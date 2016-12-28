@@ -1,0 +1,202 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{1CE3AA34-A68D-4364-B5B0-128AC8771D3F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>RequestsForRights.Database</RootNamespace>
+    <AssemblyName>Database</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DatabaseContext.cs" />
+    <Compile Include="IDatabaseContext.cs" />
+    <Compile Include="Migrations\201612270556307_Init.cs" />
+    <Compile Include="Migrations\201612270556307_Init.Designer.cs">
+      <DependentUpon>201612270556307_Init.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201612270703589_Departments.cs" />
+    <Compile Include="Migrations\201612270703589_Departments.Designer.cs">
+      <DependentUpon>201612270703589_Departments.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201612270717065_ResourceOwners.cs" />
+    <Compile Include="Migrations\201612270717065_ResourceOwners.Designer.cs">
+      <DependentUpon>201612270717065_ResourceOwners.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201612270720027_ResourceOwnersCorrectingColumnNames.cs" />
+    <Compile Include="Migrations\201612270720027_ResourceOwnersCorrectingColumnNames.Designer.cs">
+      <DependentUpon>201612270720027_ResourceOwnersCorrectingColumnNames.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201612270726115_AclUsers.cs" />
+    <Compile Include="Migrations\201612270726115_AclUsers.Designer.cs">
+      <DependentUpon>201612270726115_AclUsers.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201612270802243_AclRoles.cs" />
+    <Compile Include="Migrations\201612270802243_AclRoles.Designer.cs">
+      <DependentUpon>201612270802243_AclRoles.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201612280108346_AddDeletedFlags.cs" />
+    <Compile Include="Migrations\201612280108346_AddDeletedFlags.Designer.cs">
+      <DependentUpon>201612280108346_AddDeletedFlags.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201612280128298_AddRequests.cs" />
+    <Compile Include="Migrations\201612280128298_AddRequests.Designer.cs">
+      <DependentUpon>201612280128298_AddRequests.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201612280209129_AddRequestRightUser.cs" />
+    <Compile Include="Migrations\201612280209129_AddRequestRightUser.Designer.cs">
+      <DependentUpon>201612280209129_AddRequestRightUser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201612280241472_AddDelegationRequestUserRightInfo.cs" />
+    <Compile Include="Migrations\201612280241472_AddDelegationRequestUserRightInfo.Designer.cs">
+      <DependentUpon>201612280241472_AddDelegationRequestUserRightInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201612280243555_CorrectDelegationRequestUserRightInfo.cs" />
+    <Compile Include="Migrations\201612280243555_CorrectDelegationRequestUserRightInfo.Designer.cs">
+      <DependentUpon>201612280243555_CorrectDelegationRequestUserRightInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201612280253189_AddRequestExtDescription.cs" />
+    <Compile Include="Migrations\201612280253189_AddRequestExtDescription.Designer.cs">
+      <DependentUpon>201612280253189_AddRequestExtDescription.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201612280301200_RequireCorrections.cs" />
+    <Compile Include="Migrations\201612280301200_RequireCorrections.Designer.cs">
+      <DependentUpon>201612280301200_RequireCorrections.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201612280321163_AddAgreements.cs" />
+    <Compile Include="Migrations\201612280321163_AddAgreements.Designer.cs">
+      <DependentUpon>201612280321163_AddAgreements.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201612280342176_AddRequestUserLastSeen.cs" />
+    <Compile Include="Migrations\201612280342176_AddRequestUserLastSeen.Designer.cs">
+      <DependentUpon>201612280342176_AddRequestUserLastSeen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201612280401291_AddAclDepartments.cs" />
+    <Compile Include="Migrations\201612280401291_AddAclDepartments.Designer.cs">
+      <DependentUpon>201612280401291_AddAclDepartments.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201612280407236_AddAclDepartmentsCorrection.cs" />
+    <Compile Include="Migrations\201612280407236_AddAclDepartmentsCorrection.Designer.cs">
+      <DependentUpon>201612280407236_AddAclDepartmentsCorrection.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201612280414019_AddAclUsersCorrection.cs" />
+    <Compile Include="Migrations\201612280414019_AddAclUsersCorrection.Designer.cs">
+      <DependentUpon>201612280414019_AddAclUsersCorrection.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Domain\RequestsForRights.Domain.csproj">
+      <Project>{f4cca6b9-9648-47f4-a750-4eccba53f5fb}</Project>
+      <Name>RequestsForRights.Domain</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201612270556307_Init.resx">
+      <DependentUpon>201612270556307_Init.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612270703589_Departments.resx">
+      <DependentUpon>201612270703589_Departments.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612270717065_ResourceOwners.resx">
+      <DependentUpon>201612270717065_ResourceOwners.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612270720027_ResourceOwnersCorrectingColumnNames.resx">
+      <DependentUpon>201612270720027_ResourceOwnersCorrectingColumnNames.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612270726115_AclUsers.resx">
+      <DependentUpon>201612270726115_AclUsers.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612270802243_AclRoles.resx">
+      <DependentUpon>201612270802243_AclRoles.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612280108346_AddDeletedFlags.resx">
+      <DependentUpon>201612280108346_AddDeletedFlags.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612280128298_AddRequests.resx">
+      <DependentUpon>201612280128298_AddRequests.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612280209129_AddRequestRightUser.resx">
+      <DependentUpon>201612280209129_AddRequestRightUser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612280241472_AddDelegationRequestUserRightInfo.resx">
+      <DependentUpon>201612280241472_AddDelegationRequestUserRightInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612280243555_CorrectDelegationRequestUserRightInfo.resx">
+      <DependentUpon>201612280243555_CorrectDelegationRequestUserRightInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612280253189_AddRequestExtDescription.resx">
+      <DependentUpon>201612280253189_AddRequestExtDescription.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612280301200_RequireCorrections.resx">
+      <DependentUpon>201612280301200_RequireCorrections.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612280321163_AddAgreements.resx">
+      <DependentUpon>201612280321163_AddAgreements.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612280342176_AddRequestUserLastSeen.resx">
+      <DependentUpon>201612280342176_AddRequestUserLastSeen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612280401291_AddAclDepartments.resx">
+      <DependentUpon>201612280401291_AddAclDepartments.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612280407236_AddAclDepartmentsCorrection.resx">
+      <DependentUpon>201612280407236_AddAclDepartmentsCorrection.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612280414019_AddAclUsersCorrection.resx">
+      <DependentUpon>201612280414019_AddAclUsersCorrection.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
