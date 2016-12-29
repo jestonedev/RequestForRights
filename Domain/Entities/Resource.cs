@@ -17,7 +17,8 @@ namespace RequestsForRights.Domain.Entities
         public int IdResourceGroup { get; set; }
         public virtual ResourceGroup ResourceGroup { get; set; }
         public virtual ICollection<ResourceRight> ResourceRights { get; set; }
-        public virtual ICollection<Department> Departments { get; set; }
+        public int IdDepartment { get; set; }
+        public virtual Department Department { get; set; }
         [DefaultValue(false)]
         public bool Deleted { get; set; }
     }

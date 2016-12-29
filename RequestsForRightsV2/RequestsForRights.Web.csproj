@@ -132,7 +132,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -140,21 +139,65 @@
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ReportController.cs" />
+    <Compile Include="Controllers\RequestAddUserController.cs" />
+    <Compile Include="Controllers\RequestController.cs" />
+    <Compile Include="Controllers\RequestDelegatePermissionsController.cs" />
+    <Compile Include="Controllers\RequestModifyPermissionsController.cs" />
+    <Compile Include="Controllers\RequestRemoveUserController.cs" />
     <Compile Include="Controllers\ResourceGroupController.cs" />
+    <Compile Include="Controllers\ResourceController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Infrastructure\Enums\AclRole.cs" />
+    <Compile Include="Infrastructure\Enums\RequestCategory.cs" />
+    <Compile Include="Infrastructure\Helpers\RequestHelper.cs" />
+    <Compile Include="Infrastructure\Services\Interfaces\IRequestService.cs" />
+    <Compile Include="Infrastructure\Services\Interfaces\ISecurityService.cs" />
+    <Compile Include="Infrastructure\Services\RequestService.cs" />
+    <Compile Include="Infrastructure\Services\SecurityService.cs" />
+    <Compile Include="Models\NotSeenRequestsByState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Favicon\android-icon-144x144.png" />
+    <Content Include="Content\Favicon\android-icon-192x192.png" />
+    <Content Include="Content\Favicon\android-icon-36x36.png" />
+    <Content Include="Content\Favicon\android-icon-48x48.png" />
+    <Content Include="Content\Favicon\android-icon-72x72.png" />
+    <Content Include="Content\Favicon\android-icon-96x96.png" />
+    <Content Include="Content\Favicon\apple-icon-114x114.png" />
+    <Content Include="Content\Favicon\apple-icon-120x120.png" />
+    <Content Include="Content\Favicon\apple-icon-144x144.png" />
+    <Content Include="Content\Favicon\apple-icon-152x152.png" />
+    <Content Include="Content\Favicon\apple-icon-180x180.png" />
+    <Content Include="Content\Favicon\apple-icon-57x57.png" />
+    <Content Include="Content\Favicon\apple-icon-60x60.png" />
+    <Content Include="Content\Favicon\apple-icon-72x72.png" />
+    <Content Include="Content\Favicon\apple-icon-76x76.png" />
+    <Content Include="Content\Favicon\apple-icon-precomposed.png" />
+    <Content Include="Content\Favicon\apple-icon.png" />
+    <Content Include="Content\Favicon\browserconfig.xml" />
+    <Content Include="Content\Favicon\favicon-16x16.png" />
+    <Content Include="Content\Favicon\favicon-32x32.png" />
+    <Content Include="Content\Favicon\favicon-96x96.png" />
+    <Content Include="Content\Favicon\ms-icon-144x144.png" />
+    <Content Include="Content\Favicon\ms-icon-150x150.png" />
+    <Content Include="Content\Favicon\ms-icon-310x310.png" />
+    <Content Include="Content\Favicon\ms-icon-70x70.png" />
+    <Content Include="Content\Images\ic_polymer_black_18dp.png" />
+    <Content Include="Content\Images\ic_polymer_black_24dp.png" />
+    <Content Include="Content\Images\ic_polymer_black_48dp.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Content\Favicon\manifest.json" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -173,11 +216,18 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\ResourceGroup\Index.cshtml" />
+    <None Include="Views\Report\ResourcePermissions.cshtml" />
+    <None Include="Views\Report\UserPermissions.cshtml" />
+    <None Include="Views\RequestAddUser\Index.cshtml" />
+    <None Include="Views\RequestDelegatePermissions\Index.cshtml" />
+    <None Include="Views\Request\Index.cshtml" />
+    <None Include="Views\RequestModifyPermissions\Index.cshtml" />
+    <None Include="Views\RequestRemoveUser\Index.cshtml" />
+    <None Include="Views\Request\RequestsByStatesMenuItems.cshtml" />
+    <None Include="Views\Resource\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Database\RequestsForRights.Database.csproj">

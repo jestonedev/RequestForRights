@@ -1,5 +1,9 @@
 using RequestsForRights.Database;
+using RequestsForRights.Database.Repositories;
+using RequestsForRights.Database.Repositories.Interfaces;
 using RequestsForRights.Domain;
+using RequestsForRightsV2.Infrastructure.Services;
+using RequestsForRightsV2.Infrastructure.Services.Interfaces;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(RequestsForRightsV2.App_Start.NinjectWebCommon), "Start")]
 [assembly: WebActivatorEx.ApplicationShutdownMethodAttribute(typeof(RequestsForRightsV2.App_Start.NinjectWebCommon), "Stop")]
@@ -65,6 +69,9 @@ namespace RequestsForRightsV2.App_Start
         private static void RegisterServices(IKernel kernel)
         {
             kernel.Bind<IDatabaseContext>().To<DatabaseContext>();
+            kernel.Bind<IRequestRepository>().To<RequestRepository>();
+            kernel.Bind<IRequestService>().To<RequestService>();
+            kernel.Bind<ISecurityService>().To<SecurityService>();
         }        
     }
 }

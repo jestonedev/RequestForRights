@@ -15,6 +15,7 @@ namespace RequestsForRights.Database
         public IDbSet<AclRole> AclRoles { get; set; }
         public IDbSet<Request> Requests { get; set; }
         public IDbSet<RequestType> RequestTypes { get; set; }
+        public IDbSet<RequestState> RequestStates { get; set; }
         public IDbSet<RequestUser> RequestUsers { get; set; }
         public IDbSet<RequestUserRightAssoc> RequestUserRightAssocs { get; set; }
         public IDbSet<DelegationRequestUserRightExtInfo> DelegationRequestUserRightsExtInfo { get; set; }
@@ -22,17 +23,10 @@ namespace RequestsForRights.Database
         public IDbSet<RequestAgreementType> RequestAgreementTypes { get; set; }
         public IDbSet<RequestAgreementState> RequestAgreementStates { get; set; }
         public IDbSet<RequestAgreement> Request { get; set; }
+        public IDbSet<RequestUserLastSeen> RequestUserLastSeens { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Department>()
-                .HasMany(f => f.Resources)
-                .WithMany(f => f.Departments)
-                .Map(cs =>
-                {
-                    cs.MapRightKey("IdResource");
-                    cs.MapLeftKey("IdDepartment");
-                });
             modelBuilder.Entity<AclUser>()
                 .HasMany(f => f.Roles)
                 .WithMany(f => f.Users)
@@ -77,6 +71,10 @@ namespace RequestsForRights.Database
             modelBuilder.Entity<ResourceRight>()
                 .HasMany(f => f.RequestUserRightAssoc)
                 .WithRequired(f => f.ResourceRight)
+                .WillCascadeOnDelete(false);
+            modelBuilder.Entity<Resource>()
+                .HasRequired(f => f.Department)
+                .WithMany(f => f.Resources)
                 .WillCascadeOnDelete(false);
             modelBuilder.Entity<RequestState>()
                 .HasMany(f => f.Requests)

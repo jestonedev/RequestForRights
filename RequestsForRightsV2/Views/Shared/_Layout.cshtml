@@ -1,14 +1,32 @@
-﻿<!DOCTYPE html>
+﻿@using RequestsForRightsV2.Infrastructure.Enums
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>@ViewBag.Title - Реестр прав доступа</title>
+    <link rel="apple-touch-icon" sizes="57x57" href="/Content/Favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/Content/Favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/Content/Favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/Content/Favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/Content/Favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/Content/Favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/Content/Favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/Content/Favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/Content/Favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/Content/Favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/Content/Favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/Content/Favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/Content/Favicon/favicon-16x16.png">
+    <link rel="manifest" href="/Content/Favicon/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/Content/Favicon/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar navbar-default navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -16,26 +34,59 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Application name", "Index", "Home", null, new { @class = "navbar-brand" })
+                <a class="navbar-brand" href="/" title="Перейти на главную">
+                    <img alt="Реестр прав доступа" src="~/Content/Images/ic_polymer_black_18dp.png"/>
+                </a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li class="navbar-text">Hello, @User.Identity.Name!</li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            Перечень заявок <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu requests-menu">
+                            <li>@Html.ActionLink("Мои заявки", "Index", "Request", new { RequestCategory = RequestCategory.AllRequests }, null)</li>
+                            <li>@Html.ActionLink("Все заявки", "Index", "Request", new { RequestCategory = RequestCategory.MyRequests }, null)</li>
+                            <li role="separator" class="divider"></li>
+                            @Html.Action("RequestsByStatesMenuItems", "Request")
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            Подать заявку <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("На подключение нового сотрудника", "Index", "RequestAddUser")</li>
+                            <li>@Html.ActionLink("На выдачу и лишение прав доступа", "Index", "RequestModifyPermissions")</li>
+                            <li>@Html.ActionLink("На отключение сотрудника", "Index", "RequestRemoveUser")</li>
+                            <li>@Html.ActionLink("На временное делегирование прав", "Index", "RequestDelegatePermissions")</li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            Справочники <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Информационные ресурсы", "Index", "Resource")</li>
+                            <li>@Html.ActionLink("Категории ресурсов", "Index", "ResourceGroup")</li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            Отчеты <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Права конкретного пользователя", "UserPermissions", "Report")</li>
+                            <li>@Html.ActionLink("Права на информационный ресурс", "ResourcePermissions", "Report")</li>
+                        </ul>
+                    </li>
+                    <li>@Html.ActionLink("Руководство", "Help", "Home")</li>
                 </ul>
             </div>
         </div>
     </div>
     <div class="container body-content">
         @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>
     </div>
 
     @Scripts.Render("~/bundles/jquery")

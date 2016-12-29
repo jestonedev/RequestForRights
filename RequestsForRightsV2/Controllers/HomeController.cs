@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using RequestsForRights.Database;
 
 namespace RequestsForRightsV2.Controllers
 {
@@ -14,18 +13,9 @@ namespace RequestsForRightsV2.Controllers
             return View();
         }
 
-        public ActionResult About()
+        public ActionResult Help()
         {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
+            return RedirectPermanent("http://rqrights/App_Data/Manual.html");
         }
     }
 }

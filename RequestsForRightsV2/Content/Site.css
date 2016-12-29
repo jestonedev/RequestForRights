@@ -40,3 +40,9 @@ input[type="checkbox"].input-validation-error {
 .validation-summary-valid {
     display: none;
 }
+
+.requests-menu__badge {
+    background-color: #e46161;
+    font-size: 14px;
+    margin-left: 5pt;
+}
