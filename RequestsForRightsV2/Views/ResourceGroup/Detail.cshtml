@@ -1,8 +1,52 @@
-﻿@model dynamic
+﻿@model RequestsForRights.Domain.Entities.ResourceGroup
 
 @{
     ViewBag.Title = "Просмотр категории ресурсов";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Просмотр категории ресурсов</h2>
+<h2>Категория ресурсов # @Model.IdResourceGroup</h2>
+
+@Html.Partial("ErrorAlert")
+
+<dl class="dl-horizontal">
+    <dt>@Html.DisplayNameFor(r => r.Name)</dt>
+    <dd>@Model.Name</dd>
+    <dt>@Html.DisplayNameFor(r => r.Description)</dt>
+    <dd>@Model.Description</dd>
+</dl>
+
+<div class="btn-group col-sm-offset-3 col-sm-6 col-xs-12" role="group" aria-label="Панель действий">
+    <a href="@Url.Action("Index")"
+       class="btn btn-default col-xs-4"
+       title="Вернуться к перечню"
+       aria-label="Назад">
+        <span class="glyphicon glyphicon-circle-arrow-left"></span>
+        Назад
+    </a>
+    <a href="@Url.Action("Update", new {id = Model.IdResourceGroup, returnUri = Url.Action("Detail")})"
+       class="btn btn-default col-xs-4"
+       title="Изменить запись"
+       aria-label="Изменить запись">
+        <span class="glyphicon glyphicon-pencil"></span>
+        Изменить
+    </a>
+    <a href="@Url.Action("Delete", new {id = Model.IdResourceGroup })" id="delete-button"
+       data-success-redirect-to="@Url.Action("Index")"
+       class="btn btn-danger col-xs-4"
+       title="Вернуться к перечню"
+       aria-label="Удалить">
+        <span class="glyphicon glyphicon-remove"></span>
+        Удалить
+    </a>
+</div>
+
+@Html.Partial("DeleteModal", new
+{
+    Title = "Подтвердите удаление",
+    Description = "Вы действительно хотите удалить эту категорию ресурсов?"
+})
+
+@section scripts {
+    @Scripts.Render("~/bundles/detail.common")
+}

@@ -16,12 +16,12 @@
         else
         {
             <li>
-                @Ajax.ActionLink("«", "GetDataTable", new { PageIndex = Model.FilterOptions.PageIndex - 1 }, new AjaxOptions
-                        {
-                            UpdateTargetId = "main-table-wrapper",
-                            InsertionMode = InsertionMode.Replace,
-                            Url = Url.Action("GetDataTable", new { PageIndex = Model.FilterOptions.PageIndex - 1 })
-                        }, new { ariaLabel = "Предыдущая страница" })
+                @Ajax.ActionLink("«", "GetDataTable", new {PageIndex = Model.FilterOptions.PageIndex - 1}, new AjaxOptions
+                {
+                    UpdateTargetId = "main-table-wrapper",
+                    InsertionMode = InsertionMode.Replace,
+                    Url = Url.Action("GetDataTable", new {PageIndex = Model.FilterOptions.PageIndex - 1})
+                }, new {ariaLabel = "Предыдущая страница"})
             </li>
         }
         @for (var i = firstDisplayedPageIndex; i <= firstDisplayedPageIndex + 10; i++)
@@ -31,12 +31,12 @@
                 break;
             }
             <li class="@(Model.FilterOptions.PageIndex == i ? "active" : "")">
-                @Ajax.ActionLink((i+1).ToString(), "GetDataTable", new { PageIndex = i }, new AjaxOptions
-                        {
-                            UpdateTargetId = "main-table-wrapper",
-                            InsertionMode = InsertionMode.Replace,
-                            Url = Url.Action("GetDataTable", new { PageIndex = i })
-                        })
+                @Ajax.ActionLink((i + 1).ToString(), "GetDataTable", new {PageIndex = i}, new AjaxOptions
+                {
+                    UpdateTargetId = "main-table-wrapper",
+                    InsertionMode = InsertionMode.Replace,
+                    Url = Url.Action("GetDataTable", new {PageIndex = i})
+                })
             </li>
         }
         @if (Model.FilterOptions.PageIndex == pageCount - 1)
@@ -47,14 +47,18 @@
         }
         else
         {
-             <li>
-                @Ajax.ActionLink("»", "GetDataTable", new { PageIndex = Model.FilterOptions.PageIndex + 1 }, new AjaxOptions
-                            {
-                                UpdateTargetId = "main-table-wrapper",
-                                InsertionMode = InsertionMode.Replace,
-                                Url = Url.Action("GetDataTable", new { PageIndex = Model.FilterOptions.PageIndex + 1 })
-                            }, new { ariaLabel = "Следующая страница" })
-            </li>   
+            <li>
+                @Ajax.ActionLink("»", "GetDataTable", new {PageIndex = Model.FilterOptions.PageIndex + 1}, new AjaxOptions
+                {
+                    UpdateTargetId = "main-table-wrapper",
+                    InsertionMode = InsertionMode.Replace,
+                    Url = Url.Action("GetDataTable", new {PageIndex = Model.FilterOptions.PageIndex + 1})
+                }, new {ariaLabel = "Следующая страница"})
+            </li>
         }
     </ul>
+    <a class="btn btn-primary pull-right col-xs-12 col-sm-2 rr-add-button" href="@Url.Action("Create")">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+        Добавить
+    </a>
 </nav>

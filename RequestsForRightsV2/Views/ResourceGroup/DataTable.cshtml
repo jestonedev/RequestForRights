@@ -1,0 +1,71 @@
+﻿@using SortDirection = RequestsForRightsV2.Infrastructure.Enums.SortDirection
+@model RequestsForRightsV2.Models.ModelViews.ResourceGroupIndexModelView
+
+@{
+    var headers = new[]
+    {
+        new {
+            Name = "Наименование",
+            Field = "Name"
+        },
+        new {
+            Name = "Описание",
+            Field = "Description"
+        }
+    };
+}
+
+<div id="main-table-wrapper" class="rr-table-wrapper">
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            @foreach (var header in headers)
+            {
+                var iconClass = "glyphicon-sort";
+                var sortDirection = SortDirection.Asc;
+                if (header.Field == Model.FilterOptions.SortField)
+                {
+                    iconClass = Model.FilterOptions.SortDirection == SortDirection.Asc ?
+                        "glyphicon-sort-by-attributes" :
+                        "glyphicon-sort-by-attributes-alt";
+                    sortDirection = Model.FilterOptions.SortDirection == SortDirection.Asc ?
+                        SortDirection.Desc : SortDirection.Asc;
+                }
+                <th class="rr-column rr-column-header">
+                    <a href="@Url.Action("GetDataTable", new {SortField = header.Field, SortDirection = sortDirection})">
+                        @header.Name
+                        <span class="glyphicon @iconClass pull-right" aria-hidden="true"></span>
+                    </a>
+                </th>
+            }
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var resource in Model.ResourceGroups)
+        {
+            <tr>
+                <td class="rr-column">@resource.Name</td>
+                <td class="rr-column">@resource.Description</td>
+                <td class="text-center">
+                    <div class="btn-group btn-group-xs" role="group" aria-label="Панель редактирования записи">
+                        <a href="@Url.Action("Detail", new {id = resource.IdResourceGroup})"
+                           class="btn btn-default glyphicon glyphicon-eye-open"
+                           title="Просмотреть запись"
+                           aria-label="Просмотреть запись"></a>
+                        <a href="@Url.Action("Update", new {id = resource.IdResourceGroup})"
+                           class="btn btn-default glyphicon glyphicon-pencil"
+                           title="Изменить запись"
+                           aria-label="Изменить запись"></a>
+                        <a href="@Url.Action("Delete", new {id = resource.IdResourceGroup})"
+                           class="btn btn-danger glyphicon glyphicon-remove rr-delete-item-button"
+                           title="Удалить запись"
+                           aria-label="Удалить запись"></a>
+                    </div>
+
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>@Html.Partial("DataTableFooter", Model)
+</div>

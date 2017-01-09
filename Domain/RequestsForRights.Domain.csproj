@@ -59,9 +59,11 @@
     <Compile Include="Entities\RequestExtDescription.cs" />
     <Compile Include="Entities\RequestRightGrantType.cs" />
     <Compile Include="Entities\RequestState.cs" />
+    <Compile Include="Entities\RequestStateType.cs" />
+    <Compile Include="Entities\RequestUserRightAssoc.cs" />
     <Compile Include="Entities\RequestUser.cs" />
     <Compile Include="Entities\RequestUserLastSeen.cs" />
-    <Compile Include="Entities\RequestUserRightAssoc.cs" />
+    <Compile Include="Entities\RequestUserAssoc.cs" />
     <Compile Include="Helpers\MatchHelper.cs" />
     <Compile Include="Interfaces\IStringMatchable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

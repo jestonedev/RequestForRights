@@ -8,5 +8,11 @@ namespace RequestsForRights.Database.Repositories.Interfaces
         IEnumerable<ResourceGroup> GetResourceGroups();
         ResourceGroup DeleteResourceGroup(int idResourceGroup);
         int SaveChanges();
+
+        ResourceGroup GetResourceGroupById(int id);
+
+        ResourceGroup UpdateResourceGroup(ResourceGroup resourceGroup);
+
+        ResourceGroup InsertResourceGroup(ResourceGroup resourceGroup);
     }
 }

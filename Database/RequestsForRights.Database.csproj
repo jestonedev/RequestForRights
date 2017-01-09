@@ -126,6 +126,18 @@
     <Compile Include="Migrations\201612280444507_AddResourceDepartmentAssocCorrection.Designer.cs">
       <DependentUpon>201612280444507_AddResourceDepartmentAssocCorrection.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201701090115500_RefactoringStage1.cs" />
+    <Compile Include="Migrations\201701090115500_RefactoringStage1.Designer.cs">
+      <DependentUpon>201701090115500_RefactoringStage1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201701090140005_RefactoringStage2.cs" />
+    <Compile Include="Migrations\201701090140005_RefactoringStage2.Designer.cs">
+      <DependentUpon>201701090140005_RefactoringStage2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201701090149065_RefactoringStage3.cs" />
+    <Compile Include="Migrations\201701090149065_RefactoringStage3.Designer.cs">
+      <DependentUpon>201701090149065_RefactoringStage3.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\Interfaces\IRequestRepository.cs" />
@@ -202,6 +214,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201612280444507_AddResourceDepartmentAssocCorrection.resx">
       <DependentUpon>201612280444507_AddResourceDepartmentAssocCorrection.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201701090115500_RefactoringStage1.resx">
+      <DependentUpon>201701090115500_RefactoringStage1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201701090140005_RefactoringStage2.resx">
+      <DependentUpon>201701090140005_RefactoringStage2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201701090149065_RefactoringStage3.resx">
+      <DependentUpon>201701090149065_RefactoringStage3.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

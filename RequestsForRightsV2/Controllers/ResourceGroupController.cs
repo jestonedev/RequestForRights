@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Data.Entity.Infrastructure;
+using System.Net.Http;
 using System.Web.Mvc;
+using RequestsForRights.Domain.Entities;
 using RequestsForRightsV2.Infrastructure.Services.Interfaces;
 using RequestsForRightsV2.Models.FilterOptions;
-using RequestsForRightsV2.Models.ModelViews;
 
 namespace RequestsForRightsV2.Controllers
 {
@@ -28,33 +29,91 @@ namespace RequestsForRightsV2.Controllers
 
         public PartialViewResult GetDataTable(FilterOptions filterOptions)
         {
-            return PartialView(_resourceGroupService.GetResourceGroupIndexModelView(filterOptions));
+            return PartialView("DataTable", _resourceGroupService.GetResourceGroupIndexModelView(filterOptions));
         }
 
         [HttpGet]
-        public ActionResult Update(int idResourceGroup)
+        public ActionResult Update(int id)
         {
-            return View();
+            return View(_resourceGroupService.GetResourceGroupById(id));
         }
 
-        public ActionResult Detail(int idResourceGroup)
+        [HttpPost]
+        public ActionResult Update(ResourceGroup resourceGroup)
         {
-            return View();
+            if (resourceGroup == null)
+            {
+                Response.StatusCode = 400;
+                return Content("Не передана ссылка на категорию ресурсов");
+            }
+            if (!ModelState.IsValid)
+            {
+                return View(resourceGroup);
+            }
+            try
+            {
+                _resourceGroupService.UpdateResourceGroup(resourceGroup);
+                _resourceGroupService.SaveChanges();
+            }
+            catch (DbUpdateException e)
+            {
+                Response.StatusCode = 409;
+                return Content(e.Message);
+            }
+            return Request["returnUri"] != null ? (ActionResult)Redirect(Request["returnUri"]) : 
+                RedirectToAction("Index");
+        }
+
+        public ActionResult Detail(int id)
+        {
+            return View(_resourceGroupService.GetResourceGroupById(id));
         }
 
         [HttpDelete]
-        public ActionResult Delete(int idResourceGroup)
+        public ActionResult Delete(int id)
         {
             try
             {
-                _resourceGroupService.DeleteResourceGroup(idResourceGroup);
+                _resourceGroupService.DeleteResourceGroup(id);
                 _resourceGroupService.SaveChanges();
             }
-            catch (DbUpdateException)
+            catch (DbUpdateException e)
             {
-                return new HttpStatusCodeResult(409, "Не удалось удалить категорию ресурса, т.к. она имеет зависимые ресурсы");
+                Response.StatusCode = 409;
+                return Content(e.Message);
             }
             return RedirectToAction("GetDataTable");
+        }
+
+        [HttpGet]
+        public ActionResult Create()
+        {
+            return View();    
+        }
+
+        [HttpPost]
+        public ActionResult Create(ResourceGroup resourceGroup)
+        {
+            if (resourceGroup == null)
+            {
+                Response.StatusCode = 400;
+                return Content("Не передана ссылка на категорию ресурсов");
+            }
+            if (!ModelState.IsValid)
+            {
+                return View(resourceGroup);
+            }
+            try
+            {
+                _resourceGroupService.InsertResourceGroup(resourceGroup);
+                _resourceGroupService.SaveChanges();
+            }
+            catch (DbUpdateException e)
+            {
+                Response.StatusCode = 409;
+                return Content(e.Message);
+            }
+            return RedirectToAction("Index");
         }
 	}
 }

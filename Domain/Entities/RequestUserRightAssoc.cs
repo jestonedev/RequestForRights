@@ -1,6 +1,11 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace RequestsForRights.Domain.Entities
 {
@@ -9,10 +14,8 @@ namespace RequestsForRights.Domain.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int IdAssoc { get; set; }
-        public int IdRequest { get; set; }
-        public virtual Request Request { get; set; }
-        public int IdRequestUser { get; set; }
-        public virtual RequestUser RequestUser { get; set; }
+        public int IdRequestUserAssoc { get; set; }
+        public virtual RequestUserAssoc RequestUserAssoc { get; set; }
         public int IdResourceRight { get; set; }
         public virtual ResourceRight ResourceRight { get; set; }
         public int IdRequestRightGrantType { get; set; }

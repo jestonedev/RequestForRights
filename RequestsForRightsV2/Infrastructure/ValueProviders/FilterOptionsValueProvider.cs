@@ -1,10 +1,10 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 using Newtonsoft.Json;
+using RequestsForRightsV2.Infrastructure.Enums;
 using RequestsForRightsV2.Infrastructure.Helpers;
 using RequestsForRightsV2.Models.FilterOptions;
 
@@ -50,11 +50,11 @@ namespace RequestsForRightsV2.Infrastructure.ValueProviders
             var context = HttpContext.Current;
             var filterOptions = new T
             {
-                PageSize = FilterOptionsHelper.GetIntValue("PageSize", context) ?? 25,
-                PageIndex = FilterOptionsHelper.GetIntValue("PageIndex", context) ?? 0,
-                Filter = FilterOptionsHelper.GetStringValue("Filter", context),
-                SortField = FilterOptionsHelper.GetStringValue("SortField", context),
-                SortDirection = FilterOptionsHelper.GetSortDirectionValue("SortDirection", context)
+                PageSize = FilterOptionsHelper.GetValue("PageSize", context, 25),
+                PageIndex = FilterOptionsHelper.GetValue("PageIndex", context, 0),
+                Filter = FilterOptionsHelper.GetValue<string>("Filter", context, null),
+                SortField = FilterOptionsHelper.GetValue<string>("SortField", context, null),
+                SortDirection = FilterOptionsHelper.GetValue("SortDirection", context, SortDirection.Asc)
             };
             return filterOptions;
         }

@@ -8,15 +8,15 @@
 @foreach (var item in Model)
 {
     <li>
-        <a href="@Url.Action("Index", "Request", new {item.RequestState.IdRequestState})">
-            @RequestHelper.PluralRequestState(item.RequestState.Name)
+        <a href="@Url.Action("Index", "Request", new {item.RequestStateType.IdRequestStateType})">
+            @RequestHelper.PluralRequestState(item.RequestStateType.Name)
             @{
                 var notSeenCount = item.NotSeenRequests.Count();
                 notSeenCount = notSeenCount > 99 ? 99 : notSeenCount;
             }
             @if (notSeenCount > 0)
                 {
-                    <span class="rr-requests-menu-badge">@notSeenCount</span>
+                    <span class="rr-requests-menu-badge badge">@notSeenCount</span>
                 }
         </a>
     </li>

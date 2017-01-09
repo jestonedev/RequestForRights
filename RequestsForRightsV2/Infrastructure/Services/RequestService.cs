@@ -42,12 +42,14 @@ namespace RequestsForRightsV2.Infrastructure.Services
         public IEnumerable<NotSeenRequestsByState> GetNotSeenRequestsByStates()
         {
             var requests = GetNotSeenRequests();
-            var requestStates = _requestsRepository.GetRequestStates().ToList();
-            return from requestState in requestStates
+            var requestStateTypes = _requestsRepository.GetRequestStateTypes().ToList();
+            return from requestStateType in requestStateTypes
                 select new NotSeenRequestsByState
                 {
-                    RequestState = requestState,
-                    NotSeenRequests = requests.Where(r => r.IdRequestState == requestState.IdRequestState)
+                    RequestStateType = requestStateType,
+                    NotSeenRequests = requests.Where(
+                        r => r.RequestStates.Any() && 
+                            r.RequestStates.Last().IdRequestStateType == requestStateType.IdRequestStateType)
                 };
         }
     }

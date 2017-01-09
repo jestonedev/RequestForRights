@@ -25,9 +25,9 @@ namespace RequestsForRights.Database.Repositories
             return _databaseContext.Requests.Where(r => !r.Deleted);
         }
 
-        public IEnumerable<RequestState> GetRequestStates()
+        public IEnumerable<RequestStateType> GetRequestStateTypes()
         {
-            return _databaseContext.RequestStates;
+            return _databaseContext.RequestStateTypes;
         }
 
         public IEnumerable<RequestUserLastSeen> GetRequestsUserLastSeens(string login)

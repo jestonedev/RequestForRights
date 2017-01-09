@@ -13,8 +13,9 @@ namespace RequestsForRights.Database
         IDbSet<AclRole> AclRoles { get; set; }
         IDbSet<Request> Requests { get; set; }
         IDbSet<RequestType> RequestTypes { get; set; }
-        IDbSet<RequestState> RequestStates { get; set; }
-        IDbSet<RequestUser> RequestUsers { get; set; }
+        IDbSet<RequestStateType> RequestStateTypes { get; set; }
+        IDbSet<RequestUser> Users { get; set; }
+        IDbSet<RequestUserAssoc> RequestUserAssocs { get; set; }
         IDbSet<RequestUserRightAssoc> RequestUserRightAssocs { get; set; }
         IDbSet<DelegationRequestUserRightExtInfo> DelegationRequestUserRightsExtInfo { get; set; }
         IDbSet<RequestExtDescription> RequestExtDescriptions { get; set; }
@@ -22,7 +23,7 @@ namespace RequestsForRights.Database
         IDbSet<RequestAgreementState> RequestAgreementStates { get; set; }
         IDbSet<RequestAgreement> Request { get; set; }
         IDbSet<RequestUserLastSeen> RequestUserLastSeens { get; set; }
-
+        IDbSet<RequestState> RequestStates { get; set; }
         int SaveChanges();
     }
 }

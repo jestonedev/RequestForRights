@@ -1,8 +1,65 @@
-﻿@model dynamic
+﻿@model RequestsForRights.Domain.Entities.ResourceGroup
 
 @{
     ViewBag.Title = "Изменить категорию ресурсов";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var returnUri = Request["returnUri"] ?? Url.Action("Index");
 }
 
-<h2>Изменить категорию ресурсов</h2>
+<h2>Изменить категорию ресурсов # @Model.IdResourceGroup</h2>
+
+@Html.Partial("ErrorAlert")
+
+@using (Html.BeginForm("Update", "ResourceGroup", new { }, FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(r => r.IdResourceGroup)
+    @Html.Hidden("returnUri", returnUri)
+    <div class="form-group">
+        @Html.LabelFor(r => r.Name, new {@class = "col-sm-2 control-label"})
+        <div class="col-sm-10">
+            @Html.TextBoxFor(r => r.Name, new { @class = "form-control", placeholder = "Введите наименование категории ресурсов" })
+            @Html.ValidationMessageFor(r => r.Name)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(r => r.Description, new {@class = "col-sm-2 control-label"})
+        <div class="col-sm-10">
+            @Html.TextAreaFor(r => r.Description,
+                new {@class = "form-control", placeholder = "Введите описание категории ресурсов"})
+            @Html.ValidationMessageFor(r => r.Description)
+        </div>
+    </div>
+    
+    <div class="btn-group col-sm-offset-3 col-sm-6 col-xs-12" role="group" aria-label="Панель действий">
+        <a href="@returnUri"
+           class="btn btn-default col-xs-4"
+           title="Вернуться к перечню"
+           aria-label="Назад">
+            <span class="glyphicon glyphicon-circle-arrow-left"></span>
+            Назад
+        </a>
+        <button class="btn btn-default col-xs-4">
+            <span class="glyphicon glyphicon-floppy-disk"></span>
+            Сохранить
+        </button>
+        <a href="@Url.Action("Delete", new {id = Model.IdResourceGroup })" id="delete-button"
+           data-success-redirect-to="@Url.Action("Index")"
+           class="btn btn-danger col-xs-4"
+           title="Вернуться к перечню"
+           aria-label="Удалить">
+            <span class="glyphicon glyphicon-remove"></span>
+            Удалить
+        </a>
+    </div>
+}
+
+@Html.Partial("DeleteModal", new
+{
+    Title = "Подтвердите удаление",
+    Description = "Вы действительно хотите удалить эту категорию ресурсов?"
+})
+
+@section scripts {
+    @Scripts.Render("~/bundles/update.common")
+}

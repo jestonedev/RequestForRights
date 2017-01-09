@@ -27,8 +27,8 @@ namespace RequestsForRights.Domain.Entities
         public string Unit { get; set; }
         [Required]
         [MaxLength(512)]
-        public string Office { get; set; }
-        public virtual ICollection<RequestUserRightAssoc> RequestUserRightAssoc { get; set; }
+        public string Office { get; set; }      
+        public virtual ICollection<RequestUserAssoc> RequestUserAssoc { get; set; }
         [DefaultValue(false)]
         public bool Deleted { get; set; }
     }

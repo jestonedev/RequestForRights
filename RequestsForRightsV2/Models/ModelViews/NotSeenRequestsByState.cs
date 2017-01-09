@@ -5,7 +5,7 @@ namespace RequestsForRightsV2.Models.ModelViews
 {
     public class NotSeenRequestsByState
     {
-        public RequestState RequestState { get; set; }
+        public RequestStateType RequestStateType { get; set; }
         public IEnumerable<Request> NotSeenRequests { get; set; }
     }
 }

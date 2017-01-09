@@ -12,9 +12,11 @@ namespace RequestsForRights.Domain.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int IdResourceGroup { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Наименование категории ресурсов является обязательным для заполнения")]
         [MaxLength(512)]
+        [DisplayName("Наименование")]
         public string Name { get; set; }
+        [DisplayName("Описание")]
         public string Description { get; set; }
         public virtual ICollection<Resource> Resources { get; set; }
         [DefaultValue(false)]

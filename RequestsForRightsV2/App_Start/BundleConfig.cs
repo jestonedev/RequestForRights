@@ -20,11 +20,10 @@ namespace RequestsForRightsV2
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
                         "~/Scripts/modernizr-*"));
 
-            bundles.Add(new ScriptBundle("~/bundles/rxjs").Include(
-                "~/Scripts/rx.lite.js",
-                "~/Scripts/rx.async.js", "~/Scripts/rx.binding.js"));
-
-            bundles.Add(new ScriptBundle("~/bundles/index").Include("~/Scripts/index.js"));
+            bundles.Add(new ScriptBundle("~/bundles/index.common").Include("~/Scripts/index.common.js"));
+            bundles.Add(new ScriptBundle("~/bundles/detail.common").Include("~/Scripts/detail.common.js"));
+            bundles.Add(new ScriptBundle("~/bundles/update.common").Include("~/Scripts/update.common.js"));
+            bundles.Add(new ScriptBundle("~/bundles/common").Include("~/Scripts/common.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js",

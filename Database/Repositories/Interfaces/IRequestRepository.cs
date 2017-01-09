@@ -6,7 +6,7 @@ namespace RequestsForRights.Database.Repositories.Interfaces
     public interface IRequestRepository
     {
         IEnumerable<Request> GetRequests();
-        IEnumerable<RequestState> GetRequestStates();
+        IEnumerable<RequestStateType> GetRequestStateTypes();
         IEnumerable<RequestUserLastSeen> GetRequestsUserLastSeens(string login);
     }
 }

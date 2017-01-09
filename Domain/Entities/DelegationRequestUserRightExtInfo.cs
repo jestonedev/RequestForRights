@@ -14,7 +14,7 @@ namespace RequestsForRights.Domain.Entities
         public RequestUserRightAssoc RequestUserRightAssoc { get; set; }
         public int IdDelegateToUser { get; set; }
         [ForeignKey("IdDelegateToUser")]
-        public virtual RequestUser RequestUser { get; set; }
+        public virtual RequestUser DelegateToUser { get; set; }
         public DateTime DelegateFromDate { get; set; }
         public DateTime DelegateToDate { get; set; }
         [DefaultValue(false)]

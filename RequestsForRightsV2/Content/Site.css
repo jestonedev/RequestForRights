@@ -44,10 +44,45 @@ input[type="checkbox"].input-validation-error {
     margin-left: 5pt;
 }
 
+.rr-alert {
+    margin-top: 20px;
+}
+
 .rr-filter-control {
-    margin: 20pt -15px;
+    margin: 10pt -15px 5px -15px;
 }
 
 .rr-table-wrapper table {
     margin-bottom: 0;
+}
+
+.rr-add-button {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.rr-button-icon {
+    margin-right: 5pt;
+}
+
+.rr-column {
+    border-right: 1px solid #ddd;
+}
+
+.rr-column-header a {
+    display: block;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    color: #333;
+    text-decoration: none;
+}
+
+.rr-column-header a span {
+    color: #333;
+    top: 3px;
+}
+
+.rr-column-header a span.glyphicon-sort {
+    color: #ccc;
 }

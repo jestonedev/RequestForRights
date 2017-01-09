@@ -10,6 +10,9 @@ namespace RequestsForRightsV2.Infrastructure.Services.Interfaces
         IEnumerable<ResourceGroup> GetResourceGroups(FilterOptions filterOptions);
         ResourceGroupIndexModelView GetResourceGroupIndexModelView(FilterOptions filterOptions);
         ResourceGroup DeleteResourceGroup(int idResourceGroup);
+        ResourceGroup GetResourceGroupById(int id);
+        ResourceGroup UpdateResourceGroup(ResourceGroup resourceGroup);
+        ResourceGroup InsertResourceGroup(ResourceGroup resourceGroup);
         int SaveChanges();
     }
 }

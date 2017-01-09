@@ -59,5 +59,20 @@ namespace RequestsForRightsV2.Infrastructure.Services
         {
             return _resourceGroupRepository.SaveChanges();
         }
+
+        public ResourceGroup GetResourceGroupById(int id)
+        {
+            return _resourceGroupRepository.GetResourceGroupById(id);
+        }
+
+        public ResourceGroup UpdateResourceGroup(ResourceGroup resourceGroup)
+        {
+            return _resourceGroupRepository.UpdateResourceGroup(resourceGroup);
+        }
+
+        public ResourceGroup InsertResourceGroup(ResourceGroup resourceGroup)
+        {
+            return _resourceGroupRepository.InsertResourceGroup(resourceGroup);
+        }
     }
 }
