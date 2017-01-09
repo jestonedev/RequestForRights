@@ -1,0 +1,29 @@
+﻿@model RequestsForRightsV2.Models.FilterOptions.FilterOptions
+
+@{
+    Layout = null;
+}
+
+<div class="rr-filter-control">
+    @using (Ajax.BeginForm("GetDataTable", new AjaxOptions
+    {
+        UpdateTargetId = "main-table-wrapper",
+        InsertionMode = InsertionMode.Replace,
+        Url = Url.Action("GetDataTable")
+    }))
+    {
+        <div class="form-group col-sm-3">
+            @Html.Label("PageSize", "Отображено записей")
+                @Html.DropDownList("PageSize", new[] { 10, 25, 50, 100 }.Select(x => new SelectListItem
+        {
+            Value = x.ToString(),
+            Text = x.ToString(),
+            Selected = x == Model.PageSize
+        }), new { @class = "form-control" })
+        </div>
+        <div class="form-group col-sm-9">
+            @Html.Label("Filter", "Поиск")
+                @Html.TextBox("Filter", Model.Filter, new {@class = "form-control", placeholder = "Введите текст для поиска"})
+        </div>
+    }
+</div>

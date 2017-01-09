@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using RequestsForRightsV2.Models;
+using RequestsForRightsV2.Models.ModelViews;
 
 namespace RequestsForRightsV2.Infrastructure.Services.Interfaces
 {

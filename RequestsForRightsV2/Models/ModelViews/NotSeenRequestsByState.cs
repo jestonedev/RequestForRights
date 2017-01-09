@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using RequestsForRights.Domain.Entities;
 
-namespace RequestsForRightsV2.Models
+namespace RequestsForRightsV2.Models.ModelViews
 {
     public class NotSeenRequestsByState
     {

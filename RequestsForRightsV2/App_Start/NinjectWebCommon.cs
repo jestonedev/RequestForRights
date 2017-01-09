@@ -70,7 +70,10 @@ namespace RequestsForRightsV2.App_Start
         {
             kernel.Bind<IDatabaseContext>().To<DatabaseContext>();
             kernel.Bind<IRequestRepository>().To<RequestRepository>();
+            kernel.Bind<IResourceGroupRepository>().To<ResourceGroupRepository>();
+            kernel.Bind<ISecurityRepository>().To<SecurityRepository>();
             kernel.Bind<IRequestService>().To<RequestService>();
+            kernel.Bind<IResourceGroupService>().To<ResourceGroupService>();
             kernel.Bind<ISecurityService>().To<SecurityService>();
         }        
     }

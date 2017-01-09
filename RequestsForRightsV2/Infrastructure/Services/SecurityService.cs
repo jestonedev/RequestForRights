@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using RequestsForRights.Database.Repositories.Interfaces;
 using RequestsForRightsV2.Infrastructure.Enums;
 using RequestsForRightsV2.Infrastructure.Services.Interfaces;
 
@@ -9,6 +9,17 @@ namespace RequestsForRightsV2.Infrastructure.Services
 {
     public class SecurityService: ISecurityService
     {
+        private readonly ISecurityRepository _securityRepository;
+
+        public SecurityService(ISecurityRepository securityRepository)
+        {
+            if (securityRepository == null)
+            {
+                throw new ArgumentNullException("securityRepository");
+            }
+            _securityRepository = securityRepository;
+        }
+
         public string CurrentUser
         {
             get
@@ -23,7 +34,7 @@ namespace RequestsForRightsV2.Infrastructure.Services
 
         public bool InRole(AclRole role)
         {
-            return false;
+            return _securityRepository.GetUserRoles(CurrentUser).Any(r => r.IdRole == (int) role);
         }
     }
 }

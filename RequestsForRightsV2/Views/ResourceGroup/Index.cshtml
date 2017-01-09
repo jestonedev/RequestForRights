@@ -1,8 +1,14 @@
-﻿@model dynamic
+﻿@model RequestsForRightsV2.Models.ModelViews.ResourceGroupIndexModelView
 
 @{
     ViewBag.Title = "Справочник категорий ресурсов";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Справочник категорий ресурсов</h2>
+
+@Html.Partial("FilterControl", Model.FilterOptions)
+@Html.Partial("GetDataTable", Model)
+@Html.Partial("DeleteModal", new { 
+    Title = "Подтвердите удаление", 
+    Description = "Вы действительно хотите удалить эту категорию ресурсов?"
+})

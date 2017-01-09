@@ -4,7 +4,7 @@ using System.Linq;
 using RequestsForRights.Database.Repositories.Interfaces;
 using RequestsForRights.Domain.Entities;
 using RequestsForRightsV2.Infrastructure.Services.Interfaces;
-using RequestsForRightsV2.Models;
+using RequestsForRightsV2.Models.ModelViews;
 
 namespace RequestsForRightsV2.Infrastructure.Services
 {

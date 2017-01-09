@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using RequestsForRightsV2.Infrastructure.Services.Interfaces;
+using RequestsForRightsV2.Models;
+using RequestsForRightsV2.Models.FilterOptions;
 
 namespace RequestsForRightsV2.Controllers
 {
@@ -21,14 +23,15 @@ namespace RequestsForRightsV2.Controllers
 
         //
         // GET: /Requests/
-        public ActionResult Index()
+        public ActionResult Index(RequestsFilterOptions requestsFilterOptions)
         {
             return View();
         }
 
+        [ChildActionOnly]
         public ActionResult RequestsByStatesMenuItems()
         {
-            return View(_requestsSerivce.GetNotSeenRequestsByStates());
+            return PartialView(_requestsSerivce.GetNotSeenRequestsByStates());
         }
     }
 }
