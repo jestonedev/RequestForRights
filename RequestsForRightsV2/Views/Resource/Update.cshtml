@@ -1,27 +1,27 @@
 ﻿@using RequestsForRightsV2.Infrastructure.Security
-@model RequestsForRights.Domain.Entities.ResourceGroup
+@model RequestsForRights.Domain.Entities.Resource
 
 @{
-    ViewBag.Title = "Изменить категорию ресурсов";
+    ViewBag.Title = "Изменить информационные ресурс";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var securityService = (ResourceGroupSecurityService)ViewData["SecurityService"];
+    var securityService = (ResourceSecurityService)ViewData["SecurityService"];
     var returnUri = Request["returnUri"] ?? Url.Action("Index");
 }
 
-<h2>Изменить категорию ресурсов # @Model.IdResourceGroup</h2>
+<h2>Изменить информационный ресурс # @Model.IdResource</h2>
 
 @Html.Partial("ErrorAlert")
 
-@using (Html.BeginForm("Update", "ResourceGroup", new { }, FormMethod.Post, new { @class = "form-horizontal" }))
+@using (Html.BeginForm("Update", "Resource", new { }, FormMethod.Post, new { @class = "form-horizontal" }))
 {
     @Html.HttpMethodOverride(HttpVerbs.Put)
     @Html.ValidationSummary(true)
-    @Html.HiddenFor(r => r.IdResourceGroup)
+    @Html.HiddenFor(r => r.IdResource)
     @Html.Hidden("returnUri", returnUri)
     <div class="form-group">
         @Html.LabelFor(r => r.Name, new {@class = "col-sm-2 control-label"})
         <div class="col-sm-10">
-            @Html.TextBoxFor(r => r.Name, new { @class = "form-control", placeholder = "Введите наименование категории ресурсов" })
+            @Html.TextBoxFor(r => r.Name, new { @class = "form-control", placeholder = "Введите наименование ресурса" })
             @Html.ValidationMessageFor(r => r.Name)
         </div>
     </div>
@@ -29,7 +29,7 @@
         @Html.LabelFor(r => r.Description, new {@class = "col-sm-2 control-label"})
         <div class="col-sm-10">
             @Html.TextAreaFor(r => r.Description,
-                new {@class = "form-control", placeholder = "Введите описание категории ресурсов"})
+                new {@class = "form-control", placeholder = "Введите описание ресурса"})
             @Html.ValidationMessageFor(r => r.Description)
         </div>
     </div>
@@ -48,7 +48,7 @@
             </button>
             @if (securityService.CanDelete(Model))
             {
-                <a href="@Url.Action("Delete", new {id = Model.IdResourceGroup})" id="delete-button"
+                <a href="@Url.Action("Delete", new {id = Model.IdResource})" id="delete-button"
                    data-success-redirect-to="@Url.Action("Index")"
                    class="btn btn-danger"
                    title="Вернуться к перечню"
@@ -64,7 +64,7 @@
 @Html.Partial("DeleteModal", new
 {
     Title = "Подтвердите удаление",
-    Description = "Вы действительно хотите удалить эту категорию ресурсов?"
+    Description = "Вы действительно хотите удалить этот ресурс?"
 })
 
 @section scripts {

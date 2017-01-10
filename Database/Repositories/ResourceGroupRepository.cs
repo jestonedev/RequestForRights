@@ -27,8 +27,7 @@ namespace RequestsForRights.Database.Repositories
 
         public ResourceGroup DeleteResourceGroup(int idResourceGroup)
         {
-            var resourceGroup = _databaseContext.ResourceGroups.FirstOrDefault(
-                r => r.IdResourceGroup == idResourceGroup);
+            var resourceGroup = GetResourceGroupById(idResourceGroup);
             if (resourceGroup == null) return null;
             if (resourceGroup.Resources.Any())
             {
@@ -53,7 +52,7 @@ namespace RequestsForRights.Database.Repositories
             var resGroup = GetResourceGroupById(resourceGroup.IdResourceGroup);
             resGroup.Name = resourceGroup.Name;
             resGroup.Description = resourceGroup.Description;
-            return resourceGroup;
+            return resGroup;
         }
 
         public ResourceGroup InsertResourceGroup(ResourceGroup resourceGroup)

@@ -1,16 +1,16 @@
 ﻿@using RequestsForRightsV2.Infrastructure.Security
-@model RequestsForRightsV2.Models.ModelViews.ResourceGroupIndexModelView
+@model RequestsForRightsV2.Models.ModelViews.ResourceIndexModelView
 
 @{
     Layout = null;
-    var securityService = (ResourceGroupSecurityService)ViewData["SecurityService"];
+    var securityService = (ResourceSecurityService)ViewData["SecurityService"];
     var firstElementIndex = Model.FilterOptions.PageIndex * Model.FilterOptions.PageSize + 1;
     var lastElementIndex = firstElementIndex + Model.FilterOptions.PageSize - 1;
-    if (lastElementIndex > Model.ResourceGroupCount)
+    if (lastElementIndex > Model.ResourceCount)
     {
-        lastElementIndex = Model.ResourceGroupCount;
+        lastElementIndex = Model.ResourceCount;
     }
-    var pageCount = Math.Ceiling((decimal)Model.ResourceGroupCount / Model.FilterOptions.PageSize);
+    var pageCount = Math.Ceiling((decimal)Model.ResourceCount / Model.FilterOptions.PageSize);
     var firstDisplayedPageIndex = Model.FilterOptions.PageIndex - 3 > 0 ? Model.FilterOptions.PageIndex - 3 : 0;
 }
 <nav aria-label="Навигация">
@@ -65,7 +65,7 @@
             </li>
         }
     </ul>
-    <span class="rr-page-counter">показано @firstElementIndex - @lastElementIndex из @Model.ResourceGroupCount</span>
+    <span class="rr-page-counter">показано @firstElementIndex - @lastElementIndex из @Model.ResourceCount</span>
     @if (securityService.CanCreate())
     {
         <a class="btn btn-primary pull-right col-xs-12 col-sm-2 rr-add-button" href="@Url.Action("Create")">

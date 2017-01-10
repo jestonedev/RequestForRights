@@ -2,6 +2,8 @@ using RequestsForRights.Database;
 using RequestsForRights.Database.Repositories;
 using RequestsForRights.Database.Repositories.Interfaces;
 using RequestsForRights.Domain;
+using RequestsForRightsV2.Infrastructure.Security;
+using RequestsForRightsV2.Infrastructure.Security.Interfaces;
 using RequestsForRightsV2.Infrastructure.Services;
 using RequestsForRightsV2.Infrastructure.Services.Interfaces;
 
@@ -69,12 +71,19 @@ namespace RequestsForRightsV2.App_Start
         private static void RegisterServices(IKernel kernel)
         {
             kernel.Bind<IDatabaseContext>().To<DatabaseContext>();
+            // Repositories
             kernel.Bind<IRequestRepository>().To<RequestRepository>();
             kernel.Bind<IResourceGroupRepository>().To<ResourceGroupRepository>();
+            kernel.Bind<IResourceRepository>().To<ResourceRepository>();
             kernel.Bind<ISecurityRepository>().To<SecurityRepository>();
+            // Data services
             kernel.Bind<IRequestService>().To<RequestService>();
             kernel.Bind<IResourceGroupService>().To<ResourceGroupService>();
-            kernel.Bind<ISecurityService>().To<SecurityService>();
+            kernel.Bind<IResourceService>().To<ResourceService>();
+            // Security services
+            kernel.Bind<IResourceGroupSecurityService>().To<ResourceGroupSecurityService>();
+            kernel.Bind<IResourceSecurityService>().To<ResourceSecurityService>();
+            kernel.Bind<ISecurityService<object>>().To<SecurityService<object>>();
         }        
     }
 }

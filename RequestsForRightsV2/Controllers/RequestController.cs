@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using RequestsForRightsV2.Infrastructure.Services.Interfaces;
-using RequestsForRightsV2.Models;
 using RequestsForRightsV2.Models.FilterOptions;
 
 namespace RequestsForRightsV2.Controllers

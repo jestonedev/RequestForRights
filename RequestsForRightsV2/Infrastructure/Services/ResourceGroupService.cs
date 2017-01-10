@@ -13,20 +13,14 @@ namespace RequestsForRightsV2.Infrastructure.Services
     public class ResourceGroupService : IResourceGroupService
     {
         private readonly IResourceGroupRepository _resourceGroupRepository;
-        private readonly ISecurityService _securityService;
 
-        public ResourceGroupService(IResourceGroupRepository resourceGroupRepository, ISecurityService securityService)
+        public ResourceGroupService(IResourceGroupRepository resourceGroupRepository)
         {
             if (resourceGroupRepository == null)
             {
                 throw new ArgumentNullException("resourceGroupRepository");
             }
             _resourceGroupRepository = resourceGroupRepository;
-            if (securityService == null)
-            {
-                throw new ArgumentNullException("securityService");
-            }
-            _securityService = securityService;
         }
 
         public IEnumerable<ResourceGroup> GetResourceGroups(FilterOptions filterOptions)
@@ -41,12 +35,13 @@ namespace RequestsForRightsV2.Infrastructure.Services
         {
             if (filterOptions.SortField == null)
             {
-                filterOptions.SortField = "IdResourceGroup";
+                filterOptions.SortField = "Name";
             }
             return new ResourceGroupIndexModelView
             {
-                ResourceGroups = GetResourceGroups(filterOptions),
-                FilterOptions = filterOptions
+                FilteredResourceGroups = GetResourceGroups(filterOptions),
+                FilterOptions = filterOptions,
+                ResourceGroupCount = _resourceGroupRepository.GetResourceGroups().Count()
             };
         }
 

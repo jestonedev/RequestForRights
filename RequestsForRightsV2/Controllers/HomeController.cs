@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 
 namespace RequestsForRightsV2.Controllers
 {
@@ -16,6 +12,20 @@ namespace RequestsForRightsV2.Controllers
         public ActionResult Help()
         {
             return RedirectPermanent("http://rqrights/App_Data/Manual.html");
+        }
+
+        public ActionResult ForbiddenError()
+        {
+            Response.StatusCode = 403;
+            if (!Request.IsAjaxRequest()) return View("ForbiddenError");
+            return Content("Доступ запрещен");
+        }
+
+        public ActionResult ConflictError(string message)
+        {
+            Response.StatusCode = 409;
+            if (!Request.IsAjaxRequest()) return View("ConflictError", (object)message);
+            return Content(message);
         }
     }
 }

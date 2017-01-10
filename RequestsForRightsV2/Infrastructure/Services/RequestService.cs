@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using RequestsForRights.Database.Repositories.Interfaces;
 using RequestsForRights.Domain.Entities;
+using RequestsForRightsV2.Infrastructure.Security.Interfaces;
 using RequestsForRightsV2.Infrastructure.Services.Interfaces;
 using RequestsForRightsV2.Models.ModelViews;
 
@@ -11,9 +12,9 @@ namespace RequestsForRightsV2.Infrastructure.Services
     public class RequestService: IRequestService
     {
         private readonly IRequestRepository _requestsRepository;
-        private readonly ISecurityService _securityService;
+        private readonly ISecurityService<object> _securityService;
 
-        public RequestService(IRequestRepository requestsRepository, ISecurityService securityService)
+        public RequestService(IRequestRepository requestsRepository, ISecurityService<object> securityService)
         {
             if (requestsRepository == null)
             {

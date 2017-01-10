@@ -65,6 +65,16 @@ input[type="checkbox"].input-validation-error {
     margin-right: 5pt;
 }
 
+.rr-edit-column .btn-group  {
+    font-size: 0;
+    white-space: nowrap;
+}
+
+.rr-edit-column .btn-group .btn {
+    float: none;
+    display: inline-block;
+}
+
 .rr-column {
     border-right: 1px solid #ddd;
 }
@@ -85,4 +95,14 @@ input[type="checkbox"].input-validation-error {
 
 .rr-column-header a span.glyphicon-sort {
     color: #ccc;
+}
+
+.rr-page-counter {
+    vertical-align: top;
+    display: inline-block;
+    padding: 26px 0 26px 10px;
+}
+
+.rr-edit-panel > .btn-group a, .rr-edit-panel > .btn-group button {
+    width: 12em;
 }

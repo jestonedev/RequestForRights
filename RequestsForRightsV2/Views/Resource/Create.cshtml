@@ -1,0 +1,42 @@
+﻿@model RequestsForRights.Domain.Entities.Resource
+
+@{
+    ViewBag.Title = "Добавить информационный ресурс";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Добавить информационный ресурс</h2>
+
+@using (Html.BeginForm("Create", "Resource", new { }, FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    @Html.ValidationSummary(true)
+    <div class="form-group">
+        @Html.LabelFor(r => r.Name, new { @class = "col-sm-2 control-label" })
+        <div class="col-sm-10">
+            @Html.TextBoxFor(r => r.Name, new { @class = "form-control", placeholder = "Введите наименование ресурса" })
+            @Html.ValidationMessageFor(r => r.Name)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(r => r.Description, new { @class = "col-sm-2 control-label" })
+        <div class="col-sm-10">
+            @Html.TextAreaFor(r => r.Description,
+                new { @class = "form-control", placeholder = "Введите описание ресурса" })
+            @Html.ValidationMessageFor(r => r.Description)
+        </div>
+    </div>
+
+    <div class="btn-group col-sm-offset-4 col-sm-4 col-xs-12" role="group" aria-label="Панель действий">
+        <a href="@Url.Action("Index")"
+           class="btn btn-default col-xs-6"
+           title="Вернуться к перечню"
+           aria-label="Назад">
+            <span class="glyphicon glyphicon-circle-arrow-left"></span>
+            Назад
+        </a>
+        <button class="btn btn-default col-xs-6">
+            <span class="glyphicon glyphicon-floppy-disk"></span>
+            Сохранить
+        </button>
+    </div>
+}

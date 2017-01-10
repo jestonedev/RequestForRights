@@ -153,23 +153,31 @@
     <Compile Include="Infrastructure\Enums\AclRole.cs" />
     <Compile Include="Infrastructure\Enums\RequestCategory.cs" />
     <Compile Include="Infrastructure\Enums\SortDirection.cs" />
+    <Compile Include="Infrastructure\Helpers\ExceptionHelper.cs" />
     <Compile Include="Infrastructure\Helpers\FilterOptionsHelper.cs" />
     <Compile Include="Infrastructure\Helpers\LinqHelper.cs" />
     <Compile Include="Infrastructure\Helpers\RequestHelper.cs" />
+    <Compile Include="Infrastructure\Security\Interfaces\IResourceSecurityService.cs" />
+    <Compile Include="Infrastructure\Security\Interfaces\IResourceGroupSecurityService.cs" />
+    <Compile Include="Infrastructure\Security\ResourceSecurityService.cs" />
+    <Compile Include="Infrastructure\Security\ResourceGroupSecurityService.cs" />
+    <Compile Include="Infrastructure\Services\Interfaces\IResourceService.cs" />
     <Compile Include="Infrastructure\Services\Interfaces\IResourceGroupService.cs" />
+    <Compile Include="Infrastructure\Services\ResourceService.cs" />
     <Compile Include="Infrastructure\Services\ResourceGroupService.cs" />
     <Compile Include="Infrastructure\ValueProviders\FilterOptionsValueProvider.cs" />
     <Compile Include="Infrastructure\ValueProviders\FilterOptionsValueProviderFactory.cs" />
     <Compile Include="Infrastructure\ValueProviders\RequestsFilterOptionsValueProvider.cs" />
     <Compile Include="Infrastructure\ValueProviders\RequestsFilterOptionsValueProviderFactory.cs" />
     <Compile Include="Infrastructure\Services\Interfaces\IRequestService.cs" />
-    <Compile Include="Infrastructure\Services\Interfaces\ISecurityService.cs" />
+    <Compile Include="Infrastructure\Security\Interfaces\ISecurityService.cs" />
     <Compile Include="Infrastructure\Services\RequestService.cs" />
-    <Compile Include="Infrastructure\Services\SecurityService.cs" />
+    <Compile Include="Infrastructure\Security\SecurityService.cs" />
     <Compile Include="Models\FilterOptions\FilterOptions.cs" />
     <Compile Include="Models\ModelViews\NotSeenRequestsByState.cs" />
     <Compile Include="Models\FilterOptions\RequestsFilterOptions.cs" />
     <Compile Include="Models\ModelViews\ResourceGroupIndexModelView.cs" />
+    <Compile Include="Models\ModelViews\ResourceIndexModelView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -256,9 +264,17 @@
     <None Include="Views\ResourceGroup\DataTable.cshtml" />
     <Content Include="Views\ResourceGroup\DataTableFooter.cshtml" />
     <None Include="Views\ResourceGroup\Update.cshtml" />
+    <Content Include="Views\Resource\FilterControl.cshtml" />
+    <Content Include="Views\Resource\DataTable.cshtml" />
+    <Content Include="Views\Resource\DataTableFooter.cshtml" />
+    <Content Include="Views\Resource\Create.cshtml" />
+    <Content Include="Views\Resource\Detail.cshtml" />
     <None Include="Views\Resource\Index.cshtml" />
     <Content Include="Views\Shared\DeleteModal.cshtml" />
     <Content Include="Views\Shared\ErrorAlert.cshtml" />
+    <Content Include="Views\Resource\Update.cshtml" />
+    <Content Include="Views\Shared\ForbiddenError.cshtml" />
+    <Content Include="Views\Shared\ConflictError.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Database\RequestsForRights.Database.csproj">

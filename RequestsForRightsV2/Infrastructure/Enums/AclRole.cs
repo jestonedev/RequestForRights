@@ -8,6 +8,7 @@
         Dispatcher,
         Registrar,
         Executor,
-        ResourceManager
+        ResourceManager,
+        Coordinator
     }
 }

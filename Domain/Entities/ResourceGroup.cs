@@ -14,6 +14,7 @@ namespace RequestsForRights.Domain.Entities
         public int IdResourceGroup { get; set; }
         [Required(ErrorMessage = "Наименование категории ресурсов является обязательным для заполнения")]
         [MaxLength(512)]
+        [StringLength(512, ErrorMessage = "Максимальная длина наименования категории ресурсов 512 символов")]
         [DisplayName("Наименование")]
         public string Name { get; set; }
         [DisplayName("Описание")]

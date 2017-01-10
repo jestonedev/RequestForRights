@@ -2,24 +2,39 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using RequestsForRights.Domain.Helpers;
+using RequestsForRights.Domain.Interfaces;
 
 namespace RequestsForRights.Domain.Entities
 {
-    public class Resource
+    public class Resource : IStringMatchable
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int IdResource { get; set; }      
-        [Required]
+        public int IdResource { get; set; }
+        [Required(ErrorMessage = "Наименование ресурса является обязательным для заполнения")]
         [MaxLength(512)]
-        public string Name { get; set; }    
+        [StringLength(512,ErrorMessage = "Максимальная длина наименования ресурса 512 символов")]
+        [DisplayName("Наименование")]
+        public string Name { get; set; }
+        [DisplayName("Описание")]
         public string Description { get; set; }
+        [Required(ErrorMessage = "Категория ресурсов является обязательной для заполнения")]
+        [DisplayName("Категория ресурсов")]
         public int IdResourceGroup { get; set; }
         public virtual ResourceGroup ResourceGroup { get; set; }
         public virtual ICollection<ResourceRight> ResourceRights { get; set; }
+        [DisplayName("Департамент-владелец")]
         public int IdDepartment { get; set; }
         public virtual Department Department { get; set; }
         [DefaultValue(false)]
         public bool Deleted { get; set; }
+
+        public bool Match(string value)
+        {
+            return MatchHelper.MatchValueInsensitive(Name, value) ||
+                   MatchHelper.MatchValueInsensitive(Description, value) ||
+                   MatchHelper.MatchValueInsensitive(ResourceGroup.Name, value);
+        }
     }
 }

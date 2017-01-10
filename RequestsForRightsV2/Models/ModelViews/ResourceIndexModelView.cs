@@ -3,10 +3,10 @@ using RequestsForRights.Domain.Entities;
 
 namespace RequestsForRightsV2.Models.ModelViews
 {
-    public class ResourceGroupIndexModelView
+    public class ResourceIndexModelView
     {
-        public IEnumerable<ResourceGroup> FilteredResourceGroups { get; set; }
-        public int ResourceGroupCount { get; set; }
+        public IEnumerable<Resource> FilteredResources { get; set; }
+        public int ResourceCount { get; set; }
         public FilterOptions.FilterOptions FilterOptions { get; set; }
     }
 }

@@ -1,9 +1,9 @@
 ﻿@using RequestsForRightsV2.Infrastructure.Security
 @using SortDirection = RequestsForRightsV2.Infrastructure.Enums.SortDirection
-@model RequestsForRightsV2.Models.ModelViews.ResourceGroupIndexModelView
+@model RequestsForRightsV2.Models.ModelViews.ResourceIndexModelView
 
 @{
-    var securityService = (ResourceGroupSecurityService)ViewData["SecurityService"];
+    var securityService = (ResourceSecurityService)ViewData["SecurityService"];
     var headers = new[]
     {
         new {
@@ -15,6 +15,11 @@
             Name = "Описание",
             Field = "Description",
             MinWidth = 0
+        },
+        new {
+            Name = "Категория",
+            Field = "ResourceGroup.Name",
+            MinWidth = 150
         }
     };
 }
@@ -47,32 +52,34 @@
         </tr>
         </thead>
         <tbody>
-        @foreach (var resourceGroup in Model.FilteredResourceGroups)
+        @foreach (var resource in Model.FilteredResources)
         {
             <tr>
-                <td class="rr-column col-sm-3">@resourceGroup.Name</td>
-                <td class="rr-column">@resourceGroup.Description</td>
+                <td class="rr-column col-sm-2">@resource.Name</td>
+                <td class="rr-column">@resource.Description</td>
+                <td class="rr-column col-sm-2">@resource.ResourceGroup.Name</td>
                 <td class="rr-edit-column text-center">
                     <div class="btn-group btn-group-xs" role="group" aria-label="Панель редактирования записи">
-                        <a href="@Url.Action("Detail", new {id = resourceGroup.IdResourceGroup})"
+                        <a href="@Url.Action("Detail", new {id = resource.IdResource})"
                            class="btn btn-default glyphicon glyphicon-eye-open"
                            title="Просмотреть запись"
                            aria-label="Просмотреть запись"></a>
-                        @if (securityService.CanUpdate(resourceGroup))
+                        @if (securityService.CanUpdate(resource))
                         {
-                            <a href="@Url.Action("Update", new {id = resourceGroup.IdResourceGroup})"
+                            <a href="@Url.Action("Update", new {id = resource.IdResource})"
                                class="btn btn-default glyphicon glyphicon-pencil"
                                title="Изменить запись"
                                aria-label="Изменить запись"></a>
                         }
-                        @if (securityService.CanDelete(resourceGroup))
+                        @if (securityService.CanDelete(resource))
                         {
-                            <a href="@Url.Action("Delete", new {id = resourceGroup.IdResourceGroup})"
+                            <a href="@Url.Action("Delete", new {id = resource.IdResource})"
                                class="btn btn-danger glyphicon glyphicon-remove rr-delete-item-button"
                                title="Удалить запись"
                                aria-label="Удалить запись"></a>
                         }
                     </div>
+
                 </td>
             </tr>
         }
