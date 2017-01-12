@@ -47,11 +47,11 @@
         </tr>
         </thead>
         <tbody>
-        @foreach (var resourceGroup in Model.FilteredResourceGroups)
+        @foreach (var resourceGroup in Model.VisibleResourceGroups)
         {
             <tr>
                 <td class="rr-column col-sm-3">@resourceGroup.Name</td>
-                <td class="rr-column">@resourceGroup.Description</td>
+                <td class="rr-column col-sm-9">@resourceGroup.Description</td>
                 <td class="rr-edit-column text-center">
                     <div class="btn-group btn-group-xs" role="group" aria-label="Панель редактирования записи">
                         <a href="@Url.Action("Detail", new {id = resourceGroup.IdResourceGroup})"

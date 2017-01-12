@@ -19,7 +19,7 @@ namespace RequestsForRights.Domain.Entities
         public string Name { get; set; }
         [DisplayName("Описание")]
         public string Description { get; set; }
-        public virtual ICollection<Resource> Resources { get; set; }
+        public virtual IList<Resource> Resources { get; set; }
         [DefaultValue(false)]
         public bool Deleted { get; set; }
 

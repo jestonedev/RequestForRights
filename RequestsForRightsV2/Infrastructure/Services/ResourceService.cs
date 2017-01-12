@@ -23,9 +23,9 @@ namespace RequestsForRightsV2.Infrastructure.Services
             _resourceRepository = resourceRepository;
         }
 
-        public IEnumerable<Resource> GetResources(FilterOptions filterOptions)
+        public IEnumerable<Resource> GetVisibleResources(FilterOptions filterOptions)
         {
-            return _resourceRepository.GetResources().Where(filterOptions.Filter).
+            return GetFilteredResources(filterOptions.Filter).
                 OrderBy(filterOptions.SortField, filterOptions.SortDirection).
                 Skip(filterOptions.PageSize*filterOptions.PageIndex).
                 Take(filterOptions.PageSize);
@@ -39,25 +39,61 @@ namespace RequestsForRightsV2.Infrastructure.Services
             }
             return new ResourceIndexModelView
             {
-                FilteredResources = GetResources(filterOptions),
+                VisibleResources = GetVisibleResources(filterOptions),
                 FilterOptions = filterOptions,
-                ResourceCount = _resourceRepository.GetResources().Count()
+                ResourceCount = GetFilteredResources(filterOptions.Filter).Count()
+            };
+        }
+
+        private IEnumerable<Resource> GetFilteredResources(string filter)
+        {
+            return _resourceRepository.GetResources().Where(filter);
+        }
+
+        public Resource GetResourceBy(int id)
+        {
+            return _resourceRepository.GetResourceById(id);
+        }
+
+        public ResourceViewModel GetResourceViewModelBy(int id)
+        {
+            return new ResourceViewModel
+            {
+                Resource = _resourceRepository.GetResourceById(id),
+                ResourceGroups = _resourceRepository.GetResourceGroups(),
+                OwnerDepartments = _resourceRepository.GetOwnerDepartments()
+            };
+        }
+
+        public ResourceViewModel GetResourceViewModelBy(Resource resource)
+        {
+            return new ResourceViewModel
+            {
+                Resource = resource,
+                ResourceGroups = _resourceRepository.GetResourceGroups(),
+                OwnerDepartments = _resourceRepository.GetOwnerDepartments()
+            };
+        }
+
+        public ResourceViewModel GetEmptyResourceViewModel()
+        {
+            return new ResourceViewModel
+            {
+                Resource = new Resource
+                {
+                    ResourceRights = new List<ResourceRight>
+                    {
+                        new ResourceRight()
+                    }
+                },
+                ResourceGroups = _resourceRepository.GetResourceGroups(),
+                OwnerDepartments = _resourceRepository.GetOwnerDepartments()
             };
         }
 
         public Resource DeleteResource(int idResource)
         {
             return _resourceRepository.DeleteResource(idResource);
-        }
-
-        public int SaveChanges()
-        {
-            return _resourceRepository.SaveChanges();
-        }
-
-        public Resource GetResourceById(int id)
-        {
-            return _resourceRepository.GetResourceById(id);
         }
 
         public Resource UpdateResource(Resource resource)
@@ -68,6 +104,11 @@ namespace RequestsForRightsV2.Infrastructure.Services
         public Resource InsertResource(Resource resource)
         {
             return _resourceRepository.InsertResource(resource);
+        }
+
+        public int SaveChanges()
+        {
+            return _resourceRepository.SaveChanges();
         }
     }
 }

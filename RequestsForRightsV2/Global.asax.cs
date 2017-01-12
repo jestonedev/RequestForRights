@@ -2,6 +2,7 @@
 using System.Web.Optimization;
 using System.Web.Routing;
 using RequestsForRightsV2.Infrastructure.ValueProviders;
+using RequestsForRightsV2.Models.FilterOptions;
 
 namespace RequestsForRightsV2
 {
@@ -13,7 +14,7 @@ namespace RequestsForRightsV2
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-            ValueProviderFactories.Factories.Add(new FilterOptionsValueProviderFactory());
+            ValueProviderFactories.Factories.Add(new FilterOptionsValueProviderFactory<FilterOptions>());
             ValueProviderFactories.Factories.Add(new RequestsFilterOptionsValueProviderFactory());
         }
     }

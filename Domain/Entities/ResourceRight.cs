@@ -10,13 +10,16 @@ namespace RequestsForRights.Domain.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int IdResourceRight { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Наименование права является обязательным для заполнения")]
         [MaxLength(512)]
+        [StringLength(512, ErrorMessage = "Максимальная длина наименования права 512 символов")]
+        [DisplayName("Наименование")]
         public string Name { get; set; }
+        [DisplayName("Описание")]
         public string Description { get; set; }
         public int IdResource { get; set; }
         public virtual Resource Resource { get; set; }
-        public virtual ICollection<RequestUserRightAssoc> RequestUserRightAssoc { get; set; }
+        public virtual IList<RequestUserRightAssoc> RequestUserRightAssoc { get; set; }
         [DefaultValue(false)]
         public bool Deleted { get; set; }
     }

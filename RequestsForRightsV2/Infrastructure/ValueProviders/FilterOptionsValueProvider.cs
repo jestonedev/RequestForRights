@@ -15,19 +15,9 @@ namespace RequestsForRightsV2.Infrastructure.ValueProviders
     {
         public bool ContainsPrefix(string prefix)
         {
-            var request = HttpContext.Current.Request;
-            var routeValues = request.RequestContext.RouteData.Values;
-            if (!routeValues.ContainsKey("controller") || !routeValues.ContainsKey("action")) return false;
-            var controllerName = routeValues["controller"].ToString();
-            var actionName = routeValues["action"].ToString();
-            var currentAssemblyTypes = Assembly.GetAssembly(GetType())
-                .GetTypes();
-            var controller = currentAssemblyTypes.
-                FirstOrDefault(t => t.Name == controllerName + "Controller" && t.BaseType == typeof(Controller));
-            if (controller == null) return false;
             try
             {
-                var action = controller.GetMethod(actionName);
+                var action = FilterOptionsHelper.GetControllerActionByContext(HttpContext.Current);
                 var parameter = action.GetParameters().FirstOrDefault(p => p.Name == prefix);
                 return parameter != null && parameter.ParameterType == typeof(T);
             }

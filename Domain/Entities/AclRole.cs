@@ -12,6 +12,6 @@ namespace RequestsForRights.Domain.Entities
         [Required]
         [MaxLength(256)]
         public string Name { get; set; }
-        public virtual ICollection<AclUser> Users { get; set; }
+        public virtual IList<AclUser> Users { get; set; }
     }
 }

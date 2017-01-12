@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
+using System.Reflection;
 using System.Web;
+using System.Web.Mvc;
 using RequestsForRightsV2.Infrastructure.Enums;
 
 namespace RequestsForRightsV2.Infrastructure.Helpers
@@ -48,6 +51,20 @@ namespace RequestsForRightsV2.Infrastructure.Helpers
             return context.Request[cookieName] != null ?
                 context.Request[cookieName].To(defaultValue) :
                 defaultValue;
+        }
+
+        public static MethodInfo GetControllerActionByContext(HttpContext context)
+        {
+            var request = context.Request;
+            var routeValues = request.RequestContext.RouteData.Values;
+            if (!routeValues.ContainsKey("controller") || !routeValues.ContainsKey("action")) return null;
+            var controllerName = routeValues["controller"].ToString();
+            var actionName = routeValues["action"].ToString();
+            var currentAssemblyTypes = Assembly.GetAssembly(typeof(FilterOptionsHelper))
+                .GetTypes();
+            var controller = currentAssemblyTypes.
+                    FirstOrDefault(t => t.Name == controllerName + "Controller" && t.BaseType == typeof(Controller));
+            return controller == null ? null : controller.GetMethod(actionName);
         }
     }
 }

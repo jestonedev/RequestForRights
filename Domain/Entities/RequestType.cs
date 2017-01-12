@@ -13,6 +13,6 @@ namespace RequestsForRights.Domain.Entities
         [Required]
         [MaxLength(512)]
         public string Name { get; set; }
-        public virtual ICollection<Request> Requests { get; set; }
+        public virtual IList<Request> Requests { get; set; }
     }
 }

@@ -23,9 +23,9 @@ namespace RequestsForRightsV2.Infrastructure.Services
             _resourceGroupRepository = resourceGroupRepository;
         }
 
-        public IEnumerable<ResourceGroup> GetResourceGroups(FilterOptions filterOptions)
+        public IEnumerable<ResourceGroup> GetVisibleResourceGroups(FilterOptions filterOptions)
         {
-            return _resourceGroupRepository.GetResourceGroups().Where(filterOptions.Filter).
+            return GetFilteredResourceGroups(filterOptions.Filter).
                 OrderBy(filterOptions.SortField, filterOptions.SortDirection).
                 Skip(filterOptions.PageSize*filterOptions.PageIndex).
                 Take(filterOptions.PageSize);
@@ -39,10 +39,15 @@ namespace RequestsForRightsV2.Infrastructure.Services
             }
             return new ResourceGroupIndexModelView
             {
-                FilteredResourceGroups = GetResourceGroups(filterOptions),
+                VisibleResourceGroups = GetVisibleResourceGroups(filterOptions),
                 FilterOptions = filterOptions,
-                ResourceGroupCount = _resourceGroupRepository.GetResourceGroups().Count()
+                ResourceGroupCount = GetFilteredResourceGroups(filterOptions.Filter).Count()
             };
+        }
+
+        private IEnumerable<ResourceGroup> GetFilteredResourceGroups(string filter)
+        {
+            return _resourceGroupRepository.GetResourceGroups().Where(filter);
         }
 
         public ResourceGroup DeleteResourceGroup(int idResourceGroup)
@@ -55,7 +60,7 @@ namespace RequestsForRightsV2.Infrastructure.Services
             return _resourceGroupRepository.SaveChanges();
         }
 
-        public ResourceGroup GetResourceGroupById(int id)
+        public ResourceGroup GetResourceGroupBy(int id)
         {
             return _resourceGroupRepository.GetResourceGroupById(id);
         }

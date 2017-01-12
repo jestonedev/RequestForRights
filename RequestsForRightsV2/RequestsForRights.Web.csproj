@@ -178,6 +178,7 @@
     <Compile Include="Models\FilterOptions\RequestsFilterOptions.cs" />
     <Compile Include="Models\ModelViews\ResourceGroupIndexModelView.cs" />
     <Compile Include="Models\ModelViews\ResourceIndexModelView.cs" />
+    <Compile Include="Models\ModelViews\ResourceViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -235,6 +236,7 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\resource.common.js" />
     <Content Include="Scripts\update.common.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
@@ -275,6 +277,7 @@
     <Content Include="Views\Resource\Update.cshtml" />
     <Content Include="Views\Shared\ForbiddenError.cshtml" />
     <Content Include="Views\Shared\ConflictError.cshtml" />
+    <Content Include="Views\Resource\RightEditor.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Database\RequestsForRights.Database.csproj">

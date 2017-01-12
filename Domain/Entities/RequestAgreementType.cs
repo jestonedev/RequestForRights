@@ -11,6 +11,6 @@ namespace RequestsForRights.Domain.Entities
         public int IdAgreementType { get; set; }
         [Required]
         public string Name { get; set; }
-        public virtual ICollection<RequestAgreement> RequestAgreements { get; set; }
+        public virtual IList<RequestAgreement> RequestAgreements { get; set; }
     }
 }

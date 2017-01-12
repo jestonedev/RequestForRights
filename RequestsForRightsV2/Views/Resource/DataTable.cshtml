@@ -48,15 +48,15 @@
                     </a>
                 </th>
             }
-            <th></th>
+            <th style="max-width: 100px"></th>
         </tr>
         </thead>
         <tbody>
-        @foreach (var resource in Model.FilteredResources)
+        @foreach (var resource in Model.VisibleResources)
         {
             <tr>
                 <td class="rr-column col-sm-2">@resource.Name</td>
-                <td class="rr-column">@resource.Description</td>
+                <td class="rr-column col-sm-8">@resource.Description</td>
                 <td class="rr-column col-sm-2">@resource.ResourceGroup.Name</td>
                 <td class="rr-edit-column text-center">
                     <div class="btn-group btn-group-xs" role="group" aria-label="Панель редактирования записи">

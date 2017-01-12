@@ -29,7 +29,7 @@
         @Html.LabelFor(r => r.Description, new {@class = "col-sm-2 control-label"})
         <div class="col-sm-10">
             @Html.TextAreaFor(r => r.Description,
-                new {@class = "form-control", placeholder = "Введите описание категории ресурсов"})
+             new { @class = "form-control", placeholder = "Введите описание категории ресурсов", rows = "4" })
             @Html.ValidationMessageFor(r => r.Description)
         </div>
     </div>

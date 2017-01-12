@@ -16,10 +16,10 @@ namespace RequestsForRights.Domain.Entities
         public virtual AclUser User { get; set; }
         public int IdRequestType { get; set; }
         public virtual RequestType RequestType { get; set; }
-        public virtual ICollection<RequestAgreement> RequestAgreements { get; set; }
-        public virtual ICollection<RequestUserLastSeen> RequestUserLastSeens { get; set; }
-        public virtual ICollection<RequestState> RequestStates { get; set; }
-        public virtual ICollection<RequestUserAssoc> RequestUserAssoc { get; set; }
+        public virtual IList<RequestAgreement> RequestAgreements { get; set; }
+        public virtual IList<RequestUserLastSeen> RequestUserLastSeens { get; set; }
+        public virtual IList<RequestState> RequestStates { get; set; }
+        public virtual IList<RequestUserAssoc> RequestUserAssoc { get; set; }
         [DefaultValue(false)]
         public bool Deleted { get; set; }
     }

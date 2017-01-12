@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Data.Entity.Infrastructure;
 using System.Web.Mvc;
-using RequestsForRights.Domain.Entities;
 using RequestsForRightsV2.Infrastructure.Helpers;
 using RequestsForRightsV2.Infrastructure.Security.Interfaces;
 using RequestsForRightsV2.Infrastructure.Services.Interfaces;
 using RequestsForRightsV2.Models.FilterOptions;
+using RequestsForRightsV2.Models.ModelViews;
 
 namespace RequestsForRightsV2.Controllers
 {
@@ -54,33 +54,34 @@ namespace RequestsForRightsV2.Controllers
         [HttpGet]
         public ActionResult Update(int id)
         {
-            if (!_securityService.CanRead())
+            if (!_securityService.CanUpdate())
             {
                 return RedirectToAction("ForbiddenError", "Home");
             }
             ViewData["SecurityService"] = _securityService;
-            return View(_resourceService.GetResourceById(id));
+            return View(_resourceService.GetResourceViewModelBy(id));
         }
 
         [HttpPut]
-        public ActionResult Update(Resource resource)
+        public ActionResult Update(ResourceViewModel resourceViewModel)
         {
-            if (!_securityService.CanUpdate(resource))
+            if (resourceViewModel == null || resourceViewModel.Resource == null)
             {
-                return RedirectToAction("ForbiddenError", "Home");
-            }
-            if (resource == null)
-            {
+                // TODO: редирект на ошибку 400
                 Response.StatusCode = 400;
                 return Content("Не передана ссылка на ресурс");
             }
+            if (!_securityService.CanUpdate(resourceViewModel.Resource))
+            {
+                return RedirectToAction("ForbiddenError", "Home");
+            }
             if (!ModelState.IsValid)
             {
-                return View(resource);
+                return View(_resourceService.GetResourceViewModelBy(resourceViewModel.Resource));
             }
             try
             {
-                _resourceService.UpdateResource(resource);
+                _resourceService.UpdateResource(resourceViewModel.Resource);
                 _resourceService.SaveChanges();
             }
             catch (DbUpdateException e)
@@ -99,14 +100,14 @@ namespace RequestsForRightsV2.Controllers
                 return RedirectToAction("ForbiddenError", "Home");
             }
             ViewData["SecurityService"] = _securityService;
-            return View(_resourceService.GetResourceById(id));
+            return View(_resourceService.GetResourceBy(id));
         }
 
         [HttpDelete]
         public ActionResult Delete(int id)
         {
-            var resourceGroup = _resourceService.GetResourceById(id);
-            if (!_securityService.CanDelete(resourceGroup))
+            var resource = _resourceService.GetResourceViewModelBy(id);
+            if (!_securityService.CanDelete(resource.Resource))
             {
                 return RedirectToAction("ForbiddenError", "Home");
             }
@@ -131,28 +132,29 @@ namespace RequestsForRightsV2.Controllers
                 return RedirectToAction("ForbiddenError", "Home");
             }
             ViewData["SecurityService"] = _securityService;
-            return View();
+            return View(_resourceService.GetEmptyResourceViewModel());
         }
 
         [HttpPost]
-        public ActionResult Create(Resource resource)
+        public ActionResult Create(ResourceViewModel model)
         {
-            if (!_securityService.CanCreate(resource))
+            if (model == null || model.Resource == null)
             {
-                return RedirectToAction("ForbiddenError", "Home");
-            }
-            if (resource == null)
-            {
+                // TODO: редирект на ошибку 400
                 Response.StatusCode = 400;
                 return Content("Не передана ссылка на ресурс");
             }
+            if (!_securityService.CanCreate(model.Resource))
+            {
+                return RedirectToAction("ForbiddenError", "Home");
+            }
             if (!ModelState.IsValid)
             {
-                return View(resource);
+                return View(_resourceService.GetResourceViewModelBy(model.Resource));
             }
             try
             {
-                _resourceService.InsertResource(resource);
+                _resourceService.InsertResource(model.Resource);
                 _resourceService.SaveChanges();
             }
             catch (DbUpdateException e)
@@ -161,6 +163,16 @@ namespace RequestsForRightsV2.Controllers
                     new { message = ExceptionHelper.RollToInnerException(e).Message });
             }
             return RedirectToAction("Index");
+        }
+
+        public ActionResult GetEmptyRightTemplate()
+        {
+            if (!Request.IsAjaxRequest())
+            {
+                return RedirectToAction("ForbiddenError", "Home");
+            }
+            ViewData["RightIndex"] = 0;
+            return PartialView("RightEditor", _resourceService.GetEmptyResourceViewModel());
         }
     }
 }

@@ -20,11 +20,12 @@ namespace RequestsForRights.Domain.Entities
         [DisplayName("Описание")]
         public string Description { get; set; }
         [Required(ErrorMessage = "Категория ресурсов является обязательной для заполнения")]
-        [DisplayName("Категория ресурсов")]
+        [DisplayName("Категория")]
         public int IdResourceGroup { get; set; }
         public virtual ResourceGroup ResourceGroup { get; set; }
-        public virtual ICollection<ResourceRight> ResourceRights { get; set; }
-        [DisplayName("Департамент-владелец")]
+        public virtual IList<ResourceRight> ResourceRights { get; set; }
+        [Required(ErrorMessage = "Департамент-владелец является обязательным для заполнения")]
+        [DisplayName("Владелец")]
         public int IdDepartment { get; set; }
         public virtual Department Department { get; set; }
         [DefaultValue(false)]

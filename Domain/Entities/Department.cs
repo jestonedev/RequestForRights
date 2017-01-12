@@ -16,10 +16,10 @@ namespace RequestsForRights.Domain.Entities
         public int? IdParentDepartment { get; set; }
         [ForeignKey("IdParentDepartment")]
         public virtual Department ParentDepartment { get; set; }
-        public virtual ICollection<Department> ChildDepartments { get; set; }
-        public virtual ICollection<Resource> Resources { get; set; }
-        public virtual ICollection<AclUser> Users { get; set; }
-        public virtual ICollection<AclUser> AclUsers { get; set; }
+        public virtual IList<Department> ChildDepartments { get; set; }
+        public virtual IList<Resource> Resources { get; set; }
+        public virtual IList<AclUser> Users { get; set; }
+        public virtual IList<AclUser> AclUsers { get; set; }
         [DefaultValue(false)]
         public bool Deleted { get; set; }
     }

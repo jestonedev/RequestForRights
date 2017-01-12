@@ -106,3 +106,29 @@ input[type="checkbox"].input-validation-error {
 .rr-edit-panel > .btn-group a, .rr-edit-panel > .btn-group button {
     width: 12em;
 }
+
+.rr-add-right-panel {
+    margin-bottom: 20px;
+}
+
+.tab-content > .rr-tab-pane {
+    margin-top: 20px;
+    position: absolute;
+    left: -33333px;
+    top: -33333px;
+    height: 1px;
+    width: 1px;
+    display: block;
+}
+
+.tab-content > .rr-tab-pane.active {
+    position: inherit;
+    left: inherit;
+    width: inherit;
+    height: inherit;
+}
+
+.rr-badge { 
+    background-color: #e46161;
+    display: none;
+}

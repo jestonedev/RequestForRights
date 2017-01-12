@@ -5,7 +5,7 @@ namespace RequestsForRightsV2.Models.ModelViews
 {
     public class ResourceGroupIndexModelView
     {
-        public IEnumerable<ResourceGroup> FilteredResourceGroups { get; set; }
+        public IEnumerable<ResourceGroup> VisibleResourceGroups { get; set; }
         public int ResourceGroupCount { get; set; }
         public FilterOptions.FilterOptions FilterOptions { get; set; }
     }

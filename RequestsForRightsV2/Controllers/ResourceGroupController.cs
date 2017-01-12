@@ -57,7 +57,7 @@ namespace RequestsForRightsV2.Controllers
                 return RedirectToAction("ForbiddenError", "Home");
             }
             ViewData["SecurityService"] = _securityService;
-            return View(_resourceGroupService.GetResourceGroupById(id));
+            return View(_resourceGroupService.GetResourceGroupBy(id));
         }
 
         [HttpPut]
@@ -97,13 +97,13 @@ namespace RequestsForRightsV2.Controllers
                 return RedirectToAction("ForbiddenError", "Home");
             }
             ViewData["SecurityService"] = _securityService;
-            return View(_resourceGroupService.GetResourceGroupById(id));
+            return View(_resourceGroupService.GetResourceGroupBy(id));
         }
 
         [HttpDelete]
         public ActionResult Delete(int id)
         {
-            var resourceGroup = _resourceGroupService.GetResourceGroupById(id);
+            var resourceGroup = _resourceGroupService.GetResourceGroupBy(id);
             if (!_securityService.CanDelete(resourceGroup))
             {
                 return RedirectToAction("ForbiddenError", "Home");
