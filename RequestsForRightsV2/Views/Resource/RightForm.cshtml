@@ -1,32 +1,21 @@
-﻿@using RequestsForRightsV2.Infrastructure.Security
-@model RequestsForRights.Domain.Entities.Resource
-
-@{
-    ViewBag.Title = "Просмотр информационного ресурса";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-    var securityService = (ResourceSecurityService)ViewData["SecurityService"];
-}
-
-<h2>Информационный ресурс # @Model.IdResource</h2>
-
-@Html.Partial("ErrorAlert")
-
+﻿@model RequestsForRightsV2.Models.ModelViews.ResourceViewModel
+    
 <div>
     <ul class="nav nav-tabs" role="tablist">
         <li role="presentation" class="active">
-            <a href="#general" aria-controls="general" role="tab" data-toggle="tab">Сведения о ресурсе</a>
+            <a href="#general" aria-controls="general" role="tab" data-toggle="tab">Сведения о ресурсе <span class="badge rr-badge">0</span></a>
         </li>
         <li role="presentation">
-            <a href="#rights" aria-controls="rights" role="tab" data-toggle="tab">Права</a>
+            <a href="#rights" aria-controls="rights" role="tab" data-toggle="tab">Права <span class="badge rr-badge">0</span></a>
         </li>
         <li role="presentation">
-            <a href="#owner" aria-controls="owner" role="tab" data-toggle="tab">Владелец</a>
+            <a href="#owner" aria-controls="owner" role="tab" data-toggle="tab">Владелец <span class="badge rr-badge">0</span></a>
         </li>
         <li role="presentation">
-            <a href="#operator" aria-controls="operator" role="tab" data-toggle="tab">Оператор</a>
+            <a href="#operator" aria-controls="operator" role="tab" data-toggle="tab">Оператор <span class="badge rr-badge">0</span></a>
         </li>
         <li role="presentation">
-            <a href="#acts" aria-controls="acts" role="tab" data-toggle="tab">Акты</a>
+            <a href="#acts" aria-controls="acts" role="tab" data-toggle="tab">Акты <span class="badge rr-badge">0</span></a>
         </li>
     </ul>
 
@@ -35,16 +24,42 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Общие сведения</div>
                 <div class="panel-body">
-                    <dl class="dl-horizontal">
-                        <dt>@Html.DisplayNameFor(r => r.Name)</dt>
-                        <dd>@Model.Name</dd>
-                        <dt>@Html.DisplayNameFor(r => r.Description)</dt>
-                        <dd>@Model.Description</dd>
-                        <dt>@Html.DisplayNameFor(r => r.IdResourceGroup)</dt>
-                        <dd>@Model.ResourceGroup.Name</dd>
-                        <dt>@Html.DisplayNameFor(r => r.IdDepartment)</dt>
-                        <dd>@Model.Department.Name</dd>
-                    </dl>
+                    <div class="form-group">
+                        @Html.LabelFor(r => r.Resource.Name, new { @class = "col-sm-2 control-label" })
+                        <div class="col-sm-10">
+                            @Html.TextBoxFor(r => r.Resource.Name,
+                                    new { @class = "form-control", placeholder = "Введите наименование ресурса" })
+                            @Html.ValidationMessageFor(r => r.Resource.Name)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(r => r.Resource.Description, new { @class = "col-sm-2 control-label" })
+                        <div class="col-sm-10">
+                            @Html.TextAreaFor(r => r.Resource.Description,
+                                    new { @class = "form-control", placeholder = "Введите описание ресурса", rows = "4" })
+                            @Html.ValidationMessageFor(r => r.Resource.Description)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(r => r.Resource.IdResourceGroup, new { @class = "col-sm-2 control-label" })
+                        <div class="col-sm-10">
+                            @Html.DropDownListFor(r => r.Resource.IdResourceGroup,
+                                new SelectList(Model.ResourceGroups, "IdResourceGroup", "Name"),
+                                    "Выберите категорию ресурсов",
+                                    new { @class = "form-control" })
+                            @Html.ValidationMessageFor(r => r.Resource.IdResourceGroup)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(r => r.Resource.IdDepartment, new { @class = "col-sm-2 control-label" })
+                        <div class="col-sm-10">
+                            @Html.DropDownListFor(r => r.Resource.IdDepartment,
+                                new SelectList(Model.OwnerDepartments, "IdDepartment", "Name"),
+                                    "Выберите департамент-владелец",
+                                    new { @class = "form-control" })
+                            @Html.ValidationMessageFor(r => r.Resource.IdDepartment)
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="panel panel-default">
@@ -91,22 +106,25 @@
             </div>
         </div>
         <div role="tabpanel" class="tab-pane fade rr-tab-pane" id="rights">
-            <ul class="list-group">
-                @if (Model.ResourceRights != null)
+            <div class="text-center rr-rights-error">
+                @Html.ValidationMessageFor(r => r.Resource.ResourceRights)
+            </div>
+            <ul class="list-group rr-rights">
+                @if (Model.Resource.ResourceRights != null)
                 {
-                    foreach (var right in Model.ResourceRights.Where(r => !r.Deleted))
+                    for (var i = 0; i < Model.Resource.ResourceRights.Count; i++)
                     {
-                        <li class="list-group-item">
-                            <dl class="dl-horizontal">
-                                <dt>Наименование</dt>
-                                <dd>@right.Name</dd>
-                                <dt>Описание</dt>
-                                <dd>@right.Description</dd>
-                            </dl>
-                        </li>
+                        ViewBag.RightIndex = i;
+                        @Html.Partial("RightEditor", Model, new ViewDataDictionary
+                            {
+                                {"RightIndex", i}
+                            })
                     }
                 }
             </ul>
+            <div class="text-center rr-add-right-panel">
+                <button name="addRight" class="btn btn-success btn-default">Добавить право</button>
+            </div>
         </div>
         <div role="tabpanel" class="tab-pane fade rr-tab-pane" id="owner">
             <div class="panel panel-default">
@@ -244,45 +262,3 @@
     </div>
 </div>
 
-<div class="text-center rr-edit-panel">
-    <div class="btn-group" role="group" aria-label="Панель действий">
-        <a href="@Url.Action("Index")"
-           class="btn btn-default"
-           title="Вернуться к перечню"
-           aria-label="Назад">
-            <span class="glyphicon glyphicon-circle-arrow-left"></span>
-            Назад
-        </a>
-        @if (securityService.CanUpdate(Model))
-        {
-            <a href="@Url.Action("Update", new {id = Model.IdResource, returnUri = Url.Action("Detail")})"
-               class="btn btn-default"
-               title="Изменить запись"
-               aria-label="Изменить запись">
-                <span class="glyphicon glyphicon-pencil"></span>
-                Изменить
-            </a>
-        }
-        @if (securityService.CanDelete(Model))
-        {
-            <a href="@Url.Action("Delete", new {id = Model.IdResource})" id="delete-button"
-               data-success-redirect-to="@Url.Action("Index")"
-               class="btn btn-danger"
-               title="Вернуться к перечню"
-               aria-label="Удалить">
-                <span class="glyphicon glyphicon-remove"></span>
-                Удалить
-            </a>
-        }
-    </div>
-</div>
-
-@Html.Partial("DeleteModal", new
-{
-    Title = "Подтвердите удаление",
-    Description = "Вы действительно хотите удалить этот ресурс?"
-})
-
-@section scripts {
-    @Scripts.Render("~/bundles/rr-detail.update.common")
-}

@@ -1,5 +1,4 @@
-﻿using System.Security.Cryptography.X509Certificates;
-using RequestsForRightsV2.Infrastructure.Enums;
+﻿using RequestsForRightsV2.Infrastructure.Enums;
 
 namespace RequestsForRightsV2.Infrastructure.Security.Interfaces
 {

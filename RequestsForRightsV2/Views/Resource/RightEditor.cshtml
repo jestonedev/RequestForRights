@@ -1,9 +1,14 @@
 ﻿@model RequestsForRightsV2.Models.ModelViews.ResourceViewModel
+
 @{
     var rightIndex = -1;
     if (ViewData.Keys.Contains("RightIndex"))
     {
         int.TryParse(ViewData["RightIndex"].ToString(), out rightIndex);
+    }
+    if (Model.Resource.ResourceRights[rightIndex].Deleted)
+    {
+        return;   
     }
 }
 

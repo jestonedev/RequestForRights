@@ -27,5 +27,12 @@ namespace RequestsForRightsV2.Controllers
             if (!Request.IsAjaxRequest()) return View("ConflictError", (object)message);
             return Content(message);
         }
+
+        public ActionResult BadRequestError(string message)
+        {
+            Response.StatusCode = 400;
+            if (!Request.IsAjaxRequest()) return View("BadRequestError", (object)message);
+            return Content(message);
+        }
     }
 }

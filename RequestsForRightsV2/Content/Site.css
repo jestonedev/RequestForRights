@@ -34,6 +34,11 @@ input[type="checkbox"].input-validation-error {
     color: #b94a48;
 }
 
+.validation-summary-errors li {
+    list-style: none;
+    padding: 0;
+}
+
 .validation-summary-valid {
     display: none;
 }

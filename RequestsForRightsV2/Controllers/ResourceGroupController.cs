@@ -36,7 +36,8 @@ namespace RequestsForRightsV2.Controllers
                 return RedirectToAction("ForbiddenError", "Home");
             }
             ViewData["SecurityService"] = _securityService;
-            return View(_resourceGroupService.GetResourceGroupIndexModelView(filterOptions));
+            return View(_resourceGroupService.GetResourceGroupIndexModelView(filterOptions,
+                _resourceGroupService.GetFilteredResourceGroups(filterOptions.Filter)));
         }
 
         public ActionResult GetDataTable(FilterOptions filterOptions)
@@ -46,7 +47,8 @@ namespace RequestsForRightsV2.Controllers
                 return RedirectToAction("ForbiddenError", "Home");
             }
             ViewData["SecurityService"] = _securityService;
-            return PartialView("DataTable", _resourceGroupService.GetResourceGroupIndexModelView(filterOptions));
+            return PartialView("DataTable", _resourceGroupService.GetResourceGroupIndexModelView(filterOptions,
+                _resourceGroupService.GetFilteredResourceGroups(filterOptions.Filter)));
         }
 
         [HttpGet]
@@ -69,11 +71,12 @@ namespace RequestsForRightsV2.Controllers
             }
             if (resourceGroup == null)
             {
-                Response.StatusCode = 400;
-                return Content("Не передана ссылка на категорию ресурсов");
+                return RedirectToAction("BadRequestError", "Home",
+                    new { message = "Не передана ссылка на категорию ресурсов" });
             }
             if (!ModelState.IsValid)
             {
+                ViewData["SecurityService"] = _securityService;
                 return View(resourceGroup);
             }
             try
@@ -141,11 +144,12 @@ namespace RequestsForRightsV2.Controllers
             }
             if (resourceGroup == null)
             {
-                Response.StatusCode = 400;
-                return Content("Не передана ссылка на категорию ресурсов");
+                return RedirectToAction("BadRequestError", "Home",
+                    new { message = "Не передана ссылка на категорию ресурсов" });
             }
             if (!ModelState.IsValid)
             {
+                ViewData["SecurityService"] = _securityService;
                 return View(resourceGroup);
             }
             try

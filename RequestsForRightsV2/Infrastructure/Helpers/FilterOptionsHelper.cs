@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
-using RequestsForRightsV2.Infrastructure.Enums;
 
 namespace RequestsForRightsV2.Infrastructure.Helpers
 {

@@ -32,16 +32,6 @@ $(".rr-save-button")
             return false;
         });
 
-$("form")
-    .keypress(function (e) {
-        if (e.target.type === "textarea") {
-            return true;
-        }
-        if (e.which === 13) {
-            $(this).find(".rr-save-button").click();
-        }
-    });
-
 function updateControls() {
     var rightNamePropRegex = /Rights\[\d+\]/;
     var rightIdPropRegex = /Rights_\d+__/;
@@ -117,4 +107,5 @@ function updateDeleteRightButton() {
 }
 
 showErrors();
+updateControls();
 updateDeleteRightButton();

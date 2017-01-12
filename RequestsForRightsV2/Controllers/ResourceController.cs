@@ -38,7 +38,8 @@ namespace RequestsForRightsV2.Controllers
                 return RedirectToAction("ForbiddenError", "Home");
             }
             ViewData["SecurityService"] = _securityService;
-            return View(_resourceService.GetResourceIndexModelView(filterOptions));
+            return View(_resourceService.GetResourceIndexModelView(filterOptions, 
+                _resourceService.GetFilteredResources(filterOptions.Filter)));
         }
 
         public ActionResult GetDataTable(FilterOptions filterOptions)
@@ -48,7 +49,8 @@ namespace RequestsForRightsV2.Controllers
                 return RedirectToAction("ForbiddenError", "Home");
             }
             ViewData["SecurityService"] = _securityService;
-            return PartialView("DataTable", _resourceService.GetResourceIndexModelView(filterOptions));
+            return PartialView("DataTable", _resourceService.GetResourceIndexModelView(filterOptions,
+                _resourceService.GetFilteredResources(filterOptions.Filter)));
         }
 
         [HttpGet]
@@ -67,16 +69,22 @@ namespace RequestsForRightsV2.Controllers
         {
             if (resourceViewModel == null || resourceViewModel.Resource == null)
             {
-                // TODO: редирект на ошибку 400
-                Response.StatusCode = 400;
-                return Content("Не передана ссылка на ресурс");
+                return RedirectToAction("BadRequestError", "Home",
+                    new { message = "Не передана ссылка на ресурс" });
             }
             if (!_securityService.CanUpdate(resourceViewModel.Resource))
             {
                 return RedirectToAction("ForbiddenError", "Home");
             }
+            if (resourceViewModel.Resource.ResourceRights == null ||
+                resourceViewModel.Resource.ResourceRights.Count < 1)
+            {
+                ModelState.AddModelError(string.Empty, 
+                    "Необходимо задать по меньшей мере одно право для ресурса");
+            }
             if (!ModelState.IsValid)
             {
+                ViewData["SecurityService"] = _securityService;
                 return View(_resourceService.GetResourceViewModelBy(resourceViewModel.Resource));
             }
             try
@@ -136,25 +144,31 @@ namespace RequestsForRightsV2.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(ResourceViewModel model)
+        public ActionResult Create(ResourceViewModel resourceViewModel)
         {
-            if (model == null || model.Resource == null)
+            if (resourceViewModel == null || resourceViewModel.Resource == null)
             {
-                // TODO: редирект на ошибку 400
-                Response.StatusCode = 400;
-                return Content("Не передана ссылка на ресурс");
+                return RedirectToAction("BadRequestError", "Home",
+                    new { message = "Не передана ссылка на ресурс" });
             }
-            if (!_securityService.CanCreate(model.Resource))
+            if (!_securityService.CanCreate(resourceViewModel.Resource))
             {
                 return RedirectToAction("ForbiddenError", "Home");
             }
+            if (resourceViewModel.Resource.ResourceRights == null || 
+                resourceViewModel.Resource.ResourceRights.Count < 1)
+            {
+                ModelState.AddModelError(string.Empty, 
+                    "Необходимо задать по меньшей мере одно право для ресурса");
+            }
             if (!ModelState.IsValid)
             {
-                return View(_resourceService.GetResourceViewModelBy(model.Resource));
+                ViewData["SecurityService"] = _securityService;
+                return View(_resourceService.GetResourceViewModelBy(resourceViewModel.Resource));
             }
             try
             {
-                _resourceService.InsertResource(model.Resource);
+                _resourceService.InsertResource(resourceViewModel.Resource);
                 _resourceService.SaveChanges();
             }
             catch (DbUpdateException e)

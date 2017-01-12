@@ -1,5 +1,4 @@
 ﻿using System;
-using RequestsForRights.Domain.Entities;
 using RequestsForRightsV2.Infrastructure.Enums;
 
 namespace RequestsForRightsV2.Models.FilterOptions

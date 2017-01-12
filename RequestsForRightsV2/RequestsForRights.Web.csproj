@@ -219,10 +219,10 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Content\Favicon\manifest.json" />
-    <Content Include="Scripts\detail.common.js" />
+    <Content Include="Scripts\rr-detail.update.common.js" />
     <None Include="Scripts\jquery-1.11.0.intellisense.js" />
-    <Content Include="Scripts\common.js" />
-    <Content Include="Scripts\index.common.js" />
+    <Content Include="Scripts\rr-common.js" />
+    <Content Include="Scripts\rr-index.common.js" />
     <Content Include="Scripts\jquery-1.11.0.js" />
     <Content Include="Scripts\jquery-1.11.0.min.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
@@ -236,8 +236,7 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
-    <Content Include="Scripts\resource.common.js" />
-    <Content Include="Scripts\update.common.js" />
+    <Content Include="Scripts\rr-resource.common.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -275,9 +274,11 @@
     <Content Include="Views\Shared\DeleteModal.cshtml" />
     <Content Include="Views\Shared\ErrorAlert.cshtml" />
     <Content Include="Views\Resource\Update.cshtml" />
-    <Content Include="Views\Shared\ForbiddenError.cshtml" />
-    <Content Include="Views\Shared\ConflictError.cshtml" />
+    <Content Include="Views\Home\ForbiddenError.cshtml" />
+    <Content Include="Views\Home\ConflictError.cshtml" />
     <Content Include="Views\Resource\RightEditor.cshtml" />
+    <Content Include="Views\Home\BadRequestError.cshtml" />
+    <Content Include="Views\Resource\RightForm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Database\RequestsForRights.Database.csproj">

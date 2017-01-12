@@ -1,6 +1,5 @@
 namespace RequestsForRights.Database.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
     
     public partial class RefactoringStage2 : DbMigration

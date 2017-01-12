@@ -7,8 +7,11 @@ namespace RequestsForRightsV2.Infrastructure.Services.Interfaces
 {
     public interface IResourceService
     {
-        IEnumerable<Resource> GetVisibleResources(FilterOptions filterOptions);
-        ResourceIndexModelView GetResourceIndexModelView(FilterOptions filterOptions);
+        IEnumerable<Resource> GetVisibleResources(FilterOptions filterOptions, 
+            IEnumerable<Resource> filteredResources);
+        IEnumerable<Resource> GetFilteredResources(string filter);
+        ResourceIndexModelView GetResourceIndexModelView(FilterOptions filterOptions, 
+            IEnumerable<Resource> filteredResources);
         Resource GetResourceBy(int id);
         ResourceViewModel GetResourceViewModelBy(int id);
         ResourceViewModel GetResourceViewModelBy(Resource resource);

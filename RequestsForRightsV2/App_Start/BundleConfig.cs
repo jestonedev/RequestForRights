@@ -1,5 +1,4 @@
-﻿using System.Web;
-using System.Web.Optimization;
+﻿using System.Web.Optimization;
 
 namespace RequestsForRightsV2
 {
@@ -20,11 +19,10 @@ namespace RequestsForRightsV2
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
                         "~/Scripts/modernizr-*"));
 
-            bundles.Add(new ScriptBundle("~/bundles/index.common").Include("~/Scripts/index.common.js"));
-            bundles.Add(new ScriptBundle("~/bundles/detail.common").Include("~/Scripts/detail.common.js"));
-            bundles.Add(new ScriptBundle("~/bundles/update.common").Include("~/Scripts/update.common.js"));
-            bundles.Add(new ScriptBundle("~/bundles/common").Include("~/Scripts/common.js"));
-            bundles.Add(new ScriptBundle("~/bundles/resource.common").Include("~/Scripts/resource.common.js"));
+            bundles.Add(new ScriptBundle("~/bundles/rr-common").Include("~/Scripts/rr-common.js"));
+            bundles.Add(new ScriptBundle("~/bundles/rr-index.common").Include("~/Scripts/rr-index.common.js"));
+            bundles.Add(new ScriptBundle("~/bundles/rr-detail.update.common").Include("~/Scripts/rr-detail.update.common.js"));
+            bundles.Add(new ScriptBundle("~/bundles/rr-resource.common").Include("~/Scripts/rr-resource.common.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js",

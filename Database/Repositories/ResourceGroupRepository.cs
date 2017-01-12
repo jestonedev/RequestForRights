@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using RequestsForRights.Database.Repositories.Interfaces;
 using RequestsForRights.Domain.Entities;
@@ -29,12 +30,24 @@ namespace RequestsForRights.Database.Repositories
         {
             var resourceGroup = GetResourceGroupById(idResourceGroup);
             if (resourceGroup == null) return null;
-            if (resourceGroup.Resources.Any())
+            if (resourceGroup.Resources.Any(r => !r.Deleted))
             {
                 throw new DbUpdateException("Не удалось удалить категорию ресурсов, т.к. она имеет зависимые ресурсы");
             }
             resourceGroup.Deleted = true;
             return resourceGroup;
+        }
+
+        public ResourceGroup UpdateResourceGroup(ResourceGroup resourceGroup)
+        {
+            var resGroup = _databaseContext.ResourceGroups.Attach(resourceGroup);
+            _databaseContext.Entry(resGroup).State = EntityState.Modified;
+            return resGroup;
+        }
+
+        public ResourceGroup InsertResourceGroup(ResourceGroup resourceGroup)
+        {
+            return _databaseContext.ResourceGroups.Add(resourceGroup);
         }
 
         public int SaveChanges()
@@ -45,19 +58,6 @@ namespace RequestsForRights.Database.Repositories
         public ResourceGroup GetResourceGroupById(int id)
         {
             return _databaseContext.ResourceGroups.FirstOrDefault(r => r.IdResourceGroup == id);
-        }
-
-        public ResourceGroup UpdateResourceGroup(ResourceGroup resourceGroup)
-        {
-            var resGroup = GetResourceGroupById(resourceGroup.IdResourceGroup);
-            resGroup.Name = resourceGroup.Name;
-            resGroup.Description = resourceGroup.Description;
-            return resGroup;
-        }
-
-        public ResourceGroup InsertResourceGroup(ResourceGroup resourceGroup)
-        {
-            return _databaseContext.ResourceGroups.Add(resourceGroup);
         }
     }
 }

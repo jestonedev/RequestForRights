@@ -23,29 +23,38 @@ namespace RequestsForRightsV2.Infrastructure.Services
             _resourceRepository = resourceRepository;
         }
 
-        public IEnumerable<Resource> GetVisibleResources(FilterOptions filterOptions)
+        public IEnumerable<Resource> GetVisibleResources(FilterOptions filterOptions, 
+            IEnumerable<Resource> filteredResources)
         {
-            return GetFilteredResources(filterOptions.Filter).
+            return filteredResources.
                 OrderBy(filterOptions.SortField, filterOptions.SortDirection).
                 Skip(filterOptions.PageSize*filterOptions.PageIndex).
                 Take(filterOptions.PageSize);
         }
 
-        public ResourceIndexModelView GetResourceIndexModelView(FilterOptions filterOptions)
+        public ResourceIndexModelView GetResourceIndexModelView(FilterOptions filterOptions, 
+            IEnumerable<Resource> filteredResources)
         {
+            var filteredResourcesList = filteredResources.ToList();
             if (filterOptions.SortField == null)
             {
                 filterOptions.SortField = "Name";
             }
+            var resources = GetVisibleResources(filterOptions, filteredResourcesList).ToList();
+            if (!resources.Any())
+            {
+                filterOptions.PageIndex = 0;
+                resources = GetVisibleResources(filterOptions, filteredResourcesList).ToList();
+            }
             return new ResourceIndexModelView
             {
-                VisibleResources = GetVisibleResources(filterOptions),
+                VisibleResources = resources,
                 FilterOptions = filterOptions,
-                ResourceCount = GetFilteredResources(filterOptions.Filter).Count()
+                ResourceCount = filteredResourcesList.Count
             };
         }
 
-        private IEnumerable<Resource> GetFilteredResources(string filter)
+        public IEnumerable<Resource> GetFilteredResources(string filter)
         {
             return _resourceRepository.GetResources().Where(filter);
         }

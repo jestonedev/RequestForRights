@@ -20,3 +20,16 @@ $(function() {
                 $("." + $(this).attr("data-hide")).animate({ "opacity": 0 }, 300, function() { $(this).hide() });
             });
 });
+
+$("form")
+    .keypress(function (e) {
+        if (e.which === 13) {
+            if (e.target.type === "textarea") {
+                return true;
+            }
+            $(this).find(".rr-save-button").click();
+            e.preventDefault();
+            return false;
+        }
+        return true;
+    });

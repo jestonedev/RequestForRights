@@ -1,4 +1,5 @@
 ﻿using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using RequestsForRights.Domain.Entities;
 
 namespace RequestsForRights.Database
@@ -21,9 +22,11 @@ namespace RequestsForRights.Database
         IDbSet<RequestExtDescription> RequestExtDescriptions { get; set; }
         IDbSet<RequestAgreementType> RequestAgreementTypes { get; set; }
         IDbSet<RequestAgreementState> RequestAgreementStates { get; set; }
-        IDbSet<RequestAgreement> Request { get; set; }
+        IDbSet<RequestAgreement> RequestAgreements { get; set; }
         IDbSet<RequestUserLastSeen> RequestUserLastSeens { get; set; }
         IDbSet<RequestState> RequestStates { get; set; }
         int SaveChanges();
+        DbEntityEntry<TEntity> Entry<TEntity>(TEntity entity)
+            where TEntity : class;
     }
 }

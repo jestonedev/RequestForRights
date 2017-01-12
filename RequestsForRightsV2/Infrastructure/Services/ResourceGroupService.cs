@@ -23,29 +23,38 @@ namespace RequestsForRightsV2.Infrastructure.Services
             _resourceGroupRepository = resourceGroupRepository;
         }
 
-        public IEnumerable<ResourceGroup> GetVisibleResourceGroups(FilterOptions filterOptions)
+        public IEnumerable<ResourceGroup> GetVisibleResourceGroups(FilterOptions filterOptions,
+            IEnumerable<ResourceGroup> filteredResourceGroups)
         {
-            return GetFilteredResourceGroups(filterOptions.Filter).
+            return filteredResourceGroups.
                 OrderBy(filterOptions.SortField, filterOptions.SortDirection).
                 Skip(filterOptions.PageSize*filterOptions.PageIndex).
                 Take(filterOptions.PageSize);
         }
 
-        public ResourceGroupIndexModelView GetResourceGroupIndexModelView(FilterOptions filterOptions)
+        public ResourceGroupIndexModelView GetResourceGroupIndexModelView(FilterOptions filterOptions, 
+            IEnumerable<ResourceGroup> filteredResourceGroups)
         {
+            var filteredResourceGroupsList = filteredResourceGroups.ToList();
             if (filterOptions.SortField == null)
             {
                 filterOptions.SortField = "Name";
             }
+            var resourceGroup = GetVisibleResourceGroups(filterOptions, filteredResourceGroupsList).ToList();
+            if (!resourceGroup.Any())
+            {
+                filterOptions.PageIndex = 0;
+                resourceGroup = GetVisibleResourceGroups(filterOptions, filteredResourceGroupsList).ToList();
+            }
             return new ResourceGroupIndexModelView
             {
-                VisibleResourceGroups = GetVisibleResourceGroups(filterOptions),
+                VisibleResourceGroups = resourceGroup,
                 FilterOptions = filterOptions,
-                ResourceGroupCount = GetFilteredResourceGroups(filterOptions.Filter).Count()
+                ResourceGroupCount = filteredResourceGroupsList.Count
             };
         }
 
-        private IEnumerable<ResourceGroup> GetFilteredResourceGroups(string filter)
+        public IEnumerable<ResourceGroup> GetFilteredResourceGroups(string filter)
         {
             return _resourceGroupRepository.GetResourceGroups().Where(filter);
         }

@@ -15,7 +15,10 @@
 @using (Html.BeginForm("Update", "ResourceGroup", new { }, FormMethod.Post, new { @class = "form-horizontal" }))
 {
     @Html.HttpMethodOverride(HttpVerbs.Put)
-    @Html.ValidationSummary(true)
+    <div class="text-center">
+        @Html.ValidationSummary(true)
+    </div>
+    
     @Html.HiddenFor(r => r.IdResourceGroup)
     @Html.Hidden("returnUri", returnUri)
     <div class="form-group">
@@ -42,7 +45,7 @@
                 <span class="glyphicon glyphicon-circle-arrow-left"></span>
                 Назад
             </a>
-            <button class="btn btn-default">
+            <button class="btn btn-default rr-save-button">
                 <span class="glyphicon glyphicon-floppy-disk"></span>
                 Сохранить
             </button>
@@ -68,5 +71,5 @@
 })
 
 @section scripts {
-    @Scripts.Render("~/bundles/update.common")
+    @Scripts.Render("~/bundles/rr-detail.update.common")
 }

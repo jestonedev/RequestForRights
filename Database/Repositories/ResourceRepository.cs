@@ -45,22 +45,36 @@ namespace RequestsForRights.Database.Repositories
 
         public Resource UpdateResource(Resource resource)
         {
-            var res = GetResourceById(resource.IdResource);
-            res.Name = resource.Name;
-            res.Description = resource.Description;
-            res.IdResourceGroup = resource.IdResourceGroup;
-            res.IdDepartment = resource.IdDepartment;
-            // TODO: save resource rights
-            var oldRights = res.ResourceRights.ToList();
-            var newRights = resource.ResourceRights.ToList();
-            foreach (var right in oldRights)
+            var res = _databaseContext.Resources.Find(resource.IdResource);
+            _databaseContext.Entry(res).CurrentValues.SetValues(resource);
+            UpdateResoureceRights(res.ResourceRights, resource.ResourceRights, resource.IdResource);
+            return res;
+        }
+
+        private void UpdateResoureceRights(IEnumerable<ResourceRight> oldRights, IEnumerable<ResourceRight> newRights, int idResource)
+        {
+            var newRightsList = newRights.ToList();
+            newRightsList.ForEach(r => r.IdResource = idResource);
+            foreach (var resourceRight in oldRights)
             {
-                if (!newRights.Contains(right))
+                if (newRightsList.Any(r => r.IdResourceRight == resourceRight.IdResourceRight)) continue;
+                resourceRight.Deleted = true;
+                _databaseContext.ResourceRights.Attach(resourceRight);
+                _databaseContext.Entry(resourceRight).State = EntityState.Modified;
+            }
+
+            foreach (var resourceRight in newRightsList)
+            {
+                if (resourceRight.IdResourceRight == default(int))
                 {
-                    res.ResourceRights.Remove(right);
+                    _databaseContext.ResourceRights.Add(resourceRight);
+                }
+                else
+                {
+                    var resRight = _databaseContext.ResourceRights.Find(resourceRight.IdResourceRight);
+                    _databaseContext.Entry(resRight).CurrentValues.SetValues(resourceRight);
                 }
             }
-            return res;
         }
 
         public Resource InsertResource(Resource resource)

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Infrastructure.Annotations;
 using RequestsForRights.Domain.Entities;
 
@@ -23,7 +24,7 @@ namespace RequestsForRights.Database
         public IDbSet<RequestExtDescription> RequestExtDescriptions { get; set; }
         public IDbSet<RequestAgreementType> RequestAgreementTypes { get; set; }
         public IDbSet<RequestAgreementState> RequestAgreementStates { get; set; }
-        public IDbSet<RequestAgreement> Request { get; set; }
+        public IDbSet<RequestAgreement> RequestAgreements { get; set; }
         public IDbSet<RequestUserLastSeen> RequestUserLastSeens { get; set; }
         public IDbSet<RequestState> RequestStates { get; set; }
 
@@ -110,8 +111,17 @@ namespace RequestsForRights.Database
                     new IndexAnnotation(new IndexAttribute("IDX_RequestUserLastSeen_IdRequest_IdUser", 2)));
         }
 
+
+
+        public new DbEntityEntry<TEntity> Entry<TEntity>(TEntity entity)
+            where TEntity: class
+        {
+            return base.Entry(entity);
+        }
+
         public new int SaveChanges()
         {
+            // TODO: There will be change loging
             return base.SaveChanges();
         }
     }
