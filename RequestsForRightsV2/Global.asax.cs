@@ -1,10 +1,10 @@
 ﻿using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
-using RequestsForRightsV2.Infrastructure.ValueProviders;
-using RequestsForRightsV2.Models.FilterOptions;
+using RequestsForRights.Infrastructure.ValueProviders;
+using RequestsForRights.Models.FilterOptions;
 
-namespace RequestsForRightsV2
+namespace RequestsForRights
 {
     public class MvcApplication : System.Web.HttpApplication
     {

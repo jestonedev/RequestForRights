@@ -1,11 +1,11 @@
 ﻿
 
 var filterControl = $(".rr-filter-control form");
-var filter = $(".rr-filter-control #Filter");
-var pageSize = $(".rr-filter-control #PageSize");
+var input = $(".rr-filter-control input");
+var select = $(".rr-filter-control select");
 
-$(pageSize).on("change", filterControlOnValue);
-$(filter).on("keyup", debounce(filterControlOnValue, 500));
+$(select).on("change", filterControlOnValue);
+$(input).on("keyup", debounce(filterControlOnValue, 500));
 
 function filterControlOnValue() {
     filterControl.submit();

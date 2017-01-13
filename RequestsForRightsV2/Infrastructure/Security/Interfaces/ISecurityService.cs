@@ -1,6 +1,6 @@
-﻿using RequestsForRightsV2.Infrastructure.Enums;
+﻿using RequestsForRights.Infrastructure.Enums;
 
-namespace RequestsForRightsV2.Infrastructure.Security.Interfaces
+namespace RequestsForRights.Infrastructure.Security.Interfaces
 {
     public interface ISecurityService<in T>
         where T: class

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using RequestsForRights.Domain.Entities;
 
-namespace RequestsForRightsV2.Models.ModelViews
+namespace RequestsForRights.Models.ModelViews
 {
     public class ResourceIndexModelView
     {

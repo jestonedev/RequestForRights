@@ -73,7 +73,7 @@ function refreshValidation() {
 
 function showErrors() {
     var form = $("form");
-    var tabToShow = undefined;
+    var tabToShow = window.undefined;
     form.find(".nav-tabs li a")
         .each(function (idx, elem) {
             var id = $(elem).attr("href");
@@ -83,7 +83,7 @@ function showErrors() {
             badge.text(errorCount);
             if (errorCount > 0) {
                 var tab = $(elem).closest("li");
-                if (tabToShow == undefined || tab.hasClass("active")) {
+                if (tabToShow === window.undefined || tab.hasClass("active")) {
                     tabToShow = tab;
                 }
                 badge.show();
@@ -91,7 +91,7 @@ function showErrors() {
                 badge.hide();
             }
         });
-    if (tabToShow != undefined) {
+    if (tabToShow !== window.undefined) {
         tabToShow.find("a").click();
     }
     $(window).scrollTop(0);

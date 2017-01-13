@@ -2,10 +2,11 @@
 using System.Linq;
 using System.Web;
 using RequestsForRights.Database.Repositories.Interfaces;
-using RequestsForRightsV2.Infrastructure.Enums;
-using RequestsForRightsV2.Infrastructure.Security.Interfaces;
+using RequestsForRights.Domain.Entities;
+using RequestsForRights.Infrastructure.Security.Interfaces;
+using AclRole = RequestsForRights.Infrastructure.Enums.AclRole;
 
-namespace RequestsForRightsV2.Infrastructure.Security
+namespace RequestsForRights.Infrastructure.Security
 {
     public class SecurityService<T>: ISecurityService<T>
         where T: class
@@ -33,20 +34,34 @@ namespace RequestsForRightsV2.Infrastructure.Security
             }
         }
 
+        public IQueryable<Department> GetUserAllowedDepartments()
+        {
+            return _securityRepository.GetUserAllowedDepartments(CurrentUser);
+        }
+
+        public AclUser GetUserInfo()
+        {
+            return _securityRepository.GetUserInfo(CurrentUser);
+        }
+
         public bool InRole(AclRole role)
         {
-            return _securityRepository.GetUserRoles(CurrentUser).Any(r => r.IdRole == (int) role);
+            return GetUserRoles().Any(r => r.IdRole == (int)role);
         }
 
         public bool InRole(AclRole[] roles)
         {
-            return _securityRepository.GetUserRoles(CurrentUser).
-                Any(r => roles.Any(role => r.IdRole == (int)role));
+            return GetUserRoles().Any(r => roles.Any(role => r.IdRole == (int)role));
         }
 
         public virtual bool IsAnonimous()
         {
-            return !_securityRepository.GetUserRoles(CurrentUser).Any();
+            return !GetUserRoles().Any();
+        }
+
+        private IQueryable<Domain.Entities.AclRole> GetUserRoles()
+        {
+            return _securityRepository.GetUserRoles(CurrentUser);
         }
 
         public virtual bool CanRead(T entity)

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RequestsForRights.Domain.Entities
@@ -13,5 +14,6 @@ namespace RequestsForRights.Domain.Entities
         public int IdRequestUser { get; set; }
         public virtual RequestUser RequestUser { get; set; }
         public bool Deleted { get; set; }
+        public virtual IList<RequestUserRightAssoc> RequestUserRightAssocs { get; set; }
     }
 }

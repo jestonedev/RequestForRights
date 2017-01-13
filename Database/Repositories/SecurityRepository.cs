@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using RequestsForRights.Database.Repositories.Interfaces;
 using RequestsForRights.Domain.Entities;
@@ -9,6 +10,7 @@ namespace RequestsForRights.Database.Repositories
     public class SecurityRepository: ISecurityRepository
     {
         private readonly IDatabaseContext _databaseContext;
+        private readonly Dictionary<string, AclUser> _usersCache = new Dictionary<string, AclUser>();
 
         public SecurityRepository(IDatabaseContext databaseContext)
         {
@@ -21,19 +23,24 @@ namespace RequestsForRights.Database.Repositories
 
         public AclUser GetUserInfo(string login)
         {
-            return _databaseContext.AclUsers.FirstOrDefault(r => r.Login.ToLower() == login.ToLower());
+            if (_usersCache.ContainsKey(login))
+            {
+                return _usersCache[login];
+            }
+            return _usersCache[login] = 
+                _databaseContext.AclUsers.Include(r => r.AclDepartments)
+                .Include(r => r.Roles)
+                .FirstOrDefault(r => r.Login.ToLower() == login.ToLower());
         }
 
-        public IEnumerable<AclRole> GetUserRoles(string login)
+        public IQueryable<AclRole> GetUserRoles(string login)
         {
-            var user = GetUserInfo(login);
-            return user != null ? user.Roles : new List<AclRole>();
+            return GetUserInfo(login).Roles.AsQueryable();
         }
 
-        public IEnumerable<Department> GetUserAllowedDepartments(string login)
+        public IQueryable<Department> GetUserAllowedDepartments(string login)
         {
-            var user = GetUserInfo(login);
-            return user != null ? user.AclDepartments : new List<Department>();
+            return GetUserInfo(login).AclDepartments.AsQueryable();
         }
     }
 }

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Linq;
 using RequestsForRights.Database.Repositories.Interfaces;
 using RequestsForRights.Domain.Entities;
-using System.Linq;
 
 namespace RequestsForRights.Database.Repositories
 {
@@ -20,7 +20,7 @@ namespace RequestsForRights.Database.Repositories
             _databaseContext = databaseContext;
         }
 
-        public IEnumerable<Resource> GetResources()
+        public IQueryable<Resource> GetResources()
         {
             return _databaseContext.Resources.Include(r => r.ResourceGroup).Where(r => !r.Deleted);
         }
@@ -83,12 +83,12 @@ namespace RequestsForRights.Database.Repositories
         }
 
 
-        public IEnumerable<ResourceGroup> GetResourceGroups()
+        public IQueryable<ResourceGroup> GetResourceGroups()
         {
             return _databaseContext.ResourceGroups.Where(r => !r.Deleted);
         }
 
-        public IEnumerable<Department> GetOwnerDepartments()
+        public IQueryable<Department> GetOwnerDepartments()
         {
             return _databaseContext.Departments.Where(r => r.IdParentDepartment == null).Where(r => !r.Deleted);
         }

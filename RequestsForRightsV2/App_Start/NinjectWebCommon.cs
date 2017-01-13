@@ -3,19 +3,19 @@ using System.Web;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Ninject;
 using Ninject.Web.Common;
+using RequestsForRights;
 using RequestsForRights.Database;
 using RequestsForRights.Database.Repositories;
 using RequestsForRights.Database.Repositories.Interfaces;
-using RequestsForRightsV2;
-using RequestsForRightsV2.Infrastructure.Security;
-using RequestsForRightsV2.Infrastructure.Security.Interfaces;
-using RequestsForRightsV2.Infrastructure.Services;
-using RequestsForRightsV2.Infrastructure.Services.Interfaces;
+using RequestsForRights.Infrastructure.Security;
+using RequestsForRights.Infrastructure.Security.Interfaces;
+using RequestsForRights.Infrastructure.Services;
+using RequestsForRights.Infrastructure.Services.Interfaces;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
 [assembly: WebActivatorEx.ApplicationShutdownMethodAttribute(typeof(NinjectWebCommon), "Stop")]
 
-namespace RequestsForRightsV2
+namespace RequestsForRights
 {
     public static class NinjectWebCommon 
     {
@@ -72,7 +72,7 @@ namespace RequestsForRightsV2
             kernel.Bind<IRequestRepository>().To<RequestRepository>();
             kernel.Bind<IResourceGroupRepository>().To<ResourceGroupRepository>();
             kernel.Bind<IResourceRepository>().To<ResourceRepository>();
-            kernel.Bind<ISecurityRepository>().To<SecurityRepository>();
+            kernel.Bind<ISecurityRepository>().To<SecurityRepository>().InRequestScope();
             // Data services
             kernel.Bind<IRequestService>().To<RequestService>();
             kernel.Bind<IResourceGroupService>().To<ResourceGroupService>();
@@ -80,7 +80,7 @@ namespace RequestsForRightsV2
             // Security services
             kernel.Bind<IResourceGroupSecurityService>().To<ResourceGroupSecurityService>();
             kernel.Bind<IResourceSecurityService>().To<ResourceSecurityService>();
-            kernel.Bind<ISecurityService<object>>().To<SecurityService<object>>();
+            kernel.Bind<IRequestSecurityService>().To<RequestSecurityService>();
         }        
     }
 }

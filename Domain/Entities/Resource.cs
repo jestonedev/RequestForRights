@@ -2,12 +2,10 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using RequestsForRights.Domain.Helpers;
-using RequestsForRights.Domain.Interfaces;
 
 namespace RequestsForRights.Domain.Entities
 {
-    public class Resource : IStringMatchable
+    public class Resource
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -30,12 +28,5 @@ namespace RequestsForRights.Domain.Entities
         public virtual Department Department { get; set; }
         [DefaultValue(false)]
         public bool Deleted { get; set; }
-
-        public bool Match(string value)
-        {
-            return MatchHelper.MatchValueInsensitive(Name, value) ||
-                   MatchHelper.MatchValueInsensitive(Description, value) ||
-                   MatchHelper.MatchValueInsensitive(ResourceGroup.Name, value);
-        }
     }
 }

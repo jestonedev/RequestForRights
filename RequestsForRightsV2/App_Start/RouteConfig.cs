@@ -1,7 +1,7 @@
 ﻿using System.Web.Mvc;
 using System.Web.Routing;
 
-namespace RequestsForRightsV2
+namespace RequestsForRights
 {
     public class RouteConfig
     {

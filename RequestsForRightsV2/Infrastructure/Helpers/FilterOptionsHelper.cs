@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 
-namespace RequestsForRightsV2.Infrastructure.Helpers
+namespace RequestsForRights.Infrastructure.Helpers
 {
     public static class FilterOptionsHelper
     {

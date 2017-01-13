@@ -1,17 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
 using RequestsForRights.Domain.Entities;
-using RequestsForRightsV2.Models.FilterOptions;
-using RequestsForRightsV2.Models.ModelViews;
+using RequestsForRights.Models.FilterOptions;
+using RequestsForRights.Models.ModelViews;
 
-namespace RequestsForRightsV2.Infrastructure.Services.Interfaces
+namespace RequestsForRights.Infrastructure.Services.Interfaces
 {
     public interface IResourceService
     {
-        IEnumerable<Resource> GetVisibleResources(FilterOptions filterOptions, 
-            IEnumerable<Resource> filteredResources);
-        IEnumerable<Resource> GetFilteredResources(string filter);
-        ResourceIndexModelView GetResourceIndexModelView(FilterOptions filterOptions, 
-            IEnumerable<Resource> filteredResources);
+        IQueryable<Resource> GetVisibleResources(FilterOptions filterOptions,
+            IQueryable<Resource> filteredResources);
+        IQueryable<Resource> GetFilteredResources(string filter);
+        ResourceIndexModelView GetResourceIndexModelView(FilterOptions filterOptions,
+            IQueryable<Resource> filteredResources);
         Resource GetResourceBy(int id);
         ResourceViewModel GetResourceViewModelBy(int id);
         ResourceViewModel GetResourceViewModelBy(Resource resource);

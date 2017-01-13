@@ -1,5 +1,5 @@
-﻿@using RequestsForRightsV2.Infrastructure.Security
-@model RequestsForRightsV2.Models.ModelViews.ResourceGroupIndexModelView
+﻿@using RequestsForRights.Infrastructure.Security
+@model RequestsForRights.Models.ModelViews.ResourceGroupIndexModelView
 
 @{
     Layout = null;
@@ -10,12 +10,16 @@
     {
         lastElementIndex = Model.ResourceGroupCount;
     }
+    if (firstElementIndex > lastElementIndex)
+    {
+        firstElementIndex = lastElementIndex;
+    }
     var pageCount = Math.Ceiling((decimal)Model.ResourceGroupCount / Model.FilterOptions.PageSize);
     var firstDisplayedPageIndex = Model.FilterOptions.PageIndex - 3 > 0 ? Model.FilterOptions.PageIndex - 3 : 0;
 }
 <nav aria-label="Навигация">
-    <ul class="pagination">
-        @if (Model.FilterOptions.PageIndex == 0)
+    <ul class="pagination rr-pagination">
+        @if (Model.FilterOptions.PageIndex <= 0)
         {
             <li class="disabled">
                 <span>«</span>
@@ -24,12 +28,12 @@
         else
         {
             <li>
-                @Ajax.ActionLink("«", "GetDataTable", new {PageIndex = Model.FilterOptions.PageIndex - 1}, new AjaxOptions
+                @Ajax.ActionLink("«", "GetDataTable", new { PageIndex = Model.FilterOptions.PageIndex - 1 }, new AjaxOptions
                 {
                     UpdateTargetId = "main-table-wrapper",
                     InsertionMode = InsertionMode.Replace,
-                    Url = Url.Action("GetDataTable", new {PageIndex = Model.FilterOptions.PageIndex - 1})
-                }, new {ariaLabel = "Предыдущая страница"})
+                    Url = Url.Action("GetDataTable", new { PageIndex = Model.FilterOptions.PageIndex - 1 })
+                }, new { ariaLabel = "Предыдущая страница" })
             </li>
         }
         @for (var i = firstDisplayedPageIndex; i <= firstDisplayedPageIndex + 6; i++)
@@ -39,15 +43,15 @@
                 break;
             }
             <li class="@(Model.FilterOptions.PageIndex == i ? "active" : "")">
-                @Ajax.ActionLink((i + 1).ToString(), "GetDataTable", new {PageIndex = i}, new AjaxOptions
+                @Ajax.ActionLink((i + 1).ToString(), "GetDataTable", new { PageIndex = i }, new AjaxOptions
                 {
                     UpdateTargetId = "main-table-wrapper",
                     InsertionMode = InsertionMode.Replace,
-                    Url = Url.Action("GetDataTable", new {PageIndex = i})
+                    Url = Url.Action("GetDataTable", new { PageIndex = i })
                 })
             </li>
         }
-        @if (Model.FilterOptions.PageIndex == pageCount - 1)
+        @if (Model.FilterOptions.PageIndex >= pageCount - 1)
         {
             <li class="disabled">
                 <span>»</span>
@@ -56,21 +60,23 @@
         else
         {
             <li>
-                @Ajax.ActionLink("»", "GetDataTable", new {PageIndex = Model.FilterOptions.PageIndex + 1}, new AjaxOptions
+                @Ajax.ActionLink("»", "GetDataTable", new { PageIndex = Model.FilterOptions.PageIndex + 1 }, new AjaxOptions
                 {
                     UpdateTargetId = "main-table-wrapper",
                     InsertionMode = InsertionMode.Replace,
-                    Url = Url.Action("GetDataTable", new {PageIndex = Model.FilterOptions.PageIndex + 1})
-                }, new {ariaLabel = "Следующая страница"})
+                    Url = Url.Action("GetDataTable", new { PageIndex = Model.FilterOptions.PageIndex + 1 })
+                }, new { ariaLabel = "Следующая страница" })
             </li>
         }
     </ul>
     <span class="rr-page-counter">показано @firstElementIndex - @lastElementIndex из @Model.ResourceGroupCount</span>
     @if (securityService.CanCreate())
     {
-        <a class="btn btn-primary pull-right col-xs-12 col-sm-2 rr-add-button" href="@Url.Action("Create")">
-            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-            Добавить
-        </a>
+        <div class="col-sm-2 col-xs-12 rr-right-control pull-right">
+            <a class="btn btn-primary col-xs-12 rr-add-button" href="@Url.Action("Create")">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                Добавить
+            </a>
+        </div>
     }
 </nav>

@@ -1,7 +1,7 @@
+using System.Data.Entity.Migrations;
+
 namespace RequestsForRights.Database.Migrations
 {
-    using System.Data.Entity.Migrations;
-
     internal sealed class Configuration : DbMigrationsConfiguration<DatabaseContext>
     {
         public Configuration()

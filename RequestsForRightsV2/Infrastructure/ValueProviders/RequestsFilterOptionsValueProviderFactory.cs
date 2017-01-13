@@ -2,10 +2,10 @@
 using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
-using RequestsForRightsV2.Infrastructure.Helpers;
-using RequestsForRightsV2.Models.FilterOptions;
+using RequestsForRights.Infrastructure.Helpers;
+using RequestsForRights.Models.FilterOptions;
 
-namespace RequestsForRightsV2.Infrastructure.ValueProviders
+namespace RequestsForRights.Infrastructure.ValueProviders
 {
     public class RequestsFilterOptionsValueProviderFactory: ValueProviderFactory
     {

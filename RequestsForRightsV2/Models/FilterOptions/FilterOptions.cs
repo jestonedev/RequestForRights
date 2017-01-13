@@ -1,6 +1,6 @@
-﻿using RequestsForRightsV2.Infrastructure.Enums;
+﻿using RequestsForRights.Infrastructure.Enums;
 
-namespace RequestsForRightsV2.Models.FilterOptions
+namespace RequestsForRights.Models.FilterOptions
 {
     public class FilterOptions
     {

@@ -1,7 +1,7 @@
+using System.Data.Entity.Migrations;
+
 namespace RequestsForRights.Database.Migrations
 {
-    using System.Data.Entity.Migrations;
-    
     public partial class RequireCorrections : DbMigration
     {
         public override void Up()

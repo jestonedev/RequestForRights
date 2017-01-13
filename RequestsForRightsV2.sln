@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RequestsForRights.Domain", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RequestsForRights.Database", "Database\RequestsForRights.Database.csproj", "{1CE3AA34-A68D-4364-B5B0-128AC8771D3F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RequestsForRights.Ldap", "RequestsForRights.Ldap\RequestsForRights.Ldap.csproj", "{45B2F648-AA9A-4FCE-BD87-99C184A6FA29}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{1CE3AA34-A68D-4364-B5B0-128AC8771D3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1CE3AA34-A68D-4364-B5B0-128AC8771D3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1CE3AA34-A68D-4364-B5B0-128AC8771D3F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45B2F648-AA9A-4FCE-BD87-99C184A6FA29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45B2F648-AA9A-4FCE-BD87-99C184A6FA29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45B2F648-AA9A-4FCE-BD87-99C184A6FA29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45B2F648-AA9A-4FCE-BD87-99C184A6FA29}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

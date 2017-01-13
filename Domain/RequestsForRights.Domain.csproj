@@ -64,8 +64,6 @@
     <Compile Include="Entities\RequestUser.cs" />
     <Compile Include="Entities\RequestUserLastSeen.cs" />
     <Compile Include="Entities\RequestUserAssoc.cs" />
-    <Compile Include="Helpers\MatchHelper.cs" />
-    <Compile Include="Interfaces\IStringMatchable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Entities\RequestType.cs" />
     <Compile Include="Entities\Resource.cs" />

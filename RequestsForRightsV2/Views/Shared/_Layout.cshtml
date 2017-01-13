@@ -1,4 +1,4 @@
-﻿@using RequestsForRightsV2.Infrastructure.Enums
+﻿@using RequestsForRights.Infrastructure.Enums
 <!DOCTYPE html>
 <html>
 <head>
@@ -45,8 +45,9 @@
                             Перечень заявок <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu requests-menu">
-                            <li>@Html.ActionLink("Мои заявки", "Index", "Request", new { RequestCategory = RequestCategory.AllRequests }, null)</li>
-                            <li>@Html.ActionLink("Все заявки", "Index", "Request", new { RequestCategory = RequestCategory.MyRequests }, null)</li>
+                            <li>@Html.ActionLink("Мои заявки", "Index", "Request", new { RequestCategory = RequestCategory.MyRequests }, null)</li>
+                            <li>@Html.ActionLink("Все заявки", "Index", "Request", new { RequestCategory = RequestCategory.AllRequests }, null)</li>
+                            <li>@Html.ActionLink("Непросмотренные", "Index", "Request", new { RequestCategory = RequestCategory.NotSeenRequests }, null)</li>
                             <li role="separator" class="divider"></li>
                             @Html.Action("RequestsByStatesMenuItems", "Request")
                         </ul>

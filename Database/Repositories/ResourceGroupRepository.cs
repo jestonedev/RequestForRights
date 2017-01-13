@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using System.Linq;
 using RequestsForRights.Database.Repositories.Interfaces;
 using RequestsForRights.Domain.Entities;
-using System.Linq;
 
 namespace RequestsForRights.Database.Repositories
 {
@@ -21,7 +20,7 @@ namespace RequestsForRights.Database.Repositories
             _databaseContext = databaseContext;
         }
 
-        public IEnumerable<ResourceGroup> GetResourceGroups()
+        public IQueryable<ResourceGroup> GetResourceGroups()
         {
             return _databaseContext.ResourceGroups.Where(r => !r.Deleted);
         }

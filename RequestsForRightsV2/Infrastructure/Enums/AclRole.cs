@@ -1,4 +1,4 @@
-﻿namespace RequestsForRightsV2.Infrastructure.Enums
+﻿namespace RequestsForRights.Infrastructure.Enums
 {
     public enum AclRole
     {

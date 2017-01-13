@@ -1,0 +1,82 @@
+﻿@using RequestsForRights.Infrastructure.Security
+@model RequestsForRights.Models.ModelViews.RequestIndexModelView
+
+@{
+    Layout = null;
+    var securityService = (RequestSecurityService)ViewData["SecurityService"];
+    var firstElementIndex = Model.FilterOptions.PageIndex * Model.FilterOptions.PageSize + 1;
+    var lastElementIndex = firstElementIndex + Model.FilterOptions.PageSize - 1;
+    if (lastElementIndex > Model.RequestCount)
+    {
+        lastElementIndex = Model.RequestCount;
+    }
+    if (firstElementIndex > lastElementIndex)
+    {
+        firstElementIndex = lastElementIndex;
+    }
+    var pageCount = Math.Ceiling((decimal)Model.RequestCount / Model.FilterOptions.PageSize);
+    var firstDisplayedPageIndex = Model.FilterOptions.PageIndex - 3 > 0 ? Model.FilterOptions.PageIndex - 3 : 0;
+}
+<nav aria-label="Навигация">
+    <ul class="pagination rr-pagination">
+        @if (Model.FilterOptions.PageIndex <= 0)
+        {
+            <li class="disabled">
+                <span>«</span>
+            </li>
+        }
+        else
+        {
+            <li>
+                @Ajax.ActionLink("«", "GetDataTable", new {PageIndex = Model.FilterOptions.PageIndex - 1}, new AjaxOptions
+                {
+                    UpdateTargetId = "main-table-wrapper",
+                    InsertionMode = InsertionMode.Replace,
+                    Url = Url.Action("GetDataTable", new {PageIndex = Model.FilterOptions.PageIndex - 1})
+                }, new {ariaLabel = "Предыдущая страница"})
+            </li>
+        }
+        @for (var i = firstDisplayedPageIndex; i <= firstDisplayedPageIndex + 6; i++)
+        {
+            if (pageCount <= i)
+            {
+                break;
+            }
+            <li class="@(Model.FilterOptions.PageIndex == i ? "active" : "")">
+                @Ajax.ActionLink((i + 1).ToString(), "GetDataTable", new {PageIndex = i}, new AjaxOptions
+                {
+                    UpdateTargetId = "main-table-wrapper",
+                    InsertionMode = InsertionMode.Replace,
+                    Url = Url.Action("GetDataTable", new {PageIndex = i})
+                })
+            </li>
+        }
+        @if (Model.FilterOptions.PageIndex >= pageCount - 1)
+        {
+            <li class="disabled">
+                <span>»</span>
+            </li>
+        }
+        else
+        {
+            <li>
+                @Ajax.ActionLink("»", "GetDataTable", new {PageIndex = Model.FilterOptions.PageIndex + 1}, new AjaxOptions
+                {
+                    UpdateTargetId = "main-table-wrapper",
+                    InsertionMode = InsertionMode.Replace,
+                    Url = Url.Action("GetDataTable", new {PageIndex = Model.FilterOptions.PageIndex + 1})
+                }, new {ariaLabel = "Следующая страница"})
+            </li>
+        }
+    </ul>
+    <span class="rr-page-counter">показано @firstElementIndex - @lastElementIndex из @Model.RequestCount</span>
+    @if (securityService.CanCreate())
+    {
+        <div class="col-sm-2 col-xs-12 rr-right-control pull-right">
+            <a class="btn btn-primary col-xs-12 rr-add-button" href="@Url.Action("Create")">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                Добавить
+            </a>
+        </div>
+    }
+</nav>

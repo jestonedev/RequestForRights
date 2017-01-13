@@ -1,9 +1,9 @@
 ﻿using RequestsForRights.Database.Repositories.Interfaces;
 using RequestsForRights.Domain.Entities;
-using RequestsForRightsV2.Infrastructure.Security.Interfaces;
-using AclRole = RequestsForRightsV2.Infrastructure.Enums.AclRole;
+using RequestsForRights.Infrastructure.Security.Interfaces;
+using AclRole = RequestsForRights.Infrastructure.Enums.AclRole;
 
-namespace RequestsForRightsV2.Infrastructure.Security
+namespace RequestsForRights.Infrastructure.Security
 {
     public class ResourceSecurityService : SecurityService<Resource>, IResourceSecurityService
     {

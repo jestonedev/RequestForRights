@@ -1,17 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
 using RequestsForRights.Domain.Entities;
-using RequestsForRightsV2.Models.FilterOptions;
-using RequestsForRightsV2.Models.ModelViews;
+using RequestsForRights.Models.FilterOptions;
+using RequestsForRights.Models.ModelViews;
 
-namespace RequestsForRightsV2.Infrastructure.Services.Interfaces
+namespace RequestsForRights.Infrastructure.Services.Interfaces
 {
     public interface IResourceGroupService
     {
-        IEnumerable<ResourceGroup> GetVisibleResourceGroups(FilterOptions filterOptions, 
-            IEnumerable<ResourceGroup> filteredResourceGroups);
-        IEnumerable<ResourceGroup> GetFilteredResourceGroups(string filter);
+        IQueryable<ResourceGroup> GetVisibleResourceGroups(FilterOptions filterOptions,
+            IQueryable<ResourceGroup> filteredResourceGroups);
+        IQueryable<ResourceGroup> GetFilteredResourceGroups(string filter);
         ResourceGroupIndexModelView GetResourceGroupIndexModelView(FilterOptions filterOptions,
-            IEnumerable<ResourceGroup> filteredResourceGroups);
+            IQueryable<ResourceGroup> filteredResourceGroups);
         ResourceGroup DeleteResourceGroup(int idResourceGroup);
         ResourceGroup GetResourceGroupBy(int id);
         ResourceGroup UpdateResourceGroup(ResourceGroup resourceGroup);

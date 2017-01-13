@@ -1,4 +1,4 @@
-﻿@model RequestsForRightsV2.Models.FilterOptions.FilterOptions
+﻿@model RequestsForRights.Models.FilterOptions.FilterOptions
 
 @{
     Layout = null;
@@ -12,16 +12,16 @@
         Url = Url.Action("GetDataTable")
     }))
     {
-        <div class="form-group col-sm-3">
+        <div class="form-group col-sm-3 rr-left-control">
             @Html.Label("PageSize", "Отображено записей")
-                @Html.DropDownList("PageSize", new[] { 10, 25, 50, 100 }.Select(x => new SelectListItem
+            @Html.DropDownList("PageSize", new[] {10, 25, 50, 100}.Select(x => new SelectListItem
             {
                 Value = x.ToString(),
                 Text = x.ToString(),
                 Selected = x == Model.PageSize
-            }), new { @class = "form-control" })
+            }), new {@class = "form-control"})
         </div>
-        <div class="form-group col-sm-9">
+        <div class="form-group col-sm-9 rr-right-control">
             @Html.Label("Filter", "Поиск")
             @Html.TextBox("Filter", Model.Filter, new {@class = "form-control", placeholder = "Введите текст для поиска"})
         </div>

@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
 using RequestsForRights.Domain.Entities;
 
 namespace RequestsForRights.Database.Repositories.Interfaces
 {
     public interface IResourceGroupRepository
     {
-        IEnumerable<ResourceGroup> GetResourceGroups();
+        IQueryable<ResourceGroup> GetResourceGroups();
         ResourceGroup DeleteResourceGroup(int idResourceGroup);
 
         ResourceGroup GetResourceGroupById(int id);

@@ -1,0 +1,119 @@
+﻿@using System.Globalization
+@using RequestsForRights.Infrastructure.Security
+@using SortDirection = RequestsForRights.Infrastructure.Enums.SortDirection
+@model RequestsForRights.Models.ModelViews.RequestIndexModelView
+
+@{
+    var securityService = (RequestSecurityService) ViewData["SecurityService"];
+    var headers = new[]
+    {
+        new
+        {
+            Name = "№",
+            Field = "IdRequest",
+            MinWidth = 50
+        },
+        new
+        {
+            Name = "Создатель",
+            Field = "User.Snp",
+            MinWidth = 120
+        },
+        new
+        {
+            Name = "Состояние",
+            Field = "RequestState",
+            MinWidth = 120
+        },
+        new
+        {
+            Name = "Тип заявки",
+            Field = "RequestType.Name",
+            MinWidth = 120
+        },
+        new
+        {
+            Name = "Описание",
+            Field = "Description",
+            MinWidth = 120
+        },
+        new
+        {
+            Name = "Дата подачи",
+            Field = "CreateDate",
+            MinWidth = 100
+        }
+    };
+}
+<div id="main-table-wrapper" class="rr-table-wrapper">
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            @foreach (var header in headers)
+            {
+                var iconClass = "glyphicon-sort";
+                var sortDirection = SortDirection.Asc;
+                if (header.Field == Model.FilterOptions.SortField)
+                {
+                    iconClass = Model.FilterOptions.SortDirection == SortDirection.Asc ?
+                        "glyphicon-sort-by-attributes" :
+                        "glyphicon-sort-by-attributes-alt";
+                    sortDirection = Model.FilterOptions.SortDirection == SortDirection.Asc ?
+                        SortDirection.Desc : SortDirection.Asc;
+                }
+                <th class="rr-column rr-column-header"
+                    style="min-width: @(header.MinWidth)px">
+                    <a href="@Url.Action("GetDataTable", new {SortField = header.Field, SortDirection = sortDirection})">
+                        @header.Name
+                        <span class="glyphicon @iconClass pull-right" aria-hidden="true"></span>
+                    </a>
+                </th>
+            }
+            <th style="max-width: 100px"></th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var request in Model.VisibleRequests)
+        {
+            var rowClass = "";
+            if (!request.RequestUserLastSeens.Any(ls =>
+                ls.User.Login.ToLower() == securityService.CurrentUser.ToLower() && ls.IdRequest == request.IdRequest))
+            {
+                rowClass = "warning";
+            }
+            <tr class="@rowClass">
+                <td class="rr-column col-sm-1">@request.IdRequest</td>
+                <td class="rr-column col-sm-2">@request.User.Snp</td>
+                <td class="rr-column col-sm-2">@request.RequestStates.Last().RequestStateType.Name</td>
+                <td class="rr-column col-sm-2">@request.RequestType.Name</td>
+                <td class="rr-column col-sm-4">@request.Description</td>
+                <td class="rr-column col-sm-1">@request.RequestStates.First().Date.ToString("dd.MM.yyyy", CultureInfo.CurrentCulture)</td>
+                <td class="rr-edit-column text-center">
+                    <div class="btn-group btn-group-xs" role="group" aria-label="Панель редактирования записи">
+                        <a href="@Url.Action("Detail", new {id = request.IdRequest})"
+                           class="btn btn-default glyphicon glyphicon-eye-open"
+                           title="Просмотреть запись"
+                           aria-label="Просмотреть запись"></a>
+                        @if (securityService.CanUpdate(request))
+                        {
+                            <a href="@Url.Action("Update", new {id = request.IdRequest})"
+                               class="btn btn-default glyphicon glyphicon-pencil"
+                               title="Изменить запись"
+                               aria-label="Изменить запись"></a>
+                        }
+                        @if (securityService.CanDelete(request))
+                        {
+                            <a href="@Url.Action("Delete", new {id = request.IdRequest})"
+                               class="btn btn-danger glyphicon glyphicon-remove rr-delete-item-button"
+                               title="Удалить запись"
+                               aria-label="Удалить запись"></a>
+                        }
+                    </div>
+
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    @Html.Partial("DataTableFooter", Model)
+</div>

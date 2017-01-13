@@ -1,23 +1,37 @@
-﻿@using RequestsForRightsV2.Infrastructure.Helpers
-@model IEnumerable<RequestsForRightsV2.Models.ModelViews.NotSeenRequestsByState>
+﻿@using RequestsForRights.Infrastructure.Helpers
+@model RequestsForRights.Models.ModelViews.NotSeenRequestsViewModel
 
 @{
     Layout = null;
+    var notSeenAgg = (from row in Model.NotSeenRequests
+        group row.IdRequest by row.RequestStates.OrderByDescending(rs => rs.IdRequestState).
+            FirstOrDefault().IdRequestStateType
+        into gs
+        select new
+        {
+            IdRequestStateType = gs.Key,
+            Count = gs.Count()
+        }).ToList();
 }
 
-@foreach (var item in Model)
+@foreach (var requestStateType in Model.RequestStateTypes)
 {
     <li>
-        <a href="@Url.Action("Index", "Request", new {item.RequestStateType.IdRequestStateType})">
-            @RequestHelper.PluralRequestState(item.RequestStateType.Name)
+        <a href="@Url.Action("Index", "Request", new { requestStateType.IdRequestStateType })">
+            @RequestHelper.PluralRequestState(requestStateType.Name)
             @{
-                var notSeenCount = item.NotSeenRequests.Count();
-                notSeenCount = notSeenCount > 99 ? 99 : notSeenCount;
+                var notSeenItem =
+                    notSeenAgg.FirstOrDefault(r => r.IdRequestStateType == requestStateType.IdRequestStateType);
+                var notSeenCount = 0;
+                if (notSeenItem != null)
+                {
+                    notSeenCount = notSeenItem.Count > 99 ? 99 : notSeenItem.Count;
+                }
             }
             @if (notSeenCount > 0)
-                {
-                    <span class="rr-requests-menu-badge badge">@notSeenCount</span>
-                }
+            {
+                <span class="rr-requests-menu-badge badge">@notSeenCount</span>
+            }
         </a>
     </li>
 }

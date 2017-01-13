@@ -1,12 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
 using RequestsForRights.Domain.Entities;
 
 namespace RequestsForRights.Database.Repositories.Interfaces
 {
     public interface IRequestRepository
     {
-        IEnumerable<Request> GetRequests();
-        IEnumerable<RequestStateType> GetRequestStateTypes();
-        IEnumerable<RequestUserLastSeen> GetRequestsUserLastSeens(string login);
+        IQueryable<Request> GetRequests();
+        IQueryable<RequestStateType> GetRequestStateTypes();
+        IQueryable<RequestType> GetRequestTypes();
+        IQueryable<RequestUserLastSeen> GetRequestsUserLastSeens(string login);
+
+        Request DeleteRequest(int idRequest);
+        int SaveChanges();
+        Request GetRequestById(int idRequest);
     }
 }

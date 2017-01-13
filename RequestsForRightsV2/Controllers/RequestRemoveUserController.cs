@@ -1,6 +1,6 @@
 ﻿using System.Web.Mvc;
 
-namespace RequestsForRightsV2.Controllers
+namespace RequestsForRights.Controllers
 {
     public class RequestRemoveUserController : Controller
     {

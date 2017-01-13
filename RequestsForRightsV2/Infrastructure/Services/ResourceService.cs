@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using RequestsForRights.Database.Repositories.Interfaces;
 using RequestsForRights.Domain.Entities;
-using RequestsForRightsV2.Infrastructure.Helpers;
-using RequestsForRightsV2.Infrastructure.Services.Interfaces;
-using RequestsForRightsV2.Models.FilterOptions;
-using RequestsForRightsV2.Models.ModelViews;
+using RequestsForRights.Infrastructure.Enums;
+using RequestsForRights.Infrastructure.Services.Interfaces;
+using RequestsForRights.Models.FilterOptions;
+using RequestsForRights.Models.ModelViews;
 
-namespace RequestsForRightsV2.Infrastructure.Services
+namespace RequestsForRights.Infrastructure.Services
 {
     public class ResourceService : IResourceService
     {
@@ -23,40 +23,86 @@ namespace RequestsForRightsV2.Infrastructure.Services
             _resourceRepository = resourceRepository;
         }
 
-        public IEnumerable<Resource> GetVisibleResources(FilterOptions filterOptions, 
-            IEnumerable<Resource> filteredResources)
+        public IQueryable<Resource> GetVisibleResources(FilterOptions filterOptions,
+            IQueryable<Resource> filteredResources)
         {
-            return filteredResources.
-                OrderBy(filterOptions.SortField, filterOptions.SortDirection).
+            return Order(filteredResources, filterOptions.SortField, filterOptions.SortDirection).
                 Skip(filterOptions.PageSize*filterOptions.PageIndex).
                 Take(filterOptions.PageSize);
         }
 
-        public ResourceIndexModelView GetResourceIndexModelView(FilterOptions filterOptions, 
-            IEnumerable<Resource> filteredResources)
+        private static IQueryable<Resource> Order(IQueryable<Resource> resources,
+            string sortField, SortDirection sortDirection)
         {
-            var filteredResourcesList = filteredResources.ToList();
+            switch (sortField)
+            {
+                case "Name":
+                    switch (sortDirection)
+                    {
+                        case SortDirection.Asc:
+                            return resources.OrderBy(r => r.Name);
+                        case SortDirection.Desc:
+                            return resources.OrderByDescending(r => r.Name);
+                        default:
+                            return resources;
+                    }
+                case "Description":
+                    switch (sortDirection)
+                    {
+                        case SortDirection.Asc:
+                            return resources.OrderBy(r => r.Description);
+                        case SortDirection.Desc:
+                            return resources.OrderByDescending(r => r.Description);
+                        default:
+                            return resources;
+                    }
+                case "ResourceGroup.Name":
+                    switch (sortDirection)
+                    {
+                        case SortDirection.Asc:
+                            return resources.OrderBy(r => r.ResourceGroup.Name);
+                        case SortDirection.Desc:
+                            return resources.OrderByDescending(r => r.ResourceGroup.Name);
+                        default:
+                            return resources;
+                    }
+                default:
+                    return resources;
+            }
+        }
+
+        public ResourceIndexModelView GetResourceIndexModelView(FilterOptions filterOptions,
+            IQueryable<Resource> filteredResources)
+        {
             if (filterOptions.SortField == null)
             {
                 filterOptions.SortField = "Name";
             }
-            var resources = GetVisibleResources(filterOptions, filteredResourcesList).ToList();
+            var resources = GetVisibleResources(filterOptions, filteredResources).ToList();
             if (!resources.Any())
             {
                 filterOptions.PageIndex = 0;
-                resources = GetVisibleResources(filterOptions, filteredResourcesList).ToList();
+                resources = GetVisibleResources(filterOptions, filteredResources).ToList();
             }
             return new ResourceIndexModelView
             {
                 VisibleResources = resources,
                 FilterOptions = filterOptions,
-                ResourceCount = filteredResourcesList.Count
+                ResourceCount = filteredResources.Count()
             };
         }
 
-        public IEnumerable<Resource> GetFilteredResources(string filter)
+        public IQueryable<Resource> GetFilteredResources(string filter)
         {
-            return _resourceRepository.GetResources().Where(filter);
+            var resources = _resourceRepository.GetResources();
+            if (string.IsNullOrEmpty(filter))
+            {
+                return resources;
+            }
+            return resources.Where(r => 
+                r.Name.ToLower().Contains(filter) ||
+                r.Description.ToLower().Contains(filter) ||
+                r.ResourceGroup.Name.ToLower().Contains(filter));
         }
 
         public Resource GetResourceBy(int id)

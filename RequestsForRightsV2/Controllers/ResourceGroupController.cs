@@ -2,12 +2,12 @@
 using System.Data.Entity.Infrastructure;
 using System.Web.Mvc;
 using RequestsForRights.Domain.Entities;
-using RequestsForRightsV2.Infrastructure.Helpers;
-using RequestsForRightsV2.Infrastructure.Security.Interfaces;
-using RequestsForRightsV2.Infrastructure.Services.Interfaces;
-using RequestsForRightsV2.Models.FilterOptions;
+using RequestsForRights.Infrastructure.Helpers;
+using RequestsForRights.Infrastructure.Security.Interfaces;
+using RequestsForRights.Infrastructure.Services.Interfaces;
+using RequestsForRights.Models.FilterOptions;
 
-namespace RequestsForRightsV2.Controllers
+namespace RequestsForRights.Controllers
 {
     public class ResourceGroupController : Controller
     {
