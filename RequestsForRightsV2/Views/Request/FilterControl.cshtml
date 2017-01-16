@@ -1,8 +1,15 @@
 ﻿@using System.Globalization
-@model RequestsForRights.Models.ModelViews.RequestIndexModelView
+@using RequestsForRights.Infrastructure.Enums
+@model RequestsForRights.Models.ModelViews.RequestIndexViewModel
 
 @{
     Layout = null;
+    var showHiddenFilter = 
+        Model.FilterOptions.DateOfFillingFrom != null ||
+        Model.FilterOptions.DateOfFillingTo != null ||
+        Model.FilterOptions.IdRequestStateType != null ||
+        Model.FilterOptions.IdRequestType != null ||
+        Model.FilterOptions.RequestCategory != RequestCategory.AllRequests;
 }
 
 <div class="rr-filter-control">
@@ -16,27 +23,28 @@
         <div class="clearfix rr-main-filter-panel">
             <div class="form-group col-sm-3 rr-left-control">
                 @Html.Label("PageSize", "Отображено записей")
-                @Html.DropDownList("PageSize", new[] { 10, 25, 50, 100 }.Select(x => new SelectListItem
+                @Html.DropDownList("PageSize", new[] {10, 25, 50, 100}.Select(x => new SelectListItem
                 {
                     Value = x.ToString(),
                     Text = x.ToString(),
                     Selected = x == Model.FilterOptions.PageSize
-                }), new { @class = "form-control" })
+                }), new {@class = "form-control"})
             </div>
-            <div class="form-group col-sm-7">
+            <div class="form-group col-sm-6 col-md-7">
                 @Html.Label("Filter", "Поиск")
-                @Html.TextBox("Filter", Model.FilterOptions.Filter, 
-                    new { @class = "form-control", placeholder = "Введите текст для поиска" })
+                @Html.TextBox("Filter", Model.FilterOptions.Filter,
+                    new {@class = "form-control", placeholder = "Введите текст для поиска"})
             </div>
-            <div class="col-sm-2 col-xs-12 rr-right-control ">
+            <div class="col-sm-3 col-md-2 col-xs-12 rr-right-control ">
                 <button class="btn btn-primary col-xs-12 rr-ext-filter-button collapsed" type="button"
                         data-toggle="collapse" data-target="#filter"
                         aria-expanded="false" aria-controls="filter">
+                    <span class="glyphicon glyphicon-filter" aria-hidden="true"></span>
                     Фильтрация
                 </button>
             </div>
         </div>
-        <div class="collapse rr-ext-filter-panel" id="filter">
+        <div class="collapse @(showHiddenFilter ? "in" : "") rr-ext-filter-panel" id="filter">
             <div class="form-group col-sm-6  rr-left-control">
                 @Html.Label("IdRequestStateType", "Статус заявки")
                 @Html.DropDownList("IdRequestStateType",

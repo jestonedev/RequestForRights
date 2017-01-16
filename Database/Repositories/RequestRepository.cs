@@ -54,7 +54,40 @@ namespace RequestsForRights.Database.Repositories
 
         public Request GetRequestById(int id)
         {
-            return _databaseContext.Requests.FirstOrDefault(r => r.IdRequest == id);
+            return _databaseContext.Requests.Find(id);
+        }
+
+        public IQueryable<RequestExtDescription> GetRequestExtDescriptions(int idRequest)
+        {
+            return _databaseContext.RequestExtDescriptions.Where(r => r.IdRequest == idRequest);
+        }
+
+        public IQueryable<RequestAgreement> GetRequestAgreements(int idRequest)
+        {
+            return _databaseContext.RequestAgreements.Where(r => r.IdRequest == idRequest);
+        }
+
+        public DelegationRequestUsersExtInfo GetDelegationRequestUserExtInfoBy(int idRequestUserAssoc)
+        {
+            return _databaseContext.DelegationRequestUsersExtInfo.Find(idRequestUserAssoc);
+        }
+
+        public void UpdateUserLastSeen(int idRequest, int idUser)
+        {
+            var requestUserLastSeen = _databaseContext.RequestUserLastSeens.FirstOrDefault(r => r.IdRequest == idRequest && r.IdUser == idUser);
+            if (requestUserLastSeen == null)
+            {
+                _databaseContext.RequestUserLastSeens.Add(new RequestUserLastSeen
+                {
+                    IdRequest = idRequest,
+                    IdUser = idUser,
+                    DateOfLastSeen = DateTime.Now
+                });
+            }
+            else
+            {
+                requestUserLastSeen.DateOfLastSeen = DateTime.Now;
+            }
         }
 
         public int SaveChanges()

@@ -8,7 +8,7 @@
     var returnUri = Request["returnUri"] ?? Url.Action("Index");
 }
 
-<h2>Изменить информационный ресурс # @Model.Resource.IdResource</h2>
+<h2>Изменение информационного ресурса # @Model.Resource.IdResource</h2>
 
 @Html.Partial("ErrorAlert")
 
@@ -22,7 +22,7 @@
     @Html.HiddenFor(r => r.Resource.IdResource)
     @Html.Hidden("returnUri", returnUri)
     
-    @Html.Partial("RightForm")
+    @Html.Partial("ResourceForm")
     
     <div class="text-center rr-edit-panel">
         <div class="btn-group" role="group" aria-label="Панель действий">

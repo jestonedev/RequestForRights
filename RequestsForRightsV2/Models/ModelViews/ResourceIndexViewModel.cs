@@ -3,7 +3,7 @@ using RequestsForRights.Domain.Entities;
 
 namespace RequestsForRights.Models.ModelViews
 {
-    public class ResourceIndexModelView
+    public class ResourceIndexViewModel
     {
         public IEnumerable<Resource> VisibleResources { get; set; }
         public int ResourceCount { get; set; }

@@ -24,6 +24,7 @@ namespace RequestsForRights
             bundles.Add(new ScriptBundle("~/bundles/rr-detail.update.common").Include("~/Scripts/rr-detail.update.common.js"));
             bundles.Add(new ScriptBundle("~/bundles/rr-resource.common").Include("~/Scripts/rr-resource.common.js"));
             bundles.Add(new ScriptBundle("~/bundles/rr-request.index").Include("~/Scripts/rr-request.index.js"));
+            bundles.Add(new ScriptBundle("~/bundles/rr-request.common").Include("~/Scripts/rr-request.common.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js",

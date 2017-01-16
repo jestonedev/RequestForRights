@@ -2,7 +2,7 @@
 using System.Linq;
 using RequestsForRights.Database.Repositories.Interfaces;
 using RequestsForRights.Domain.Entities;
-using RequestsForRights.Infrastructure.Enums;
+using RequestsForRights.Infrastructure.Helpers;
 using RequestsForRights.Infrastructure.Services.Interfaces;
 using RequestsForRights.Models.FilterOptions;
 using RequestsForRights.Models.ModelViews;
@@ -25,42 +25,12 @@ namespace RequestsForRights.Infrastructure.Services
         public IQueryable<ResourceGroup> GetVisibleResourceGroups(FilterOptions filterOptions,
             IQueryable<ResourceGroup> filteredResourceGroups)
         {
-            return Order(filteredResourceGroups, filterOptions.SortField, filterOptions.SortDirection).
+            return filteredResourceGroups.OrderBy(filterOptions.SortDirection, filterOptions.SortField).
                 Skip(filterOptions.PageSize*filterOptions.PageIndex).
                 Take(filterOptions.PageSize);
         }
 
-        private static IQueryable<ResourceGroup> Order(IQueryable<ResourceGroup> resourceGroups,
-            string sortField, SortDirection sortDirection)
-        {
-            switch (sortField)
-            {
-                case "Name":
-                    switch (sortDirection)
-                    {
-                        case SortDirection.Asc:
-                            return resourceGroups.OrderBy(r => r.Name);
-                        case SortDirection.Desc:
-                            return resourceGroups.OrderByDescending(r => r.Name);
-                        default:
-                            return resourceGroups;
-                    }
-                case "Description":
-                    switch (sortDirection)
-                    {
-                        case SortDirection.Asc:
-                            return resourceGroups.OrderBy(r => r.Description);
-                        case SortDirection.Desc:
-                            return resourceGroups.OrderByDescending(r => r.Description);
-                        default:
-                            return resourceGroups;
-                    }
-                default:
-                    return resourceGroups;
-            }
-        }
-
-        public ResourceGroupIndexModelView GetResourceGroupIndexModelView(FilterOptions filterOptions, IQueryable<ResourceGroup> filteredResourceGroups)
+        public ResourceGroupIndexViewModel GetResourceGroupIndexModelView(FilterOptions filterOptions, IQueryable<ResourceGroup> filteredResourceGroups)
         {
             if (filterOptions.SortField == null)
             {
@@ -72,7 +42,7 @@ namespace RequestsForRights.Infrastructure.Services
                 filterOptions.PageIndex = 0;
                 resourceGroup = GetVisibleResourceGroups(filterOptions, filteredResourceGroups).ToList();
             }
-            return new ResourceGroupIndexModelView
+            return new ResourceGroupIndexViewModel
             {
                 VisibleResourceGroups = resourceGroup, FilterOptions = filterOptions, ResourceGroupCount = filteredResourceGroups.Count()
             };

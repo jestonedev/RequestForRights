@@ -1,11 +1,13 @@
-﻿using RequestsForRights.Infrastructure.Enums;
+﻿using RequestsForRights.Domain.Entities;
+using AclRole = RequestsForRights.Infrastructure.Enums.AclRole;
 
 namespace RequestsForRights.Infrastructure.Security.Interfaces
 {
     public interface ISecurityService<in T>
         where T: class
     {
-        string CurrentUser { get; }
+        string CurrentUser { get; }     
+        AclUser GetUserInfo();
         bool InRole(AclRole role);
         bool InRole(AclRole[] role);
         bool IsAnonimous();

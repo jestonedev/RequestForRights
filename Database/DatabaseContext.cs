@@ -20,7 +20,7 @@ namespace RequestsForRights.Database
         public IDbSet<RequestUser> Users { get; set; }
         public IDbSet<RequestUserAssoc> RequestUserAssocs { get; set; }
         public IDbSet<RequestUserRightAssoc> RequestUserRightAssocs { get; set; }
-        public IDbSet<DelegationRequestUserRightExtInfo> DelegationRequestUserRightsExtInfo { get; set; }
+        public IDbSet<DelegationRequestUsersExtInfo> DelegationRequestUsersExtInfo { get; set; }
         public IDbSet<RequestExtDescription> RequestExtDescriptions { get; set; }
         public IDbSet<RequestAgreementType> RequestAgreementTypes { get; set; }
         public IDbSet<RequestAgreementState> RequestAgreementStates { get; set; }

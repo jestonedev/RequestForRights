@@ -10,7 +10,7 @@ namespace RequestsForRights.Infrastructure.Services.Interfaces
         IQueryable<Resource> GetVisibleResources(FilterOptions filterOptions,
             IQueryable<Resource> filteredResources);
         IQueryable<Resource> GetFilteredResources(string filter);
-        ResourceIndexModelView GetResourceIndexModelView(FilterOptions filterOptions,
+        ResourceIndexViewModel GetResourceIndexModelView(FilterOptions filterOptions,
             IQueryable<Resource> filteredResources);
         Resource GetResourceBy(int id);
         ResourceViewModel GetResourceViewModelBy(int id);

@@ -57,10 +57,7 @@
                             Подать заявку <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li>@Html.ActionLink("На подключение нового сотрудника", "Index", "RequestAddUser")</li>
-                            <li>@Html.ActionLink("На выдачу и лишение прав доступа", "Index", "RequestModifyPermissions")</li>
-                            <li>@Html.ActionLink("На отключение сотрудника", "Index", "RequestRemoveUser")</li>
-                            <li>@Html.ActionLink("На временное делегирование прав", "Index", "RequestDelegatePermissions")</li>
+                            @Html.Action("RequestCreateMenuItems", "Request")
                         </ul>
                     </li>
                     <li class="dropdown">

@@ -11,6 +11,7 @@ using RequestsForRights.Infrastructure.Security;
 using RequestsForRights.Infrastructure.Security.Interfaces;
 using RequestsForRights.Infrastructure.Services;
 using RequestsForRights.Infrastructure.Services.Interfaces;
+using RequestsForRights.Models.Models;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
 [assembly: WebActivatorEx.ApplicationShutdownMethodAttribute(typeof(NinjectWebCommon), "Stop")]
@@ -67,20 +68,24 @@ namespace RequestsForRights
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
-            kernel.Bind<IDatabaseContext>().To<DatabaseContext>();
+            kernel.Bind<IDatabaseContext>().To<DatabaseContext>().InRequestScope();
             // Repositories
             kernel.Bind<IRequestRepository>().To<RequestRepository>();
             kernel.Bind<IResourceGroupRepository>().To<ResourceGroupRepository>();
             kernel.Bind<IResourceRepository>().To<ResourceRepository>();
             kernel.Bind<ISecurityRepository>().To<SecurityRepository>().InRequestScope();
             // Data services
-            kernel.Bind<IRequestService>().To<RequestService>();
+            kernel.Bind<IRequestService<RequestUserModel>>().To<RequestService<RequestUserModel>>();
+            kernel.Bind<IRequestService<RequestDelegatePermissionsUserModel>>().
+                To<RequestDelegatePermissionsService>();
             kernel.Bind<IResourceGroupService>().To<ResourceGroupService>();
             kernel.Bind<IResourceService>().To<ResourceService>();
             // Security services
             kernel.Bind<IResourceGroupSecurityService>().To<ResourceGroupSecurityService>();
             kernel.Bind<IResourceSecurityService>().To<ResourceSecurityService>();
-            kernel.Bind<IRequestSecurityService>().To<RequestSecurityService>();
+            kernel.Bind<IRequestSecurityService<RequestUserModel>>().To<RequestSecurityService<RequestUserModel>>();
+            kernel.Bind<IRequestSecurityService<RequestDelegatePermissionsUserModel>>().
+                To<RequestSecurityService<RequestDelegatePermissionsUserModel>>();
         }        
     }
 }

@@ -1,5 +1,5 @@
 ﻿@using RequestsForRights.Infrastructure.Security
-@model RequestsForRights.Models.ModelViews.ResourceIndexModelView
+@model RequestsForRights.Models.ModelViews.ResourceIndexViewModel
 
 @{
     Layout = null;
@@ -72,7 +72,7 @@
     <span class="rr-page-counter">показано @firstElementIndex - @lastElementIndex из @Model.ResourceCount</span>
     @if (securityService.CanCreate())
     {
-        <div class="col-sm-2 col-xs-12 rr-right-control pull-right">
+        <div class="col-sm-3 col-md-2 col-xs-12 rr-right-control pull-right">
             <a class="btn btn-primary col-xs-12 rr-add-button" href="@Url.Action("Create")">
                 <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                 Добавить

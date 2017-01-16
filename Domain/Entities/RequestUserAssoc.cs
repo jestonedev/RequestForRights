@@ -12,6 +12,7 @@ namespace RequestsForRights.Domain.Entities
         public int IdRequest { get; set; }
         public virtual Request Request { get; set; }
         public int IdRequestUser { get; set; }
+        public string Description { get; set; }
         public virtual RequestUser RequestUser { get; set; }
         public bool Deleted { get; set; }
         public virtual IList<RequestUserRightAssoc> RequestUserRightAssocs { get; set; }

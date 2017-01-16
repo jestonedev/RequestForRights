@@ -10,7 +10,7 @@ namespace RequestsForRights.Infrastructure.Services.Interfaces
         IQueryable<ResourceGroup> GetVisibleResourceGroups(FilterOptions filterOptions,
             IQueryable<ResourceGroup> filteredResourceGroups);
         IQueryable<ResourceGroup> GetFilteredResourceGroups(string filter);
-        ResourceGroupIndexModelView GetResourceGroupIndexModelView(FilterOptions filterOptions,
+        ResourceGroupIndexViewModel GetResourceGroupIndexModelView(FilterOptions filterOptions,
             IQueryable<ResourceGroup> filteredResourceGroups);
         ResourceGroup DeleteResourceGroup(int idResourceGroup);
         ResourceGroup GetResourceGroupBy(int id);

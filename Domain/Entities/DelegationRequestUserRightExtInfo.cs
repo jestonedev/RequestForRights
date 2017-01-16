@@ -5,13 +5,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RequestsForRights.Domain.Entities
 {
-    [Table("DelegationRequestUserRightsExtInfo")]
-    public class DelegationRequestUserRightExtInfo
+    [Table("DelegationRequestUsersExtInfo")]
+    public class DelegationRequestUsersExtInfo
     {
         [Key]
-        public int IdAssoc { get; set; }
-        [ForeignKey("IdAssoc")]
-        public RequestUserRightAssoc RequestUserRightAssoc { get; set; }
+        public int IdRequestUserAssoc { get; set; }
+        [ForeignKey("IdRequestUserAssoc")]
+        public RequestUserAssoc RequestUserAssoc { get; set; }
         public int IdDelegateToUser { get; set; }
         [ForeignKey("IdDelegateToUser")]
         public virtual RequestUser DelegateToUser { get; set; }

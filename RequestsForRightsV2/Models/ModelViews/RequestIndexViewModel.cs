@@ -4,7 +4,7 @@ using RequestsForRights.Models.Models;
 
 namespace RequestsForRights.Models.ModelViews
 {
-    public class RequestIndexModelView
+    public class RequestIndexViewModel
     {
         public IEnumerable<Request> VisibleRequests { get; set; }
         public int RequestCount { get; set; }

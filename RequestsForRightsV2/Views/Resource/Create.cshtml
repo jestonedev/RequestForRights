@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Добавить информационный ресурс</h2>
+<h2>Новый информационный ресурс</h2>
 
 @using (Html.BeginForm("Create", "Resource", new { }, FormMethod.Post, new { @class = "form-horizontal" }))
 {
@@ -13,7 +13,7 @@
         @Html.ValidationSummary(true)
     </div>
     
-    @Html.Partial("RightForm")
+    @Html.Partial("ResourceForm")
 
     <div class="text-center rr-edit-panel">
         <div class="btn-group" role="group" aria-label="Панель действий">

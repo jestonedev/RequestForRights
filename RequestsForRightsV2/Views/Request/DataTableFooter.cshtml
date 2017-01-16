@@ -1,9 +1,10 @@
 ﻿@using RequestsForRights.Infrastructure.Security
-@model RequestsForRights.Models.ModelViews.RequestIndexModelView
+@using RequestsForRights.Models.Models
+@model RequestsForRights.Models.ModelViews.RequestIndexViewModel
 
 @{
     Layout = null;
-    var securityService = (RequestSecurityService)ViewData["SecurityService"];
+    var securityService = (RequestSecurityService<RequestUserModel>)ViewData["SecurityService"];
     var firstElementIndex = Model.FilterOptions.PageIndex * Model.FilterOptions.PageSize + 1;
     var lastElementIndex = firstElementIndex + Model.FilterOptions.PageSize - 1;
     if (lastElementIndex > Model.RequestCount)
@@ -72,11 +73,14 @@
     <span class="rr-page-counter">показано @firstElementIndex - @lastElementIndex из @Model.RequestCount</span>
     @if (securityService.CanCreate())
     {
-        <div class="col-sm-2 col-xs-12 rr-right-control pull-right">
-            <a class="btn btn-primary col-xs-12 rr-add-button" href="@Url.Action("Create")">
+        <div class="col-md-2 col-sm-3 col-xs-12 rr-right-control pull-right">
+            <button type="button" class="btn btn-primary dropdown-toggle col-xs-12 rr-add-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                Добавить
-            </a>
+                Подать заявку
+            </button>
+            <ul class="dropdown-menu">
+                @Html.Action("RequestCreateMenuItems")
+            </ul>
         </div>
     }
 </nav>

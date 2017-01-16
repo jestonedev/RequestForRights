@@ -56,7 +56,7 @@ namespace RequestsForRights.Database.Repositories
 
         public ResourceGroup GetResourceGroupById(int id)
         {
-            return _databaseContext.ResourceGroups.FirstOrDefault(r => r.IdResourceGroup == id);
+            return _databaseContext.ResourceGroups.Find(id);
         }
     }
 }

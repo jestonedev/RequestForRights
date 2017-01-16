@@ -13,5 +13,11 @@ namespace RequestsForRights.Database.Repositories.Interfaces
         Request DeleteRequest(int idRequest);
         int SaveChanges();
         Request GetRequestById(int idRequest);
+
+        IQueryable<RequestExtDescription> GetRequestExtDescriptions(int idRequest);
+        IQueryable<RequestAgreement> GetRequestAgreements(int idRequest);
+        DelegationRequestUsersExtInfo GetDelegationRequestUserExtInfoBy(int idRequestUserAssoc);
+
+        void UpdateUserLastSeen(int idRequest, int idUser);
     }
 }

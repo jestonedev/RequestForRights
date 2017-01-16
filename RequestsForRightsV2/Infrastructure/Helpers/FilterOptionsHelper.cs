@@ -9,7 +9,7 @@ namespace RequestsForRights.Infrastructure.Helpers
 {
     public static class FilterOptionsHelper
     {
-        public static T To<T>(this string value, T defaultValue)
+        private static T To<T>(this string value, T defaultValue)
         {
             try
             {

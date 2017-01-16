@@ -1,10 +1,11 @@
 ﻿@using System.Globalization
 @using RequestsForRights.Infrastructure.Security
+@using RequestsForRights.Models.Models
 @using SortDirection = RequestsForRights.Infrastructure.Enums.SortDirection
-@model RequestsForRights.Models.ModelViews.RequestIndexModelView
+@model RequestsForRights.Models.ModelViews.RequestIndexViewModel
 
 @{
-    var securityService = (RequestSecurityService) ViewData["SecurityService"];
+    var securityService = (RequestSecurityService<RequestUserModel>)ViewData["SecurityService"];
     var headers = new[]
     {
         new
@@ -76,8 +77,10 @@
         @foreach (var request in Model.VisibleRequests)
         {
             var rowClass = "";
-            if (!request.RequestUserLastSeens.Any(ls =>
-                ls.User.Login.ToLower() == securityService.CurrentUser.ToLower() && ls.IdRequest == request.IdRequest))
+            if (request.User.Login.ToLower() != securityService.CurrentUser.ToLower() && 
+                !request.RequestUserLastSeens.Any(ls =>
+                ls.User.Login.ToLower() == securityService.CurrentUser.ToLower() && 
+                ls.IdRequest == request.IdRequest))
             {
                 rowClass = "warning";
             }

@@ -4,17 +4,22 @@ using System.Web.Mvc;
 using RequestsForRights.Infrastructure.Helpers;
 using RequestsForRights.Infrastructure.Security.Interfaces;
 using RequestsForRights.Infrastructure.Services.Interfaces;
+using RequestsForRights.Infrastructure.Utilities.TransfertToRoute;
+using RequestsForRights.Infrastructure.Utilities.TransfertToRoute.Extensions;
 using RequestsForRights.Models.FilterOptions;
+using RequestsForRights.Models.Models;
+using RequestsForRights.Models.ModelViews;
+using WebGrease.Css.Extensions;
 
 namespace RequestsForRights.Controllers
 {
     public class RequestController : Controller
     {
-        private readonly IRequestService _requestService;
-        private readonly IRequestSecurityService _securityService;
+        private readonly IRequestService<RequestUserModel> _requestService;
+        private readonly IRequestSecurityService<RequestUserModel> _securityService;
 
-        public RequestController(IRequestService requestService,
-            IRequestSecurityService securityService)
+        public RequestController(IRequestService<RequestUserModel> requestService,
+            IRequestSecurityService<RequestUserModel> securityService)
         {
             if (requestService == null)
             {
@@ -57,65 +62,49 @@ namespace RequestsForRights.Controllers
         [HttpGet]
         public ActionResult Update(int id)
         {
-            if (!_securityService.CanUpdate())
-            {
-                return RedirectToAction("ForbiddenError", "Home");
-            }
-            ViewData["SecurityService"] = _securityService;
-            return Content(""/*_requestService.GetRequestViewModelBy(id)*/);
-        }
-
-        /*[HttpPut]
-        public ActionResult Update(ResourceViewModel resourceViewModel)
-        {
-            if (resourceViewModel == null || resourceViewModel.Resource == null)
-            {
-                return RedirectToAction("BadRequestError", "Home",
-                    new { message = "Не передана ссылка на ресурс" });
-            }
-            if (!_securityService.CanUpdate(resourceViewModel.Resource))
-            {
-                return RedirectToAction("ForbiddenError", "Home");
-            }
-            if (resourceViewModel.Resource.ResourceRights == null ||
-                resourceViewModel.Resource.ResourceRights.Count < 1)
-            {
-                ModelState.AddModelError(string.Empty, 
-                    "Необходимо задать по меньшей мере одно право для ресурса");
-            }
-            if (!ModelState.IsValid)
-            {
-                ViewData["SecurityService"] = _securityService;
-                return System.Web.UI.WebControls.View(_resourceService.GetResourceViewModelBy(resourceViewModel.Resource));
-            }
+            var request = _requestService.GetRequestById(id);
             try
             {
-                _resourceService.UpdateResource(resourceViewModel.Resource);
-                _resourceService.SaveChanges();
+                _requestService.UpdateUserLastSeen(id, _securityService.GetUserInfo().IdUser);
+                _requestService.SaveChanges();
             }
             catch (DbUpdateException e)
             {
-                return RedirectToAction("ConflictError", "Home", 
-                    new { message = ExceptionHelper.RollToInnerException(e).Message });
+                return RedirectToAction("ConflictError", "Home", new { message = e.Message });
             }
-            return Request["returnUri"] != null ? (ActionResult)Redirect(Request["returnUri"]) :
-                RedirectToAction("Index");
-        }*/
+            return TransfertTo("Update", request.IdRequestType);
+        }
+
+        [HttpPut]
+        public ActionResult Update(RequestViewModel<RequestUserModel> requestViewModel)
+        {
+            if (requestViewModel == null || requestViewModel.RequestModel == null)
+            {
+                return RedirectToAction("BadRequestError", "Home",
+                    new { message = "Не передана ссылка на заявку" });
+            }
+            return TransfertTo("Update", requestViewModel.RequestModel.IdRequestType);
+        }
 
         public ActionResult Detail(int id)
         {
-            if (!_securityService.CanRead())
+            var request = _requestService.GetRequestById(id);
+            try
             {
-                return RedirectToAction("ForbiddenError", "Home");
+                _requestService.UpdateUserLastSeen(id, _securityService.GetUserInfo().IdUser);
+                _requestService.SaveChanges();
             }
-            ViewData["SecurityService"] = _securityService;
-            return Content("")/*View(_requestService.GetRequestBy(id))*/;
+            catch (DbUpdateException e)
+            {
+                return RedirectToAction("ConflictError", "Home", new { message = e.Message });
+            }
+            return TransfertTo("Detail", request.IdRequestType);
         }
 
         [HttpDelete]
         public ActionResult Delete(int id)
         {
-            var request = _requestService.GetRequestById(id);
+            var request = _requestService.GetRequestModelBy(_requestService.GetRequestById(id));
             if (!_securityService.CanDelete(request))
             {
                 return RedirectToAction("ForbiddenError", "Home");
@@ -134,56 +123,46 @@ namespace RequestsForRights.Controllers
         }
 
         [HttpGet]
-        public ActionResult Create()
+        public ActionResult Create(int idRequestType)
         {
-            if (!_securityService.CanCreate())
-            {
-                return RedirectToAction("ForbiddenError", "Home");
-            }
-            ViewData["SecurityService"] = _securityService;
-            return Content("") /*View(_requestService.GetEmptyResourceViewModel())*/;
+            return TransfertTo("Create", idRequestType);
         }
-        /*
+
+        
         [HttpPost]
-        public ActionResult Create(ResourceViewModel resourceViewModel)
+        public ActionResult Create(RequestViewModel<RequestUserModel> requestViewModel)
         {
-            if (resourceViewModel == null || resourceViewModel.Resource == null)
+            if (requestViewModel == null || requestViewModel.RequestModel == null)
             {
                 return RedirectToAction("BadRequestError", "Home",
-                    new { message = "Не передана ссылка на ресурс" });
+                    new { message = "Не передана ссылка на зявку" });
             }
-            if (!_securityService.CanCreate(resourceViewModel.Resource))
+            return TransfertTo("Create", requestViewModel.RequestModel.IdRequestType);
+        }
+
+        private ActionResult TransfertTo(string actionName, int idRequestType)
+        {
+            var controller = RequestHelper.IdRequestTypeToControllerName(idRequestType);
+            if (controller == null)
             {
-                return RedirectToAction("ForbiddenError", "Home");
+                return RedirectToAction("BadRequestError", "Home",
+                    new { message = "Некорректный тип заявки" });
             }
-            if (resourceViewModel.Resource.ResourceRights == null || 
-                resourceViewModel.Resource.ResourceRights.Count < 1)
-            {
-                ModelState.AddModelError(string.Empty, 
-                    "Необходимо задать по меньшей мере одно право для ресурса");
-            }
-            if (!ModelState.IsValid)
-            {
-                ViewData["SecurityService"] = _securityService;
-                return System.Web.UI.WebControls.View(_resourceService.GetResourceViewModelBy(resourceViewModel.Resource));
-            }
-            try
-            {
-                _resourceService.InsertResource(resourceViewModel.Resource);
-                _resourceService.SaveChanges();
-            }
-            catch (DbUpdateException e)
-            {
-                return RedirectToAction("ConflictError", "Home",
-                    new { message = ExceptionHelper.RollToInnerException(e).Message });
-            }
-            return RedirectToAction("Index");
-        }*/
+            var routedValues = Request.GetRouteValueDictionary();
+            RouteData.Values.ForEach(r => routedValues.AddWithCheck(r.Key, r.Value));
+            return new TransferToRouteResult(actionName, controller, routedValues);
+        }
 
         [ChildActionOnly]
         public ActionResult RequestsByStatesMenuItems()
         {
             return PartialView(_requestService.GetNotSeenRequestsViewModel());
+        }
+
+        [ChildActionOnly]
+        public ActionResult RequestCreateMenuItems()
+        {
+            return PartialView(_requestService.GetRequestTypes());
         }
     }
 }

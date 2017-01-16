@@ -40,7 +40,7 @@ namespace RequestsForRights.Database.Repositories
 
         public Resource GetResourceById(int id)
         {
-            return _databaseContext.Resources.FirstOrDefault(r => r.IdResource == id);
+            return _databaseContext.Resources.Find(id);
         }
 
         public Resource UpdateResource(Resource resource)
@@ -85,12 +85,12 @@ namespace RequestsForRights.Database.Repositories
 
         public IQueryable<ResourceGroup> GetResourceGroups()
         {
-            return _databaseContext.ResourceGroups.Where(r => !r.Deleted);
+            return _databaseContext.ResourceGroups.Where(r => !r.Deleted).OrderBy(r => r.Name);
         }
 
         public IQueryable<Department> GetOwnerDepartments()
         {
-            return _databaseContext.Departments.Where(r => r.IdParentDepartment == null).Where(r => !r.Deleted);
+            return _databaseContext.Departments.Where(r => r.IdParentDepartment == null).Where(r => !r.Deleted).OrderBy(r => r.Name);
         }
     }
 }

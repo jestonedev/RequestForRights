@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using RequestsForRights.Database.Repositories.Interfaces;
 using RequestsForRights.Domain.Entities;
-using RequestsForRights.Infrastructure.Enums;
+using RequestsForRights.Infrastructure.Helpers;
 using RequestsForRights.Infrastructure.Services.Interfaces;
 using RequestsForRights.Models.FilterOptions;
 using RequestsForRights.Models.ModelViews;
@@ -26,52 +26,12 @@ namespace RequestsForRights.Infrastructure.Services
         public IQueryable<Resource> GetVisibleResources(FilterOptions filterOptions,
             IQueryable<Resource> filteredResources)
         {
-            return Order(filteredResources, filterOptions.SortField, filterOptions.SortDirection).
+            return filteredResources.OrderBy(filterOptions.SortDirection, filterOptions.SortField).
                 Skip(filterOptions.PageSize*filterOptions.PageIndex).
                 Take(filterOptions.PageSize);
         }
 
-        private static IQueryable<Resource> Order(IQueryable<Resource> resources,
-            string sortField, SortDirection sortDirection)
-        {
-            switch (sortField)
-            {
-                case "Name":
-                    switch (sortDirection)
-                    {
-                        case SortDirection.Asc:
-                            return resources.OrderBy(r => r.Name);
-                        case SortDirection.Desc:
-                            return resources.OrderByDescending(r => r.Name);
-                        default:
-                            return resources;
-                    }
-                case "Description":
-                    switch (sortDirection)
-                    {
-                        case SortDirection.Asc:
-                            return resources.OrderBy(r => r.Description);
-                        case SortDirection.Desc:
-                            return resources.OrderByDescending(r => r.Description);
-                        default:
-                            return resources;
-                    }
-                case "ResourceGroup.Name":
-                    switch (sortDirection)
-                    {
-                        case SortDirection.Asc:
-                            return resources.OrderBy(r => r.ResourceGroup.Name);
-                        case SortDirection.Desc:
-                            return resources.OrderByDescending(r => r.ResourceGroup.Name);
-                        default:
-                            return resources;
-                    }
-                default:
-                    return resources;
-            }
-        }
-
-        public ResourceIndexModelView GetResourceIndexModelView(FilterOptions filterOptions,
+        public ResourceIndexViewModel GetResourceIndexModelView(FilterOptions filterOptions,
             IQueryable<Resource> filteredResources)
         {
             if (filterOptions.SortField == null)
@@ -84,7 +44,7 @@ namespace RequestsForRights.Infrastructure.Services
                 filterOptions.PageIndex = 0;
                 resources = GetVisibleResources(filterOptions, filteredResources).ToList();
             }
-            return new ResourceIndexModelView
+            return new ResourceIndexViewModel
             {
                 VisibleResources = resources,
                 FilterOptions = filterOptions,
@@ -115,7 +75,7 @@ namespace RequestsForRights.Infrastructure.Services
             return new ResourceViewModel
             {
                 Resource = _resourceRepository.GetResourceById(id),
-                ResourceGroups = _resourceRepository.GetResourceGroups(),
+                ResourceGroups = _resourceRepository.GetResourceGroups().OrderBy(r => r.Name),
                 OwnerDepartments = _resourceRepository.GetOwnerDepartments()
             };
         }
@@ -125,7 +85,7 @@ namespace RequestsForRights.Infrastructure.Services
             return new ResourceViewModel
             {
                 Resource = resource,
-                ResourceGroups = _resourceRepository.GetResourceGroups(),
+                ResourceGroups = _resourceRepository.GetResourceGroups().OrderBy(r => r.Name),
                 OwnerDepartments = _resourceRepository.GetOwnerDepartments()
             };
         }
@@ -141,7 +101,7 @@ namespace RequestsForRights.Infrastructure.Services
                         new ResourceRight()
                     }
                 },
-                ResourceGroups = _resourceRepository.GetResourceGroups(),
+                ResourceGroups = _resourceRepository.GetResourceGroups().OrderBy(r => r.Name),
                 OwnerDepartments = _resourceRepository.GetOwnerDepartments()
             };
         }

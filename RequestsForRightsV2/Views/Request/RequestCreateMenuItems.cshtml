@@ -1,0 +1,9 @@
+﻿@model IQueryable<RequestsForRights.Domain.Entities.RequestType>
+
+@foreach (var requestType in Model)
+{
+    <li>
+        @Html.ActionLink(requestType.Name, "Create", "Request",
+            new RouteValueDictionary {{"IdRequestType", requestType.IdRequestType}}, null)
+    </li>
+}

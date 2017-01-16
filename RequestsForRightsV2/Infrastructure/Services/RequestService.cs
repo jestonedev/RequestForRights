@@ -7,47 +7,51 @@ using RequestsForRights.Domain.Entities;
 using RequestsForRights.Infrastructure.Enums;
 using RequestsForRights.Infrastructure.Security.Interfaces;
 using RequestsForRights.Infrastructure.Services.Interfaces;
+using RequestsForRights.Infrastructure.Helpers;
 using RequestsForRights.Models.FilterOptions;
 using RequestsForRights.Models.Models;
 using RequestsForRights.Models.ModelViews;
 
 namespace RequestsForRights.Infrastructure.Services
 {
-    public class RequestService: IRequestService
+    public class RequestService<T> : IRequestService<T>
+        where T: RequestUserModel, new()
     {
-        private readonly IRequestRepository _requestsRepository;
-        private readonly IRequestSecurityService _requestSecurityService;
+        protected readonly IRequestRepository RequestsRepository;
+        protected readonly IRequestSecurityService<T> RequestSecurityService;
 
-        public RequestService(IRequestRepository requestsRepository, IRequestSecurityService requestSecurityService)
+        public RequestService(IRequestRepository requestsRepository,
+            IRequestSecurityService<T> requestSecurityService)
         {
             if (requestsRepository == null)
             {
                 throw new ArgumentNullException("requestsRepository");
             }
-            _requestsRepository = requestsRepository;
+            RequestsRepository = requestsRepository;
             if (requestSecurityService == null)
             {
                 throw new ArgumentNullException("requestSecurityService");
             }
-            _requestSecurityService = requestSecurityService;
+            RequestSecurityService = requestSecurityService;
         }
 
         public IQueryable<Request> GetNotSeenRequests()
         {
-            var requests = _requestsRepository.GetRequests();
-            var requestsUserLastSeens = _requestsRepository.GetRequestsUserLastSeens(_requestSecurityService.CurrentUser);
+            var requests = RequestsRepository.GetRequests();
+            var requestsUserLastSeens = RequestsRepository.GetRequestsUserLastSeens(RequestSecurityService.CurrentUser);
             return from request in requests
                 join lastSeen in requestsUserLastSeens
                     on request.IdRequest equals lastSeen.IdRequest into joinedRequestsAndLastSeens
                 from joinedLastSeensRow in joinedRequestsAndLastSeens.DefaultIfEmpty()
-                where joinedLastSeensRow == null
+                   where joinedLastSeensRow == null && 
+                       request.User.Login.ToLower() != RequestSecurityService.CurrentUser.ToLower()
                 select request;
         }
 
         public NotSeenRequestsViewModel GetNotSeenRequestsViewModel()
         {
             var requests = GetNotSeenRequests();
-            var requestStateTypes = _requestsRepository.GetRequestStateTypes();
+            var requestStateTypes = RequestsRepository.GetRequestStateTypes();
             return new NotSeenRequestsViewModel
             {
                 NotSeenRequests = requests,
@@ -73,10 +77,12 @@ namespace RequestsForRights.Infrastructure.Services
                     switch (sortDirection)
                     {
                         case SortDirection.Asc:
-                            return requests.OrderBy(r => r.RequestStates.OrderByDescending(rs => rs.IdRequestState).
+                            return requests.OrderBy(r => r.RequestStates.OrderByDescending(
+                                rs => rs.IdRequestState).
                                 FirstOrDefault().RequestStateType.Name);
                         case SortDirection.Desc:
-                            return requests.OrderByDescending(r => r.RequestStates.OrderByDescending(rs => rs.IdRequestState).
+                            return requests.OrderByDescending(r => r.RequestStates.OrderByDescending(
+                                rs => rs.IdRequestState).
                                 FirstOrDefault().RequestStateType.Name);
                         default:
                             return requests;
@@ -91,54 +97,14 @@ namespace RequestsForRights.Infrastructure.Services
                         default:
                             return requests;
                     }
-                case "IdRequest":
-                    switch (sortDirection)
-                    {
-                        case SortDirection.Asc:
-                            return requests.OrderBy(r => r.IdRequest);
-                        case SortDirection.Desc:
-                            return requests.OrderByDescending(r => r.IdRequest);
-                        default:
-                            return requests;
-                    }
-                case "User.Snp":
-                    switch (sortDirection)
-                    {
-                        case SortDirection.Asc:
-                            return requests.OrderBy(r => r.User.Snp);
-                        case SortDirection.Desc:
-                            return requests.OrderByDescending(r => r.User.Snp);
-                        default:
-                            return requests;
-                    }
-                case "RequestType.Name":
-                    switch (sortDirection)
-                    {
-                        case SortDirection.Asc:
-                            return requests.OrderBy(r => r.RequestType.Name);
-                        case SortDirection.Desc:
-                            return requests.OrderByDescending(r => r.RequestType.Name);
-                        default:
-                            return requests;
-                    }
-                case "Description":
-                    switch (sortDirection)
-                    {
-                        case SortDirection.Asc:
-                            return requests.OrderBy(r => r.Description);
-                        case SortDirection.Desc:
-                            return requests.OrderByDescending(r => r.Description);
-                        default:
-                            return requests;
-                    }
                 default:
-                    return requests;
+                    return requests.OrderBy(sortDirection, sortField);
             }
         }
 
         public IQueryable<Request> GetFilteredRequests(RequestsFilterOptions filterOptions)
         {
-            var requests = _requestSecurityService.FilterRequests(_requestsRepository.GetRequests());
+            var requests = RequestSecurityService.FilterRequests(RequestsRepository.GetRequests());
             if (filterOptions.IdRequestType != null)
             {
                 requests = requests.Where(r => r.IdRequestType == filterOptions.IdRequestType);
@@ -149,7 +115,7 @@ namespace RequestsForRights.Infrastructure.Services
             }
             if (filterOptions.RequestCategory == RequestCategory.MyRequests)
             {
-                requests = requests.Where(r => r.User.Login.ToLower() == _requestSecurityService.CurrentUser.ToLower());
+                requests = requests.Where(r => r.User.Login.ToLower() == RequestSecurityService.CurrentUser.ToLower());
             }
             if (filterOptions.DateOfFillingFrom != null)
             {
@@ -168,15 +134,10 @@ namespace RequestsForRights.Infrastructure.Services
                 return requests;
             }
             var filter = filterOptions.Filter.ToLower();
-            return requests.Where(r => r.IdRequest.ToString().ToLower().Contains(filter) || 
-                r.User.Snp.ToLower().Contains(filter) || 
-                r.RequestStates.OrderByDescending(rs => rs.IdRequestState).
-                FirstOrDefault().RequestStateType.Name.ToLower().Contains(filter) || 
-                r.RequestType.Name.ToLower().Contains(filter) || 
-                r.Description.ToLower().Contains(filter));
+            return requests.Where(r => r.IdRequest.ToString().ToLower().Contains(filter) || r.User.Snp.ToLower().Contains(filter) || r.RequestStates.OrderByDescending(rs => rs.IdRequestState).FirstOrDefault().RequestStateType.Name.ToLower().Contains(filter) || r.RequestType.Name.ToLower().Contains(filter) || r.Description.ToLower().Contains(filter));
         }
 
-        public RequestIndexModelView GetRequestIndexModelView(RequestsFilterOptions filterOptions, IQueryable<Request> filteredRequests)
+        public RequestIndexViewModel GetRequestIndexModelView(RequestsFilterOptions filterOptions, IQueryable<Request> filteredRequests)
         {
             if (filterOptions.SortField == null)
             {
@@ -188,9 +149,9 @@ namespace RequestsForRights.Infrastructure.Services
                 filterOptions.PageIndex = 0;
                 requests = GetVisibleRequests(filterOptions, filteredRequests).ToList();
             }
-            return new RequestIndexModelView
+            return new RequestIndexViewModel
             {
-                VisibleRequests = requests, FilterOptions = filterOptions, RequestCount = filteredRequests.Count(), RequestStateTypes = _requestsRepository.GetRequestStateTypes(), RequestTypes = _requestsRepository.GetRequestTypes(), RequestCatogories = GetRequestCategories()
+                VisibleRequests = requests, FilterOptions = filterOptions, RequestCount = filteredRequests.Count(), RequestStateTypes = RequestsRepository.GetRequestStateTypes(), RequestTypes = RequestsRepository.GetRequestTypes(), RequestCatogories = GetRequestCategories()
             };
         }
 
@@ -215,17 +176,120 @@ namespace RequestsForRights.Infrastructure.Services
 
         public Request GetRequestById(int idRequest)
         {
-            return _requestsRepository.GetRequestById(idRequest);
+            return RequestsRepository.GetRequestById(idRequest);
+        }
+
+        public virtual RequestModel<T> GetRequestModelBy(Request request)
+        {
+            return new RequestModel<T>
+            {
+                IdRequest = request.IdRequest,
+                Description = request.Description,
+                IdRequestType = request.IdRequestType,
+                Users = request.RequestUserAssoc.Where(ru => !ru.Deleted).
+                    Select(FillRequestUserModel).ToList()
+            };
         }
 
         public Request DeleteRequest(int idRequest)
         {
-            return _requestsRepository.DeleteRequest(idRequest);
+            return RequestsRepository.DeleteRequest(idRequest);
+        }
+
+        public virtual Request UpdateRequest(RequestModel<T> requestModel)
+        {
+            return null;
+        }
+
+        public virtual Request CreateRequest(RequestModel<T> requestModel)
+        {
+            return null;
+        }
+
+        public Request InsertRequest(RequestModel<T> requestModel)
+        {
+            return null;
+        }
+
+        public IQueryable<RequestType> GetRequestTypes()
+        {
+            return RequestsRepository.GetRequestTypes();
+        }
+
+        public void UpdateUserLastSeen(int idRequest, int idUser)
+        {
+            RequestsRepository.UpdateUserLastSeen(idRequest, idUser);
+        }
+
+        public virtual RequestViewModel<T> GetEmptyRequestViewModel()
+        {
+            return new RequestViewModel<T>
+            {
+                RequestModel = new RequestModel<T>
+                {
+                    Users = new List<T>
+                    {
+                        new T
+                        {
+                            Rights = new List<RequestUserRightModel>
+                            {
+                                new RequestUserRightModel()
+                            }
+                        }
+                    }
+                }
+            };
         }
 
         public int SaveChanges()
         {
-            return _requestsRepository.SaveChanges();
+            return RequestsRepository.SaveChanges();
+        }
+
+        public virtual RequestViewModel<T> GetRequestViewModelBy(Request request)
+        {
+            return new RequestViewModel<T>
+            {
+                RequestModel = GetRequestModelBy(request),
+                Descriptions = RequestsRepository.GetRequestExtDescriptions(request.IdRequest),
+                Agreements = RequestsRepository.GetRequestAgreements(request.IdRequest)
+            };
+        }
+
+        protected T FillRequestUserModel(RequestUserAssoc userAssoc)
+        {
+            return new T
+            {
+                Description = userAssoc.Description, Login = userAssoc.RequestUser.Login, 
+                Post = userAssoc.RequestUser.Post, Snp = userAssoc.RequestUser.Snp, 
+                Phone = userAssoc.RequestUser.Phone, 
+                Department = userAssoc.RequestUser.Department, 
+                Unit = userAssoc.RequestUser.Unit, 
+                Rights = userAssoc.RequestUserRightAssocs.Where(rur => !rur.Deleted).
+                Select(RequestUserRightModelBy).ToList()
+            };
+        }
+
+        protected RequestUserRightModel RequestUserRightModelBy(RequestUserRightAssoc rightAssoc)
+        {
+            return new RequestUserRightModel
+            {
+                Description = rightAssoc.Descirption, 
+                IdResourceRight = rightAssoc.IdResourceRight, 
+                ResourceRightName = rightAssoc.ResourceRight.Name, 
+                IdResourceRightGrantType = rightAssoc.IdRequestRightGrantType, 
+                ResourceRightGrantTypeName = rightAssoc.RequestRightGrantType.Name
+            };
+        }
+
+        public virtual RequestViewModel<T> GetRequestViewModelBy(RequestModel<T> request)
+        {
+            return new RequestViewModel<T>
+            {
+                RequestModel = request, 
+                Descriptions = RequestsRepository.GetRequestExtDescriptions(request.IdRequest), 
+                Agreements = RequestsRepository.GetRequestAgreements(request.IdRequest)
+            };
         }
     }
 }

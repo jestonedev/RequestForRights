@@ -153,9 +153,22 @@
     <Compile Include="Infrastructure\Enums\AclRole.cs" />
     <Compile Include="Infrastructure\Enums\RequestCategory.cs" />
     <Compile Include="Infrastructure\Enums\SortDirection.cs" />
+    <Compile Include="Infrastructure\Helpers\LinqHelper.cs" />
+    <Compile Include="Infrastructure\Utilities\EntitySorter\EntitySorter.cs" />
+    <Compile Include="Infrastructure\Utilities\EntitySorter\OrderBySorter.cs" />
+    <Compile Include="Infrastructure\Utilities\EntitySorter\ThenBySorter.cs" />
+    <Compile Include="Infrastructure\Utilities\TransfertToRoute\Extensions\ControllerContextExtensions.cs" />
+    <Compile Include="Infrastructure\Utilities\TransfertToRoute\Extensions\ControllerExtensions.cs" />
+    <Compile Include="Infrastructure\Utilities\EntitySorter\Extensions\EntitySorterExtensions.cs" />
+    <Compile Include="Infrastructure\Utilities\TransfertToRoute\Extensions\HttpRequestBaseExtensions.cs" />
+    <Compile Include="Infrastructure\Utilities\TransfertToRoute\Extensions\RouteValueDictionaryExtensions.cs" />
     <Compile Include="Infrastructure\Helpers\ExceptionHelper.cs" />
     <Compile Include="Infrastructure\Helpers\FilterOptionsHelper.cs" />
     <Compile Include="Infrastructure\Helpers\RequestHelper.cs" />
+    <Compile Include="Infrastructure\Utilities\EntitySorter\EntitySorterBuilder.cs" />
+    <Compile Include="Infrastructure\Utilities\EntitySorter\Interfaces\IEntitySorter.cs" />
+    <Compile Include="Infrastructure\Utilities\TransfertToRoute\TransferActionOnlyAttribute.cs" />
+    <Compile Include="Infrastructure\Utilities\TransfertToRoute\TransferToRouteResult.cs" />
     <Compile Include="Infrastructure\Security\Interfaces\IRequestSecurityService.cs" />
     <Compile Include="Infrastructure\Security\Interfaces\IResourceSecurityService.cs" />
     <Compile Include="Infrastructure\Security\Interfaces\IResourceGroupSecurityService.cs" />
@@ -164,6 +177,7 @@
     <Compile Include="Infrastructure\Security\ResourceGroupSecurityService.cs" />
     <Compile Include="Infrastructure\Services\Interfaces\IResourceService.cs" />
     <Compile Include="Infrastructure\Services\Interfaces\IResourceGroupService.cs" />
+    <Compile Include="Infrastructure\Services\RequestDelegatePermissionsService.cs" />
     <Compile Include="Infrastructure\Services\ResourceService.cs" />
     <Compile Include="Infrastructure\Services\ResourceGroupService.cs" />
     <Compile Include="Infrastructure\ValueProviders\FilterOptionsValueProvider.cs" />
@@ -175,13 +189,19 @@
     <Compile Include="Infrastructure\Services\RequestService.cs" />
     <Compile Include="Infrastructure\Security\SecurityService.cs" />
     <Compile Include="Models\FilterOptions\FilterOptions.cs" />
+    <Compile Include="Models\Models\DelegationRequestUsersExtInfoModel.cs" />
     <Compile Include="Models\Models\RequestCategoryModel.cs" />
+    <Compile Include="Models\Models\RequestDelegatePermissionsUserModel.cs" />
+    <Compile Include="Models\Models\RequestModel.cs" />
+    <Compile Include="Models\Models\RequestUserModel.cs" />
+    <Compile Include="Models\Models\RequestUserRightModel.cs" />
     <Compile Include="Models\ModelViews\NotSeenRequestsViewModel.cs" />
     <Compile Include="Models\FilterOptions\RequestsFilterOptions.cs" />
-    <Compile Include="Models\ModelViews\ResourceGroupIndexModelView.cs" />
-    <Compile Include="Models\ModelViews\ResourceIndexModelView.cs" />
+    <Compile Include="Models\ModelViews\RequestViewModel.cs" />
+    <Compile Include="Models\ModelViews\ResourceGroupIndexViewModel.cs" />
+    <Compile Include="Models\ModelViews\ResourceIndexViewModel.cs" />
     <Compile Include="Models\ModelViews\ResourceViewModel.cs" />
-    <Compile Include="Models\ModelViews\RequestIndexModelView.cs" />
+    <Compile Include="Models\ModelViews\RequestIndexViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -323,6 +343,7 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\rr-request.common.js" />
     <Content Include="Scripts\rr-request.index.js" />
     <Content Include="Scripts\rr-resource.common.js" />
     <Content Include="Scripts\_references.js" />
@@ -342,15 +363,29 @@
     <Content Include="Views\ResourceGroup\FilterControl.cshtml" />
     <None Include="Views\Report\ResourcePermissions.cshtml" />
     <None Include="Views\Report\UserPermissions.cshtml" />
-    <None Include="Views\RequestAddUser\Index.cshtml" />
-    <None Include="Views\RequestDelegatePermissions\Index.cshtml" />
+    <None Include="Views\RequestAddUser\Detail.cshtml" />
+    <Content Include="Views\RequestAddUser\Update.cshtml" />
+    <Content Include="Views\RequestAddUser\Create.cshtml" />
+    <Content Include="Views\RequestDelegatePermissions\Create.cshtml" />
+    <Content Include="Views\RequestAddUser\RequestForm.cshtml" />
+    <None Include="Views\RequestDelegatePermissions\Detail.cshtml" />
     <Content Include="Views\Request\DataTableFooter.cshtml" />
     <Content Include="Views\Request\DataTable.cshtml" />
     <Content Include="Views\Request\FilterControl.cshtml" />
+    <Content Include="Views\RequestDelegatePermissions\Update.cshtml" />
+    <Content Include="Views\RequestModifyPermissions\Update.cshtml" />
+    <Content Include="Views\RequestRemoveUser\Update.cshtml" />
+    <Content Include="Views\RequestModifyPermissions\Create.cshtml" />
+    <Content Include="Views\RequestRemoveUser\Create.cshtml" />
+    <Content Include="Views\RequestDelegatePermissions\RequestForm.cshtml" />
+    <Content Include="Views\RequestModifyPermissions\RequestForm.cshtml" />
+    <Content Include="Views\RequestRemoveUser\RequestForm.cshtml" />
     <None Include="Views\Request\Index.cshtml" />
-    <None Include="Views\RequestModifyPermissions\Index.cshtml" />
-    <None Include="Views\RequestRemoveUser\Index.cshtml" />
+    <None Include="Views\RequestModifyPermissions\Detail.cshtml" />
+    <None Include="Views\RequestRemoveUser\Detail.cshtml" />
+    <None Include="Views\Request\RequestCreateMenuItems.cshtml" />
     <None Include="Views\Request\RequestsByStatesMenuItems.cshtml" />
+    <Content Include="Views\Shared\Request\RequestTabs.cshtml" />
     <None Include="Views\ResourceGroup\Create.cshtml" />
     <None Include="Views\ResourceGroup\Detail.cshtml" />
     <None Include="Views\ResourceGroup\DataTable.cshtml" />
@@ -361,6 +396,8 @@
     <Content Include="Views\Resource\DataTableFooter.cshtml" />
     <Content Include="Views\Resource\Create.cshtml" />
     <Content Include="Views\Resource\Detail.cshtml" />
+    <Content Include="Views\Shared\Request\Agreements.cshtml" />
+    <Content Include="Views\Shared\Request\ExtDescriptions.cshtml" />
     <None Include="Views\Resource\Index.cshtml" />
     <Content Include="Views\Shared\DeleteModal.cshtml" />
     <Content Include="Views\Shared\ErrorAlert.cshtml" />
@@ -369,7 +406,7 @@
     <Content Include="Views\Home\ConflictError.cshtml" />
     <Content Include="Views\Resource\RightEditor.cshtml" />
     <Content Include="Views\Home\BadRequestError.cshtml" />
-    <Content Include="Views\Resource\RightForm.cshtml" />
+    <Content Include="Views\Resource\ResourceForm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Database\RequestsForRights.Database.csproj">

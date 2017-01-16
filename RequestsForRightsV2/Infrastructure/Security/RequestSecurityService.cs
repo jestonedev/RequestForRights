@@ -1,17 +1,32 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using RequestsForRights.Database.Repositories.Interfaces;
 using RequestsForRights.Domain.Entities;
 using RequestsForRights.Infrastructure.Security.Interfaces;
+using RequestsForRights.Models.Models;
 using AclRole = RequestsForRights.Infrastructure.Enums.AclRole;
 
 namespace RequestsForRights.Infrastructure.Security
 {
-    public class RequestSecurityService : SecurityService<Request>, IRequestSecurityService
+    public class RequestSecurityService<T> : SecurityService<RequestModel<T>>, IRequestSecurityService<T>
+        where T: RequestUserModel
     {
+        private readonly IRequestRepository _requestRepository;
 
-        public RequestSecurityService(ISecurityRepository securityRepository)
+        public RequestSecurityService(ISecurityRepository securityRepository,
+            IRequestRepository requestRepository)
             : base(securityRepository)
         {
+            if (requestRepository == null)
+            {
+                throw new ArgumentNullException("requestRepository");
+            }
+            _requestRepository = requestRepository;
+        }
+
+        public bool CanRead(Request request)
+        {
+            return CanRead();
         }
 
         public override bool CanRead()
@@ -37,27 +52,41 @@ namespace RequestsForRights.Infrastructure.Security
             });
         }
 
-        public override bool CanDelete(Request entity)
-        {
-            return InRole(AclRole.Administrator) || 
-                (InRole(AclRole.Requester) && 
-                 entity.User.Login.ToLower() == CurrentUser.ToLower() &&
-                 entity.RequestStates.Last().IdRequestStateType == 1);
-        }
-
-        public override bool CanCreate(Request entity)
+        public bool CanDelete(Request request)
         {
             return InRole(AclRole.Administrator) ||
-                (InRole(AclRole.Requester) && 
-                 entity.User.Login.ToLower() == CurrentUser.ToLower());
+                (InRole(AclRole.Requester) &&
+                 request.User.Login.ToLower() == CurrentUser.ToLower() &&
+                 request.RequestStates.Last().IdRequestStateType == 1);
         }
 
-        public override bool CanUpdate(Request entity)
+        public override bool CanDelete(RequestModel<T> entity)
+        {
+            var request = _requestRepository.GetRequestById(entity.IdRequest);
+            return CanDelete(request);
+        }
+
+        public override bool CanCreate(RequestModel<T> entity)
+        {
+            return InRole(new[]
+            {
+                AclRole.Administrator,
+                AclRole.Requester
+            });
+        }
+
+        public bool CanUpdate(Request request)
         {
             return InRole(AclRole.Administrator) ||
-                (InRole(AclRole.Requester) && 
-                 entity.User.Login.ToLower() == CurrentUser.ToLower() &&
-                 entity.RequestStates.Last().IdRequestStateType == 1);
+                (InRole(AclRole.Requester) &&
+                 request.User.Login.ToLower() == CurrentUser.ToLower() &&
+                 request.RequestStates.Last().IdRequestStateType == 1);
+        }
+
+        public override bool CanUpdate(RequestModel<T> entity)
+        {
+            var request = _requestRepository.GetRequestById(entity.IdRequest);
+            return CanUpdate(request);
         }
 
         public IQueryable<Request> FilterRequests(IQueryable<Request> requests)
