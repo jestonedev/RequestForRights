@@ -380,12 +380,13 @@
     <Content Include="Views\RequestDelegatePermissions\RequestForm.cshtml" />
     <Content Include="Views\RequestModifyPermissions\RequestForm.cshtml" />
     <Content Include="Views\RequestRemoveUser\RequestForm.cshtml" />
+    <Content Include="Views\RequestRemoveUser\UserEditor.cshtml" />
     <None Include="Views\Request\Index.cshtml" />
     <None Include="Views\RequestModifyPermissions\Detail.cshtml" />
     <None Include="Views\RequestRemoveUser\Detail.cshtml" />
     <None Include="Views\Request\RequestCreateMenuItems.cshtml" />
     <None Include="Views\Request\RequestsByStatesMenuItems.cshtml" />
-    <Content Include="Views\Shared\Request\RequestTabs.cshtml" />
+    <Content Include="Views\Shared\Request\Tabs.cshtml" />
     <None Include="Views\ResourceGroup\Create.cshtml" />
     <None Include="Views\ResourceGroup\Detail.cshtml" />
     <None Include="Views\ResourceGroup\DataTable.cshtml" />
@@ -407,6 +408,9 @@
     <Content Include="Views\Resource\RightEditor.cshtml" />
     <Content Include="Views\Home\BadRequestError.cshtml" />
     <Content Include="Views\Resource\ResourceForm.cshtml" />
+    <Content Include="Views\Shared\Request\EditPanels\Create.cshtml" />
+    <Content Include="Views\Shared\Request\EditPanels\Update.cshtml" />
+    <Content Include="Views\Shared\Request\EditPanels\Detail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Database\RequestsForRights.Database.csproj">

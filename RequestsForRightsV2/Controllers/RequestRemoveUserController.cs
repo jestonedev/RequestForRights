@@ -143,5 +143,16 @@ namespace RequestsForRights.Controllers
                     "Необходимо указать по меньшей мере одно пользователя");
             }
         }
+
+        [HttpGet]
+        public ActionResult GetEmptyUserTemplate()
+        {
+            if (!Request.IsAjaxRequest())
+            {
+                return RedirectToAction("ForbiddenError", "Home");
+            }
+            ViewData["UserIndex"] = 0;
+            return PartialView("UserEditor", _requestService.GetEmptyRequestViewModel());
+        }
 	}
 }

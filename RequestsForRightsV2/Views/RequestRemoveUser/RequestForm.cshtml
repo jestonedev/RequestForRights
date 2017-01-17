@@ -1,3 +1,27 @@
 ﻿@model RequestsForRights.Models.ModelViews.RequestViewModel<RequestsForRights.Models.Models.RequestUserModel>
 
-@Model.RequestModel.IdRequest
+<div class="form-group">
+    @Html.LabelFor(r => r.RequestModel.Description, new { @class = "col-sm-2 control-label" })
+    <div class="col-sm-10">
+        @Html.TextAreaFor(r => r.RequestModel.Description,
+            new { @class = "form-control", placeholder = "Введите описание заявки", rows = "4" })
+        @Html.ValidationMessageFor(r => r.RequestModel.Description)
+    </div>
+</div>
+
+<div class="panel-group rr-request-users" id="accordion" role="tablist" aria-multiselectable="true">
+    @if (Model.RequestModel.Users != null)
+    {
+        for (var i = 0; i < Model.RequestModel.Users.Count; i++)
+        {
+            ViewBag.RightIndex = i;
+            @Html.Partial("UserEditor", Model, new ViewDataDictionary
+            {
+                {"UserIndex", i}
+            })
+        }
+    }
+</div>
+<div class="text-center rr-add-request-user-panel">
+    <button name="addUser" class="btn btn-success btn-default">Добавить сотрудника</button>
+</div>

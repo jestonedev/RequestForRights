@@ -265,6 +265,7 @@ namespace RequestsForRights.Infrastructure.Services
                 Phone = userAssoc.RequestUser.Phone, 
                 Department = userAssoc.RequestUser.Department, 
                 Unit = userAssoc.RequestUser.Unit, 
+                Office = userAssoc.RequestUser.Office,
                 Rights = userAssoc.RequestUserRightAssocs.Where(rur => !rur.Deleted).
                 Select(RequestUserRightModelBy).ToList()
             };

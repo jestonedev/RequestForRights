@@ -180,3 +180,12 @@ button.rr-ext-filter-button.collapsed:hover {
         margin-left: 0;
     }
 }
+
+.rr-request-user .form-control[disabled] {
+    cursor: default;
+}
+
+.rr-add-request-user-panel {
+    margin-bottom: 20px;
+    margin-top: 20px;
+}

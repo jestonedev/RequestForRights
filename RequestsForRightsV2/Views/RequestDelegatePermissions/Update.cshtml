@@ -1,12 +1,9 @@
-﻿@using RequestsForRights.Infrastructure.Security
-@using RequestsForRights.Models.Models
+﻿@using RequestsForRights.Models.Models
 @model RequestsForRights.Models.ModelViews.RequestViewModel<RequestDelegatePermissionsUserModel>
 
 @{
-    var securityService = (RequestSecurityService<RequestDelegatePermissionsUserModel>)ViewData["SecurityService"];
     ViewBag.Title = "Изменить заявку на делегирование прав";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var returnUri = Request["returnUri"] ?? Url.Action("Index", "Request");
 }
 
 <h2>Изменение заявки # @Model.RequestModel.IdRequest на делегирование прав </h2>
@@ -14,7 +11,7 @@
 @Html.Partial("ErrorAlert")
 
 <div>
-    @Html.Partial("Request/RequestTabs")
+    @Html.Partial("Request/Tabs")
     <div class="tab-content">
         <div role="tabpanel" class="tab-pane fade in active rr-tab-pane" id="request">
             @using (Html.BeginForm("Update", "Request", new { },
@@ -28,34 +25,7 @@
                 </div>
 
                 @Html.Partial("RequestForm")
-
-                <div class="text-center rr-edit-panel">
-                    <div class="btn-group" role="group" aria-label="Панель действий">
-                        <a href="@returnUri"
-                           class="btn btn-default"
-                           title="Вернуться к перечню"
-                           aria-label="Назад">
-                            <span class="glyphicon glyphicon-circle-arrow-left"></span>
-                            Назад
-                        </a>
-                        <button class="btn btn-default rr-save-button">
-                            <span class="glyphicon glyphicon-floppy-disk"></span>
-                            Сохранить
-                        </button> 
-                        @if (securityService.CanDelete(Model.RequestModel))
-                        {
-                            <a href="@Url.Action("Delete", "Request",
-                                new { id = Model.RequestModel.IdRequest })" id="delete-button"
-                               data-success-redirect-to="@Url.Action("Index", "Request")"
-                               class="btn btn-danger"
-                               title="Вернуться к перечню"
-                               aria-label="Удалить">
-                                <span class="glyphicon glyphicon-remove"></span>
-                                Удалить
-                            </a>
-                        }
-                    </div>
-                </div>
+                @Html.Partial("Request/EditPanels/Update")
             }
         </div>
         @Html.Partial("Request/Agreements", Model.Agreements)

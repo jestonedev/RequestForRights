@@ -1,9 +1,7 @@
-﻿@using RequestsForRights.Infrastructure.Security
-@using RequestsForRights.Models.Models
+﻿@using RequestsForRights.Models.Models
 @model RequestsForRights.Models.ModelViews.RequestViewModel<RequestUserModel>
 
 @{    
-    var securityService = (RequestSecurityService<RequestUserModel>)ViewData["SecurityService"];
     ViewBag.Title = "Заявка на подключение нового сотрудника";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -13,48 +11,13 @@
 @Html.Partial("ErrorAlert")
 
 <div>
-    @Html.Partial("Request/RequestTabs")
+    @Html.Partial("Request/Tabs")
     <div class="tab-content">
         <div role="tabpanel" class="tab-pane fade in active rr-tab-pane" id="request">
             <div>
                 @Model.RequestModel.IdRequest
             </div>
-            <div class="text-center rr-edit-panel">
-                <div class="btn-group" role="group" aria-label="Панель действий">
-                    <a href="@Url.Action("Index", "Request")"
-                       class="btn btn-default"
-                       title="Вернуться к перечню"
-                       aria-label="Назад">
-                        <span class="glyphicon glyphicon-circle-arrow-left"></span>
-                        Назад
-                    </a>
-                    @if (securityService.CanUpdate(Model.RequestModel))
-                    {
-                        <a href="@Url.Action("Update", "Request", new
-                                 {
-                                     id = Model.RequestModel.IdRequest,
-                                     returnUri = Url.Action("Detail", "Request", new { id = Model.RequestModel.IdRequest })
-                                 })"
-                           class="btn btn-default"
-                           title="Изменить запись"
-                           aria-label="Изменить запись">
-                            <span class="glyphicon glyphicon-pencil"></span>
-                            Изменить
-                        </a>
-                    }
-                    @if (securityService.CanDelete(Model.RequestModel))
-                    {
-                        <a href="@Url.Action("Delete", "Request", new { id = Model.RequestModel.IdRequest })" id="delete-button"
-                           data-success-redirect-to="@Url.Action("Index", "Request")"
-                           class="btn btn-danger"
-                           title="Вернуться к перечню"
-                           aria-label="Удалить">
-                            <span class="glyphicon glyphicon-remove"></span>
-                            Удалить
-                        </a>
-                    }
-                </div>
-            </div>
+            @Html.Partial("Request/EditPanels/Detail")
         </div>
         @Html.Partial("Request/Agreements", Model.Agreements)
         @Html.Partial("Request/ExtDescriptions", Model.Descriptions)

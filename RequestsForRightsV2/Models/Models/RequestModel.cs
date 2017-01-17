@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace RequestsForRights.Models.Models
 {
@@ -6,6 +7,7 @@ namespace RequestsForRights.Models.Models
         where T: RequestUserModel
     {
         public int IdRequest { get; set; }
+        [DisplayName("Описание")]
         public string Description { get; set; }
         public int IdRequestType { get; set; }
         public string RequestTypeName { get; set; }

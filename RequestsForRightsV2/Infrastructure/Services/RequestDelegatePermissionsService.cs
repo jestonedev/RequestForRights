@@ -39,6 +39,7 @@ namespace RequestsForRights.Infrastructure.Services
                         PhoneDelegateTo = delegationExtInfo.DelegateToUser.Phone,
                         DepartmentDelegateTo = delegationExtInfo.DelegateToUser.Department,
                         UnitDelegateTo = delegationExtInfo.DelegateToUser.Unit,
+                        OfficeDelegateTo = delegationExtInfo.DelegateToUser.Office,
                         DelegateFromDate = delegationExtInfo.DelegateFromDate,
                         DelegateToDate = delegationExtInfo.DelegateToDate
                     };

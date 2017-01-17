@@ -15,24 +15,8 @@
     </div>
 
     @Html.Partial("RequestForm")
-
-    <div class="text-center rr-edit-panel">
-        <div class="btn-group" role="group" aria-label="Панель действий">
-            <a href="@Url.Action("Index", "Request")"
-                class="btn btn-default"
-                title="Вернуться к перечню"
-                aria-label="Назад">
-                <span class="glyphicon glyphicon-circle-arrow-left"></span>
-                Назад
-            </a>
-            <button class="btn btn-default rr-save-button">
-                <span class="glyphicon glyphicon-floppy-disk"></span>
-                Сохранить
-            </button>
-        </div>
-    </div>
-}
-        
+    @Html.Partial("Request/EditPanels/Create")
+}   
 
 @section scripts {
     @Scripts.Render("~/bundles/rr-request.common")

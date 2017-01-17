@@ -140,6 +140,16 @@ namespace RequestsForRights.Controllers
             return TransfertTo("Create", requestViewModel.RequestModel.IdRequestType);
         }
 
+        [HttpGet]
+        public ActionResult GetEmptyUserTemplate(int idRequestType)
+        {
+            if (!Request.IsAjaxRequest())
+            {
+                return RedirectToAction("ForbiddenError", "Home");
+            }
+            return TransfertTo("GetEmptyUserTemplate", idRequestType);
+        }
+
         private ActionResult TransfertTo(string actionName, int idRequestType)
         {
             var controller = RequestHelper.IdRequestTypeToControllerName(idRequestType);
