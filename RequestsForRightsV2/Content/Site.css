@@ -181,11 +181,38 @@ button.rr-ext-filter-button.collapsed:hover {
     }
 }
 
-.rr-request-user .form-control[disabled] {
+.rr-request-user .form-control[readonly] {
     cursor: default;
 }
 
 .rr-add-request-user-panel {
     margin-bottom: 20px;
     margin-top: 20px;
+}
+
+.autocomplete-suggestions {
+    overflow: auto;
+    border: 1px solid #CBD3DD;
+    background: #FFF;
+}
+
+.autocomplete-suggestion {
+    overflow: hidden;
+    padding: 5px 15px;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.autocomplete-suggestions strong {
+    color: #428bca;
+    font-weight: normal;
+}
+
+.autocomplete-selected {
+    background: #eee;
+}
+
+.rr-request-user-autocomplete-department, .rr-request-user-autocomplete-unit {
+    color: #aaa;
+    font-size: 12px;
 }

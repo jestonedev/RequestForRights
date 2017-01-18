@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ILdapRepository.cs" />
+    <Compile Include="LdapDepartmentFilter.cs" />
     <Compile Include="LdapRepository.cs" />
     <Compile Include="LdapUser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

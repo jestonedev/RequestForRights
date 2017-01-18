@@ -132,6 +132,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\User\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -147,6 +148,7 @@
     <Compile Include="Controllers\RequestRemoveUserController.cs" />
     <Compile Include="Controllers\ResourceGroupController.cs" />
     <Compile Include="Controllers\ResourceController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -154,6 +156,10 @@
     <Compile Include="Infrastructure\Enums\RequestCategory.cs" />
     <Compile Include="Infrastructure\Enums\SortDirection.cs" />
     <Compile Include="Infrastructure\Helpers\LinqHelper.cs" />
+    <Compile Include="Infrastructure\Security\Interfaces\IUserSecurityService.cs" />
+    <Compile Include="Infrastructure\Security\UserSecurityService.cs" />
+    <Compile Include="Infrastructure\Services\Interfaces\IUserService.cs" />
+    <Compile Include="Infrastructure\Services\UserService.cs" />
     <Compile Include="Infrastructure\Utilities\EntitySorter\EntitySorter.cs" />
     <Compile Include="Infrastructure\Utilities\EntitySorter\OrderBySorter.cs" />
     <Compile Include="Infrastructure\Utilities\EntitySorter\ThenBySorter.cs" />
@@ -252,6 +258,8 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Content\Favicon\manifest.json" />
+    <Content Include="Scripts\jquery.autocomplete.js" />
+    <Content Include="Scripts\jquery.autocomplete.min.js" />
     <Content Include="Scripts\locales\bootstrap-datepicker.ar.min.js" />
     <Content Include="Scripts\locales\bootstrap-datepicker.az.min.js" />
     <Content Include="Scripts\locales\bootstrap-datepicker.bg.min.js" />
@@ -420,6 +428,10 @@
     <ProjectReference Include="..\Domain\RequestsForRights.Domain.csproj">
       <Project>{f4cca6b9-9648-47f4-a750-4eccba53f5fb}</Project>
       <Name>RequestsForRights.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RequestsForRights.Ldap\RequestsForRights.Ldap.csproj">
+      <Project>{45b2f648-aa9a-4fce-bd87-99c184a6fa29}</Project>
+      <Name>RequestsForRights.Ldap</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -1,6 +1,10 @@
-﻿namespace RequestsForRights.Ldap
+﻿using System.Collections.Generic;
+
+namespace RequestsForRights.Ldap
 {
-    interface ILdapRepository
+    public interface ILdapRepository
     {
+        IEnumerable<LdapUser> FindUsers(string snpPattern, 
+            IEnumerable<LdapDepartmentFilter> departemtnsFilter, int maxCount);
     }
 }

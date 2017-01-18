@@ -35,7 +35,10 @@ namespace RequestsForRights
                       "~/Scripts/locales/bootstrap-datepicker.ru.min.js"));
 
             bundles.Add(new StyleBundle("~/Content/bootstrap-datepicker").Include(
-                      "~/Content/bootstrap-datepicker.css"));
+                      "~/Content/bootstrap-datepicker3.css"));
+
+            bundles.Add(new ScriptBundle("~/bundles/jquery.autocomplete").Include(
+                      "~/Scripts/jquery.autocomplete.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",

@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace RequestsForRights.Models.Models
 {
     public class RequestUserModel
     {
         [DisplayName("ФИО")]
+        [Required(ErrorMessage = "ФИО является обязательным для заполнения")]
         public string Snp { get; set; }
         [DisplayName("Логин")]
         public string Login { get; set; }

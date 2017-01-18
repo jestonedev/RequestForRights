@@ -1,4 +1,5 @@
-﻿using RequestsForRights.Domain.Entities;
+﻿using System.Linq;
+using RequestsForRights.Domain.Entities;
 using AclRole = RequestsForRights.Infrastructure.Enums.AclRole;
 
 namespace RequestsForRights.Infrastructure.Security.Interfaces
@@ -8,6 +9,7 @@ namespace RequestsForRights.Infrastructure.Security.Interfaces
     {
         string CurrentUser { get; }     
         AclUser GetUserInfo();
+        IQueryable<Department> GetUserAllowedDepartments();
         bool InRole(AclRole role);
         bool InRole(AclRole[] role);
         bool IsAnonimous();

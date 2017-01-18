@@ -23,17 +23,21 @@ namespace RequestsForRights.Ldap
                    select domain.Name;
         }
 
-        public LdapUser GetUserInfo(string login)
+        public IEnumerable<LdapUser> FindUsers(string snpPattern, 
+            IEnumerable<LdapDepartmentFilter> departemtnsFilter, int maxCount)
         {
-            if (string.IsNullOrEmpty(login))
+            if (string.IsNullOrEmpty(snpPattern))
             {
-                throw new ArgumentNullException("login");
+                throw new ArgumentNullException("snpPattern");
             }
+            var i = 0;
+            var users = new List<LdapUser>();
+            var filters = departemtnsFilter.ToList();
             foreach (var domainName in GetDomains())
             {
                 var context = new DirectoryContext(
                     DirectoryContextType.Domain, domainName, _userName, _password);
-                using(var domain = Domain.GetDomain(context))
+                using (var domain = Domain.GetDomain(context))
                 using (var domainEntry = domain.GetDirectoryEntry())
                 {
                     using (var searcher = new DirectorySearcher())
@@ -42,33 +46,60 @@ namespace RequestsForRights.Ldap
                         searcher.SearchScope = SearchScope.Subtree;
                         searcher.PropertiesToLoad.Add("displayName");
                         searcher.PropertiesToLoad.Add("samAccountName");
+                        searcher.PropertiesToLoad.Add("title");
                         searcher.PropertiesToLoad.Add("company");
                         searcher.PropertiesToLoad.Add("department");
-                        searcher.PropertiesToLoad.Add("office");
+                        searcher.PropertiesToLoad.Add("physicaldeliveryofficename");
                         searcher.PropertiesToLoad.Add("mail");
-                        searcher.PropertiesToLoad.Add("phone");
-                        var loginParts = login.Split('\\');
-                        searcher.Filter = string.Format(CultureInfo.InvariantCulture,
-                            "(&(objectClass=user)(objectClass=person)(samAccountName={0})(!(useraccountcontrol:1.2.840.113556.1.4.803:=2)))", 
-                            loginParts[loginParts.Length - 1]);
-                        var results = searcher.FindAll();
-                        if (results.Count == 0)
-                            continue;
-                        var userDomain = new LdapUser
+                        searcher.PropertiesToLoad.Add("telephonenumber");
+                        foreach (var filter in filters)
                         {
-                            DisplayName = results[0].Properties["displayName"][0].ToString(),
-                            Login = results[0].Properties["samAccountName"][0].ToString().ToLower(),
-                            Company = results[0].Properties["company"][0].ToString(),
-                            Department = results[0].Properties["department"][0].ToString(),
-                            Office = results[0].Properties["office"][0].ToString(),
-                            Email = results[0].Properties["mail"][0].ToString(),
-                            Phone = results[0].Properties["phone"][0].ToString(),
-                        };
-                        return userDomain;
+                            searcher.Filter = string.Format(CultureInfo.InvariantCulture,
+                            "(&(objectClass=user)(company={1})(department={2})(objectClass=person)(displayName=*{0}*)(!(useraccountcontrol:1.2.840.113556.1.4.803:=2)))",
+                            snpPattern, filter.Company ?? "*", filter.Department ?? "*");
+                            var results = searcher.FindAll();
+                            if (results.Count == 0)
+                                continue;
+                            foreach (SearchResult result in results)
+                            {
+                                var user = new LdapUser
+                                {
+                                    DisplayName = GetValue(result.Properties, "displayName"),
+                                    Login = GetValue(result.Properties, "samAccountName").ToLower(),
+                                    Post = GetValue(result.Properties, "title"),
+                                    Company = GetValue(result.Properties, "company"),
+                                    Department = GetValue(result.Properties, "department"),
+                                    Office = GetValue(result.Properties, "physicaldeliveryofficename"),
+                                    Email = GetValue(result.Properties, "mail"),
+                                    Phone = GetValue(result.Properties, "telephonenumber")
+                                };
+                                users.Add(user);
+                                i++;
+                                if (i == maxCount)
+                                {
+                                    break;
+                                }
+                            }
+                            if (i == maxCount)
+                            {
+                                break;
+                            }
+                        }
+                        if (i == maxCount)
+                        {
+                            break;
+                        }
                     }
                 }
             }
-            return null;
+            return users;
+        }
+
+        private static string GetValue(ResultPropertyCollection properties, string parameter)
+        {
+            return properties.Contains(parameter)
+                ? properties[parameter][0].ToString()
+                : null;
         }
     }
 }

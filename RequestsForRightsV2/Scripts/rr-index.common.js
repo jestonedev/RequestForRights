@@ -5,7 +5,7 @@ var input = $(".rr-filter-control input");
 var select = $(".rr-filter-control select");
 
 $(select).on("change", filterControlOnValue);
-$(input).on("keyup", debounce(filterControlOnValue, 500));
+$(input).on("keyup", debounce(filterControlOnValue, 250));
 
 function filterControlOnValue() {
     filterControl.submit();

@@ -11,7 +11,6 @@ namespace RequestsForRights.Infrastructure.Utilities.TransfertToRoute.Extensions
             var routedValues = new RouteValueDictionary();
             request.QueryString.AllKeys.ForEach(r => routedValues.AddWithCheck(r, request.QueryString[r]));
             request.Form.AllKeys.ForEach(r => routedValues.AddWithCheck(r, request.Form[r]));
-            request.Cookies.AllKeys.ForEach(r => routedValues.AddWithCheck(r, request.Cookies[r] != null ? request.Cookies[r].Value : null));
             return routedValues;
         }
     }

@@ -152,10 +152,12 @@
     <Compile Include="Repositories\Interfaces\IResourceRepository.cs" />
     <Compile Include="Repositories\Interfaces\IResourceGroupRepository.cs" />
     <Compile Include="Repositories\Interfaces\ISecurityRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IUserRepository.cs" />
     <Compile Include="Repositories\RequestRepository.cs" />
     <Compile Include="Repositories\ResourceRepository.cs" />
     <Compile Include="Repositories\ResourceGroupRepository.cs" />
     <Compile Include="Repositories\SecurityRepository.cs" />
+    <Compile Include="Repositories\UserRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

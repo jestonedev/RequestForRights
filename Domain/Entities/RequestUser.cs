@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Web.Script.Serialization;
 
 namespace RequestsForRights.Domain.Entities
 {
@@ -9,6 +11,7 @@ namespace RequestsForRights.Domain.Entities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [ScriptIgnore]
         public int IdRequestUser { get; set; }
         [MaxLength(256)]
         public string Login { get; set; }
@@ -28,8 +31,10 @@ namespace RequestsForRights.Domain.Entities
         [Required]
         [MaxLength(512)]
         public string Office { get; set; }
+        [ScriptIgnore(ApplyToOverrides = true)]
         public virtual IList<RequestUserAssoc> RequestUserAssoc { get; set; }
         [DefaultValue(false)]
+        [ScriptIgnore]
         public bool Deleted { get; set; }
     }
 }
