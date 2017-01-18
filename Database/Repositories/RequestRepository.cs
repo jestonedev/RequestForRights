@@ -98,14 +98,17 @@ namespace RequestsForRights.Database.Repositories
             return request;
         }
 
-        public Request UpdateRequest(Request request)
+        public Request UpdateRequest(Request request, bool resetAgreements)
         {
             var req = GetRequestById(request.IdRequest);
             request.IdUser = req.IdUser;
             _databaseContext.Entry(req).CurrentValues.SetValues(request);
             UpdateRequestUsers(req.RequestUserAssoc.Where(r => !r.Deleted), 
                 request.RequestUserAssoc, req);
-            ResetAgreements(request.IdRequest);
+            if (resetAgreements)
+            {
+                ResetAgreements(request.IdRequest);
+            }
             return req;
         }
 

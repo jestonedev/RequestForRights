@@ -24,7 +24,12 @@ $("form")
             updateControls();
             refreshValidation();
             updateDeleteUserButton();
-            setTimeout(function () { $("body").css("margin-bottom", marginBottom) }, 350);
+            if (supportTransitions()) {
+                // transitionend not working. I think reason is display:none before transition end
+                setTimeout(function () { $("body").css("margin-bottom", marginBottom) }, 350);
+            } else {
+                $("body").css("margin-bottom", marginBottom);
+            }
             e.preventDefault();
             return false;
         });
@@ -99,7 +104,7 @@ function addUser(userLayout) {
         var addedUser = $(".rr-request-user").last();
         initializeUsersAutocomplete(addedUser.find(".rr-request-user-snp input"));
         addedUser.find(".panel-heading a").click();
-        scrollToElement(addedUser);
+        $(window).scrollTop($(document).height());
     });
 }
 

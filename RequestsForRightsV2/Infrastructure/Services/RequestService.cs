@@ -11,6 +11,7 @@ using RequestsForRights.Infrastructure.Helpers;
 using RequestsForRights.Models.FilterOptions;
 using RequestsForRights.Models.Models;
 using RequestsForRights.Models.ModelViews;
+using AclRole = RequestsForRights.Infrastructure.Enums.AclRole;
 
 namespace RequestsForRights.Infrastructure.Services
 {
@@ -207,7 +208,8 @@ namespace RequestsForRights.Infrastructure.Services
         public virtual Request UpdateRequest(RequestModel<T> requestModel)
         {
             var request = ConvertToRequest(requestModel);
-            return RequestsRepository.UpdateRequest(request);
+            return RequestsRepository.UpdateRequest(request, 
+                !RequestSecurityService.InRole(AclRole.Administrator));
         }
 
         public virtual Request InsertRequest(RequestModel<T> requestModel)

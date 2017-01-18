@@ -60,7 +60,7 @@ function addRight(rightLayout) {
         refreshValidation();
         $(".rr-rights-error").remove();
         updateDeleteRightButton();
-        scrollToElement($(".rr-right").last());
+        $(window).scrollTop($(document).height());
     });
 }
 

@@ -17,6 +17,13 @@ function scrollToElement(elem) {
     $(window).scrollTop($(elem).offset().top + $(".rr-main-menu").height());
 }
 
+function supportTransitions() {
+    return ("WebkitTransition" in document.body.style ||
+            "MozTransition" in document.body.style ||
+            "OTransition" in document.body.style ||
+            "transition" in document.body.style);
+}
+
 $(function() {
     $("[data-hide]")
         .on("click",

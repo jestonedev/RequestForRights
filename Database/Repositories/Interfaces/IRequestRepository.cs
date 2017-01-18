@@ -16,7 +16,7 @@ namespace RequestsForRights.Database.Repositories.Interfaces
         DelegationRequestUsersExtInfo GetDelegationRequestUserExtInfoBy(int idRequestUserAssoc);
         void UpdateUserLastSeen(int idRequest, int idUser);
         Request DeleteRequest(int idRequest);
-        Request UpdateRequest(Request request);
+        Request UpdateRequest(Request request, bool resetAgreements);
         Request InsertRequest(Request request);
         int SaveChanges();
     }
