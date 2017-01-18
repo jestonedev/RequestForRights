@@ -26,7 +26,7 @@ $(".rr-save-button")
             if (form.valid()) {
                 form.submit();
             } else {
-                showErrors();
+                showErrorBadgets();
             }
             e.preventDefault();
             return false;
@@ -60,6 +60,7 @@ function addRight(rightLayout) {
         refreshValidation();
         $(".rr-rights-error").remove();
         updateDeleteRightButton();
+        scrollToElement($(".rr-right").last());
     });
 }
 
@@ -71,7 +72,7 @@ function refreshValidation() {
     form.validate();
 }
 
-function showErrors() {
+function showErrorBadgets() {
     var form = $("form");
     var tabToShow = window.undefined;
     form.find(".nav-tabs li a")
@@ -106,6 +107,6 @@ function updateDeleteRightButton() {
     }
 }
 
-showErrors();
+showErrorBadgets();
 updateControls();
 updateDeleteRightButton();

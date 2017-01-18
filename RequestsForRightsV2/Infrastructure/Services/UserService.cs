@@ -37,11 +37,31 @@ namespace RequestsForRights.Infrastructure.Services
 
         public IEnumerable<RequestUser> FindUsers(string snpPattern, int maxCount)
         {
-            var dbUsers = _securityRepository.FilterUsers(
-                _userRepository.FindUsers(snpPattern)).Take(maxCount);
-            var ldapUsers = _ldapRepository.FindUsers(snpPattern,
-                GetLdapDepartmentFilter(), maxCount);
-            return ldapUsers.Select(r => new RequestUser
+            var dbUsers = FilterUsersFields(_securityRepository.FilterUsers(
+                _userRepository.FindUsers(snpPattern)).Take(maxCount));
+            var ldapUsers = FilterUsersFields(_ldapRepository.FindUsers(snpPattern,
+                GetLdapDepartmentFilter(), maxCount));
+           var result = ldapUsers.Concat(dbUsers).OrderBy(r => r.Snp).Distinct().Take(10);
+            return result;
+        }
+
+        private static IEnumerable<RequestUser> FilterUsersFields(IEnumerable<RequestUser> users)
+        {
+            return users.Select(r => new RequestUser
+            {
+                Login = r.Login,
+                Snp = r.Snp,
+                Post = r.Post,
+                Department = r.Department,
+                Unit = r.Unit,
+                Office = r.Office,
+                Phone = r.Phone
+            });
+        }
+
+        private static IEnumerable<RequestUser> FilterUsersFields(IEnumerable<LdapUser> users)
+        {
+            return users.Select(r => new RequestUser
             {
                 Login = r.Login,
                 Snp = r.DisplayName,
@@ -50,7 +70,7 @@ namespace RequestsForRights.Infrastructure.Services
                 Unit = r.Department,
                 Office = r.Office,
                 Phone = r.Phone
-            }).Concat(dbUsers).OrderBy(r => r.Snp).Take(10);
+            });
         }
 
         public IEnumerable<LdapDepartmentFilter> GetLdapDepartmentFilter()

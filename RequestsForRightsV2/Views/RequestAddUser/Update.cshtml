@@ -1,9 +1,9 @@
-﻿@using RequestsForRights.Infrastructure.Security
+﻿@using RequestsForRights.Infrastructure.Security.Interfaces
 @using RequestsForRights.Models.Models
 @model RequestsForRights.Models.ModelViews.RequestViewModel<RequestUserModel>
 
 @{
-    var securityService = (RequestSecurityService<RequestUserModel>)ViewData["SecurityService"]; 
+    var securityService = (IRequestSecurityService<RequestUserModel>)ViewData["SecurityService"]; 
     ViewBag.Title = "Изменить заявку на подключение нового сотрудника";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var returnUri = Request["returnUri"] ?? Url.Action("Index", "Request");
@@ -17,12 +17,13 @@
     @Html.Partial("Request/Tabs")
     <div class="tab-content">
         <div role="tabpanel" class="tab-pane fade in active rr-tab-pane" id="request">
-            @using (Html.BeginForm("Update", "Request", new { },
+            @using (Html.BeginForm("Update", "Request", new { id = Model.RequestModel.IdRequest },
                 FormMethod.Post, new { @class = "form-horizontal" }))
             {
                 @Html.HttpMethodOverride(HttpVerbs.Put)
                 @Html.HiddenFor(r => r.RequestModel.IdRequest)
                 @Html.HiddenFor(r => r.RequestModel.IdRequestType)
+                @Html.Hidden("returnUri", returnUri)
                 <div class="text-center">
                     @Html.ValidationSummary(true)
                 </div>

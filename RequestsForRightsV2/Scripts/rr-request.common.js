@@ -16,48 +16,38 @@ $("form")
             if (userOpeningElem.length === 0) {
                 userOpeningElem = userDeletingElem.next();
             }
+            var marginBottom = $("body").css("margin-bottom");
+            $("body").css("margin-bottom", userDeletingElem.find(".panel-body").outerHeight());
             userDeletingElem.remove();
+            var title = userOpeningElem.find(".panel-heading");
+            title.find("a").click();
             updateControls();
             refreshValidation();
             updateDeleteUserButton();
-            userOpeningElem.find(".panel-heading a").click();
+            setTimeout(function () { $("body").css("margin-bottom", marginBottom) }, 350);
             e.preventDefault();
             return false;
         });
 
-var requestContinuing = false;
-
 $(".rr-save-button").on("click", submitButtonClick);
-
 $(".rr-request-user").first().find(".panel-heading a").click();
-$(document)
-    .ready(function () {
-        $("form")
-            .on("keypress",
-                ".rr-request-user-snp input",
-                function () {
-                    requestContinuing = true;
-                });
-    });
-
-$("form").validate().settings.ignore = "";
-
-updateControls();
-updateDeleteUserButton();
-refreshValidation();
-initializeUsersAutocomplete($(".rr-request-user-snp input"));
 
 function submitButtonClick(e) {
-    if (requestContinuing) {
-        setTimeout(function () { submitButtonClick(e); }, 100);
-        e.preventDefault();
-        return false;
-    }
     var form = $("form");
+    if (formIsValid(form)) {
+        form.submit();
+    } else {
+        showErrorBadgets();
+    }
+    e.preventDefault();
+    return false;
+}
+
+function formIsValid(form) {
     var validator = form.validate();
     var formValid = form.valid();
     var users = $(".rr-request-users > .rr-request-user");
-    users.each(function(userIdx, userElem) {
+    users.each(function (userIdx, userElem) {
         var userSnpElem = $(userElem).find(".rr-request-user-snp input");
         if (userSnpElem.val() === "") {
             return;
@@ -71,11 +61,7 @@ function submitButtonClick(e) {
             validator.showErrors(error);
         }
     });
-    if (formValid) {
-        form.submit();
-    }
-    e.preventDefault();
-    return false;
+    return formValid;
 }
 
 function updateControls() {
@@ -113,6 +99,7 @@ function addUser(userLayout) {
         var addedUser = $(".rr-request-user").last();
         initializeUsersAutocomplete(addedUser.find(".rr-request-user-snp input"));
         addedUser.find(".panel-heading a").click();
+        scrollToElement(addedUser);
     });
 }
 
@@ -122,6 +109,32 @@ function refreshValidation() {
     .removeData("unobtrusiveValidation");
     $.validator.unobtrusive.parse(form);
     form.validate();
+}
+
+function showErrorBadgets() {
+    var titleToShow = window.undefined;
+    var panelToShow = window.undefined;
+    $(".rr-request-user")
+        .each(function (idx, elem) {
+            var title = $(elem).find(".panel-title");
+            var id = $(title).find("a").attr("href");
+            var panel = $(elem).find(".panel-collapse" + id);
+            var badge = $(title).find(".rr-badge");
+            var errorCount = panel.find(".field-validation-error").length;
+            if (errorCount > 0) {
+                if (titleToShow === window.undefined || panel.hasClass("in")) {
+                    titleToShow = title;
+                    panelToShow = panel;
+                }
+                badge.show();
+            } else {
+                badge.hide();
+            }
+        });
+    if (titleToShow !== window.undefined && !panelToShow.hasClass("in")) {
+        scrollToElement(titleToShow);
+        $(titleToShow).find("a").click();
+    }
 }
 
 function updateDeleteUserButton() {
@@ -134,25 +147,20 @@ function updateDeleteUserButton() {
 }
 
 function initializeUsersAutocomplete(userSnp) {
+    if (userSnp.length === 0) return;
     $(userSnp).autocomplete({
         serviceUrl: "/User/GetUsers",
         ajaxSettings: {
             dataType: "json"
         },
         paramName: "snpPattern",
-        deferRequestBy: 250,
+        deferRequestBy: 0,
         transformResult: function(response) {
             return {
                 suggestions: $.map(response, function (dataItem) {
                     return { value: dataItem.Snp, data: dataItem };
                 })
             };
-        },
-        onSearchComplete: function() {
-            requestContinuing = false;
-        },
-        onSearchError: function() {
-            requestContinuing = false;
         },
         formatResult: function (suggestion, currentValue) {
             var snp = suggestion.data.Snp;
@@ -179,7 +187,12 @@ function initializeUsersAutocomplete(userSnp) {
             } else {
                 user.find(".panel-title a").text("Новый сотрудник");
             }
-            requestContinuing = false;
         }
     });
 }
+
+showErrorBadgets();
+updateControls();
+updateDeleteUserButton();
+refreshValidation();
+initializeUsersAutocomplete($(".rr-request-user-snp input"));

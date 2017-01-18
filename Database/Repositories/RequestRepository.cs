@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using RequestsForRights.Database.Repositories.Interfaces;
@@ -44,17 +45,16 @@ namespace RequestsForRights.Database.Repositories
                 .Where(r => r.User.Login.ToLower() == login.ToLower());
         }
 
-        public Request DeleteRequest(int idRequest)
-        {
-            var request = GetRequestById(idRequest);
-            if (request == null) return null;
-            request.Deleted = true;
-            return request;
-        }
-
         public Request GetRequestById(int id)
         {
-            return _databaseContext.Requests.Find(id);
+            return _databaseContext.Requests.Where(r => r.IdRequest == id).
+                Include(r => r.RequestType).
+                Include(r => r.RequestUserAssoc).
+                Include(r => r.RequestUserAssoc.Select(ru => ru.RequestUserRightAssocs)).
+                Include(r => r.RequestUserAssoc.Select(ru => ru.RequestUser)).
+                Include(r => r.RequestStates).
+                Include(r => r.RequestAgreements).
+                FirstOrDefault();
         }
 
         public IQueryable<RequestExtDescription> GetRequestExtDescriptions(int idRequest)
@@ -88,6 +88,109 @@ namespace RequestsForRights.Database.Repositories
             {
                 requestUserLastSeen.DateOfLastSeen = DateTime.Now;
             }
+        }
+
+        public Request DeleteRequest(int idRequest)
+        {
+            var request = GetRequestById(idRequest);
+            if (request == null) return null;
+            request.Deleted = true;
+            return request;
+        }
+
+        public Request UpdateRequest(Request request)
+        {
+            var req = GetRequestById(request.IdRequest);
+            request.IdUser = req.IdUser;
+            _databaseContext.Entry(req).CurrentValues.SetValues(request);
+            UpdateRequestUsers(req.RequestUserAssoc.Where(r => !r.Deleted), 
+                request.RequestUserAssoc, req);
+            ResetAgreements(request.IdRequest);
+            return req;
+        }
+
+        private void UpdateRequestUsers(IEnumerable<RequestUserAssoc> oldUsersAssoc, 
+            IEnumerable<RequestUserAssoc> newUsersAssoc, Request request)
+        {
+            var newUsersList = newUsersAssoc.ToList();
+            newUsersList.ForEach(r => r.IdRequest = request.IdRequest);
+            var newReqUsers = newUsersList.Select(r => CreateUserIfNotExists(r.RequestUser)).ToList();
+            foreach (var userAssoc in oldUsersAssoc)
+            {
+                if (newReqUsers.Any(r => r == userAssoc.RequestUser))
+                {
+                    newReqUsers.Remove(userAssoc.RequestUser);
+                    continue;
+                }
+                userAssoc.Deleted = true;
+                _databaseContext.RequestUserAssocs.Attach(userAssoc);
+                _databaseContext.Entry(userAssoc).State = EntityState.Modified;
+            }
+            foreach (var user in newReqUsers)
+            {
+                _databaseContext.RequestUserAssocs.Add(
+                    new RequestUserAssoc
+                    {
+                        Request = request,
+                        RequestUser = user
+                    });
+            }
+        }
+
+        private RequestUser CreateUserIfNotExists(RequestUser requestUser)
+        {
+            var user = _databaseContext.Users.FirstOrDefault(r => !r.Deleted &&
+                       requestUser.Login != null ? r.Login == requestUser.Login :
+                       r.Snp == requestUser.Snp && r.Department == requestUser.Department &&
+                       r.Unit == requestUser.Unit);
+            if (user == null)
+            {
+                return _databaseContext.Users.Add(requestUser);
+            }
+            requestUser.IdRequestUser = user.IdRequestUser;
+            _databaseContext.Entry(user).CurrentValues.SetValues(requestUser);
+            return user;
+        }
+
+        private void ResetAgreements(int idRequest)
+        {
+            var agreements = _databaseContext.RequestAgreements.
+                Where(r => r.IdRequest == idRequest);
+            foreach (var requestAgreement in agreements)
+            {
+                if (requestAgreement.IdAgreementType == 2)
+                {
+                    // Доп. согласование
+                    requestAgreement.IdAgreementState = 1;
+                    requestAgreement.Description = null;
+                    requestAgreement.Date = null;
+                }
+                else
+                {
+                    // Первичное согласование
+                    _databaseContext.RequestAgreements.Remove(requestAgreement);
+                }
+            }
+        }
+
+        public Request InsertRequest(Request request)
+        {
+            request.RequestUserAssoc.ToList().ForEach(r =>
+            {
+                var user = CreateUserIfNotExists(r.RequestUser);
+                r.RequestUser = user;
+            });
+            request.RequestStates = new List<RequestState>
+            {
+                new RequestState
+                {
+                    IdRequestStateType = 1,
+                    Request = request,
+                    Date = DateTime.Now
+                }
+            };
+            var resRequest = _databaseContext.Requests.Add(request);
+            return resRequest;
         }
 
         public int SaveChanges()

@@ -59,6 +59,14 @@ namespace RequestsForRights.Infrastructure.Services
             };
         }
 
+        public bool DidNotSeenRequest(Request request)
+        {
+            return request.User.Login.ToLower() != RequestSecurityService.CurrentUser.ToLower() &&
+                   !request.RequestUserLastSeens.Any(ls =>
+                       ls.User.Login.ToLower() == RequestSecurityService.CurrentUser.ToLower() &&
+                       ls.IdRequest == request.IdRequest);
+        }
+
         public IQueryable<Request> GetVisibleRequests(RequestsFilterOptions filterOptions, 
             IQueryable<Request> filteredRequests)
         {
@@ -198,17 +206,45 @@ namespace RequestsForRights.Infrastructure.Services
 
         public virtual Request UpdateRequest(RequestModel<T> requestModel)
         {
-            return null;
+            var request = ConvertToRequest(requestModel);
+            return RequestsRepository.UpdateRequest(request);
         }
 
-        public virtual Request CreateRequest(RequestModel<T> requestModel)
+        public virtual Request InsertRequest(RequestModel<T> requestModel)
         {
-            return null;
+            var request = ConvertToRequest(requestModel);
+            request.User = RequestSecurityService.GetUserInfo();
+            return RequestsRepository.InsertRequest(request);
         }
 
-        public Request InsertRequest(RequestModel<T> requestModel)
+        private static Request ConvertToRequest(RequestModel<T> requestModel)
         {
-            return null;
+            var request = new Request
+            {
+                IdRequest = requestModel.IdRequest,
+                IdRequestType = requestModel.IdRequestType,
+                Description = requestModel.Description,
+                RequestUserAssoc = new List<RequestUserAssoc>()
+            };
+            foreach (var user in requestModel.Users)
+            {
+                var requestUser = new RequestUser
+                {
+                    Snp = user.Snp,
+                    Login = user.Login,
+                    Post = user.Post,
+                    Department = user.Department,
+                    Unit = user.Unit,
+                    Office = user.Office,
+                    Phone = user.Phone
+                };
+                request.RequestUserAssoc.Add(new RequestUserAssoc
+                {
+                    RequestUser = requestUser,
+                    Request = request
+                });
+            }
+            return request;
         }
 
         public IQueryable<RequestType> GetRequestTypes()

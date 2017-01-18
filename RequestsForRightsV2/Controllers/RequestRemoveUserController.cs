@@ -152,6 +152,7 @@ namespace RequestsForRights.Controllers
                 return RedirectToAction("ForbiddenError", "Home");
             }
             ViewData["UserIndex"] = 0;
+            ViewData["SecurityService"] = _securityService;
             return PartialView("UserEditor", _requestService.GetEmptyRequestViewModel());
         }
 	}

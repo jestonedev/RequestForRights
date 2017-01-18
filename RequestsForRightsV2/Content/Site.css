@@ -1,6 +1,7 @@
 ﻿body {
     padding-top: 50px;
-    padding-bottom: 20px;    
+    padding-bottom: 20px;
+    overflow-y: scroll;
 }
 
 body.modal-open #deleteModal {
@@ -123,6 +124,10 @@ button.rr-ext-filter-button.collapsed:hover {
     padding: 26px 0 26px 10px;
 }
 
+.rr-edit-panel {
+    margin-top: 15px;
+}
+
 .rr-edit-panel > .btn-group a, .rr-edit-panel > .btn-group button {
     width: 12em;
 }
@@ -131,7 +136,7 @@ button.rr-ext-filter-button.collapsed:hover {
     margin-bottom: 20px;
 }
 
-.tab-content > .rr-tab-pane {
+.tab-content > .rr-tab-pane, .rr-request-user .collapse {
     margin-top: 20px;
     position: absolute;
     left: -33333px;
@@ -139,6 +144,7 @@ button.rr-ext-filter-button.collapsed:hover {
     height: 1px;
     width: 1px;
     display: block;
+    visibility: hidden;
 }
 
 .tab-content > .rr-tab-pane.active {
@@ -146,6 +152,11 @@ button.rr-ext-filter-button.collapsed:hover {
     left: inherit;
     width: inherit;
     height: inherit;
+    visibility: inherit;
+}
+
+.rr-tab-pane > .panel {
+    margin-bottom: 15px;
 }
 
 .rr-badge { 
@@ -186,8 +197,8 @@ button.rr-ext-filter-button.collapsed:hover {
 }
 
 .rr-add-request-user-panel {
-    margin-bottom: 20px;
-    margin-top: 20px;
+    margin-bottom: 15px;
+    margin-top: 15px;
 }
 
 .autocomplete-suggestions {

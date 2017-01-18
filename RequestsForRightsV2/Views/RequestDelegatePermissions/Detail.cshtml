@@ -1,9 +1,9 @@
-﻿@using RequestsForRights.Infrastructure.Security
+﻿@using RequestsForRights.Infrastructure.Security.Interfaces
 @using RequestsForRights.Models.Models
 @model RequestsForRights.Models.ModelViews.RequestViewModel<RequestDelegatePermissionsUserModel>
 
 @{
-    var securityService = (RequestSecurityService<RequestDelegatePermissionsUserModel>)ViewData["SecurityService"];
+    var securityService = (IRequestSecurityService<RequestDelegatePermissionsUserModel>)ViewData["SecurityService"];
     ViewBag.Title = "Заявка на делегирование прав";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }

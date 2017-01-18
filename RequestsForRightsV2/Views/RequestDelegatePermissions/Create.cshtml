@@ -7,7 +7,7 @@
 
 <h2>Новая заявка на делегирование прав</h2>
 
-@using (Html.BeginForm("Create", "Request", new { }, FormMethod.Post, new { @class = "form-horizontal" }))
+@using (Html.BeginForm("Create", "Request", new { IdRequestType = 4 }, FormMethod.Post, new { @class = "form-horizontal" }))
 {
     @Html.Hidden("Request.IdRequestType", 4)
     <div class="text-center">

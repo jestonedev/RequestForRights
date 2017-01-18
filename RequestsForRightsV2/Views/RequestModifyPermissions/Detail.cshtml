@@ -1,9 +1,9 @@
-﻿@using RequestsForRights.Infrastructure.Security
+﻿@using RequestsForRights.Infrastructure.Security.Interfaces
 @using RequestsForRights.Models.Models
 @model RequestsForRights.Models.ModelViews.RequestViewModel<RequestUserModel>
 
 @{
-    var securityService = (RequestSecurityService<RequestUserModel>)ViewData["SecurityService"];
+    var securityService = (IRequestSecurityService<RequestUserModel>)ViewData["SecurityService"];
     ViewBag.Title = "Заявка на выдачу и лишение прав пользователя";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }

@@ -42,6 +42,7 @@ namespace RequestsForRights.Controllers
                 return RedirectToAction("ForbiddenError", "Home");
             }
             ViewData["SecurityService"] = _securityService;
+            ViewData["RequestService"] = _requestService;
             return View(
                 _requestService.GetRequestIndexModelView(filterOptions,
                 _requestService.GetFilteredRequests(filterOptions)));
@@ -54,6 +55,7 @@ namespace RequestsForRights.Controllers
                 return RedirectToAction("ForbiddenError", "Home");
             }
             ViewData["SecurityService"] = _securityService;
+            ViewData["RequestService"] = _requestService;
             return PartialView("DataTable",
                 _requestService.GetRequestIndexModelView(filterOptions,
                 _requestService.GetFilteredRequests(filterOptions)));

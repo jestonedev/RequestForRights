@@ -1,9 +1,9 @@
-﻿@using RequestsForRights.Infrastructure.Security
+﻿@using RequestsForRights.Infrastructure.Security.Interfaces
 @model RequestsForRights.Models.ModelViews.ResourceGroupIndexViewModel
 
 @{
     Layout = null;
-    var securityService = (ResourceGroupSecurityService)ViewData["SecurityService"];
+    var securityService = (IResourceGroupSecurityService)ViewData["SecurityService"];
     var firstElementIndex = Model.FilterOptions.PageIndex * Model.FilterOptions.PageSize + 1;
     var lastElementIndex = firstElementIndex + Model.FilterOptions.PageSize - 1;
     if (lastElementIndex > Model.ResourceGroupCount)

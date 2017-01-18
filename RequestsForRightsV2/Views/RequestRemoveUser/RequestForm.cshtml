@@ -19,7 +19,8 @@
             ViewBag.RightIndex = i;
             @Html.Partial("UserEditor", Model, new ViewDataDictionary
             {
-                {"UserIndex", i}
+                {"UserIndex", i},
+                {"SecurityService", ViewData["SecurityService"]}
             })
         }
     }

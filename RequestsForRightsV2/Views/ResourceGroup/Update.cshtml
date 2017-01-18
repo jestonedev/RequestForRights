@@ -1,10 +1,10 @@
-﻿@using RequestsForRights.Infrastructure.Security
+﻿@using RequestsForRights.Infrastructure.Security.Interfaces
 @model RequestsForRights.Domain.Entities.ResourceGroup
 
 @{
     ViewBag.Title = "Изменить категорию ресурсов";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var securityService = (ResourceGroupSecurityService)ViewData["SecurityService"];
+    var securityService = (IResourceGroupSecurityService)ViewData["SecurityService"];
     var returnUri = Request["returnUri"] ?? Url.Action("Index");
 }
 

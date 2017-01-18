@@ -1,9 +1,9 @@
-﻿@using RequestsForRights.Infrastructure.Security
+﻿@using RequestsForRights.Infrastructure.Security.Interfaces
 @using SortDirection = RequestsForRights.Infrastructure.Enums.SortDirection
 @model RequestsForRights.Models.ModelViews.ResourceIndexViewModel
 
 @{
-    var securityService = (ResourceSecurityService)ViewData["SecurityService"];
+    var securityService = (IResourceSecurityService)ViewData["SecurityService"];
     var headers = new[]
     {
         new {

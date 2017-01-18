@@ -1,10 +1,10 @@
-﻿@using RequestsForRights.Infrastructure.Security
+﻿@using RequestsForRights.Infrastructure.Security.Interfaces
 @model RequestsForRights.Domain.Entities.Resource
 
 @{
     ViewBag.Title = "Просмотр информационного ресурса";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var securityService = (ResourceSecurityService)ViewData["SecurityService"];
+    var securityService = (IResourceSecurityService)ViewData["SecurityService"];
 }
 
 <h2>Информационный ресурс # @Model.IdResource</h2>
@@ -94,14 +94,14 @@
             <ul class="list-group">
                 @if (Model.ResourceRights != null)
                 {
-                    foreach (var right in Model.ResourceRights.Where(r => !r.Deleted))
+                    for (var i = 0; i < Model.ResourceRights.Count(r => !r.Deleted); i++)
                     {
                         <li class="list-group-item">
                             <dl class="dl-horizontal">
-                                <dt>Наименование</dt>
-                                <dd>@right.Name</dd>
-                                <dt>Описание</dt>
-                                <dd>@right.Description</dd>
+                                <dt>@Html.DisplayNameFor(r => r.ResourceRights[i].Name)</dt>
+                                <dd>@Model.ResourceRights[i].Name</dd>
+                                <dt>@Html.DisplayNameFor(r => r.ResourceRights[i].Description)</dt>
+                                <dd>@Model.ResourceRights[i].Description</dd>
                             </dl>
                         </li>
                     }

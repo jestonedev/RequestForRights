@@ -1,9 +1,9 @@
-﻿@using RequestsForRights.Infrastructure.Security
+﻿@using RequestsForRights.Infrastructure.Security.Interfaces
 @using RequestsForRights.Models.Models
 @model RequestsForRights.Models.ModelViews.RequestViewModel<RequestUserModel>
 
 @{
-    var securityService = (RequestSecurityService<RequestUserModel>)ViewData["SecurityService"];
+    var securityService = (IRequestSecurityService<RequestUserModel>)ViewData["SecurityService"];
     ViewBag.Title = "Заявка на отключение сотрудника";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -17,7 +17,54 @@
     <div class="tab-content">
         <div role="tabpanel" class="tab-pane fade in active rr-tab-pane" id="request">
             <div>
-                @Model.RequestModel.IdRequest
+                <div class="col-sm-12">
+                    <dl class="dl-horizontal">
+                        <dt>@Html.DisplayNameFor(r => r.RequestModel.Description)</dt>
+                        <dd>@Model.RequestModel.Description</dd>
+                    </dl>
+                </div>
+                <div class="panel-group rr-request-users" id="accordion" role="tablist" aria-multiselectable="true">
+                    @if (Model.RequestModel.Users != null)
+                    {
+                        for (var i = 0; i < Model.RequestModel.Users.Count; i++)
+                        {
+                            var id = string.Format("collapse{0}", i);
+                            
+                            <div class="panel panel-default rr-request-user">
+                                <div class="panel-heading" role="tab" id="heading@id">
+                                    <h4 class="panel-title">
+                                        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#@id" aria-expanded="true" aria-controls="@id">
+                                            @Model.RequestModel.Users[i].Snp
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="@id" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                                    <div class="panel-body">
+                                        <dl class="dl-horizontal">
+                                            <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].Snp)</dt>
+                                            <dd>@Model.RequestModel.Users[i].Snp</dd>
+                                            @if (securityService.CanSeeLogin())
+                                            {
+                                                <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].Login)</dt>
+                                                <dd>@Model.RequestModel.Users[i].Login</dd>
+                                            }
+                                            <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].Post)</dt>
+                                            <dd>@Model.RequestModel.Users[i].Post</dd>
+                                            <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].Department)</dt>
+                                            <dd>@Model.RequestModel.Users[i].Department</dd>
+                                            <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].Unit)</dt>
+                                            <dd>@Model.RequestModel.Users[i].Unit</dd>
+                                            <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].Office)</dt>
+                                            <dd>@Model.RequestModel.Users[i].Office</dd>
+                                            <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].Phone)</dt>
+                                            <dd>@Model.RequestModel.Users[i].Phone</dd>
+                                        </dl>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
             </div> 
             @Html.Partial("Request/EditPanels/Detail")
         </div>

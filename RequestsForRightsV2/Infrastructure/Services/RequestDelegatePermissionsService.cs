@@ -53,7 +53,7 @@ namespace RequestsForRights.Infrastructure.Services
             return null;
         }
 
-        public override Request CreateRequest(RequestModel<RequestDelegatePermissionsUserModel> requestModel)
+        public override Request InsertRequest(RequestModel<RequestDelegatePermissionsUserModel> requestModel)
         {
             return null;
         }

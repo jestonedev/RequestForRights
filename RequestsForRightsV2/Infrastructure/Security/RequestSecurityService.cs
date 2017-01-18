@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using RequestsForRights.Database.Repositories.Interfaces;
 using RequestsForRights.Domain.Entities;
@@ -26,7 +27,14 @@ namespace RequestsForRights.Infrastructure.Security
 
         public bool CanRead(Request request)
         {
-            return CanRead();
+            var result = FilterRequests(new List<Request> {request}.AsQueryable());
+            return result.Any();
+        }
+
+        public override bool CanRead(RequestModel<T> entity)
+        {
+            var request = _requestRepository.GetRequestById(entity.IdRequest);
+            return CanRead(request);
         }
 
         public override bool CanRead()
@@ -101,10 +109,11 @@ namespace RequestsForRights.Infrastructure.Security
             if (InRole(AclRole.Requester))
             {
                 filteredRequests = filteredRequests.Concat(
-                    requests.Where(r => allowedDepartments.Any() ?
+                    requests.Where(r => r.IdUser == userInfo.IdUser ||
+                        (allowedDepartments.Any() ?
                         allowedDepartments.Any(d => 
                         d == r.User.Department.IdDepartment) :
-                        userInfo.IdDepartment == r.User.Department.IdDepartment));
+                        userInfo.IdDepartment == r.User.Department.IdDepartment)));
             }
             if (InRole(AclRole.ResourceOwner))
             {
@@ -150,6 +159,11 @@ namespace RequestsForRights.Infrastructure.Security
         public override bool CanCreate()
         {
             return CanModify();
+        }
+
+        public bool CanSeeLogin()
+        {
+            return InRole(new[] { AclRole.Executor, AclRole.Administrator });
         }
     }
 }

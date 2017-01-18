@@ -13,6 +13,10 @@
     };
 };
 
+function scrollToElement(elem) {
+    $(window).scrollTop($(elem).offset().top + $(".rr-main-menu").height());
+}
+
 $(function() {
     $("[data-hide]")
         .on("click",

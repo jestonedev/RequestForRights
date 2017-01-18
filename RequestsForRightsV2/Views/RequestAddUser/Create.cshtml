@@ -7,7 +7,7 @@
 
 <h2>Новая заявка на подключение сотрудника</h2>
 
-@using (Html.BeginForm("Create", "Request", new {}, FormMethod.Post, new {@class = "form-horizontal"}))
+@using (Html.BeginForm("Create", "Request", new { IdRequestType = 1 }, FormMethod.Post, new { @class = "form-horizontal" }))
 {
     @Html.Hidden("Request.IdRequestType", 1)
     <div class="text-center">

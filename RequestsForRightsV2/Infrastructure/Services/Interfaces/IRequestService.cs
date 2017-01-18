@@ -10,6 +10,7 @@ namespace RequestsForRights.Infrastructure.Services.Interfaces
         where T: RequestUserModel
     {
         IQueryable<Request> GetNotSeenRequests();
+        bool DidNotSeenRequest(Request request);
         NotSeenRequestsViewModel GetNotSeenRequestsViewModel();
         IQueryable<Request> GetVisibleRequests(RequestsFilterOptions filterOptions,
             IQueryable<Request> filteredRequests);
@@ -24,7 +25,6 @@ namespace RequestsForRights.Infrastructure.Services.Interfaces
         int SaveChanges();
         Request DeleteRequest(int idRequest);
         Request UpdateRequest(RequestModel<T> requestModel);
-        Request CreateRequest(RequestModel<T> requestModel);
         Request InsertRequest(RequestModel<T> requestModel);
         IQueryable<RequestType> GetRequestTypes();
 

@@ -11,5 +11,6 @@ namespace RequestsForRights.Infrastructure.Security.Interfaces
         bool CanDelete(Request request);
         bool CanUpdate(Request request);
         bool CanRead(Request request);
+        bool CanSeeLogin();
     }
 }

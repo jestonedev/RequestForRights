@@ -1,10 +1,10 @@
-﻿@using RequestsForRights.Infrastructure.Security
+﻿@using RequestsForRights.Infrastructure.Security.Interfaces
 @model RequestsForRights.Models.ModelViews.ResourceViewModel
 
 @{
     ViewBag.Title = "Изменить информационные ресурс";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var securityService = (ResourceSecurityService)ViewData["SecurityService"];
+    var securityService = (IResourceSecurityService)ViewData["SecurityService"];
     var returnUri = Request["returnUri"] ?? Url.Action("Index");
 }
 

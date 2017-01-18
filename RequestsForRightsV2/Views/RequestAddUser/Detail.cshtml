@@ -1,7 +1,9 @@
-﻿@using RequestsForRights.Models.Models
+﻿@using RequestsForRights.Infrastructure.Security.Interfaces
+@using RequestsForRights.Models.Models
 @model RequestsForRights.Models.ModelViews.RequestViewModel<RequestUserModel>
 
 @{    
+    var securityService = (IRequestSecurityService<RequestUserModel>)ViewData["SecurityService"];
     ViewBag.Title = "Заявка на подключение нового сотрудника";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
