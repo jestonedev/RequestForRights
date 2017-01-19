@@ -1,5 +1,5 @@
-﻿using System.Linq;
-using System.Web.Mvc;
+﻿using System.Collections.Generic;
+using System.Linq;
 using RequestsForRights.Domain.Entities;
 using RequestsForRights.Models.FilterOptions;
 using RequestsForRights.Models.Models;
@@ -10,9 +10,8 @@ namespace RequestsForRights.Infrastructure.Services.Interfaces
     public interface IRequestService<T>
         where T: RequestUserModel
     {
-        IQueryable<Request> GetNotSeenRequests();
+        IEnumerable<RequestsCountByStateTypesViewModel> GetRequestsCountByStateTypes();
         bool DidNotSeenRequest(Request request);
-        NotSeenRequestsViewModel GetNotSeenRequestsViewModel();
         IQueryable<Request> GetVisibleRequests(RequestsFilterOptions filterOptions,
             IQueryable<Request> filteredRequests);
         IQueryable<Request> GetFilteredRequests(RequestsFilterOptions filterOptions);

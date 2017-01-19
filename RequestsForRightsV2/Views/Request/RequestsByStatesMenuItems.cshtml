@@ -1,36 +1,19 @@
 ﻿@using RequestsForRights.Infrastructure.Helpers
-@model RequestsForRights.Models.ModelViews.NotSeenRequestsViewModel
+@model IEnumerable<RequestsForRights.Models.ModelViews.RequestsCountByStateTypesViewModel>
 
 @{
     Layout = null;
-    var notSeenAgg = (from row in Model.NotSeenRequests
-        group row.IdRequest by row.RequestStates.OrderByDescending(rs => rs.IdRequestState).
-            FirstOrDefault().IdRequestStateType
-        into gs
-        select new
-        {
-            IdRequestStateType = gs.Key,
-            Count = gs.Count()
-        }).ToList();
 }
 
-@foreach (var requestStateType in Model.RequestStateTypes)
+@foreach (var value in Model.ToList())
 {
+    var requestSateType = value.RequestStateType;
     <li>
-        <a href="@Url.Action("Index", "Request", new { requestStateType.IdRequestStateType })">
-            @RequestHelper.PluralRequestState(requestStateType.Name)
-            @{
-                var notSeenItem =
-                    notSeenAgg.FirstOrDefault(r => r.IdRequestStateType == requestStateType.IdRequestStateType);
-                var notSeenCount = 0;
-                if (notSeenItem != null)
-                {
-                    notSeenCount = notSeenItem.Count > 99 ? 99 : notSeenItem.Count;
-                }
-            }
-            @if (notSeenCount > 0)
+        <a href="@Url.Action("Index", "Request", new { requestSateType.IdRequestStateType })">
+            @RequestHelper.PluralRequestState(value.RequestStateType.Name)
+            @if (value.RequestCount > 0)
             {
-                <span class="rr-requests-menu-badge badge">@notSeenCount</span>
+                <span class="rr-requests-menu-badge badge">@value.RequestCount</span>
             }
         </a>
     </li>

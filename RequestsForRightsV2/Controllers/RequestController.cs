@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.Entity.Infrastructure;
+using System.Linq;
 using System.Web.Mvc;
 using RequestsForRights.Infrastructure.Helpers;
 using RequestsForRights.Infrastructure.Security.Interfaces;
@@ -176,7 +177,7 @@ namespace RequestsForRights.Controllers
         [ChildActionOnly]
         public ActionResult RequestsByStatesMenuItems()
         {
-            return PartialView(_requestService.GetNotSeenRequestsViewModel());
+            return PartialView(_requestService.GetRequestsCountByStateTypes());
         }
 
         [ChildActionOnly]

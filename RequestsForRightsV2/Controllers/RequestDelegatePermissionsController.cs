@@ -35,7 +35,7 @@ namespace RequestsForRights.Controllers
         [TransferActionOnly]
         public ActionResult Detail(int id)
         {
-            var request = _requestService.GetRequestModelBy(_requestService.GetRequestById(id));
+            var request = _requestService.GetRequestById(id);
             if (!_securityService.CanRead(request))
             {
                 return RedirectToAction("ForbiddenError", "Home");
@@ -48,7 +48,7 @@ namespace RequestsForRights.Controllers
         [HttpGet]
         public ActionResult Update(int id)
         {
-            var request = _requestService.GetRequestModelBy(_requestService.GetRequestById(id));
+            var request = _requestService.GetRequestById(id);
             if (!_securityService.CanUpdate(request))
             {
                 return RedirectToAction("ForbiddenError", "Home");
@@ -66,8 +66,7 @@ namespace RequestsForRights.Controllers
                 return RedirectToAction("BadRequestError", "Home",
                     new { message = "Не передана ссылка на ресурс" });
             }
-            var request = _requestService.GetRequestModelBy(_requestService.GetRequestById(
-                requestViewModel.RequestModel.IdRequest));
+            var request = _requestService.GetRequestById(requestViewModel.RequestModel.IdRequest);
             if (!_securityService.CanUpdate(request))
             {
                 return RedirectToAction("ForbiddenError", "Home");

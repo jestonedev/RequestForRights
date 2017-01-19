@@ -179,6 +179,7 @@ function showErrorBadgets() {
     } else {
         badge.hide();
     }
+    fixIELayoutProblems();
     if (titleToShow !== window.undefined && !panelToShow.hasClass("in")) {
         scrollToElement(titleToShow);
         $(titleToShow).find("a").click();
@@ -325,6 +326,12 @@ function showCommentsCountBadget() {
     } else {
         badge.hide();
     }
+    fixIELayoutProblems();
+}
+
+function fixIELayoutProblems() {
+    $(".rr-requests-tabs").addClass("fix-layout");
+    $(".rr-requests-tabs").removeClass("fix-layout");
 }
 
 showErrorBadgets();

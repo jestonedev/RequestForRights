@@ -8,7 +8,6 @@ using RequestsForRights.Infrastructure.Enums;
 using RequestsForRights.Infrastructure.Extensions;
 using RequestsForRights.Infrastructure.Security.Interfaces;
 using RequestsForRights.Infrastructure.Services.Interfaces;
-using RequestsForRights.Infrastructure.Helpers;
 using RequestsForRights.Models.FilterOptions;
 using RequestsForRights.Models.Models;
 using RequestsForRights.Models.ModelViews;
@@ -48,17 +47,6 @@ namespace RequestsForRights.Infrastructure.Services
                    where joinedLastSeensRow == null && 
                        request.User.Login.ToLower() != RequestSecurityService.CurrentUser.ToLower()
                 select request;
-        }
-
-        public NotSeenRequestsViewModel GetNotSeenRequestsViewModel()
-        {
-            var requests = GetNotSeenRequests();
-            var requestStateTypes = RequestsRepository.GetRequestStateTypes();
-            return new NotSeenRequestsViewModel
-            {
-                NotSeenRequests = requests,
-                RequestStateTypes = requestStateTypes
-            };
         }
 
         public bool DidNotSeenRequest(Request request)
@@ -347,6 +335,28 @@ namespace RequestsForRights.Infrastructure.Services
                 Comments = RequestsRepository.GetRequestExtComments(request.IdRequest), 
                 Agreements = RequestsRepository.GetRequestAgreements(request.IdRequest)
             };
+        }
+
+        public IEnumerable<RequestsCountByStateTypesViewModel> GetRequestsCountByStateTypes()
+        {
+            var notSeenRequests = from row in GetNotSeenRequests()
+                group row.IdRequest by row.RequestStates.OrderByDescending(rs => rs.IdRequestState).
+                    FirstOrDefault().IdRequestStateType
+                into gs
+                select new
+                {
+                    IdRequestStateType = gs.Key,
+                    Count = gs.Count()
+                };
+            return from requestStateTypesRow in RequestsRepository.GetRequestStateTypes()
+                join requestRow in notSeenRequests
+                    on requestStateTypesRow.IdRequestStateType equals requestRow.IdRequestStateType into rst
+                from rstRow in rst.DefaultIfEmpty()
+                select new RequestsCountByStateTypesViewModel
+                {
+                    RequestStateType = requestStateTypesRow,
+                    RequestCount = rstRow == null ? 0 : (rstRow.Count > 99 ? 99 : rstRow.Count)
+                };
         }
     }
 }

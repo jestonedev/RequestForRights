@@ -161,6 +161,10 @@ button.rr-ext-filter-button.collapsed:hover {
     margin-bottom: 15px;
 }
 
+.rr-requests-tabs a {
+    white-space: nowrap;
+}
+
 .rr-badge { 
     background-color: #e46161;
     display: none;

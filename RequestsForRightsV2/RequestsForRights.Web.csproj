@@ -202,7 +202,7 @@
     <Compile Include="Models\Models\RequestModel.cs" />
     <Compile Include="Models\Models\RequestUserModel.cs" />
     <Compile Include="Models\Models\RequestUserRightModel.cs" />
-    <Compile Include="Models\ModelViews\NotSeenRequestsViewModel.cs" />
+    <Compile Include="Models\ModelViews\RequestsByStateTypesCountViewModel.cs" />
     <Compile Include="Models\FilterOptions\RequestsFilterOptions.cs" />
     <Compile Include="Models\ModelViews\RequestViewModel.cs" />
     <Compile Include="Models\ModelViews\ResourceGroupIndexViewModel.cs" />
