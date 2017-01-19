@@ -154,6 +154,10 @@
     <Compile Include="Migrations\201701180228039_NullableUserOffice.Designer.cs">
       <DependentUpon>201701180228039_NullableUserOffice.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201701190321271_RenameExtDescriptionsTable.cs" />
+    <Compile Include="Migrations\201701190321271_RenameExtDescriptionsTable.Designer.cs">
+      <DependentUpon>201701190321271_RenameExtDescriptionsTable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\Interfaces\IRequestRepository.cs" />
@@ -255,6 +259,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201701180228039_NullableUserOffice.resx">
       <DependentUpon>201701180228039_NullableUserOffice.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201701190321271_RenameExtDescriptionsTable.resx">
+      <DependentUpon>201701190321271_RenameExtDescriptionsTable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

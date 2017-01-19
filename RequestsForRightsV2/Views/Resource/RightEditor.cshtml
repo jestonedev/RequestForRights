@@ -1,4 +1,5 @@
-﻿@model RequestsForRights.Models.ModelViews.ResourceViewModel
+﻿@using RequestsForRights.Infrastructure.Extensions
+@model RequestsForRights.Models.ModelViews.ResourceViewModel
 
 @{
     var rightIndex = -1;
@@ -15,7 +16,7 @@
 <li class="list-group-item clearfix rr-right">
     @Html.HiddenFor(r => r.Resource.ResourceRights[rightIndex].IdResourceRight)
     <div class="form-group">
-        @Html.LabelFor(r => r.Resource.ResourceRights[rightIndex].Name,
+        @Html.RequiredLabelFor(r => r.Resource.ResourceRights[rightIndex].Name,
             new {@class = "col-sm-2 control-label"})
         <div class="col-sm-10">
             @Html.TextBoxFor(r => r.Resource.ResourceRights[rightIndex].Name,
@@ -24,7 +25,7 @@
         </div>
     </div>
     <div class="form-group">
-        @Html.LabelFor(r => r.Resource.ResourceRights[rightIndex].Description,
+        @Html.RequiredLabelFor(r => r.Resource.ResourceRights[rightIndex].Description,
             new {@class = "col-sm-2 control-label"})
         <div class="col-sm-10">
             @Html.TextAreaFor(r => Model.Resource.ResourceRights[rightIndex].Description,

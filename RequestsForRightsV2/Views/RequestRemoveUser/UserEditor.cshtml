@@ -1,4 +1,5 @@
-﻿@using RequestsForRights.Infrastructure.Security.Interfaces
+﻿@using RequestsForRights.Infrastructure.Extensions
+@using RequestsForRights.Infrastructure.Security.Interfaces
 @using RequestsForRights.Models.Models
 @model RequestsForRights.Models.ModelViews.RequestViewModel<RequestUserModel>
 
@@ -20,14 +21,14 @@
             <a role="button" data-toggle="collapse" data-parent="#accordion" href="#@id" aria-expanded="true" aria-controls="@id">
                 @title
             </a>
-            <span class="badge rr-badge">!</span>
+             <span class="badge rr-badge">0</span>
         </h4>
     </div>
     <div id="@id" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
         <div class="panel-body">
             @Html.Hidden("rr-request-user-prev-snp", Model.RequestModel.Users[userIndex].Snp)
             <div class="form-group rr-request-user-snp">
-                @Html.LabelFor(r => r.RequestModel.Users[userIndex].Snp,
+                @Html.RequiredLabelFor(r => r.RequestModel.Users[userIndex].Snp,
                     new {@class = "col-sm-2 control-label"})
                 <div class="col-sm-10">
                     @Html.TextBoxFor(r => r.RequestModel.Users[userIndex].Snp,
@@ -42,7 +43,7 @@
             @if (securityService.CanSeeLogin())
             {
                 <div class="form-group rr-request-user-login">
-                    @Html.LabelFor(r => r.RequestModel.Users[userIndex].Login,
+                    @Html.RequiredLabelFor(r => r.RequestModel.Users[userIndex].Login,
                         new {@class = "col-sm-2 control-label"})
                     <div class="col-sm-10">
                         @Html.TextBoxFor(r => r.RequestModel.Users[userIndex].Login,
@@ -62,7 +63,7 @@
                 </div>
             }
             <div class="form-group rr-request-user-post">
-                @Html.LabelFor(r => r.RequestModel.Users[userIndex].Post,
+                @Html.RequiredLabelFor(r => r.RequestModel.Users[userIndex].Post,
                     new {@class = "col-sm-2 control-label"})
                 <div class="col-sm-10">
                     @Html.TextBoxFor(r => r.RequestModel.Users[userIndex].Post,
@@ -75,7 +76,7 @@
                 </div>
             </div>
             <div class="form-group rr-request-user-department">
-                @Html.LabelFor(r => r.RequestModel.Users[userIndex].Department,
+                @Html.RequiredLabelFor(r => r.RequestModel.Users[userIndex].Department,
                     new {@class = "col-sm-2 control-label"})
                 <div class="col-sm-10">
                     @Html.TextBoxFor(r => r.RequestModel.Users[userIndex].Department,
@@ -88,7 +89,7 @@
                 </div>
             </div>
             <div class="form-group rr-request-user-unit">
-                @Html.LabelFor(r => r.RequestModel.Users[userIndex].Unit,
+                @Html.RequiredLabelFor(r => r.RequestModel.Users[userIndex].Unit,
                     new {@class = "col-sm-2 control-label"})
                 <div class="col-sm-10">
                     @Html.TextBoxFor(r => r.RequestModel.Users[userIndex].Unit,
@@ -101,7 +102,7 @@
                 </div>
             </div>
             <div class="form-group rr-request-user-office">
-                @Html.LabelFor(r => r.RequestModel.Users[userIndex].Office,
+                @Html.RequiredLabelFor(r => r.RequestModel.Users[userIndex].Office,
                     new {@class = "col-sm-2 control-label"})
                 <div class="col-sm-10">
                     @Html.TextBoxFor(r => r.RequestModel.Users[userIndex].Office,
@@ -114,7 +115,7 @@
                 </div>
             </div>
             <div class="form-group rr-request-user-phone">
-                @Html.LabelFor(r => r.RequestModel.Users[userIndex].Phone,
+                @Html.RequiredLabelFor(r => r.RequestModel.Users[userIndex].Phone,
                     new {@class = "col-sm-2 control-label"})
                 <div class="col-sm-10">
                     @Html.TextBoxFor(r => r.RequestModel.Users[userIndex].Phone,
@@ -127,7 +128,7 @@
                 </div>
             </div>
             <div class="text-center">
-                <button name="deleteUser" class="btn btn-danger">Удалить сотрудника</button>
+                <button name="deleteUser" class="btn btn-danger rr-remove-user-button">Удалить сотрудника</button>
             </div>
         </div>
     </div>

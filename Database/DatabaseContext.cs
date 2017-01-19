@@ -21,7 +21,7 @@ namespace RequestsForRights.Database
         public IDbSet<RequestUserAssoc> RequestUserAssocs { get; set; }
         public IDbSet<RequestUserRightAssoc> RequestUserRightAssocs { get; set; }
         public IDbSet<DelegationRequestUsersExtInfo> DelegationRequestUsersExtInfo { get; set; }
-        public IDbSet<RequestExtDescription> RequestExtDescriptions { get; set; }
+        public IDbSet<RequestExtComment> RequestExtComments { get; set; }
         public IDbSet<RequestAgreementType> RequestAgreementTypes { get; set; }
         public IDbSet<RequestAgreementState> RequestAgreementStates { get; set; }
         public IDbSet<RequestAgreement> RequestAgreements { get; set; }
@@ -56,7 +56,7 @@ namespace RequestsForRights.Database
                 .WithRequired(f => f.User)
                 .WillCascadeOnDelete(false);
             modelBuilder.Entity<AclUser>()
-                .HasMany(f => f.RequestsExtDescriptions)
+                .HasMany(f => f.RequestsExtComments)
                 .WithRequired(f => f.User)
                 .WillCascadeOnDelete(false);
             modelBuilder.Entity<AclUser>()

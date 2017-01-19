@@ -5,6 +5,7 @@ using System.Linq;
 using RequestsForRights.Database.Repositories.Interfaces;
 using RequestsForRights.Domain.Entities;
 using RequestsForRights.Infrastructure.Enums;
+using RequestsForRights.Infrastructure.Extensions;
 using RequestsForRights.Infrastructure.Security.Interfaces;
 using RequestsForRights.Infrastructure.Services.Interfaces;
 using RequestsForRights.Infrastructure.Helpers;
@@ -259,6 +260,18 @@ namespace RequestsForRights.Infrastructure.Services
             RequestsRepository.UpdateUserLastSeen(idRequest, idUser);
         }
 
+        public RequestExtComment AddComment(int idRequest, string comment)
+        {
+            var requestComment = new RequestExtComment
+            {
+                DateOfWriting = DateTime.Now,
+                Comment = comment,
+                IdRequest = idRequest,
+                User = RequestSecurityService.GetUserInfo()
+            };
+            return RequestsRepository.AddComment(requestComment);
+        }
+
         public virtual RequestViewModel<T> GetEmptyRequestViewModel()
         {
             return new RequestViewModel<T>
@@ -289,9 +302,14 @@ namespace RequestsForRights.Infrastructure.Services
             return new RequestViewModel<T>
             {
                 RequestModel = GetRequestModelBy(request),
-                Descriptions = RequestsRepository.GetRequestExtDescriptions(request.IdRequest),
+                Comments = GetRequestExtComments(request.IdRequest),
                 Agreements = RequestsRepository.GetRequestAgreements(request.IdRequest)
             };
+        }
+
+        public virtual IQueryable<RequestExtComment> GetRequestExtComments(int idRequest)
+        {
+            return RequestsRepository.GetRequestExtComments(idRequest);
         }
 
         protected T FillRequestUserModel(RequestUserAssoc userAssoc)
@@ -326,7 +344,7 @@ namespace RequestsForRights.Infrastructure.Services
             return new RequestViewModel<T>
             {
                 RequestModel = request, 
-                Descriptions = RequestsRepository.GetRequestExtDescriptions(request.IdRequest), 
+                Comments = RequestsRepository.GetRequestExtComments(request.IdRequest), 
                 Agreements = RequestsRepository.GetRequestAgreements(request.IdRequest)
             };
         }

@@ -57,9 +57,9 @@ namespace RequestsForRights.Database.Repositories
                 FirstOrDefault();
         }
 
-        public IQueryable<RequestExtDescription> GetRequestExtDescriptions(int idRequest)
+        public IQueryable<RequestExtComment> GetRequestExtComments(int idRequest)
         {
-            return _databaseContext.RequestExtDescriptions.Where(r => r.IdRequest == idRequest);
+            return _databaseContext.RequestExtComments.Where(r => r.IdRequest == idRequest);
         }
 
         public IQueryable<RequestAgreement> GetRequestAgreements(int idRequest)
@@ -183,11 +183,14 @@ namespace RequestsForRights.Database.Repositories
                 var user = CreateUserIfNotExists(r.RequestUser);
                 r.RequestUser = user;
             });
+            var idRequestStateType = request.RequestUserAssoc.Any(ru => 
+                ru.RequestUserRightAssocs != null &&
+                ru.RequestUserRightAssocs.Any(rur => rur.ResourceRight.Resource.IdDepartment != 24)) ? 1 : 2;
             request.RequestStates = new List<RequestState>
             {
                 new RequestState
                 {
-                    IdRequestStateType = 1,
+                    IdRequestStateType = idRequestStateType,
                     Request = request,
                     Date = DateTime.Now
                 }
@@ -199,6 +202,11 @@ namespace RequestsForRights.Database.Repositories
         public int SaveChanges()
         {
             return _databaseContext.SaveChanges();
+        }
+
+        public RequestExtComment AddComment(RequestExtComment requestComment)
+        {
+            return _databaseContext.RequestExtComments.Add(requestComment);
         }
     }
 }

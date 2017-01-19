@@ -4,6 +4,7 @@
 
 @{
     var securityService = (IRequestSecurityService<RequestUserModel>)ViewData["SecurityService"];
+    ViewData["IdRequest"] = Model.RequestModel.IdRequest;
     ViewBag.Title = "Заявка на отключение сотрудника";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -15,7 +16,7 @@
 <div>
     @Html.Partial("Request/Tabs")
     <div class="tab-content">
-        <div role="tabpanel" class="tab-pane fade in active rr-tab-pane" id="request">
+        <div role="tabpanel" class="tab-pane fade in active rr-tab-pane" id="rr-request-content">
             <div>
                 <div class="col-sm-12">
                     <dl class="dl-horizontal">
@@ -29,7 +30,7 @@
                         for (var i = 0; i < Model.RequestModel.Users.Count; i++)
                         {
                             var id = string.Format("collapse{0}", i);
-                            
+
                             <div class="panel panel-default rr-request-user">
                                 <div class="panel-heading" role="tab" id="heading@id">
                                     <h4 class="panel-title">
@@ -65,11 +66,11 @@
                         }
                     }
                 </div>
-            </div> 
+            </div>
             @Html.Partial("Request/EditPanels/Detail")
         </div>
         @Html.Partial("Request/Agreements", Model.Agreements)
-        @Html.Partial("Request/ExtDescriptions", Model.Descriptions)
+        @Html.Partial("Request/ExtComments", Model.Comments)
     </div>
 </div>
 

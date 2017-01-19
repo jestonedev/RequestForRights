@@ -1,4 +1,5 @@
-﻿@using RequestsForRights.Infrastructure.Security.Interfaces
+﻿@using RequestsForRights.Infrastructure.Extensions
+@using RequestsForRights.Infrastructure.Security.Interfaces
 @model RequestsForRights.Domain.Entities.ResourceGroup
 
 @{
@@ -22,14 +23,14 @@
     @Html.HiddenFor(r => r.IdResourceGroup)
     @Html.Hidden("returnUri", returnUri)
     <div class="form-group">
-        @Html.LabelFor(r => r.Name, new {@class = "col-sm-2 control-label"})
+        @Html.RequiredLabelFor(r => r.Name, new { @class = "col-sm-2 control-label" })
         <div class="col-sm-10">
             @Html.TextBoxFor(r => r.Name, new { @class = "form-control", placeholder = "Введите наименование категории ресурсов" })
             @Html.ValidationMessageFor(r => r.Name)
         </div>
     </div>
     <div class="form-group">
-        @Html.LabelFor(r => r.Description, new {@class = "col-sm-2 control-label"})
+        @Html.RequiredLabelFor(r => r.Description, new { @class = "col-sm-2 control-label" })
         <div class="col-sm-10">
             @Html.TextAreaFor(r => r.Description,
              new { @class = "form-control", placeholder = "Введите описание категории ресурсов", rows = "4" })
@@ -40,13 +41,15 @@
         <div class="btn-group" role="group" aria-label="Панель действий">
             <a href="@returnUri"
                class="btn btn-default"
-               title="Вернуться к перечню"
+               title="Вернуться к перечню категорий ресурсов"
                aria-label="Назад">
-                <span class="glyphicon glyphicon-circle-arrow-left"></span>
+                <span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span>
                 Назад
             </a>
-            <button class="btn btn-default rr-save-button">
-                <span class="glyphicon glyphicon-floppy-disk"></span>
+            <button class="btn btn-default rr-save-button"
+                    title="Сохранить категорию ресурсов"
+                    aria-label="Сохранить">
+                <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
                 Сохранить
             </button>
             @if (securityService.CanDelete(Model))
@@ -54,9 +57,9 @@
                 <a href="@Url.Action("Delete", new {id = Model.IdResourceGroup})" id="delete-button"
                    data-success-redirect-to="@Url.Action("Index")"
                    class="btn btn-danger"
-                   title="Вернуться к перечню"
+                   title="Удалить категорию ресурсов"
                    aria-label="Удалить">
-                    <span class="glyphicon glyphicon-remove"></span>
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                     Удалить
                 </a>
             }

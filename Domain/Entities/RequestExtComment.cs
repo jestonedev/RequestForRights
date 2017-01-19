@@ -4,13 +4,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RequestsForRights.Domain.Entities
 {
-    public class RequestExtDescription
+    public class RequestExtComment
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int IdDescription { get; set; }
+        public int IdComment { get; set; }
         [Required]
-        public string Description { get; set; }
+        public string Comment { get; set; }
         public DateTime DateOfWriting { get; set; }
         public int IdRequest { get; set; }
         public virtual Request Request { get; set; }

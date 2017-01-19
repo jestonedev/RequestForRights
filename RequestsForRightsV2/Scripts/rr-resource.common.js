@@ -48,7 +48,7 @@ function updateControls() {
                     var id = $(field).prop("id").replace(rightIdPropRegex, "Rights_" + rightIdx + "__");
                     $(field).prop("id", id);
                     $(field).closest(".form-group").find("label").prop("for", id);
-                    $(field).closest(".form-group").find("span").attr("data-valmsg-for", name);
+                    $(field).closest(".form-group").find("span[data-valmsg-for]").attr("data-valmsg-for", name);
                 });
         });
 }

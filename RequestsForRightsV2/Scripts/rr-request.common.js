@@ -1,4 +1,4 @@
-﻿$("form")
+﻿$("#rr-request-form")
     .on("click",
         '[name="addUser"]',
         function (e) {
@@ -7,7 +7,7 @@
             return false;
         });
 
-$("form")
+$("#rr-request-form")
     .on("click",
         '[name="deleteUser"]',
         function (e) {
@@ -30,15 +30,48 @@ $("form")
             } else {
                 $("body").css("margin-bottom", marginBottom);
             }
+            updateRequestDescription();
             e.preventDefault();
             return false;
         });
 
 $(".rr-save-button").on("click", submitButtonClick);
-$(".rr-request-user").first().find(".panel-heading a").click();
+
+var descriptionModifiedManual = false;
+var initialDescriptionIsEmpty = !$(".rr-request-description textarea").val();
+$(".rr-request-description textarea")
+    .on("change",
+        function() {
+            descriptionModifiedManual = true;
+        });
+
+var addCommentButton = $(".rr-add-comment-button").clone();
+
+$(".rr-comment-tab-edit-panel")
+    .on("click", ".rr-add-comment-button",
+        function(e) {
+            $(this).remove();
+            $(".rr-request-comment-editor").show();
+            $(".rr-request-comment-editor textarea").focus();
+            $(".rr-add-comment-panel").show();
+            updateSendCommentButtonState();
+            $(window).scrollTop($(document).height());
+            e.preventDefault();
+            return false;
+        });
+
+$("#rr-new-comment").on("keyup", updateSendCommentButtonState);
+
+$(".rr-send-cancel-button")
+    .on("click",
+        function (e) {
+            resetCommentFormState();
+            e.preventDefault();
+            return false;
+        });
 
 function submitButtonClick(e) {
-    var form = $("form");
+    var form = $("#rr-request-form");
     if (formIsValid(form)) {
         form.submit();
     } else {
@@ -85,7 +118,7 @@ function updateControls() {
                 var id = $(field).prop("id").replace(userIdPropRegex, "Users_" + userIdx + "__");
                 $(field).prop("id", id);
                 $(field).closest(".form-group").find("label").prop("for", id);
-                $(field).closest(".form-group").find("span").attr("data-valmsg-for", name);
+                $(field).closest(".form-group").find("span[data-valmsg-for]").attr("data-valmsg-for", name);
             });
         $(userElem).find(".panel-heading").attr("id", "heading" + userIdx);
         $(userElem).find(".panel-heading a").attr("href", "#collapse" + userIdx).
@@ -109,7 +142,7 @@ function addUser(userLayout) {
 }
 
 function refreshValidation() {
-    var form = $("form")
+    var form = $("#rr-request-form")
     .removeData("validator")
     .removeData("unobtrusiveValidation");
     $.validator.unobtrusive.parse(form);
@@ -119,6 +152,7 @@ function refreshValidation() {
 function showErrorBadgets() {
     var titleToShow = window.undefined;
     var panelToShow = window.undefined;
+    var totalErrors = 0;
     $(".rr-request-user")
         .each(function (idx, elem) {
             var title = $(elem).find(".panel-title");
@@ -127,15 +161,24 @@ function showErrorBadgets() {
             var badge = $(title).find(".rr-badge");
             var errorCount = panel.find(".field-validation-error").length;
             if (errorCount > 0) {
+                totalErrors += errorCount;
                 if (titleToShow === window.undefined || panel.hasClass("in")) {
                     titleToShow = title;
                     panelToShow = panel;
                 }
+                badge.text(errorCount);
                 badge.show();
             } else {
                 badge.hide();
             }
         });
+    var badge = $("#rr-request-tab .rr-badge");
+    if (totalErrors > 0) {
+        badge.text(totalErrors);
+        badge.show();
+    } else {
+        badge.hide();
+    }
     if (titleToShow !== window.undefined && !panelToShow.hasClass("in")) {
         scrollToElement(titleToShow);
         $(titleToShow).find("a").click();
@@ -181,23 +224,113 @@ function initializeUsersAutocomplete(userSnp) {
         },
         onSelect: function (suggestion) {
             var user = $(this).closest(".rr-request-user");
-            user.find(".rr-request-user-login input").val(suggestion.data.Login);
-            user.find(".rr-request-user-post input").val(suggestion.data.Post);
-            user.find(".rr-request-user-department input").val(suggestion.data.Department);
-            user.find(".rr-request-user-unit input").val(suggestion.data.Unit);
-            user.find(".rr-request-user-office input").val(suggestion.data.Office);
-            user.find(".rr-request-user-phone input").val(suggestion.data.Phone);
-            if (suggestion.data.Snp) {
-                user.find(".panel-title a").text("Сотрудник «" + suggestion.data.Snp + "»");
-            } else {
-                user.find(".panel-title a").text("Новый сотрудник");
-            }
+            updateUserFields(user, suggestion);
+            updateRequestDescription();
         }
     });
 }
 
+function updateUserFields(user, suggestion) {
+    user.find(".rr-request-user-login input").val(suggestion.data.Login);
+    user.find(".rr-request-user-post input").val(suggestion.data.Post);
+    user.find(".rr-request-user-department input").val(suggestion.data.Department);
+    user.find(".rr-request-user-unit input").val(suggestion.data.Unit);
+    user.find(".rr-request-user-office input").val(suggestion.data.Office);
+    user.find(".rr-request-user-phone input").val(suggestion.data.Phone);
+    if (suggestion.data.Snp) {
+        user.find(".panel-title a").text("Сотрудник «" + suggestion.data.Snp + "»");
+    } else {
+        user.find(".panel-title a").text("Новый сотрудник");
+    }
+}
+
+function updateRequestDescription() {
+    if (descriptionModifiedManual || !initialDescriptionIsEmpty) {
+        return;
+    }
+    var requestDescription = $(".rr-request-description textarea");
+    requestDescription.off("change");
+    var idRequestType = $('[name="RequestModel.IdRequestType"]').val();
+    var description = getRequestDescriptionPreamble(idRequestType);
+    $(".rr-request-user").each(function(index, userElem) {
+        description += $(userElem).find(".rr-request-user-snp input").val() + ",\n";
+    });
+    requestDescription.val(description.replace(/,\n$/, "."));
+    requestDescription.on("change",
+        function () {
+            descriptionModifiedManual = true;
+        });
+}
+
+function getRequestDescriptionPreamble(idRequestType) {
+    var isOne = $(".rr-request-user").length === 1;
+    switch (parseInt(idRequestType)) {
+        case 1:
+            return "Произвести подключение к информационной инфраструктуры " +
+                (isOne ? "следующего сотрудника" : "следующих сотрудников") +
+                ":\n";
+        case 2:
+            return "Выдать/лишить прав доступа к информационным ресурсам " +
+                (isOne ? "следующего сотрудника" : "следующих сотрудников") +
+                ":\n";
+        case 3:
+            return "Произвести отключение от информационной инфраструктуры " +
+                (isOne ? "следующего сотрудника" : "следующих сотрудников") +
+                ":\n";
+        case 4:
+            return "Временно делегировать права доступа " +
+                (isOne ? "следующего сотрудника" : "следующих сотрудников") +
+                ":\n";
+        default:
+            return "";
+    }
+}
+
+function beforeAddComment() {
+    $("#rr-new-comment").attr("readonly", true);
+}
+
+function commentAddingSuccess() {
+    $("#rr-new-comment").attr("readonly", false);
+    $("#rr-new-comment").val("");
+    resetCommentFormState();
+    showCommentsCountBadget();
+}
+
+function commentAddingFailure() {
+    $(".rr-comment-error-alert").css({ "opacity": 1 }).show();
+    $("#rr-new-comment").attr("readonly", false);
+}
+
+function resetCommentFormState() {
+    $(".rr-comment-tab-edit-panel .btn-group").append(addCommentButton);
+    $(".rr-request-comment-editor").hide();
+    $(".rr-add-comment-panel").hide();
+}
+
+function updateSendCommentButtonState() {
+    if ($.trim($("#rr-new-comment").val()) === "") {
+        $(".rr-send-comment-button").attr("disabled", "disabled");
+    } else {
+        $(".rr-send-comment-button").removeAttr("disabled");
+    }
+}
+
+function showCommentsCountBadget() {
+    var badge = $("#rr-comments-tab .rr-comments-badge");
+    var commentsCount = $("#rr-comments-content .rr-comment").length;
+    if (commentsCount > 0) {
+        badge.text(commentsCount);
+        badge.show();
+    } else {
+        badge.hide();
+    }
+}
+
 showErrorBadgets();
+showCommentsCountBadget();
 updateControls();
 updateDeleteUserButton();
 refreshValidation();
 initializeUsersAutocomplete($(".rr-request-user-snp input"));
+$(".rr-request-user").first().find(".panel-heading a").click();

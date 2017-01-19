@@ -4,6 +4,7 @@
 
 @{
     var securityService = (IRequestSecurityService<RequestDelegatePermissionsUserModel>)ViewData["SecurityService"];
+    ViewData["IdRequest"] = Model.RequestModel.IdRequest;
     ViewBag.Title = "Заявка на делегирование прав";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -15,14 +16,14 @@
 <div>
     @Html.Partial("Request/Tabs")
     <div class="tab-content">
-        <div role="tabpanel" class="tab-pane fade in active rr-tab-pane" id="request">
+        <div role="tabpanel" class="tab-pane fade in active rr-tab-pane" id="rr-request-content">
             <div>
                 @Model.RequestModel.IdRequest
-            </div> 
+            </div>
             @Html.Partial("Request/EditPanels/Detail")
         </div>
         @Html.Partial("Request/Agreements", Model.Agreements)
-        @Html.Partial("Request/ExtDescriptions", Model.Descriptions)
+        @Html.Partial("Request/ExtComments", Model.Comments)
     </div>
 </div>
 

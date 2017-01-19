@@ -28,13 +28,15 @@
         <div class="btn-group" role="group" aria-label="Панель действий">
             <a href="@returnUri"
                class="btn btn-default"
-               title="Вернуться к перечню"
+               title="Вернуться к перечню ресурсов"
                aria-label="Назад">
-                <span class="glyphicon glyphicon-circle-arrow-left"></span>
+                <span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span>
                 Назад
             </a>
-            <button class="btn btn-default">
-                <span class="glyphicon glyphicon-floppy-disk rr-save-button"></span>
+            <button class="btn btn-default"
+                    title="Сохранить ресурс"
+                    aria-label="Сохранить">
+                <span class="glyphicon glyphicon-floppy-disk rr-save-button" aria-hidden="true"></span>
                 Сохранить
             </button>
             @if (securityService.CanDelete(Model.Resource))
@@ -42,9 +44,9 @@
                 <a href="@Url.Action("Delete", new { id = Model.Resource.IdResource })" id="delete-button"
                    data-success-redirect-to="@Url.Action("Index")"
                    class="btn btn-danger"
-                   title="Вернуться к перечню"
+                   title="Удалить ресурс"
                    aria-label="Удалить">
-                    <span class="glyphicon glyphicon-remove"></span>
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                     Удалить
                 </a>
             }

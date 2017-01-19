@@ -27,7 +27,7 @@ namespace RequestsForRights.Infrastructure.Security
 
         public bool CanRead(Request request)
         {
-            var result = FilterRequests(new List<Request> {request}.AsQueryable());
+            var result = FilterRequests(new List<Request> { request }.AsQueryable());
             return result.Any();
         }
 
@@ -35,29 +35,6 @@ namespace RequestsForRights.Infrastructure.Security
         {
             var request = _requestRepository.GetRequestById(entity.IdRequest);
             return CanRead(request);
-        }
-
-        public override bool CanRead()
-        {
-            return InRole(new []
-            {
-                AclRole.Coordinator,
-                AclRole.Administrator, 
-                AclRole.Dispatcher, 
-                AclRole.Executor, 
-                AclRole.Registrar, 
-                AclRole.Requester, 
-                AclRole.ResourceOwner
-            });
-        }
-
-        public override bool CanModify()
-        {
-            return InRole(new[]
-            {
-                AclRole.Administrator, 
-                AclRole.Requester
-            });
         }
 
         public bool CanDelete(Request request)
@@ -74,13 +51,18 @@ namespace RequestsForRights.Infrastructure.Security
             return CanDelete(request);
         }
 
-        public override bool CanCreate(RequestModel<T> entity)
+        public bool CanCreate(Request request)
         {
             return InRole(new[]
             {
                 AclRole.Administrator,
                 AclRole.Requester
             });
+        }
+
+        public override bool CanCreate(RequestModel<T> entity)
+        {
+            return CanCreate(null);
         }
 
         public bool CanUpdate(Request request)
@@ -106,6 +88,10 @@ namespace RequestsForRights.Infrastructure.Security
             }
             var allowedDepartments = GetUserAllowedDepartments().Select(r => r.IdDepartment);
             var userInfo = GetUserInfo();
+            if (userInfo == null)
+            {
+                return filteredRequests;
+            }
             if (InRole(AclRole.Requester))
             {
                 filteredRequests = filteredRequests.Concat(
@@ -146,6 +132,29 @@ namespace RequestsForRights.Infrastructure.Security
             return filteredRequests.Distinct();
         }
 
+        public override bool CanRead()
+        {
+            return InRole(new[]
+            {
+                AclRole.Coordinator,
+                AclRole.Administrator, 
+                AclRole.Dispatcher, 
+                AclRole.Executor, 
+                AclRole.Registrar, 
+                AclRole.Requester, 
+                AclRole.ResourceOwner
+            });
+        }
+
+        public override bool CanModify()
+        {
+            return InRole(new[]
+            {
+                AclRole.Administrator, 
+                AclRole.Requester
+            });
+        }
+
         public override bool CanUpdate()
         {
             return CanModify();
@@ -164,6 +173,11 @@ namespace RequestsForRights.Infrastructure.Security
         public bool CanSeeLogin()
         {
             return InRole(new[] { AclRole.Executor, AclRole.Administrator });
+        }
+
+        public bool CanComment()
+        {
+            return CanRead();
         }
     }
 }

@@ -25,9 +25,13 @@ namespace RequestsForRights.Infrastructure.Security
             if (!allowedDepartments.Any() && !allowedUnits.Any())
             {
                 var userInfo = GetUserInfo();
-                var department = userInfo.Department.ParentDepartment == null ? userInfo.Department.Name :
-                    userInfo.Department.ParentDepartment.Name; 
-                allowedDepartments.Add(department);
+                if (userInfo != null)
+                {
+                    var department = userInfo.Department.ParentDepartment == null
+                        ? userInfo.Department.Name
+                        : userInfo.Department.ParentDepartment.Name;
+                    allowedDepartments.Add(department);
+                }
             }
             return users.Where(r => allowedDepartments.Any(ad => ad == r.Department) ||
                 allowedUnits.Any(au => au == r.Department + "@" + r.Unit));

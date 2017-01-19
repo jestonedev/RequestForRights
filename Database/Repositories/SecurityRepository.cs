@@ -30,17 +30,21 @@ namespace RequestsForRights.Database.Repositories
             return _usersCache[login] = 
                 _databaseContext.AclUsers.Include(r => r.AclDepartments)
                 .Include(r => r.Roles)
-                .FirstOrDefault(r => r.Login.ToLower() == login.ToLower());
+                .FirstOrDefault(r => !r.Deleted && r.Login.ToLower() == login.ToLower());
         }
 
         public IQueryable<AclRole> GetUserRoles(string login)
         {
-            return GetUserInfo(login).Roles.AsQueryable();
+            var userInfo = GetUserInfo(login);
+            return userInfo == null ? new List<AclRole>().AsQueryable() :
+                userInfo.Roles.AsQueryable();
         }
 
         public IQueryable<Department> GetUserAllowedDepartments(string login)
         {
-            return GetUserInfo(login).AclDepartments.AsQueryable();
+            var userInfo = GetUserInfo(login);
+            return userInfo == null ? new List<Department>().AsQueryable() :
+                userInfo.AclDepartments.AsQueryable();
         }
     }
 }

@@ -2,9 +2,9 @@
 using RequestsForRights.Infrastructure.Enums;
 using RequestsForRights.Infrastructure.Utilities.EntitySorter;
 
-namespace RequestsForRights.Infrastructure.Helpers
+namespace RequestsForRights.Infrastructure.Extensions
 {
-    public static class LinqHelper
+    public static class LinqExtensions
     {
         public static IQueryable<T> OrderBy<T>(this IQueryable<T> entities, SortDirection sortDirection, string sortField)
         {

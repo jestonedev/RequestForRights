@@ -17,7 +17,7 @@ $("body")
 		                        location.href = redirectUri;
 		                    },
                     		error: function (error) {
-                    			var errorAlert = $(".alert");
+                    			var errorAlert = $(".rr-delete-error-alert");
                     			errorAlert.find(".rr-alert-message").text(error.responseText || "Произошла ошибка");
                     			$(".alert").css({ "opacity": 1 }).show();
                     		}

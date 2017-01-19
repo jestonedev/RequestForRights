@@ -102,7 +102,7 @@ namespace RequestsForRights.Controllers
             ViewData["SecurityService"] = _securityService;
             return View(_requestService.GetEmptyRequestViewModel());
         }
-
+        
         [TransferActionOnly]
         [HttpPost]
         public ActionResult Create(RequestViewModel<RequestUserModel> requestViewModel)
@@ -112,7 +112,7 @@ namespace RequestsForRights.Controllers
                 return RedirectToAction("BadRequestError", "Home",
                     new { message = "Не передана ссылка на ресурс" });
             }
-            if (!_securityService.CanCreate())
+            if (!_securityService.CanCreate(requestViewModel.RequestModel))
             {
                 return RedirectToAction("ForbiddenError", "Home");
             }

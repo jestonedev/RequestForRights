@@ -19,7 +19,7 @@ namespace RequestsForRights.Database
         IDbSet<RequestUserAssoc> RequestUserAssocs { get; set; }
         IDbSet<RequestUserRightAssoc> RequestUserRightAssocs { get; set; }
         IDbSet<DelegationRequestUsersExtInfo> DelegationRequestUsersExtInfo { get; set; }
-        IDbSet<RequestExtDescription> RequestExtDescriptions { get; set; }
+        IDbSet<RequestExtComment> RequestExtComments { get; set; }
         IDbSet<RequestAgreementType> RequestAgreementTypes { get; set; }
         IDbSet<RequestAgreementState> RequestAgreementStates { get; set; }
         IDbSet<RequestAgreement> RequestAgreements { get; set; }

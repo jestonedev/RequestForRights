@@ -11,7 +11,7 @@ namespace RequestsForRights.Database.Repositories.Interfaces
         IQueryable<RequestUserLastSeen> GetRequestsUserLastSeens(string login);
         Request GetRequestById(int idRequest);
 
-        IQueryable<RequestExtDescription> GetRequestExtDescriptions(int idRequest);
+        IQueryable<RequestExtComment> GetRequestExtComments(int idRequest);
         IQueryable<RequestAgreement> GetRequestAgreements(int idRequest);
         DelegationRequestUsersExtInfo GetDelegationRequestUserExtInfoBy(int idRequestUserAssoc);
         void UpdateUserLastSeen(int idRequest, int idUser);
@@ -19,5 +19,6 @@ namespace RequestsForRights.Database.Repositories.Interfaces
         Request UpdateRequest(Request request, bool resetAgreements);
         Request InsertRequest(Request request);
         int SaveChanges();
+        RequestExtComment AddComment(RequestExtComment requestComment);
     }
 }

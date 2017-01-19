@@ -57,7 +57,7 @@
     <Compile Include="Entities\RequestAgreement.cs" />
     <Compile Include="Entities\RequestAgreementState.cs" />
     <Compile Include="Entities\RequestAgreementType.cs" />
-    <Compile Include="Entities\RequestExtDescription.cs" />
+    <Compile Include="Entities\RequestExtComment.cs" />
     <Compile Include="Entities\RequestRightGrantType.cs" />
     <Compile Include="Entities\RequestState.cs" />
     <Compile Include="Entities\RequestStateType.cs" />

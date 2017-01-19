@@ -155,7 +155,8 @@
     <Compile Include="Infrastructure\Enums\AclRole.cs" />
     <Compile Include="Infrastructure\Enums\RequestCategory.cs" />
     <Compile Include="Infrastructure\Enums\SortDirection.cs" />
-    <Compile Include="Infrastructure\Helpers\LinqHelper.cs" />
+    <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions.cs" />
+    <Compile Include="Infrastructure\Extensions\LinqExtensions.cs" />
     <Compile Include="Infrastructure\Security\Interfaces\IUserSecurityService.cs" />
     <Compile Include="Infrastructure\Security\UserSecurityService.cs" />
     <Compile Include="Infrastructure\Services\Interfaces\IUserService.cs" />
@@ -406,7 +407,7 @@
     <Content Include="Views\Resource\Create.cshtml" />
     <Content Include="Views\Resource\Detail.cshtml" />
     <Content Include="Views\Shared\Request\Agreements.cshtml" />
-    <Content Include="Views\Shared\Request\ExtDescriptions.cshtml" />
+    <Content Include="Views\Shared\Request\ExtComments.cshtml" />
     <None Include="Views\Resource\Index.cshtml" />
     <Content Include="Views\Shared\DeleteModal.cshtml" />
     <Content Include="Views\Shared\ErrorAlert.cshtml" />
@@ -419,6 +420,7 @@
     <Content Include="Views\Shared\Request\EditPanels\Create.cshtml" />
     <Content Include="Views\Shared\Request\EditPanels\Update.cshtml" />
     <Content Include="Views\Shared\Request\EditPanels\Detail.cshtml" />
+    <Content Include="Views\Shared\Request\ExtCommentsList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Database\RequestsForRights.Database.csproj">

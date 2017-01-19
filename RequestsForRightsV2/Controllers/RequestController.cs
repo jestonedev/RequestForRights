@@ -33,8 +33,6 @@ namespace RequestsForRights.Controllers
             _securityService = securityService;
         }
 
-        //
-        // GET: /ResourceGroup/
         public ActionResult Index(RequestsFilterOptions filterOptions)
         {
             if (!_securityService.CanRead())
@@ -67,7 +65,12 @@ namespace RequestsForRights.Controllers
             var request = _requestService.GetRequestById(id);
             try
             {
-                _requestService.UpdateUserLastSeen(id, _securityService.GetUserInfo().IdUser);
+                var userInfo = _securityService.GetUserInfo();
+                if (userInfo == null)
+                {
+                    return RedirectToAction("ForbiddenError", "Home");
+                }
+                _requestService.UpdateUserLastSeen(id, userInfo.IdUser);
                 _requestService.SaveChanges();
             }
             catch (DbUpdateException e)
@@ -93,7 +96,12 @@ namespace RequestsForRights.Controllers
             var request = _requestService.GetRequestById(id);
             try
             {
-                _requestService.UpdateUserLastSeen(id, _securityService.GetUserInfo().IdUser);
+                var userInfo = _securityService.GetUserInfo();
+                if (userInfo == null)
+                {
+                    return RedirectToAction("ForbiddenError", "Home");
+                }
+                _requestService.UpdateUserLastSeen(id, userInfo.IdUser);
                 _requestService.SaveChanges();
             }
             catch (DbUpdateException e)
@@ -175,6 +183,28 @@ namespace RequestsForRights.Controllers
         public ActionResult RequestCreateMenuItems()
         {
             return PartialView(_requestService.GetRequestTypes());
+        }
+
+        [HttpPost]
+        public ActionResult AddComment(int idRequest, string comment)
+        {
+            if (comment == null)
+            {
+                return RedirectToAction("BadRequestError", "Home",
+                    new { message = "Нельзя добавить пустой комментарий" });
+            }
+            try
+            {
+                _requestService.AddComment(idRequest, comment);
+                _requestService.SaveChanges();
+            }
+            catch (DbUpdateException e)
+            {
+                return RedirectToAction("ConflictError", "Home",
+                    new { message = ExceptionHelper.RollToInnerException(e).Message });
+            }
+            return PartialView("Request/ExtCommentsList", 
+                _requestService.GetRequestExtComments(idRequest));
         }
     }
 }

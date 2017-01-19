@@ -10,7 +10,9 @@ namespace RequestsForRights.Infrastructure.Security.Interfaces
         IQueryable<Request> FilterRequests(IQueryable<Request> requests);
         bool CanDelete(Request request);
         bool CanUpdate(Request request);
+        bool CanCreate(Request request);
         bool CanRead(Request request);
         bool CanSeeLogin();
+        bool CanComment();
     }
 }

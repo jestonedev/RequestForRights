@@ -8,7 +8,7 @@ namespace RequestsForRights.Models.ModelViews
         where T: RequestUserModel
     {
         public RequestModel<T> RequestModel { get; set; }
-        public IEnumerable<RequestExtDescription> Descriptions { get; set; }
+        public IEnumerable<RequestExtComment> Comments { get; set; }
         public IEnumerable<RequestAgreement> Agreements { get; set; }
     }
 }

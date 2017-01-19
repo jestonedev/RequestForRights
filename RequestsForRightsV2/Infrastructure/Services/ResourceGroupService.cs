@@ -2,6 +2,7 @@
 using System.Linq;
 using RequestsForRights.Database.Repositories.Interfaces;
 using RequestsForRights.Domain.Entities;
+using RequestsForRights.Infrastructure.Extensions;
 using RequestsForRights.Infrastructure.Helpers;
 using RequestsForRights.Infrastructure.Services.Interfaces;
 using RequestsForRights.Models.FilterOptions;

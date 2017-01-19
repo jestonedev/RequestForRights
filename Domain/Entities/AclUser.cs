@@ -25,7 +25,7 @@ namespace RequestsForRights.Domain.Entities
         public virtual IList<Department> AclDepartments { get; set; }
         public virtual IList<AclRole> Roles { get; set; }
         public virtual IList<Request> Requests { get; set; }
-        public virtual IList<RequestExtDescription> RequestsExtDescriptions { get; set; }
+        public virtual IList<RequestExtComment> RequestsExtComments { get; set; }
         public virtual IList<RequestAgreement> RequestAgreements { get; set; }
         public virtual IList<RequestUserLastSeen> RequestUserLastSeens { get; set; }
         [DefaultValue(false)]

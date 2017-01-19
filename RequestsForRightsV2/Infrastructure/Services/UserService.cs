@@ -98,7 +98,12 @@ namespace RequestsForRights.Infrastructure.Services
                 });
             var ldapDepartmentFilter = ldapCompanies.Concat(ldapDepartments).ToList();
             if (ldapDepartmentFilter.Any()) return ldapDepartmentFilter;
-            var userDepartment = _securityRepository.GetUserInfo().Department;
+            var userInfo = _securityRepository.GetUserInfo();
+            if (userInfo == null)
+            {
+                return new List<LdapDepartmentFilter>();
+            }
+            var userDepartment = userInfo.Department;
             ldapDepartmentFilter = new List<LdapDepartmentFilter>
             {
                 new LdapDepartmentFilter

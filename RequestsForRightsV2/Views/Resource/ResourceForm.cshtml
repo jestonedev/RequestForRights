@@ -1,4 +1,5 @@
-﻿@model RequestsForRights.Models.ModelViews.ResourceViewModel
+﻿@using RequestsForRights.Infrastructure.Extensions
+@model RequestsForRights.Models.ModelViews.ResourceViewModel
     
 <div>
     <ul class="nav nav-tabs" role="tablist">
@@ -25,7 +26,7 @@
                 <div class="panel-heading">Общие сведения</div>
                 <div class="panel-body">
                     <div class="form-group">
-                        @Html.LabelFor(r => r.Resource.Name, new { @class = "col-sm-2 control-label" })
+                        @Html.RequiredLabelFor(r => r.Resource.Name, new { @class = "col-sm-2 control-label" })
                         <div class="col-sm-10">
                             @Html.TextBoxFor(r => r.Resource.Name,
                                     new { @class = "form-control", placeholder = "Введите наименование ресурса" })
@@ -33,7 +34,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        @Html.LabelFor(r => r.Resource.Description, new { @class = "col-sm-2 control-label" })
+                        @Html.RequiredLabelFor(r => r.Resource.Description, new { @class = "col-sm-2 control-label" })
                         <div class="col-sm-10">
                             @Html.TextAreaFor(r => r.Resource.Description,
                                     new { @class = "form-control", placeholder = "Введите описание ресурса", rows = "4" })
@@ -41,7 +42,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        @Html.LabelFor(r => r.Resource.IdResourceGroup, new { @class = "col-sm-2 control-label" })
+                        @Html.RequiredLabelFor(r => r.Resource.IdResourceGroup, new { @class = "col-sm-2 control-label" })
                         <div class="col-sm-10">
                             @Html.DropDownListFor(r => r.Resource.IdResourceGroup,
                                 new SelectList(Model.ResourceGroups, "IdResourceGroup", "Name"),
@@ -51,7 +52,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        @Html.LabelFor(r => r.Resource.IdDepartment, new { @class = "col-sm-2 control-label" })
+                        @Html.RequiredLabelFor(r => r.Resource.IdDepartment, new { @class = "col-sm-2 control-label" })
                         <div class="col-sm-10">
                             @Html.DropDownListFor(r => r.Resource.IdDepartment,
                                 new SelectList(Model.OwnerDepartments, "IdDepartment", "Name"),
