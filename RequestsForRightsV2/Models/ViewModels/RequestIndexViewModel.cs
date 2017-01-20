@@ -2,7 +2,7 @@
 using RequestsForRights.Domain.Entities;
 using RequestsForRights.Models.Models;
 
-namespace RequestsForRights.Models.ModelViews
+namespace RequestsForRights.Models.ViewModels
 {
     public class RequestIndexViewModel
     {

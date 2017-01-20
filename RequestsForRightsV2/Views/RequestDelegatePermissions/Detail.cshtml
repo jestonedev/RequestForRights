@@ -1,6 +1,6 @@
 ﻿@using RequestsForRights.Infrastructure.Security.Interfaces
 @using RequestsForRights.Models.Models
-@model RequestsForRights.Models.ModelViews.RequestViewModel<RequestDelegatePermissionsUserModel>
+@model RequestsForRights.Models.ViewModels.RequestViewModel<RequestDelegatePermissionsUserModel>
 
 @{
     var securityService = (IRequestSecurityService<RequestDelegatePermissionsUserModel>)ViewData["SecurityService"];
@@ -22,7 +22,7 @@
             </div>
             @Html.Partial("Request/EditPanels/Detail")
         </div>
-        @Html.Partial("Request/Agreements", Model.Agreements)
+        @Html.Partial("Request/Agreements")
         @Html.Partial("Request/ExtComments", Model.Comments)
     </div>
 </div>
@@ -35,5 +35,7 @@
 
 @section scripts {
     @Scripts.Render("~/bundles/rr-request.common")
+    @Scripts.Render("~/bundles/rr-request.comments")
+    @Scripts.Render("~/bundles/rr-request.agreements")
     @Scripts.Render("~/bundles/rr-detail.update.common")
 }

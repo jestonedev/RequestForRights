@@ -5,6 +5,7 @@ using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Ninject;
 using Ninject.Web.Common;
 using RequestsForRights;
+using RequestsForRights.CachePool;
 using RequestsForRights.Database;
 using RequestsForRights.Database.Repositories;
 using RequestsForRights.Database.Repositories.Interfaces;
@@ -72,15 +73,16 @@ namespace RequestsForRights
         {
             kernel.Bind<IDatabaseContext>().To<DatabaseContext>().InRequestScope();
             // Repositories
-            kernel.Bind<IRequestRepository>().To<RequestRepository>();
-            kernel.Bind<IResourceGroupRepository>().To<ResourceGroupRepository>();
-            kernel.Bind<IResourceRepository>().To<ResourceRepository>();
-            kernel.Bind<IUserRepository>().To<UserRepository>();
+            kernel.Bind<ICachePool>().To<CachePool.CachePool>();
+            kernel.Bind<IRequestRepository>().To<RequestRepository>().InRequestScope();
+            kernel.Bind<IResourceGroupRepository>().To<ResourceGroupRepository>().InRequestScope();
+            kernel.Bind<IResourceRepository>().To<ResourceRepository>().InRequestScope();
+            kernel.Bind<IUserRepository>().To<UserRepository>().InRequestScope();
             kernel.Bind<ISecurityRepository>().To<SecurityRepository>().InRequestScope();
             kernel.Bind<ILdapRepository>().ToConstant(
                 new LdapRepository(
                     ConfigurationManager.AppSettings["ldap_username"],
-                    ConfigurationManager.AppSettings["ldap_password"]));
+                    ConfigurationManager.AppSettings["ldap_password"])).InRequestScope();
             // Data services
             kernel.Bind<IRequestService<RequestUserModel>>().To<RequestService<RequestUserModel>>();
             kernel.Bind<IRequestService<RequestDelegatePermissionsUserModel>>().

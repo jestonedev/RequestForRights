@@ -5,7 +5,7 @@ using RequestsForRights.Infrastructure.Helpers;
 using RequestsForRights.Infrastructure.Security.Interfaces;
 using RequestsForRights.Infrastructure.Services.Interfaces;
 using RequestsForRights.Models.FilterOptions;
-using RequestsForRights.Models.ModelViews;
+using RequestsForRights.Models.ViewModels;
 
 namespace RequestsForRights.Controllers
 {

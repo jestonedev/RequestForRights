@@ -1,9 +1,5 @@
-﻿@using RequestsForRights.Infrastructure.Security.Interfaces
-@using RequestsForRights.Models.Models
-@model dynamic
-@{
-    dynamic securityService = ViewData["SecurityService"] as IRequestSecurityService<RequestUserModel> ??
-        (dynamic)(ViewData["SecurityService"] as IRequestSecurityService<RequestDelegatePermissionsUserModel>);
+﻿@{
+    dynamic securityService = ViewData["SecurityService"];
     if (securityService == null)
     {
         return;

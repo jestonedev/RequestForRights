@@ -21,7 +21,7 @@ namespace RequestsForRights.Models.Models
         public string Office { get; set; }
         [DisplayName("Телефон")]
         public string Phone { get; set; }
-        [DisplayName("Описание")]
+        [DisplayName("Примечание")]
         public string Description { get; set; }
         public IList<RequestUserRightModel> Rights { get; set; }
     }

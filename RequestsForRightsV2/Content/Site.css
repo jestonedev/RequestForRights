@@ -128,9 +128,20 @@ button.rr-ext-filter-button.collapsed:hover {
     margin-top: 15px;
 }
 
+.rr-comment-tab-edit-panel, .rr-agreement-tab-edit-panel {
+    margin-top: 0;
+}
+
+.rr-add-comment-panel, .rr-agreement-panel, .rr-cancel-agreement-panel {
+    margin-bottom: 15px;
+}
+
 .rr-edit-panel > .btn-group a, .rr-edit-panel > .btn-group button,
 .rr-add-comment-panel > .btn-group a, .rr-add-comment-panel > .btn-group button,
-.rr-add-request-user-panel > button, .rr-remove-user-button {
+.rr-add-request-user-panel > button, .rr-remove-user-button,
+.rr-cancel-agreement-panel > .btn-group button, .rr-cancel-agreement-panel > .btn-group a,
+.rr-agreement-panel > .btn-group button, .rr-agreement-panel > .btn-group a
+ {
     width: 12em;
 }
 
@@ -258,7 +269,8 @@ button.rr-ext-filter-button.collapsed:hover {
     width: 60%;
 }
 
-.rr-add-comment-panel, .rr-request-comment-editor {
+.rr-add-comment-panel, .rr-request-comment-editor,
+.rr-cancel-agreement-panel, .rr-request-cancel-agreement-editor {
     display: none;
 }
 

@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using RequestsForRights.Domain.Entities;
 using RequestsForRights.Models.FilterOptions;
-using RequestsForRights.Models.ModelViews;
+using RequestsForRights.Models.ViewModels;
 
 namespace RequestsForRights.Infrastructure.Services.Interfaces
 {

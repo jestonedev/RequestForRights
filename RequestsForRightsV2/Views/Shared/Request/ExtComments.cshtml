@@ -1,10 +1,5 @@
-﻿@using RequestsForRights.Infrastructure.Security.Interfaces
-@using RequestsForRights.Models.Models
-@model IEnumerable<RequestsForRights.Domain.Entities.RequestExtComment>
-
-@{
-    dynamic securityService = ViewData["SecurityService"] as IRequestSecurityService<RequestUserModel> ??
-        (dynamic)(ViewData["SecurityService"] as IRequestSecurityService<RequestDelegatePermissionsUserModel>);
+﻿@{
+    dynamic securityService = ViewData["SecurityService"];
     if (securityService == null)
     {
         return;
@@ -40,7 +35,11 @@
             @Html.Hidden("IdRequest", ViewData["IdRequest"])
             <div class="rr-request-comment-editor">
                 <div class="form-group col-md-8 col-md-offset-2">
-                    @Html.Label("CommentLabel", "Комментарий", new {@class = "control-label"})
+                    @Html.Label("CommentLabel", "Комментарий", new
+                    {
+                        @class = "control-label",
+                        @for = "rr-new-comment"
+                    })
                     @Html.TextArea("comment", new {@class = "form-control",
                                                    placeholder = "Введите комментарий",
                                                    rows = "4",
@@ -56,7 +55,7 @@
                         <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
                         Отправить
                     </button>
-                    <button class="btn btn-default rr-send-cancel-button"
+                    <button class="btn btn-default rr-cancel-comment-button"
                             title="Отменить комментарий"
                             aria-label="Отменить">
                         <span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span>

@@ -41,33 +41,8 @@ var descriptionModifiedManual = false;
 var initialDescriptionIsEmpty = !$(".rr-request-description textarea").val();
 $(".rr-request-description textarea")
     .on("change",
-        function() {
+        function () {
             descriptionModifiedManual = true;
-        });
-
-var addCommentButton = $(".rr-add-comment-button").clone();
-
-$(".rr-comment-tab-edit-panel")
-    .on("click", ".rr-add-comment-button",
-        function(e) {
-            $(this).remove();
-            $(".rr-request-comment-editor").show();
-            $(".rr-request-comment-editor textarea").focus();
-            $(".rr-add-comment-panel").show();
-            updateSendCommentButtonState();
-            $(window).scrollTop($(document).height());
-            e.preventDefault();
-            return false;
-        });
-
-$("#rr-new-comment").on("keyup", updateSendCommentButtonState);
-
-$(".rr-send-cancel-button")
-    .on("click",
-        function (e) {
-            resetCommentFormState();
-            e.preventDefault();
-            return false;
         });
 
 function submitButtonClick(e) {
@@ -253,7 +228,7 @@ function updateRequestDescription() {
     requestDescription.off("change");
     var idRequestType = $('[name="RequestModel.IdRequestType"]').val();
     var description = getRequestDescriptionPreamble(idRequestType);
-    $(".rr-request-user").each(function(index, userElem) {
+    $(".rr-request-user").each(function (index, userElem) {
         description += $(userElem).find(".rr-request-user-snp input").val() + ",\n";
     });
     requestDescription.val(description.replace(/,\n$/, "."));
@@ -287,55 +262,12 @@ function getRequestDescriptionPreamble(idRequestType) {
     }
 }
 
-function beforeAddComment() {
-    $("#rr-new-comment").attr("readonly", true);
-}
-
-function commentAddingSuccess() {
-    $("#rr-new-comment").attr("readonly", false);
-    $("#rr-new-comment").val("");
-    resetCommentFormState();
-    showCommentsCountBadget();
-}
-
-function commentAddingFailure() {
-    $(".rr-comment-error-alert").css({ "opacity": 1 }).show();
-    $("#rr-new-comment").attr("readonly", false);
-}
-
-function resetCommentFormState() {
-    $(".rr-comment-tab-edit-panel .btn-group").append(addCommentButton);
-    $(".rr-request-comment-editor").hide();
-    $(".rr-add-comment-panel").hide();
-}
-
-function updateSendCommentButtonState() {
-    if ($.trim($("#rr-new-comment").val()) === "") {
-        $(".rr-send-comment-button").attr("disabled", "disabled");
-    } else {
-        $(".rr-send-comment-button").removeAttr("disabled");
-    }
-}
-
-function showCommentsCountBadget() {
-    var badge = $("#rr-comments-tab .rr-comments-badge");
-    var commentsCount = $("#rr-comments-content .rr-comment").length;
-    if (commentsCount > 0) {
-        badge.text(commentsCount);
-        badge.show();
-    } else {
-        badge.hide();
-    }
-    fixIELayoutProblems();
-}
-
 function fixIELayoutProblems() {
     $(".rr-requests-tabs").addClass("fix-layout");
     $(".rr-requests-tabs").removeClass("fix-layout");
 }
 
 showErrorBadgets();
-showCommentsCountBadget();
 updateControls();
 updateDeleteUserButton();
 refreshValidation();

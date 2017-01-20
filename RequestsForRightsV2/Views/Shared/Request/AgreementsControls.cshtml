@@ -1,0 +1,133 @@
+﻿@{
+    dynamic securityService = ViewData["SecurityService"];
+    if (securityService == null)
+    {
+        return;
+    }
+}
+
+@if (securityService.CanAgreement(Model.RequestModel))
+{
+    <div class="clearfix">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="alert alert-danger rr-agreement-error-alert" style="display: none" role="alert">
+                <button type="button" class="close" data-hide="alert" aria-label="Закрыть">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <span class="rr-alert-message">Произошла непредвиденная ошибка</span>
+            </div>
+        </div>
+    </div>
+    if (securityService.CanSetRequestState(Model.RequestModel, 5))
+    {
+        using (Ajax.BeginForm("SetRequestState", "Request",
+            new AjaxOptions
+            {
+                UpdateTargetId = "rr-agreements",
+                InsertionMode = InsertionMode.Replace,
+                OnFailure = "agreementFailure",
+                OnBegin = "beforeSendAgreementCancel"
+            }))
+        {
+            @Html.Hidden("IdRequest", (int) Model.RequestModel.IdRequest)
+            @Html.Hidden("IdRequestStateType", 5)
+            <div class="rr-request-cancel-agreement-editor">
+                <div class="form-group col-md-8 col-md-offset-2">
+                    @Html.Label("AgreementLabel", "Причина отклонения", new
+                    {
+                        @class = "control-label",
+                        @for = "rr-cancel-agreement-reason"
+                    })
+                    @Html.TextArea("AgreementReason", new
+                    {
+                        @class = "form-control",
+                        placeholder = "Введите причину отклонения заявки",
+                        rows = "4",
+                        id = "rr-cancel-agreement-reason"
+                    })
+                </div>
+            </div>
+            <div class="text-center rr-cancel-agreement-panel">
+                <div class="btn-group" role="group" aria-label="Панель отклонения заявки">
+                    <button class="btn btn-danger rr-send-agreement-button"
+                            title="Отклонить заявку"
+                            aria-label="Отклонить">
+                        Отклонить
+                    </button>
+                    <button class="btn btn-default rr-cancel-agreement-button"
+                            title="Отменить отклонение заявки"
+                            aria-label="Отменить">
+                        Отменить
+                    </button>
+                </div>
+            </div>
+        }
+    }
+    <div class="text-center rr-agreement-panel">
+        <div class="btn-group" role="group" aria-label="Панель согласования">
+            @{
+    var agreementButtonsParams = new[]
+                    {
+                        new
+                        {
+                            Title = "Отправить на согласование",
+                            IdRequestStateType = 1,
+                            LabelText = "На согласование"
+                        },
+                        new
+                        {
+                            Title = "Утвердить заявку",
+                            IdRequestStateType = 2,
+                            LabelText = "Утвердить"
+                        },
+                        new
+                        {
+                            Title = "Отправить на исполнение",
+                            IdRequestStateType = 3,
+                            LabelText = "На исполнение"
+                        },
+                        new
+                        {
+                            Title = "Выполнит заявку",
+                            IdRequestStateType = 4,
+                            LabelText = "Выполнить"
+                        }
+                    };
+            }
+
+            @foreach (var buttonsParams in agreementButtonsParams)
+            {
+                if (securityService.CanSetRequestState(
+                    Model.RequestModel,
+                    buttonsParams.IdRequestStateType))
+                {
+                    @Ajax.ActionLink(buttonsParams.LabelText, "SetRequestState", "Request",
+                            new
+                            {
+                                idRequest = Model.RequestModel.IdRequest,
+                                idRequestStateType = buttonsParams.IdRequestStateType
+                            },
+                            new AjaxOptions
+                            {
+                                UpdateTargetId = "rr-agreements",
+                                InsertionMode = InsertionMode.Replace,
+                                OnFailure = "agreementFailure"
+                            }, new
+                            {
+                                @class = "btn btn-default",
+                                title = buttonsParams.Title,
+                                ariaLable = buttonsParams.LabelText
+                            })
+                }
+            }
+            @if (securityService.CanSetRequestState(Model.RequestModel, 5))
+            {
+                <button class="btn btn-default rr-cancel-agreement-dialog-show-button"
+                        title="Отклонить заявку"
+                        aria-label="Отклонить">
+                    Отклонить
+                </button>
+            }
+        </div>
+    </div>
+}

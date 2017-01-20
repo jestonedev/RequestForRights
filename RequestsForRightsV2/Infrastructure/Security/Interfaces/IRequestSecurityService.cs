@@ -14,5 +14,11 @@ namespace RequestsForRights.Infrastructure.Security.Interfaces
         bool CanRead(Request request);
         bool CanSeeLogin();
         bool CanComment();
+        bool CanComment(RequestModel<T> request);
+        bool CanComment(Request request);
+        bool CanSetRequestState(RequestModel<T> request, int idRequestStateType);
+        bool CanSetRequestState(Request request, int idRequestStateType);
+        bool CanSetRequestStateGlobal(Request request, int idRequestStateType);
+        bool CanAgreement(RequestModel<T> request);
     }
 }

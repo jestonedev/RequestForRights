@@ -180,6 +180,10 @@
       <Project>{f4cca6b9-9648-47f4-a750-4eccba53f5fb}</Project>
       <Name>RequestsForRights.Domain</Name>
     </ProjectReference>
+    <ProjectReference Include="..\RequestsForRights.CachePool\RequestsForRights.CachePool.csproj">
+      <Project>{9bbd2caf-b6c1-4747-816b-59d95d18610e}</Project>
+      <Name>RequestsForRights.CachePool</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201612270556307_Init.resx">

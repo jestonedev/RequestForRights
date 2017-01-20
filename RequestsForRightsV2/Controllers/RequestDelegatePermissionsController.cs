@@ -7,7 +7,7 @@ using RequestsForRights.Infrastructure.Security.Interfaces;
 using RequestsForRights.Infrastructure.Services.Interfaces;
 using RequestsForRights.Infrastructure.Utilities.TransfertToRoute;
 using RequestsForRights.Models.Models;
-using RequestsForRights.Models.ModelViews;
+using RequestsForRights.Models.ViewModels;
 
 namespace RequestsForRights.Controllers
 {

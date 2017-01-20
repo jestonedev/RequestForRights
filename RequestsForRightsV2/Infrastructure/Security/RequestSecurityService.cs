@@ -179,5 +179,128 @@ namespace RequestsForRights.Infrastructure.Security
         {
             return CanRead();
         }
+
+        public bool CanComment(RequestModel<T> entity)
+        {
+            var request = _requestRepository.GetRequestById(entity.IdRequest);
+            return CanComment(request);
+        }
+
+        public bool CanComment(Request request)
+        {
+            return CanRead(request);
+        }
+
+        public bool CanSetRequestState(Request request, int idRequestStateType)
+        {
+            if (request.RequestStates.Last(r => !r.Deleted).IdRequestStateType == idRequestStateType)
+            {
+                return false;
+            }
+            switch (idRequestStateType)
+            {
+                case 1:
+                    return InRole(AclRole.Administrator) &&
+                           CanSetRequestStateGlobal(request, idRequestStateType);
+                case 2:
+                    return InRole(AclRole.Administrator) ||
+                           (InRole(AclRole.ResourceOwner) &&
+                            ResourceOwnerCanSetRequestState(request)) ||
+                           (InRole(AclRole.Coordinator) &&
+                            CoordinatorCanSetRequestState(request));
+                case 3:
+                    return InRole(AclRole.Administrator) ||
+                           (InRole(AclRole.Dispatcher) &&
+                            DispatcherCanSetRequestState(request));
+                case 4:
+                    return InRole(AclRole.Administrator);
+                case 5:
+                    return InRole(AclRole.Administrator) ||
+                           (InRole(AclRole.ResourceOwner) &&
+                            ResourceOwnerCanSetRequestState(request)) ||
+                           (InRole(AclRole.Coordinator) &&
+                            CoordinatorCanSetRequestState(request)) ||
+                           (InRole(AclRole.Dispatcher) &&
+                            DispatcherCanSetRequestState(request));
+            }
+            return false;
+        }
+
+        public bool CanSetRequestStateGlobal(Request request, int idRequestStateType)
+        {
+            if (idRequestStateType == 1)
+            {
+                return request.RequestUserAssoc.Any(ru =>
+                    ru.RequestUserRightAssocs != null &&
+                    ru.RequestUserRightAssocs.Any(rur =>
+                        rur.ResourceRight.Resource.IdDepartment != 24));
+            }
+            return true;
+        }
+
+        public bool CanSetRequestState(RequestModel<T> entity, int idRequestStateType)
+        {
+            var request = _requestRepository.GetRequestById(entity.IdRequest);
+            return CanSetRequestState(request, idRequestStateType);
+        }
+
+        private bool DispatcherCanSetRequestState(Request request)
+        {
+            return request.RequestStates.
+                Last(r => !r.Deleted).IdRequestStateType == 2;
+        }
+
+        private bool ResourceOwnerCanSetRequestState(Request request)
+        {
+            var userInfo = GetUserInfo();
+            if (userInfo == null)
+            {
+                return false;
+            }
+            var allowedDepartments = GetUserAllowedDepartments().Select(r => r.IdDepartment);
+            return 
+                request.RequestStates.
+                Last(r => !r.Deleted).IdRequestStateType == 1 &&
+                !request.RequestAgreements.Any(r => r.IdUser == userInfo.IdUser &&
+                    new[] { 2, 3 }.Contains(r.IdAgreementState)) &&
+                request.RequestUserAssoc.Any(ru =>
+                ru.RequestUserRightAssocs != null &&
+                ru.RequestUserRightAssocs.Any(rur =>
+                    allowedDepartments.Any()
+                        ? allowedDepartments.Any(ad =>
+                            rur.ResourceRight.Resource.IdDepartment == ad)
+                        : rur.ResourceRight.Resource.IdDepartment == userInfo.IdDepartment));
+        }
+
+        private bool CoordinatorCanSetRequestState(Request request)
+        {
+            var userInfo = GetUserInfo();
+            if (userInfo == null)
+            {
+                return false;
+            }
+            return
+                request.RequestStates.Last(r => !r.Deleted).IdRequestStateType == 1 &&
+                !request.RequestAgreements.Any(r => r.IdUser == userInfo.IdUser &&
+                    new[] { 2, 3 }.Contains(r.IdAgreementState)) &&
+                request.RequestAgreements.Any(r =>
+                r.IdUser == userInfo.IdUser &&
+                r.IdAgreementType == 2);
+        }
+
+        public bool CanAgreement(RequestModel<T> entity)
+        {
+            var request = _requestRepository.GetRequestById(entity.IdRequest);
+            foreach (var idRequestStateType in 
+                _requestRepository.GetRequestStateTypes().Select(r => r.IdRequestStateType))
+            {
+                var can = CanSetRequestState(request, idRequestStateType);
+                if (can)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }

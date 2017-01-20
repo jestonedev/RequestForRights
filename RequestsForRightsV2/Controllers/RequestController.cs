@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data.Entity.Infrastructure;
-using System.Linq;
 using System.Web.Mvc;
 using RequestsForRights.Infrastructure.Helpers;
 using RequestsForRights.Infrastructure.Security.Interfaces;
@@ -9,7 +8,7 @@ using RequestsForRights.Infrastructure.Utilities.TransfertToRoute;
 using RequestsForRights.Infrastructure.Utilities.TransfertToRoute.Extensions;
 using RequestsForRights.Models.FilterOptions;
 using RequestsForRights.Models.Models;
-using RequestsForRights.Models.ModelViews;
+using RequestsForRights.Models.ViewModels;
 using WebGrease.Css.Extensions;
 
 namespace RequestsForRights.Controllers
@@ -194,6 +193,11 @@ namespace RequestsForRights.Controllers
                 return RedirectToAction("BadRequestError", "Home",
                     new { message = "Нельзя добавить пустой комментарий" });
             }
+            var request = _requestService.GetRequestById(idRequest);
+            if (!_securityService.CanComment(request))
+            {
+                return RedirectToAction("ForbiddenError", "Home");
+            }
             try
             {
                 _requestService.AddComment(idRequest, comment);
@@ -206,6 +210,27 @@ namespace RequestsForRights.Controllers
             }
             return PartialView("Request/ExtCommentsList", 
                 _requestService.GetRequestExtComments(idRequest));
+        }
+
+        public ActionResult SetRequestState(int idRequest, int idRequestStateType, string agreementReason)
+        {
+            var request = _requestService.GetRequestById(idRequest);
+            if (!_securityService.CanSetRequestState(request, idRequestStateType))
+            {
+                return RedirectToAction("ForbiddenError", "Home");
+            }
+            try
+            {
+                _requestService.SetRequestState(idRequest, idRequestStateType, agreementReason);
+                _requestService.SaveChanges();
+            }
+            catch (DbUpdateException e)
+            {
+                return RedirectToAction("ConflictError", "Home",
+                    new { message = ExceptionHelper.RollToInnerException(e).Message });
+            }
+            ViewData["SecurityService"] = _securityService;
+            return PartialView("Request/AgreementsContent", _requestService.GetRequestViewModelBy(request));
         }
     }
 }

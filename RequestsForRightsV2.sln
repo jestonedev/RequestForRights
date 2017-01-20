@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RequestsForRights.Database"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RequestsForRights.Ldap", "RequestsForRights.Ldap\RequestsForRights.Ldap.csproj", "{45B2F648-AA9A-4FCE-BD87-99C184A6FA29}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RequestsForRights.CachePool", "RequestsForRights.CachePool\RequestsForRights.CachePool.csproj", "{9BBD2CAF-B6C1-4747-816B-59D95D18610E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{45B2F648-AA9A-4FCE-BD87-99C184A6FA29}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{45B2F648-AA9A-4FCE-BD87-99C184A6FA29}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{45B2F648-AA9A-4FCE-BD87-99C184A6FA29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9BBD2CAF-B6C1-4747-816B-59D95D18610E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BBD2CAF-B6C1-4747-816B-59D95D18610E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BBD2CAF-B6C1-4747-816B-59D95D18610E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9BBD2CAF-B6C1-4747-816B-59D95D18610E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -202,13 +202,13 @@
     <Compile Include="Models\Models\RequestModel.cs" />
     <Compile Include="Models\Models\RequestUserModel.cs" />
     <Compile Include="Models\Models\RequestUserRightModel.cs" />
-    <Compile Include="Models\ModelViews\RequestsByStateTypesCountViewModel.cs" />
     <Compile Include="Models\FilterOptions\RequestsFilterOptions.cs" />
-    <Compile Include="Models\ModelViews\RequestViewModel.cs" />
-    <Compile Include="Models\ModelViews\ResourceGroupIndexViewModel.cs" />
-    <Compile Include="Models\ModelViews\ResourceIndexViewModel.cs" />
-    <Compile Include="Models\ModelViews\ResourceViewModel.cs" />
-    <Compile Include="Models\ModelViews\RequestIndexViewModel.cs" />
+    <Compile Include="Models\ViewModels\RequestIndexViewModel.cs" />
+    <Compile Include="Models\ViewModels\RequestsByStateTypesCountViewModel.cs" />
+    <Compile Include="Models\ViewModels\RequestViewModel.cs" />
+    <Compile Include="Models\ViewModels\ResourceGroupIndexViewModel.cs" />
+    <Compile Include="Models\ViewModels\ResourceIndexViewModel.cs" />
+    <Compile Include="Models\ViewModels\ResourceViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -352,6 +352,8 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\rr-request.agreements.js" />
+    <Content Include="Scripts\rr-request.comments.js" />
     <Content Include="Scripts\rr-request.common.js" />
     <Content Include="Scripts\rr-request.index.js" />
     <Content Include="Scripts\rr-resource.common.js" />
@@ -421,6 +423,8 @@
     <Content Include="Views\Shared\Request\EditPanels\Update.cshtml" />
     <Content Include="Views\Shared\Request\EditPanels\Detail.cshtml" />
     <Content Include="Views\Shared\Request\ExtCommentsList.cshtml" />
+    <Content Include="Views\Shared\Request\AgreementsContent.cshtml" />
+    <Content Include="Views\Shared\Request\AgreementsControls.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Database\RequestsForRights.Database.csproj">
@@ -430,6 +434,10 @@
     <ProjectReference Include="..\Domain\RequestsForRights.Domain.csproj">
       <Project>{f4cca6b9-9648-47f4-a750-4eccba53f5fb}</Project>
       <Name>RequestsForRights.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RequestsForRights.CachePool\RequestsForRights.CachePool.csproj">
+      <Project>{9bbd2caf-b6c1-4747-816b-59d95d18610e}</Project>
+      <Name>RequestsForRights.CachePool</Name>
     </ProjectReference>
     <ProjectReference Include="..\RequestsForRights.Ldap\RequestsForRights.Ldap.csproj">
       <Project>{45b2f648-aa9a-4fce-bd87-99c184a6fa29}</Project>

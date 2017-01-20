@@ -1,4 +1,4 @@
-﻿@model RequestsForRights.Models.ModelViews.RequestViewModel<RequestsForRights.Models.Models.RequestDelegatePermissionsUserModel>
+﻿@model RequestsForRights.Models.ViewModels.RequestViewModel<RequestsForRights.Models.Models.RequestDelegatePermissionsUserModel>
 
 @{
     ViewBag.Title = "Добавить заявку на делегирование прав";
@@ -21,5 +21,6 @@
 
 
 @section scripts {
+    @Scripts.Render("~/bundles/jquery.autocomplete")
     @Scripts.Render("~/bundles/rr-request.common")
 }

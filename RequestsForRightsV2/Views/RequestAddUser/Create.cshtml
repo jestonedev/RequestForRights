@@ -1,4 +1,4 @@
-﻿@model RequestsForRights.Models.ModelViews.RequestViewModel<RequestsForRights.Models.Models.RequestUserModel>
+﻿@model RequestsForRights.Models.ViewModels.RequestViewModel<RequestsForRights.Models.Models.RequestUserModel>
 
 @{
     ViewBag.Title = "Добавить заявку на подключение нового сотрудника";
@@ -20,5 +20,6 @@
 }   
 
 @section scripts {
+    @Scripts.Render("~/bundles/jquery.autocomplete")
     @Scripts.Render("~/bundles/rr-request.common")
 }
