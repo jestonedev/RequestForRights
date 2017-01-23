@@ -22,7 +22,14 @@ namespace RequestsForRights.Database.Repositories
 
         public IQueryable<Resource> GetResources()
         {
-            return _databaseContext.Resources.Include(r => r.ResourceGroup).Where(r => !r.Deleted);
+            return _databaseContext.Resources.Include(r => r.ResourceGroup)
+                .Include(r => r.ResourceRights).Where(r => !r.Deleted);
+        }
+
+        public IQueryable<ResourceRight> GetResourceRights()
+        {
+            return _databaseContext.ResourceRights.Include(r => r.Resource).Where(r => !r.Deleted &&
+                                                                                       !r.Resource.Deleted);
         }
 
         public Resource DeleteResource(int idResource)

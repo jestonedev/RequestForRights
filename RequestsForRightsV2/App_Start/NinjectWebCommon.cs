@@ -85,6 +85,7 @@ namespace RequestsForRights
                     ConfigurationManager.AppSettings["ldap_password"])).InRequestScope();
             // Data services
             kernel.Bind<IRequestService<RequestUserModel>>().To<RequestService<RequestUserModel>>();
+            kernel.Bind<IRequestAddUserService>().To<RequestAddUserService>();
             kernel.Bind<IRequestService<RequestDelegatePermissionsUserModel>>().
                 To<RequestDelegatePermissionsService>();
             kernel.Bind<IResourceGroupService>().To<ResourceGroupService>();

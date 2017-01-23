@@ -1,0 +1,89 @@
+﻿@using RequestsForRights.Infrastructure.Extensions
+@using RequestsForRights.Models.Models
+@model RequestsForRights.Models.ViewModels.RequestViewModel<RequestUserModel>
+
+@{
+    var userIndex = -1;
+    if (ViewData.Keys.Contains("UserIndex"))
+    {
+        int.TryParse(ViewData["UserIndex"].ToString(), out userIndex);
+    }
+    var rightIndex = -1;
+    if (ViewData.Keys.Contains("RightIndex"))
+    {
+        int.TryParse(ViewData["RightIndex"].ToString(), out rightIndex);
+    }
+}
+
+<li class="list-group-item rr-request-right">
+    @Html.Hidden(
+        string.Format(
+                "RequestModel.Users[{0}].Rights[{1}].IdRequestRightGrantType", userIndex, rightIndex), 1)
+    <div class="form-group col-sm-6 col-xs-12 rr-request-right-resource">
+        @Html.Label("Информационный ресурс", 
+                    new
+                    {
+                        @class = "control-label",
+                        @for = string.Format("Users[{0}].Resources", userIndex)
+                    })
+        <select class="form-control" name="Users[@userIndex].Resources" id="Users[@userIndex].Resources">
+            <option selected>Выберите информационный ресурс</option>
+            @foreach (var resourceGroup in Model.Resources.GroupBy(r => r.ResourceGroup))
+            {
+                var idResourceRight =
+                    Model.RequestModel.Users[userIndex].Rights[rightIndex].IdResourceRight;
+                <optgroup label="@resourceGroup.Key.Name">
+                    @Html.Raw(
+                    resourceGroup.Select(r =>
+                        {
+                            var selected = r.ResourceRights.Any(rr => rr.IdResourceRight == idResourceRight);
+                            return string.Format("<option data-id-resource=\"{2}\" {1}>{0}</option>",
+                                Html.Encode(r.Name), selected ? "selected" : "", r.IdResource);
+                        }).Aggregate((acc, v) => acc + v));
+                </optgroup>
+            }
+        </select>
+    </div>
+    <div class="form-group col-sm-6 col-xs-12 rr-request-right-id">
+        @Html.RequiredLabelFor(r => r.RequestModel.Users[userIndex].Rights[rightIndex].IdResourceRight,
+            new { @class = "control-label" })
+        <select class="form-control"
+                name="@Html.NameFor(r => r.RequestModel.Users[userIndex].Rights[rightIndex].IdResourceRight)"
+                id="@Html.IdFor(r => r.RequestModel.Users[userIndex].Rights[rightIndex].IdResourceRight)"
+                data-val="true"
+                data-val-required="Право является обязательным для заполнения"
+                aria-required="true">
+            <option value="" selected>Выберите право</option>
+            @foreach (var right in Model.ResourceRights)
+            {
+                var selected = right.IdResourceRight ==
+                               Model.RequestModel.Users[userIndex].Rights[rightIndex].IdResourceRight;
+                <option value="@right.IdResourceRight" @(selected ? "selected" : "")
+                        data-id-resource="@right.IdResource"
+                        data-id-resource-right="@right.IdResourceRight">
+                    @right.Name
+                </option>
+            }
+        </select>
+        @Html.ValidationMessageFor(r => r.RequestModel.Users[userIndex].Rights[rightIndex].IdResourceRight)
+    </div>
+    <div class="clearfix"></div>
+    <div class="form-group col-sm-12 rr-request-right-description">
+        @Html.RequiredLabelFor(r => r.RequestModel.Users[userIndex].Rights[rightIndex].Description,
+            new {@class = "control-label"})
+        <div>
+            @Html.TextAreaFor(r => r.RequestModel.Users[userIndex].Rights[rightIndex].Description,
+                new
+                {
+                    @class = "form-control",
+                    rows = "4",
+                    placeholder = "Введите примечание к праву"
+                })
+            @Html.ValidationMessageFor(r => r.RequestModel.Users[userIndex].Rights[rightIndex].Description)
+        </div>
+    </div>
+    <button name="deleteRight" class="btn btn-danger pull-right rr-remove-right-button" title="Удалить право" aria-label="Удалить право">
+        Удалить право
+    </button>
+    <div class="clearfix"></div>
+</li>

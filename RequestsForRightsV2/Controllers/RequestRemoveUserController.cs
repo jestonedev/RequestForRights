@@ -84,7 +84,7 @@ namespace RequestsForRights.Controllers
             catch (DbUpdateException e)
             {
                 return RedirectToAction("ConflictError", "Home",
-                    new { message = ExceptionHelper.RollToInnerException(e).Message });
+                    new {message = ExceptionHelper.RollToInnerException(e).Message});
             }
             return Request["returnUri"] != null ? (ActionResult)Redirect(Request["returnUri"]) :
                 RedirectToAction("Index", "Request");
@@ -153,6 +153,16 @@ namespace RequestsForRights.Controllers
             ViewData["UserIndex"] = 0;
             ViewData["SecurityService"] = _securityService;
             return PartialView("UserEditor", _requestService.GetEmptyRequestViewModel());
+        }
+
+        [HttpGet]
+        public ActionResult GetEmptyRightTemplate()
+        {
+            if (!Request.IsAjaxRequest())
+            {
+                return RedirectToAction("ForbiddenError", "Home");
+            }
+            return Content("");
         }
 	}
 }

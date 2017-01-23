@@ -6,5 +6,6 @@ namespace RequestsForRights.Infrastructure.Security.Interfaces
     public interface IUserSecurityService: ISecurityService<RequestUser>
     {
         IQueryable<RequestUser> FilterUsers(IQueryable<RequestUser> users);
+        IQueryable<Department> FilterDepartments(IQueryable<Department> departments);
     }
 }

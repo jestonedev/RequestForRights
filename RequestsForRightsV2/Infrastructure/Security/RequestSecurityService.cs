@@ -13,9 +13,10 @@ namespace RequestsForRights.Infrastructure.Security
         where T: RequestUserModel
     {
         private readonly IRequestRepository _requestRepository;
+        private readonly IResourceRepository _resourceRepository;
 
         public RequestSecurityService(ISecurityRepository securityRepository,
-            IRequestRepository requestRepository)
+            IRequestRepository requestRepository, IResourceRepository resourceRepository)
             : base(securityRepository)
         {
             if (requestRepository == null)
@@ -23,6 +24,11 @@ namespace RequestsForRights.Infrastructure.Security
                 throw new ArgumentNullException("requestRepository");
             }
             _requestRepository = requestRepository;
+            if (resourceRepository == null)
+            {
+                throw new ArgumentNullException("resourceRepository");
+            }
+            _resourceRepository = resourceRepository;
         }
 
         public bool CanRead(Request request)
@@ -230,10 +236,17 @@ namespace RequestsForRights.Infrastructure.Security
         {
             if (idRequestStateType == 1)
             {
-                return request.RequestUserAssoc.Any(ru =>
-                    ru.RequestUserRightAssocs != null &&
-                    ru.RequestUserRightAssocs.Any(rur =>
-                        rur.ResourceRight.Resource.IdDepartment != 24));
+                var resourceRights = request.RequestUserAssoc.Where(r => r.RequestUserRightAssocs != null)
+                    .Select(r => r.RequestUserRightAssocs).ToList();
+                if (!resourceRights.Any())
+                {
+                    return false;
+                }
+                var idResourceRights = resourceRights.Aggregate((acc, v) => acc.Concat(v).ToList())
+                    .Select(r => r.IdResourceRight);
+                return _resourceRepository.GetResourceRights().Where(r => 
+                    idResourceRights.Any(idResourceRight => idResourceRight == r.IdResourceRight))
+                    .Any(r => !r.Deleted && r.Resource.IdDepartment != 24);
             }
             return true;
         }

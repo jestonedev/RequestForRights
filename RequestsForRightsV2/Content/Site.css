@@ -23,7 +23,7 @@ body.modal-open #deleteModal {
     display: none;
 }
 
-input.input-validation-error {
+input.input-validation-error, select.input-validation-error {
     border: 1px solid #b94a48;
 }
 
@@ -140,7 +140,9 @@ button.rr-ext-filter-button.collapsed:hover {
 .rr-add-comment-panel > .btn-group a, .rr-add-comment-panel > .btn-group button,
 .rr-add-request-user-panel > button, .rr-remove-user-button,
 .rr-cancel-agreement-panel > .btn-group button, .rr-cancel-agreement-panel > .btn-group a,
-.rr-agreement-panel > .btn-group button, .rr-agreement-panel > .btn-group a
+.rr-agreement-panel > .btn-group button, .rr-agreement-panel > .btn-group a,
+.rr-edit-user-panel > .btn-group button, .rr-edit-user-panel > .btn-group a,
+.rr-remove-right-button
  {
     width: 12em;
 }
@@ -190,14 +192,21 @@ button.rr-ext-filter-button.collapsed:hover {
 }
 
 @media(min-width: 768px) {
-    .rr-left-control {
+    .rr-col-sm-no-left-padding {
         padding-left: 0;
         margin-left: 0;
     }
 
-    .rr-right-control {
+    .rr-col-sm-no-right-padding {
         padding-right: 0;
         margin-right: 0;
+    }
+
+    .rr-col-sm-no-side-padding {
+        padding-right: 0;
+        margin-right: 0;
+        padding-left: 0;
+        margin-left: 0;
     }
 
     .rr-ext-filter-button {
@@ -279,9 +288,37 @@ button.rr-ext-filter-button.collapsed:hover {
     color: #aaa;
 }
 
+.rr-comments-empty {
+    margin-bottom: 20px;
+}
+
 .rr-required-field:after {
     content: '*';
     position: absolute;
     color: #b94a48;
-    right: 6px;
+    margin-left: 6px;
+}
+
+.rr-request-user .rr-request-right .form-group {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.rr-request-user .rr-request-right {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.rr-request-right .rr-remove-right-button {
+    margin-right: 15px;
+    margin-bottom: 5px;
+}
+
+.rr-edit-user-panel {
+    margin-top: 15px;
+}
+
+.rr-request-rights .list-group-item {
+    padding-left: 0;
+    padding-right:0;
 }

@@ -159,7 +159,9 @@
     <Compile Include="Infrastructure\Extensions\LinqExtensions.cs" />
     <Compile Include="Infrastructure\Security\Interfaces\IUserSecurityService.cs" />
     <Compile Include="Infrastructure\Security\UserSecurityService.cs" />
+    <Compile Include="Infrastructure\Services\Interfaces\IRequestAddUserService.cs" />
     <Compile Include="Infrastructure\Services\Interfaces\IUserService.cs" />
+    <Compile Include="Infrastructure\Services\RequestAddUserService.cs" />
     <Compile Include="Infrastructure\Services\UserService.cs" />
     <Compile Include="Infrastructure\Utilities\EntitySorter\EntitySorter.cs" />
     <Compile Include="Infrastructure\Utilities\EntitySorter\OrderBySorter.cs" />
@@ -352,6 +354,7 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\rr-request.adduser.js" />
     <Content Include="Scripts\rr-request.agreements.js" />
     <Content Include="Scripts\rr-request.comments.js" />
     <Content Include="Scripts\rr-request.common.js" />
@@ -379,6 +382,8 @@
     <Content Include="Views\RequestAddUser\Create.cshtml" />
     <Content Include="Views\RequestDelegatePermissions\Create.cshtml" />
     <Content Include="Views\RequestAddUser\RequestForm.cshtml" />
+    <Content Include="Views\RequestAddUser\UserEditor.cshtml" />
+    <Content Include="Views\RequestAddUser\RightEditor.cshtml" />
     <None Include="Views\RequestDelegatePermissions\Detail.cshtml" />
     <Content Include="Views\Request\DataTableFooter.cshtml" />
     <Content Include="Views\Request\DataTable.cshtml" />

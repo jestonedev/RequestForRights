@@ -3,6 +3,7 @@ using RequestsForRights.Database.Repositories.Interfaces;
 using RequestsForRights.Domain.Entities;
 using RequestsForRights.Infrastructure.Security.Interfaces;
 using AclRole = RequestsForRights.Infrastructure.Enums.AclRole;
+using System;
 
 namespace RequestsForRights.Infrastructure.Security
 {
@@ -35,6 +36,28 @@ namespace RequestsForRights.Infrastructure.Security
             }
             return users.Where(r => allowedDepartments.Any(ad => ad == r.Department) ||
                 allowedUnits.Any(au => au == r.Department + "@" + r.Unit));
+        }
+
+        public IQueryable<Department> FilterDepartments(IQueryable<Department> departments)
+        {
+            if (InRole(AclRole.Administrator))
+            {
+                return departments;
+            }
+            var allowedDepartments = GetUserAllowedDepartments().Select(r => r.IdDepartment).ToList();
+            var userInfo = GetUserInfo();
+            if (userInfo == null)
+            {
+                throw new ApplicationException("Неизвестный пользователь");
+            }
+            if (!allowedDepartments.Any())
+            {
+                allowedDepartments.Add(userInfo.IdDepartment);
+            }
+            return departments.Where(r =>
+                allowedDepartments.
+                    Any(department => department == r.IdDepartment ||
+                                      (r.ParentDepartment != null && department == r.ParentDepartment.IdDepartment)));
         }
     }
 }

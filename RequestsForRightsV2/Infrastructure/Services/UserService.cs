@@ -16,7 +16,9 @@ namespace RequestsForRights.Infrastructure.Services
         private readonly ILdapRepository _ldapRepository;
         private readonly IUserSecurityService _securityRepository;
 
-        public UserService(IUserRepository userRepository, ILdapRepository ldapRepository, IUserSecurityService securityService)
+        public UserService(IUserRepository userRepository, 
+            ILdapRepository ldapRepository, 
+            IUserSecurityService securityService)
         {
             if (userRepository == null)
             {
@@ -43,6 +45,16 @@ namespace RequestsForRights.Infrastructure.Services
                 GetLdapDepartmentFilter(), maxCount));
            var result = ldapUsers.Concat(dbUsers).OrderBy(r => r.Snp).Distinct().Take(10);
             return result;
+        }
+
+        public IEnumerable<Department> GetUnits()
+        {
+            return _securityRepository.FilterDepartments(_userRepository.GetUnits());
+        }
+
+        public IEnumerable<Department> GetDepartments()
+        {
+            return _securityRepository.FilterDepartments(_userRepository.GetDepartments());
         }
 
         private static IEnumerable<RequestUser> FilterUsersFields(IEnumerable<RequestUser> users)

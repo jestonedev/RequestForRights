@@ -20,9 +20,11 @@ namespace RequestsForRights.Infrastructure.Services
         where T: RequestUserModel, new()
     {
         protected readonly IRequestRepository RequestsRepository;
+        private readonly IResourceRepository _resourceRepository;
         protected readonly IRequestSecurityService<T> RequestSecurityService;
 
         public RequestService(IRequestRepository requestsRepository,
+            IResourceRepository resourceRepository,
             IRequestSecurityService<T> requestSecurityService)
         {
             if (requestsRepository == null)
@@ -35,6 +37,11 @@ namespace RequestsForRights.Infrastructure.Services
                 throw new ArgumentNullException("requestSecurityService");
             }
             RequestSecurityService = requestSecurityService;
+            if (resourceRepository == null)
+            {
+                throw new ArgumentNullException("resourceRepository");
+            }
+            _resourceRepository = resourceRepository;
         }
 
         public IQueryable<Request> GetNotSeenRequests()
@@ -220,7 +227,7 @@ namespace RequestsForRights.Infrastructure.Services
             return RequestsRepository.InsertRequest(request);
         }
 
-        private static Request ConvertToRequest(RequestModel<T> requestModel)
+        private Request ConvertToRequest(RequestModel<T> requestModel)
         {
             var request = new Request
             {
@@ -241,12 +248,28 @@ namespace RequestsForRights.Infrastructure.Services
                     Office = user.Office,
                     Phone = user.Phone
                 };
-                request.RequestUserAssoc.Add(new RequestUserAssoc
+                var requestUserAssoc = new RequestUserAssoc
                 {
                     RequestUser = requestUser,
                     Request = request,
                     Description = user.Description
-                });
+                };
+                request.RequestUserAssoc.Add(requestUserAssoc);
+                if (user.Rights != null)
+                {
+                    requestUserAssoc.RequestUserRightAssocs = new List<RequestUserRightAssoc>();
+                    foreach (var right in user.Rights)
+                    {
+                        var requestUserRightAssoc = new RequestUserRightAssoc
+                        {
+                            RequestUserAssoc = requestUserAssoc,
+                            Descirption = right.Description,
+                            IdRequestRightGrantType = right.IdRequestRightGrantType,
+                            IdResourceRight = right.IdResourceRight
+                        };
+                        requestUserAssoc.RequestUserRightAssocs.Add(requestUserRightAssoc);
+                    }
+                }
             }
             return request;
         }
@@ -363,7 +386,9 @@ namespace RequestsForRights.Infrastructure.Services
                             }
                         }
                     }
-                }
+                },
+                Resources = _resourceRepository.GetResources(),
+                ResourceRights = _resourceRepository.GetResourceRights()
             };
         }
 
@@ -406,34 +431,37 @@ namespace RequestsForRights.Infrastructure.Services
                 Description = rightAssoc.Descirption, 
                 IdResourceRight = rightAssoc.IdResourceRight, 
                 ResourceRightName = rightAssoc.ResourceRight.Name, 
-                IdResourceRightGrantType = rightAssoc.IdRequestRightGrantType, 
-                ResourceRightGrantTypeName = rightAssoc.RequestRightGrantType.Name
+                IdRequestRightGrantType = rightAssoc.IdRequestRightGrantType, 
+                RequestRightGrantTypeName = rightAssoc.RequestRightGrantType.Name,
+                ResourceName = rightAssoc.ResourceRight.Resource.Name
             };
         }
 
         public virtual RequestViewModel<T> GetRequestViewModelBy(Request request)
         {
-            var agreements = RequestsRepository.GetRequestAgreements(request.IdRequest).ToList();
-            return new RequestViewModel<T>
-            {
-                RequestModel = GetRequestModelBy(request),
-                Comments = GetRequestExtComments(request.IdRequest),
-                SuccessAgreements = GetSuccessAgreements(agreements),
-                CancelAgreements = GetCancelAgreements(agreements),
-                WaitAgreementUsers = GetWaitAgreementUsers(request.IdRequest, agreements)
-            };
+            var viewModel = GetPreRequestViewModel(request.IdRequest);
+            viewModel.RequestModel = GetRequestModelBy(request);
+            return viewModel;
         }
 
         public virtual RequestViewModel<T> GetRequestViewModelBy(RequestModel<T> request)
         {
-            var agreements = RequestsRepository.GetRequestAgreements(request.IdRequest).ToList();
+            var viewModel = GetPreRequestViewModel(request.IdRequest);
+            viewModel.RequestModel = request;
+            return viewModel;
+        }
+
+        private RequestViewModel<T> GetPreRequestViewModel(int idRequest)
+        {
+            var agreements = RequestsRepository.GetRequestAgreements(idRequest).ToList();
             return new RequestViewModel<T>
             {
-                RequestModel = request,
-                Comments = RequestsRepository.GetRequestExtComments(request.IdRequest),
+                Comments = RequestsRepository.GetRequestExtComments(idRequest),
                 SuccessAgreements = GetSuccessAgreements(agreements),
                 CancelAgreements = GetCancelAgreements(agreements),
-                WaitAgreementUsers = GetWaitAgreementUsers(request.IdRequest, agreements)
+                WaitAgreementUsers = GetWaitAgreementUsers(idRequest, agreements),
+                Resources = _resourceRepository.GetResources().ToList(),
+                ResourceRights = _resourceRepository.GetResourceRights().ToList()
             };
         }
 

@@ -121,7 +121,8 @@ namespace RequestsForRights.Database.Repositories
             var req = GetRequestById(request.IdRequest);
             request.IdUser = req.IdUser;
             _databaseContext.Entry(req).CurrentValues.SetValues(request);
-            UpdateRequestUsers(req.RequestUserAssoc.Where(r => !r.Deleted), 
+            UpdateRequestUsers(
+                req.RequestUserAssoc.Where(r => !r.Deleted), 
                 request.RequestUserAssoc, req);
             if (resetAgreements)
             {
@@ -133,30 +134,18 @@ namespace RequestsForRights.Database.Repositories
         private void UpdateRequestUsers(IEnumerable<RequestUserAssoc> oldUsersAssoc, 
             IEnumerable<RequestUserAssoc> newUsersAssoc, Request request)
         {
-            var newUsersList = newUsersAssoc.ToList();
-            newUsersList.ForEach(r => r.IdRequest = request.IdRequest);
-            var newReqUsers = newUsersList.Select(r => new RequestUserAssoc
-                    {
-                        Request = request,
-                        RequestUser = CreateUserIfNotExists(r.RequestUser),
-                        Description = r.Description
-                    }).ToList();
+            var newUsersAssocList = newUsersAssoc.ToList();
+            newUsersAssocList.ForEach(r =>
+            {
+                var user = CreateUserIfNotExists(r.RequestUser);
+                r.RequestUser = user;
+                r.Request = request;
+            });
             foreach (var userAssoc in oldUsersAssoc)
             {
-                var newReqUser = newReqUsers.FirstOrDefault(r => r.RequestUser == userAssoc.RequestUser);
-                if (newReqUser != null)
-                {
-                    newReqUsers.Remove(newReqUser);
-                    userAssoc.Description = newReqUser.Description;
-                    _databaseContext.RequestUserAssocs.Attach(userAssoc);
-                    _databaseContext.Entry(userAssoc).State = EntityState.Modified;
-                    continue;
-                }
                 userAssoc.Deleted = true;
-                _databaseContext.RequestUserAssocs.Attach(userAssoc);
-                _databaseContext.Entry(userAssoc).State = EntityState.Modified;
             }
-            foreach (var user in newReqUsers)
+            foreach (var user in newUsersAssocList)
             {
                 _databaseContext.RequestUserAssocs.Add(user);
             }

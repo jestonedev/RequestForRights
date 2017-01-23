@@ -6,5 +6,7 @@ namespace RequestsForRights.Database.Repositories.Interfaces
     public interface IUserRepository
     {
         IQueryable<RequestUser> FindUsers(string snpPattern);
+        IQueryable<Department> GetDepartments();
+        IQueryable<Department> GetUnits();
     }
 }

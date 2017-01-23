@@ -10,7 +10,7 @@
 @using (Html.BeginForm("Create", "Request", new { IdRequestType = 1 }, FormMethod.Post,
     new { @class = "form-horizontal", id = "rr-request-form" }))
 {
-    @Html.Hidden("Request.IdRequestType", 1)
+    @Html.Hidden("RequestModel.IdRequestType", 1)
     <div class="text-center">
         @Html.ValidationSummary(true)
     </div>
@@ -20,6 +20,6 @@
 }   
 
 @section scripts {
-    @Scripts.Render("~/bundles/jquery.autocomplete")
     @Scripts.Render("~/bundles/rr-request.common")
+    @Scripts.Render("~/bundles/rr-request.adduser")
 }

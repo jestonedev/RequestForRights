@@ -35,7 +35,7 @@ $(function() {
 $("form")
     .keypress(function (e) {
         if (e.which === 13) {
-            if (e.target.type === "textarea") {
+            if (e.target.type === "textarea" || e.target.type === "select") {
                 return true;
             }
             $(this).find(".rr-save-button").click();

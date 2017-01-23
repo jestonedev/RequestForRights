@@ -13,10 +13,10 @@ namespace RequestsForRights.Controllers
 {
     public class RequestAddUserController : Controller
     {
-        private readonly IRequestService<RequestUserModel> _requestService;
+        private readonly IRequestAddUserService _requestService;
         private readonly IRequestSecurityService<RequestUserModel> _securityService;
 
-        public RequestAddUserController(IRequestService<RequestUserModel> requestService,
+        public RequestAddUserController(IRequestAddUserService requestService,
             IRequestSecurityService<RequestUserModel> securityService)
         {
             if (requestService == null)
@@ -132,6 +132,31 @@ namespace RequestsForRights.Controllers
                     new { message = ExceptionHelper.RollToInnerException(e).Message });
             }
             return RedirectToAction("Index", "Request");
+        }
+
+        [HttpGet]
+        public ActionResult GetEmptyUserTemplate()
+        {
+            if (!Request.IsAjaxRequest())
+            {
+                return RedirectToAction("ForbiddenError", "Home");
+            }
+            ViewData["UserIndex"] = 0;
+            ViewData["SecurityService"] = _securityService;
+            return PartialView("UserEditor", _requestService.GetEmptyRequestViewModel());
+        }
+
+        [HttpGet]
+        public ActionResult GetEmptyRightTemplate()
+        {
+            if (!Request.IsAjaxRequest())
+            {
+                return RedirectToAction("ForbiddenError", "Home");
+            }
+            ViewData["UserIndex"] = 0;
+            ViewData["RightIndex"] = 0;
+            ViewData["SecurityService"] = _securityService;
+            return PartialView("RightEditor", _requestService.GetEmptyRequestViewModel());
         }
 
         private void Validate(RequestModel<RequestUserModel> request)

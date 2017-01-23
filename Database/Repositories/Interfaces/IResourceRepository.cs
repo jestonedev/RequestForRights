@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using RequestsForRights.Domain.Entities;
 
 namespace RequestsForRights.Database.Repositories.Interfaces
@@ -8,6 +9,7 @@ namespace RequestsForRights.Database.Repositories.Interfaces
         IQueryable<ResourceGroup> GetResourceGroups();
         IQueryable<Department> GetOwnerDepartments();
         IQueryable<Resource> GetResources();
+        IQueryable<ResourceRight> GetResourceRights();
         Resource DeleteResource(int idResource);
         Resource GetResourceById(int id);
         Resource UpdateResource(Resource resource);

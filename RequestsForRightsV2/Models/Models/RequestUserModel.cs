@@ -12,8 +12,10 @@ namespace RequestsForRights.Models.Models
         [DisplayName("Логин")]
         public string Login { get; set; }
         [DisplayName("Должность")]
+        [Required(ErrorMessage = "Должность является обязательной для заполнения")]
         public string Post { get; set; }
         [DisplayName("Департамент")]
+        [Required(ErrorMessage = "Департамент является обязательным для заполнения")]
         public string Department { get; set; }
         [DisplayName("Отдел")]
         public string Unit { get; set; }

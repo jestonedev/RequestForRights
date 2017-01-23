@@ -12,5 +12,9 @@ namespace RequestsForRights.Models.ViewModels
         public IEnumerable<AclUser> WaitAgreementUsers { get; set; }
         public IEnumerable<RequestAgreement> SuccessAgreements { get; set; }
         public IEnumerable<RequestAgreement> CancelAgreements { get; set; }
+        public IEnumerable<Department> Departments { get; set; }
+        public IEnumerable<Department> Units { get; set; }
+        public IEnumerable<Resource> Resources { get; set; }
+        public IEnumerable<ResourceRight> ResourceRights { get; set; }
     }
 }

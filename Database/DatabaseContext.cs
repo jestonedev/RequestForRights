@@ -1,7 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Infrastructure.Annotations;
+using System.Data.Entity.Validation;
 using RequestsForRights.Domain.Entities;
 
 namespace RequestsForRights.Database
@@ -111,8 +113,6 @@ namespace RequestsForRights.Database
                     new IndexAnnotation(new IndexAttribute("IDX_RequestUserLastSeen_IdRequest_IdUser", 2)));
         }
 
-
-
         public new DbEntityEntry<TEntity> Entry<TEntity>(TEntity entity)
             where TEntity: class
         {
@@ -121,7 +121,6 @@ namespace RequestsForRights.Database
 
         public new int SaveChanges()
         {
-            // TODO: There will be change loging
             return base.SaveChanges();
         }
     }

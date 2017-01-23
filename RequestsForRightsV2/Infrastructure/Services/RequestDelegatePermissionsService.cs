@@ -9,9 +9,10 @@ namespace RequestsForRights.Infrastructure.Services
 {
     public class RequestDelegatePermissionsService: RequestService<RequestDelegatePermissionsUserModel>
     {
-        public RequestDelegatePermissionsService(IRequestRepository requestsRepository, 
-            IRequestSecurityService<RequestDelegatePermissionsUserModel> requestSecurityService) : 
-            base(requestsRepository, requestSecurityService)
+        public RequestDelegatePermissionsService(IRequestRepository requestsRepository,
+            IResourceRepository resourceRepository,
+            IRequestSecurityService<RequestDelegatePermissionsUserModel> requestSecurityService) :
+            base(requestsRepository, resourceRepository, requestSecurityService)
         {
         }
 

@@ -35,6 +35,28 @@ $("#rr-request-form")
             return false;
         });
 
+$("#rr-request-form")
+    .on("click",
+        '[name="addRight"]',
+        function (e) {
+            addRight($(this).closest(".rr-request-user").find(".rr-request-rights"));
+            e.preventDefault();
+            return false;
+        });
+
+$("#rr-request-form")
+    .on("click",
+        '[name="deleteRight"]',
+        function (e) {
+            var rightDeletingElem = $(this).closest(".rr-request-right");
+            rightDeletingElem.remove();
+            updateControls();
+            refreshValidation();
+            updateDeleteRightButton();
+            e.preventDefault();
+            return false;
+        });
+
 $(".rr-save-button").on("click", submitButtonClick);
 
 var descriptionModifiedManual = false;
@@ -43,6 +65,30 @@ $(".rr-request-description textarea")
     .on("change",
         function () {
             descriptionModifiedManual = true;
+        });
+
+var rightsOptionsCache = undefined;
+
+$("#rr-request-form")
+    .on("change", ".rr-request-right-resource select",
+        function() {
+            var idResource = $(this).find("option:selected").data("id-resource");
+            var rightIdSelect = $(this).closest(".rr-request-right").find(".rr-request-right-id select");
+            var idResourceRight = rightIdSelect.val();
+            var options = rightIdSelect.find("option");
+            if (rightsOptionsCache == undefined) {
+                rightsOptionsCache = options.clone();
+            }
+            options.remove();
+            rightsOptionsCache.each(function (idx, option) {
+                if ($(option).data("id-resource") === idResource || $(option).val() === "") {
+                    rightIdSelect.append($(option).clone());
+                }
+            });
+            rightIdSelect.val(idResourceRight);
+            if (rightIdSelect.val() === null) {
+                rightIdSelect.val("");
+            }
         });
 
 function submitButtonClick(e) {
@@ -59,6 +105,9 @@ function submitButtonClick(e) {
 function formIsValid(form) {
     var validator = form.validate();
     var formValid = form.valid();
+    if ($.fn.autocomplete === undefined) {
+        return formValid;
+    }
     var users = $(".rr-request-users > .rr-request-user");
     users.each(function (userIdx, userElem) {
         var userSnpElem = $(userElem).find(".rr-request-user-snp input");
@@ -78,42 +127,108 @@ function formIsValid(form) {
 }
 
 function updateControls() {
-    var userNamePropRegex = /Users\[\d+\]/;
-    var userIdPropRegex = /Users_\d+__/;
+    var userNamePropRegex = /(Users)\[\d+\]/;
+    var rightNamePropRegex = /(Rights)\[\d+\]/;
+    var userIdPropRegex = /(Users)_\d+__/;
+    var rightIdPropRegex = /(Rights)_\d+__/;
     var users = $(".rr-request-users > .rr-request-user");
     users.each(function (userIdx, userElem) {
-        $(userElem)
-            .find("[name]")
-            .filter(function (fieldIdx, field) {
-                return $(field).prop("name").match(userNamePropRegex) != null;
-            })
-            .each(function (fieldIdx, field) {
-                var name = $(field).prop("name").replace(userNamePropRegex, "Users[" + userIdx + "]");
-                $(field).prop("name", name);
-                var id = $(field).prop("id").replace(userIdPropRegex, "Users_" + userIdx + "__");
-                $(field).prop("id", id);
-                $(field).closest(".form-group").find("label").prop("for", id);
-                $(field).closest(".form-group").find("span[data-valmsg-for]").attr("data-valmsg-for", name);
-            });
+        updateControl(userIdx, userElem, userNamePropRegex, userIdPropRegex);
         $(userElem).find(".panel-heading").attr("id", "heading" + userIdx);
         $(userElem).find(".panel-heading a").attr("href", "#collapse" + userIdx).
             attr("aria-controls", "collapse" + userIdx);
         $(userElem).find(".panel-collapse").attr("id", "collapse" + userIdx);
+        var rights = $(userElem).find(".rr-request-rights > .rr-request-right");
+        rights.each(function(rightIdx, rightElem) {
+            updateControl(rightIdx, rightElem, rightNamePropRegex, rightIdPropRegex);
+        });
+    });
+}
+
+function updateControl(idx, control, namePropRegex, idPropRegex) {
+    $(control)
+        .find("[name]")
+        .filter(function(fieldIdx, field) {
+            return $(field).prop("name").match(namePropRegex) != null;
+        })
+        .each(function(fieldIdx, field) {
+            var name = $(field).prop("name").replace(namePropRegex, "$1[" + idx + "]");
+            $(field).prop("name", name);
+            var id = $(field).prop("id").replace(idPropRegex, "$1_" + idx + "__");
+            $(field).prop("id", id);
+            $(field).closest(".form-group").find("label").prop("for", id);
+            $(field).closest(".form-group").find("span[data-valmsg-for]").attr("data-valmsg-for", name);
+        });
+}
+
+var userTempalteCache = undefined;
+
+function loadUserCache(callback) {
+    var idRequestType = $("input[name='RequestModel.IdRequestType']").val();
+    if (idRequestType === undefined) return;
+    $.get("/Request/GetEmptyUserTemplate?IdRequestType=" + idRequestType, function (template) {
+        userTempalteCache = template;
+        if (callback !== undefined) {
+            callback(template);
+        }
     });
 }
 
 function addUser(userLayout) {
-    var idRequestType = $("input[name='RequestModel.IdRequestType']").val();
-    $.get("/Request/GetEmptyUserTemplate?IdRequestType=" + idRequestType, function (template) {
-        userLayout.append(template);
-        updateControls();
-        refreshValidation();
-        updateDeleteUserButton();
-        var addedUser = $(".rr-request-user").last();
-        initializeUsersAutocomplete(addedUser.find(".rr-request-user-snp input"));
-        addedUser.find(".panel-heading a").click();
-        $(window).scrollTop($(document).height());
+    if (userTempalteCache !== undefined) {
+        addUserAfterLoad(userLayout, userTempalteCache);
+        return;
+    }
+    loadUserCache(function(template) {
+        addUserAfterLoad(userLayout, template);
     });
+}
+
+function addUserAfterLoad(userLayout, template) {
+    userLayout.append(template);
+    updateControls();
+    refreshValidation();
+    updateDeleteUserButton();
+    updateDeleteRightButton();
+    var addedUser = $(".rr-request-user").last();
+    initializeUsersAutocomplete(addedUser.find(".rr-request-user-snp input"));
+    addedUser.find(".panel-heading a").click();
+    addedUser.find(".rr-request-user-department select").change();
+    addedUser.find(".rr-request-right .rr-request-right-resource select").change();
+    $(window).scrollTop($(document).height());
+}
+
+var rightTemplateCache = undefined;
+
+function loadRightCache(callback) {
+    var idRequestType = $("input[name='RequestModel.IdRequestType']").val();
+    if (idRequestType === undefined) return;
+    $.get("/Request/GetEmptyRightTemplate?IdRequestType=" + idRequestType, function (template) {
+        rightTemplateCache = template;
+        if (callback !== undefined) {
+            callback(template);
+        }
+    });
+}
+
+function addRight(rightLayout) {
+    if (rightTemplateCache !== undefined) {
+        addRightAfterLoad(rightLayout, rightTemplateCache);
+        return;
+    }
+    loadUserCache(function (template) {
+        addRightAfterLoad(rightLayout, template);
+    });
+}
+
+function addRightAfterLoad(rightLayout, template) {
+    rightLayout.append(template);
+    updateControls();
+    refreshValidation();
+    updateDeleteRightButton();
+    var addedRight = rightLayout.find(".rr-request-right").last();
+    addedRight.find(".rr-request-right-resource select").change();
+    $(window).scrollTop($(document).height());
 }
 
 function refreshValidation() {
@@ -125,8 +240,8 @@ function refreshValidation() {
 }
 
 function showErrorBadgets() {
-    var titleToShow = window.undefined;
-    var panelToShow = window.undefined;
+    var titleToShow = undefined;
+    var panelToShow = undefined;
     var totalErrors = 0;
     $(".rr-request-user")
         .each(function (idx, elem) {
@@ -137,7 +252,7 @@ function showErrorBadgets() {
             var errorCount = panel.find(".field-validation-error").length;
             if (errorCount > 0) {
                 totalErrors += errorCount;
-                if (titleToShow === window.undefined || panel.hasClass("in")) {
+                if (titleToShow === undefined || panel.hasClass("in")) {
                     titleToShow = title;
                     panelToShow = panel;
                 }
@@ -155,7 +270,7 @@ function showErrorBadgets() {
         badge.hide();
     }
     fixIELayoutProblems();
-    if (titleToShow !== window.undefined && !panelToShow.hasClass("in")) {
+    if (titleToShow !== undefined && !panelToShow.hasClass("in")) {
         scrollToElement(titleToShow);
         $(titleToShow).find("a").click();
     }
@@ -170,8 +285,20 @@ function updateDeleteUserButton() {
     }
 }
 
+function updateDeleteRightButton() {
+    var users = $(".rr-request-users > .rr-request-user");
+    users.each(function(idx, user) {
+        var rights = $(user).find(".rr-request-rights > .rr-request-right");
+        if (rights.length === 1) {
+            rights.find("button[name=deleteRight]").prop("disabled", true);
+        } else {
+            rights.find("button[name=deleteRight]").prop("disabled", false);
+        }
+    });
+}
+
 function initializeUsersAutocomplete(userSnp) {
-    if (userSnp.length === 0) return;
+    if (userSnp.length === 0 || $.fn.autocomplete === undefined) return;
     $(userSnp).autocomplete({
         serviceUrl: "/User/GetUsers",
         ajaxSettings: {
@@ -270,6 +397,11 @@ function fixIELayoutProblems() {
 showErrorBadgets();
 updateControls();
 updateDeleteUserButton();
+updateDeleteRightButton();
 refreshValidation();
 initializeUsersAutocomplete($(".rr-request-user-snp input"));
+loadUserCache();
+loadRightCache();
+
+$("#rr-request-form .rr-request-right-resource select").change();
 $(".rr-request-user").first().find(".panel-heading a").click();

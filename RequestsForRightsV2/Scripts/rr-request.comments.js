@@ -7,6 +7,7 @@ $(".rr-comment-tab-edit-panel")
             $(".rr-request-comment-editor").show();
             $(".rr-request-comment-editor textarea").focus();
             $(".rr-add-comment-panel").show();
+            $(".rr-comments-empty").hide();
             updateSendCommentButtonState();
             $(window).scrollTop($(document).height());
             e.preventDefault();
@@ -46,6 +47,7 @@ function resetCommentFormState() {
     $(".rr-comment-tab-edit-panel .btn-group").append(addCommentButton);
     $(".rr-request-comment-editor").hide();
     $(".rr-add-comment-panel").hide();
+    $(".rr-comments-empty").show();
 }
 
 function updateSendCommentButtonState() {
