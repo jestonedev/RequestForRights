@@ -198,6 +198,7 @@
     <Compile Include="Infrastructure\Services\RequestService.cs" />
     <Compile Include="Infrastructure\Security\SecurityService.cs" />
     <Compile Include="Models\FilterOptions\FilterOptions.cs" />
+    <Compile Include="Models\Models\Coordinator.cs" />
     <Compile Include="Models\Models\DelegationRequestUsersExtInfoModel.cs" />
     <Compile Include="Models\Models\RequestCategoryModel.cs" />
     <Compile Include="Models\Models\RequestDelegatePermissionsUserModel.cs" />

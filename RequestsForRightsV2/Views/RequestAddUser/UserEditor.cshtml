@@ -18,6 +18,7 @@
 <div class="panel panel-primary rr-request-user">
     <div class="panel-heading" role="tab" id="heading@id">
         <h4 class="panel-title">
+            <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
             <a role="button" data-toggle="collapse" data-parent="#accordion" href="#@id" aria-expanded="true" aria-controls="@id">
                 @title
             </a>
@@ -26,7 +27,7 @@
     </div>
     <div id="@id" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
         <div class="panel-body">
-            <div class="form-group rr-request-user-snp">
+            <div class="form-group rr-request-user-snp rr-no-autocomplete">
                 @Html.RequiredLabelFor(r => r.RequestModel.Users[userIndex].Snp,
                     new { @class = "col-sm-2 control-label" })
                 <div class="col-sm-10">
@@ -153,21 +154,21 @@
                     @Html.ValidationMessageFor(r => r.RequestModel.Users[userIndex].Description)
                 </div>
             </div>
-            <div class="panel panel-primary">
+            <div class="panel panel-primary rr-request-rights-wrapper">
                 <div class="panel-heading">Предоставить права</div>
                 <ul class="list-group rr-request-rights">
                     @if (Model.RequestModel.Users[userIndex].Rights != null &&
                          Model.RequestModel.Users[userIndex].Rights.Any())
                     {
-                        for (var i = 0; i < Model.RequestModel.Users[userIndex].Rights.Count; i++)
-                        {
-                            @Html.Partial("RightEditor", Model, new ViewDataDictionary
+                            for (var i = 0; i < Model.RequestModel.Users[userIndex].Rights.Count; i++)
                             {
-                                {"UserIndex", userIndex},
-                                {"RightIndex", i},
-                                {"SecurityService", ViewData["SecurityService"]}
-                            })
-                        }
+                                    @Html.Partial("RightEditor", Model, new ViewDataDictionary
+                                    {
+                                        {"UserIndex", userIndex},
+                                        {"RightIndex", i},
+                                        {"SecurityService", ViewData["SecurityService"]}
+                                    })
+                            }
                     }
                 </ul>
             </div>

@@ -158,6 +158,14 @@
     <Compile Include="Migrations\201701190321271_RenameExtDescriptionsTable.Designer.cs">
       <DependentUpon>201701190321271_RenameExtDescriptionsTable.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201701240648081_AclUserPhone.cs" />
+    <Compile Include="Migrations\201701240648081_AclUserPhone.Designer.cs">
+      <DependentUpon>201701240648081_AclUserPhone.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201701250305495_UniqueAclUser.cs" />
+    <Compile Include="Migrations\201701250305495_UniqueAclUser.Designer.cs">
+      <DependentUpon>201701250305495_UniqueAclUser.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\Interfaces\IRequestRepository.cs" />
@@ -266,6 +274,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201701190321271_RenameExtDescriptionsTable.resx">
       <DependentUpon>201701190321271_RenameExtDescriptionsTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201701240648081_AclUserPhone.resx">
+      <DependentUpon>201701240648081_AclUserPhone.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201701250305495_UniqueAclUser.resx">
+      <DependentUpon>201701250305495_UniqueAclUser.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

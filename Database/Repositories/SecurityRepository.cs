@@ -51,7 +51,7 @@ namespace RequestsForRights.Database.Repositories
         {
             var userInfo = GetUserInfo(login);
             return userInfo == null ? new List<Department>().AsQueryable() :
-                userInfo.AclDepartments.AsQueryable();
+                userInfo.AclDepartments.Where(r => !r.Deleted).AsQueryable();
         }
     }
 }

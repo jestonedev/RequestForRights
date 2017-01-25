@@ -29,13 +29,19 @@
                     {
                         for (var i = 0; i < Model.RequestModel.Users.Count; i++)
                         {
+                            if (!securityService.CanVisibleUser(Model.RequestModel, 
+                                Model.RequestModel.Users[i]))
+                            {
+                                continue;
+                            }
                             var id = string.Format("collapse{0}", i);
 
                             <div class="panel panel-primary rr-request-user">
                                 <div class="panel-heading" role="tab" id="heading@id">
                                     <h4 class="panel-title">
+                                        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
                                         <a role="button" data-toggle="collapse" data-parent="#accordion" href="#@id" aria-expanded="true" aria-controls="@id">
-                                            Сотрудник «@Model.RequestModel.Users[i].Snp»
+                                            Сотрудник «@(Model.RequestModel.Users[i].Snp)»
                                         </a>
                                     </h4>
                                 </div>
@@ -75,6 +81,12 @@
                                                 <ul class="list-group">
                                                     @for (var j = 0; j < Model.RequestModel.Users[i].Rights.Count; j++)
                                                     {
+                                                        if (!securityService.CanVisibleRight(
+                                                            Model.RequestModel,
+                                                            Model.RequestModel.Users[i].Rights[j]))
+                                                        {
+                                                            continue;
+                                                        }
                                                         <li class="list-group-item">
                                                             <dl class="dl-horizontal">
                                                                 <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].Rights[j].ResourceName)</dt>
@@ -113,6 +125,7 @@
 })
 
 @section scripts {
+    @Scripts.Render("~/bundles/jquery.autocomplete")
     @Scripts.Render("~/bundles/rr-request.common")
     @Scripts.Render("~/bundles/rr-request.comments")
     @Scripts.Render("~/bundles/rr-request.agreements")

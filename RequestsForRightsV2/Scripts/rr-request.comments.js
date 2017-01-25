@@ -14,7 +14,7 @@ $(".rr-comment-tab-edit-panel")
             return false;
         });
 
-$("#rr-new-comment").on("keyup", updateSendCommentButtonState);
+$("#rr-new-comment").on("keyup input propertychange", updateSendCommentButtonState);
 
 $(".rr-cancel-comment-button")
     .on("click",

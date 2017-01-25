@@ -16,6 +16,8 @@ namespace RequestsForRights.Models.Models
         [DisplayName("Примечание")]
         public string Description { get; set; }
         [DisplayName("Ресурс")]
-        public string ResourceName { get; set; }
+        public int IdResource { get; set; } // Using on detail forms only
+        [DisplayName("Ресурс")]
+        public string ResourceName { get; set; } // Using on detail forms only
     }
 }

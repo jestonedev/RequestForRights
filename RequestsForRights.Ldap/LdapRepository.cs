@@ -55,8 +55,10 @@ namespace RequestsForRights.Ldap
                         foreach (var filter in filters)
                         {
                             searcher.Filter = string.Format(CultureInfo.InvariantCulture,
-                            "(&(objectClass=user)(company={1})(department={2})(objectClass=person)(displayName=*{0}*)(!(useraccountcontrol:1.2.840.113556.1.4.803:=2)))",
-                            snpPattern, filter.Company ?? "*", filter.Department ?? "*");
+                            "(&(objectClass=user)(objectClass=person){1}{2}(displayName=*{0}*)(!(useraccountcontrol:1.2.840.113556.1.4.803:=2)))",
+                            snpPattern,
+                                filter.Company == null ? "" : string.Format("(company={0})", filter.Company),
+                                filter.Department == null ? "" : string.Format("(department={0})", filter.Department));
                             var results = searcher.FindAll();
                             if (results.Count == 0)
                                 continue;
@@ -64,11 +66,11 @@ namespace RequestsForRights.Ldap
                             {
                                 var user = new LdapUser
                                 {
-                                    DisplayName = GetValue(result.Properties, "displayName"),
+                                    Snp = GetValue(result.Properties, "displayName"),
                                     Login = GetValue(result.Properties, "samAccountName").ToLower(),
                                     Post = GetValue(result.Properties, "title"),
-                                    Company = GetValue(result.Properties, "company"),
-                                    Department = GetValue(result.Properties, "department"),
+                                    Department = GetValue(result.Properties, "company"),
+                                    Unit = GetValue(result.Properties, "department"),
                                     Office = GetValue(result.Properties, "physicaldeliveryofficename"),
                                     Email = GetValue(result.Properties, "mail"),
                                     Phone = GetValue(result.Properties, "telephonenumber")

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using RequestsForRights.Database.Repositories.Interfaces;
@@ -35,9 +34,23 @@ namespace RequestsForRights.Infrastructure.Security
             }
         }
 
-        public IQueryable<Department> GetUserAllowedDepartments()
+        public IQueryable<Department> GetUserAllowedDepartments(AclUser user = null)
         {
-            return _securityRepository.GetUserAllowedDepartments(CurrentUser);
+            if (user == null)
+            {
+                user = GetUserInfo();
+            }
+            if (user == null)
+            {
+                throw new ApplicationException("Неизвестный пользователь");
+            }
+            var allowedDepartments = _securityRepository.GetUserAllowedDepartments(user.Login);
+            if (allowedDepartments.Any()) return allowedDepartments;
+            allowedDepartments = allowedDepartments.ToList().Concat(new[]
+            {
+                user.Department
+            }).AsQueryable();
+            return allowedDepartments;
         }
 
         public AclUser GetUserInfo()

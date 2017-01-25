@@ -19,7 +19,7 @@ $("body")
                     		error: function (error) {
                     			var errorAlert = $(".rr-delete-error-alert");
                     			errorAlert.find(".rr-alert-message").text(error.responseText || "Произошла ошибка");
-                    			$(".alert").css({ "opacity": 1 }).show();
+                    			$(".rr-delete-error-alert").css({ "opacity": 1 }).show();
                     		}
                     	});
                     });

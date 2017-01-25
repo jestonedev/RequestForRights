@@ -117,19 +117,26 @@ namespace RequestsForRights.Infrastructure.Services
             }
             if (filterOptions.IdRequestStateType != null)
             {
-                requests = requests.Where(r => r.RequestStates.OrderByDescending(rs => rs.IdRequestState).FirstOrDefault().IdRequestStateType == filterOptions.IdRequestStateType);
+                requests = requests.Where(r => r.RequestStates.Where(rs => !rs.Deleted).
+                    OrderByDescending(rs => rs.IdRequestState).FirstOrDefault().IdRequestStateType == 
+                    filterOptions.IdRequestStateType);
             }
             if (filterOptions.RequestCategory == RequestCategory.MyRequests)
             {
-                requests = requests.Where(r => r.User.Login.ToLower() == RequestSecurityService.CurrentUser.ToLower());
+                requests = requests.Where(r => r.User.Login.ToLower() == 
+                    RequestSecurityService.CurrentUser.ToLower());
             }
             if (filterOptions.DateOfFillingFrom != null)
             {
-                requests = requests.Where(r => r.RequestStates.FirstOrDefault().Date >= DbFunctions.TruncateTime(filterOptions.DateOfFillingFrom.Value));
+                requests = requests.Where(r => 
+                    r.RequestStates.FirstOrDefault(rs => !rs.Deleted).Date >= 
+                    DbFunctions.TruncateTime(filterOptions.DateOfFillingFrom.Value));
             }
             if (filterOptions.DateOfFillingTo != null)
             {
-                requests = requests.Where(r => r.RequestStates.FirstOrDefault().Date <= DbFunctions.AddSeconds(DbFunctions.AddDays(DbFunctions.TruncateTime(filterOptions.DateOfFillingTo.Value), 1), -1));
+                requests = requests.Where(r =>
+                    r.RequestStates.FirstOrDefault(rs => !rs.Deleted).Date <= 
+                    DbFunctions.AddSeconds(DbFunctions.AddDays(DbFunctions.TruncateTime(filterOptions.DateOfFillingTo.Value), 1), -1));
             }
             if (filterOptions.RequestCategory == RequestCategory.NotSeenRequests)
             {
@@ -140,7 +147,10 @@ namespace RequestsForRights.Infrastructure.Services
                 return requests;
             }
             var filter = filterOptions.Filter.ToLower();
-            return requests.Where(r => r.IdRequest.ToString().ToLower().Contains(filter) || r.User.Snp.ToLower().Contains(filter) || r.RequestStates.OrderByDescending(rs => rs.IdRequestState).FirstOrDefault().RequestStateType.Name.ToLower().Contains(filter) || r.RequestType.Name.ToLower().Contains(filter) || r.Description.ToLower().Contains(filter));
+            return requests.Where(r => r.IdRequest.ToString().ToLower().Contains(filter) || 
+                r.User.Snp.ToLower().Contains(filter) ||
+                r.RequestStates.Where(rs => !rs.Deleted).OrderByDescending(rs => rs.IdRequestState).FirstOrDefault().RequestStateType.Name.ToLower().Contains(filter) || 
+                r.RequestType.Name.ToLower().Contains(filter) || r.Description.ToLower().Contains(filter));
         }
 
         public RequestIndexViewModel GetRequestIndexModelView(RequestsFilterOptions filterOptions, IQueryable<Request> filteredRequests)
@@ -227,7 +237,7 @@ namespace RequestsForRights.Infrastructure.Services
             return RequestsRepository.InsertRequest(request);
         }
 
-        private Request ConvertToRequest(RequestModel<T> requestModel)
+        private static Request ConvertToRequest(RequestModel<T> requestModel)
         {
             var request = new Request
             {
@@ -330,8 +340,12 @@ namespace RequestsForRights.Infrastructure.Services
                         RequestsRepository.AddRequestState(requestState, false);
                         break;
                     }
-                    RequestsRepository.SetRequestAgreement(agreement);
-                    if (!NeedAdditionalAgreements(idRequest))
+                    if (RequestSecurityService.InRole(AclRole.Coordinator))
+                    {
+                        agreement.IdAgreementType = 2;
+                    }
+                    RequestsRepository.UpdateRequestAgreement(agreement);
+                    if (!NeedAdditionalAgreements(idRequest, agreement))
                     {
                         RequestsRepository.AddRequestState(requestState, false);
                     }
@@ -341,7 +355,11 @@ namespace RequestsForRights.Infrastructure.Services
                     break;
                 case 5:
                     RequestsRepository.AddRequestState(requestState, false);
-                    RequestsRepository.SetRequestAgreement(agreement);
+                    if (RequestSecurityService.InRole(AclRole.Coordinator))
+                    {
+                        agreement.IdAgreementType = 2;
+                    }
+                    RequestsRepository.UpdateRequestAgreement(agreement);
                     break;
                 case 4:
                     RequestsRepository.AddRequestState(new RequestState
@@ -355,19 +373,47 @@ namespace RequestsForRights.Infrastructure.Services
             }
         }
 
-        private bool NeedAdditionalAgreements(int idRequest)
+        public void AddCooordinator(int idRequest, Coordinator coordinator)
         {
-            var request = GetRequestById(idRequest);
-            var successAgreements = request.RequestAgreements.Where(r =>
-                r.IdAgreementState == 2 &&
-                r.IdAgreementType == 1).
-                Select(r => r.User.IdDepartment);
-            successAgreements = successAgreements.Concat(new[] {24});
-            return request.RequestUserAssoc.Any(ru =>
-                ru.RequestUserRightAssocs.Any(
-                    rur =>
-                        !successAgreements.Contains(rur.ResourceRight.Resource.IdDepartment)
-                    ));
+            var agreement = new RequestAgreement
+            {
+                IdRequest = idRequest,
+                IdAgreementType = 2,
+                IdAgreementState = 1,
+                User = new AclUser
+                {
+                    Login = "pwr\\"+coordinator.Login,
+                    Snp = coordinator.Snp,
+                    Email = coordinator.Email,
+                    Phone = coordinator.Phone,
+                    Department = new Department
+                    {
+                        IdParentDepartment = null,
+                        Name = coordinator.Department
+                    },
+                    Roles = new List<Domain.Entities.AclRole>
+                    {
+                        new Domain.Entities.AclRole
+                        {
+                            IdRole = 8
+                        }
+                    }
+                }
+            };
+            var requestState = new RequestState
+            {
+                IdRequest = idRequest,
+                IdRequestStateType = 1,
+                Date = DateTime.Now
+            };
+            RequestsRepository.AddRequestState(requestState, false);
+            RequestsRepository.AddAdditionalAgreement(agreement);
+        }
+
+        private bool NeedAdditionalAgreements(int idRequest, RequestAgreement newAgreement)
+        {
+            return GetWaitAgreementUsers(idRequest,
+                GetRequestAgreements(idRequest).ToList().Concat(new[] {newAgreement}).ToList()).Any();
         }
 
         public virtual RequestViewModel<T> GetEmptyRequestViewModel()
@@ -433,6 +479,7 @@ namespace RequestsForRights.Infrastructure.Services
                 ResourceRightName = rightAssoc.ResourceRight.Name, 
                 IdRequestRightGrantType = rightAssoc.IdRequestRightGrantType, 
                 RequestRightGrantTypeName = rightAssoc.RequestRightGrantType.Name,
+                IdResource = rightAssoc.ResourceRight.IdResource,
                 ResourceName = rightAssoc.ResourceRight.Resource.Name
             };
         }
@@ -453,16 +500,21 @@ namespace RequestsForRights.Infrastructure.Services
 
         private RequestViewModel<T> GetPreRequestViewModel(int idRequest)
         {
-            var agreements = RequestsRepository.GetRequestAgreements(idRequest).ToList();
-            return new RequestViewModel<T>
+            var preRequestViewModel = new RequestViewModel<T>
             {
-                Comments = RequestsRepository.GetRequestExtComments(idRequest),
-                SuccessAgreements = GetSuccessAgreements(agreements),
-                CancelAgreements = GetCancelAgreements(agreements),
-                WaitAgreementUsers = GetWaitAgreementUsers(idRequest, agreements),
-                Resources = _resourceRepository.GetResources().ToList(),
-                ResourceRights = _resourceRepository.GetResourceRights().ToList()
+                Resources = _resourceRepository.GetResources().OrderBy(r => r.Name).ToList(),
+                ResourceRights = _resourceRepository.GetResourceRights().OrderBy(r => r.Name).ToList()
             };
+            if (default(int) == idRequest)
+            {
+                return preRequestViewModel;
+            }
+            var agreements = RequestsRepository.GetRequestAgreements(idRequest).ToList();
+            preRequestViewModel.Comments = RequestsRepository.GetRequestExtComments(idRequest);
+            preRequestViewModel.SuccessAgreements = GetSuccessAgreements(agreements);
+            preRequestViewModel.CancelAgreements = GetCancelAgreements(agreements);
+            preRequestViewModel.WaitAgreementUsers = GetWaitAgreementUsers(idRequest, agreements);
+            return preRequestViewModel;
         }
 
         private static IEnumerable<RequestAgreement> GetSuccessAgreements(
@@ -485,19 +537,30 @@ namespace RequestsForRights.Infrastructure.Services
             {
                 return new List<AclUser>();
             }
-            var requestResourceOwners = request.RequestUserAssoc.Select(r => r.RequestUserRightAssocs)
-                .Aggregate((v, acc) => acc.Concat(v).ToList()).Select(r =>
-                    r.ResourceRight.Resource.Department.Users.
-                    Where(u => u.Roles.Any(role => role.IdRole == 2)))
-                .Aggregate((v, acc) => acc.Concat(v).ToList());
+            var requestResourceOwners = request.RequestUserAssoc.SelectMany(r => r.RequestUserRightAssocs).
+                SelectMany(r =>
+                {
+                    var aclUsers = r.ResourceRight.Resource.Department.AclUsers;
+                    var users = r.ResourceRight.Resource.Department.Users.Where(u => 
+                        u.AclDepartments == null || 
+                        !u.AclDepartments.Any());
+                    return aclUsers.Concat(users).Where(u => u.Roles.Any(role => role.IdRole == 2));
+                });
             var excludeDepartments = agreements.Where(r => r.IdAgreementType == 1 &&
-                new[] { 2, 3 }.Contains(r.IdAgreementState)).Select(r => r.User.IdDepartment).Distinct();
+                                                           new[] {2, 3}.Contains(r.IdAgreementState)).
+                SelectMany(r => 
+                    RequestSecurityService.GetUserAllowedDepartments(r.User).Select(u => u.IdDepartment)).
+                    Concat(RequestSecurityService.GetUserAllowedDepartments(request.User).Select(u => u.IdDepartment)).
+                    Distinct();
             var additionalAgreementUsers =
                 agreements.Where(r => r.IdAgreementType == 2 && r.IdAgreementState == 1).Select(r => r.User);
-            return 
-                requestResourceOwners.Where(r => 
-                    excludeDepartments.All(ed => ed != r.IdDepartment)).
-                    Concat(additionalAgreementUsers).ToList();
+            return
+                requestResourceOwners.Where(r =>
+                {
+                    return !excludeDepartments.Any(ed => 
+                        RequestSecurityService.GetUserAllowedDepartments(r).
+                        Select(d => d.IdDepartment).Contains(ed));
+                }).Concat(additionalAgreementUsers).ToList().Distinct();
         }
 
         public IEnumerable<RequestsCountByStateTypesViewModel> GetRequestsCountByStateTypes()

@@ -23,3 +23,22 @@ $("#rr-request-form")
         });
 
 $("#rr-request-form .rr-request-user-department select").change();
+
+$("#rr-request-form")
+    .on("keyup input propertychange",
+        ".rr-request-user-snp input",
+        function(e) {
+            updateUserTitle(e);
+            updateRequestDescription();
+        });
+
+function updateUserTitle(e)
+{
+    var titleElem = $(e.target).closest(".rr-request-user").find(".panel-heading .panel-title a");
+    var snp = $(e.target).val();
+    if ($.trim(snp) === "") {
+        titleElem.text("Новый сотрудник");
+    } else {
+        titleElem.text("Сотрудник «"+snp+"»");
+    }
+}

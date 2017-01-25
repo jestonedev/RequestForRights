@@ -241,5 +241,26 @@ namespace RequestsForRights.Controllers
             ViewData["SecurityService"] = _securityService;
             return PartialView("Request/AgreementsContent", _requestService.GetRequestViewModelBy(request));
         }
+
+        public ActionResult AddCoordinator(int idRequest, Coordinator coordinator)
+        {
+            var request = _requestService.GetRequestById(idRequest);
+            if (!_securityService.CanAddCoordinator(request))
+            {
+                return RedirectToAction("ForbiddenError", "Home");
+            }
+            try
+            {
+                _requestService.AddCooordinator(idRequest, coordinator);
+                _requestService.SaveChanges();
+            }
+            catch (DbUpdateException e)
+            {
+                return RedirectToAction("ConflictError", "Home",
+                    new { message = ExceptionHelper.RollToInnerException(e).Message });
+            }
+            ViewData["SecurityService"] = _securityService;
+            return PartialView("Request/AgreementsContent", _requestService.GetRequestViewModelBy(request));
+        }
     }
 }

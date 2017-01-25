@@ -9,7 +9,7 @@ namespace RequestsForRights.Infrastructure.Security.Interfaces
     {
         string CurrentUser { get; }     
         AclUser GetUserInfo();
-        IQueryable<Department> GetUserAllowedDepartments();
+        IQueryable<Department> GetUserAllowedDepartments(AclUser user = null);
         bool InRole(AclRole role);
         bool InRole(AclRole[] role);
         bool IsAnonimous();

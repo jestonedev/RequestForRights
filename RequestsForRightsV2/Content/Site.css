@@ -132,7 +132,8 @@ button.rr-ext-filter-button.collapsed:hover {
     margin-top: 0;
 }
 
-.rr-add-comment-panel, .rr-agreement-panel, .rr-cancel-agreement-panel {
+.rr-add-comment-panel, .rr-agreement-panel, .rr-cancel-agreement-panel,
+.rr-add-coordinator-panel {
     margin-bottom: 15px;
 }
 
@@ -142,6 +143,7 @@ button.rr-ext-filter-button.collapsed:hover {
 .rr-cancel-agreement-panel > .btn-group button, .rr-cancel-agreement-panel > .btn-group a,
 .rr-agreement-panel > .btn-group button, .rr-agreement-panel > .btn-group a,
 .rr-edit-user-panel > .btn-group button, .rr-edit-user-panel > .btn-group a,
+.rr-add-coordinator-panel > .btn-group button, .rr-add-coordinator-panel > .btn-group a,
 .rr-remove-right-button
  {
     width: 12em;
@@ -253,7 +255,8 @@ button.rr-ext-filter-button.collapsed:hover {
     background: #eee;
 }
 
-.rr-request-user-autocomplete-department, .rr-request-user-autocomplete-unit {
+.rr-request-user-autocomplete-department, .rr-request-user-autocomplete-unit,
+.rr-coordinator-autocomplete-department, .rr-coordinator-autocomplete-unit {
     color: #aaa;
     font-size: 12px;
 }
@@ -279,7 +282,8 @@ button.rr-ext-filter-button.collapsed:hover {
 }
 
 .rr-add-comment-panel, .rr-request-comment-editor,
-.rr-cancel-agreement-panel, .rr-request-cancel-agreement-editor {
+.rr-cancel-agreement-panel, .rr-request-cancel-agreement-editor,
+.rr-request-coordinator-editor, .rr-add-coordinator-panel {
     display: none;
 }
 
@@ -288,7 +292,7 @@ button.rr-ext-filter-button.collapsed:hover {
     color: #aaa;
 }
 
-.rr-comments-empty {
+.rr-comments-empty, .rr-agreements-empty {
     margin-bottom: 20px;
 }
 
@@ -321,4 +325,14 @@ button.rr-ext-filter-button.collapsed:hover {
 .rr-request-rights .list-group-item {
     padding-left: 0;
     padding-right:0;
+}
+
+.popover {
+    max-width: 90%;
+}
+
+@media(min-width: 768px) {
+    .popover {
+        max-width: 40%;
+    }
 }

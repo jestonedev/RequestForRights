@@ -34,6 +34,7 @@
                             <div class="panel panel-primary rr-request-user">
                                 <div class="panel-heading" role="tab" id="heading@id">
                                     <h4 class="panel-title">
+                                        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
                                         <a role="button" data-toggle="collapse" data-parent="#accordion" href="#@id" aria-expanded="true" aria-controls="@id">
                                             Сотрудник «@Model.RequestModel.Users[i].Snp»
                                         </a>
@@ -86,6 +87,7 @@
 })
 
 @section scripts {
+    @Scripts.Render("~/bundles/jquery.autocomplete")
     @Scripts.Render("~/bundles/rr-request.common")
     @Scripts.Render("~/bundles/rr-request.comments")
     @Scripts.Render("~/bundles/rr-request.agreements")

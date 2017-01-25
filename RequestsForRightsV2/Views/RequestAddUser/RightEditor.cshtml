@@ -26,7 +26,13 @@
                         @class = "control-label",
                         @for = string.Format("Users[{0}].Resources", userIndex)
                     })
-        <select class="form-control" name="Users[@userIndex].Resources" id="Users[@userIndex].Resources">
+        <select class="form-control"
+                name="Users[@userIndex].Resources"
+                id="Users[@userIndex].Resources"
+                data-placement="auto top"
+                data-trigger="manual"
+                data-html="true"
+                data-container="body">
             <option selected>Выберите информационный ресурс</option>
             @foreach (var resourceGroup in Model.Resources.GroupBy(r => r.ResourceGroup))
             {
@@ -34,11 +40,12 @@
                     Model.RequestModel.Users[userIndex].Rights[rightIndex].IdResourceRight;
                 <optgroup label="@resourceGroup.Key.Name">
                     @Html.Raw(
-                    resourceGroup.Select(r =>
+                        resourceGroup.Select(r =>
                         {
                             var selected = r.ResourceRights.Any(rr => rr.IdResourceRight == idResourceRight);
-                            return string.Format("<option data-id-resource=\"{2}\" {1}>{0}</option>",
-                                Html.Encode(r.Name), selected ? "selected" : "", r.IdResource);
+                            return string.Format(
+                                "<option data-id-resource=\"{2}\" data-description=\"{3}\" {1}>{0}</option>",
+                                Html.Encode(r.Name), selected ? "selected" : "", r.IdResource, r.Description);
                         }).Aggregate((acc, v) => acc + v));
                 </optgroup>
             }
@@ -52,7 +59,11 @@
                 id="@Html.IdFor(r => r.RequestModel.Users[userIndex].Rights[rightIndex].IdResourceRight)"
                 data-val="true"
                 data-val-required="Право является обязательным для заполнения"
-                aria-required="true">
+                aria-required="true"
+                data-placement="auto top"
+                data-trigger="manual"
+                data-html="true"
+                data-container="body">
             <option value="" selected>Выберите право</option>
             @foreach (var right in Model.ResourceRights)
             {
@@ -60,7 +71,7 @@
                                Model.RequestModel.Users[userIndex].Rights[rightIndex].IdResourceRight;
                 <option value="@right.IdResourceRight" @(selected ? "selected" : "")
                         data-id-resource="@right.IdResource"
-                        data-id-resource-right="@right.IdResourceRight">
+                        data-description="@right.Description">
                     @right.Name
                 </option>
             }

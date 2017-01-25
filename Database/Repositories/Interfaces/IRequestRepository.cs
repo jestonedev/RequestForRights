@@ -21,6 +21,7 @@ namespace RequestsForRights.Database.Repositories.Interfaces
         int SaveChanges();
         RequestExtComment AddComment(RequestExtComment requestComment);
         RequestState AddRequestState(RequestState state, bool resetAgreements);
-        RequestAgreement SetRequestAgreement(RequestAgreement agreement);
+        RequestAgreement AddAdditionalAgreement(RequestAgreement agreement);
+        RequestAgreement UpdateRequestAgreement(RequestAgreement agreement);
     }
 }

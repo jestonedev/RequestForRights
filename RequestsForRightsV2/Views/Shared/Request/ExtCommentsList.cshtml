@@ -12,9 +12,12 @@
     {
         <div class="col-md-8 col-md-offset-2 rr-comment">
             <div class="popover @(i%2 == 0 ? "right" : "left pull-right") in">
-                <div class="arrow"></div>
+                <div class="arrow">
+                </div>
                 <h3 class="popover-title">
-                    @comments[i].User.Snp — 
+                    <span class="glyphicon glyphicon-pushpin" aria-hidden="true"></span>
+                    @comments[i].User.Snp —
+                    @comments[i].User.Phone —
                     <a href="mailto:@comments[i].User.Email">@comments[i].User.Email</a>
                 </h3>
                 <div class="popover-content">

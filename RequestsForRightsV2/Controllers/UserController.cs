@@ -21,5 +21,10 @@ namespace RequestsForRights.Controllers
         {
             return Json(_userService.FindUsers(snpPattern, 10), JsonRequestBehavior.AllowGet);
         }
+
+        public JsonResult GetAdUsers(string snpPattern)
+        {
+            return Json(_userService.FindAllActiveDirectoryUsers(snpPattern, 10), JsonRequestBehavior.AllowGet);
+        }
 	}
 }

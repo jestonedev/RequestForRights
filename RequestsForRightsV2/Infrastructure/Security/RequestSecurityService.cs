@@ -88,6 +88,7 @@ namespace RequestsForRights.Infrastructure.Security
         public IQueryable<Request> FilterRequests(IQueryable<Request> requests)
         {
             var filteredRequests = requests.Where(r => false);
+            requests = requests.Where(r => !r.Deleted);
             if (InRole(AclRole.Administrator))
             {
                 return requests;
@@ -102,20 +103,15 @@ namespace RequestsForRights.Infrastructure.Security
             {
                 filteredRequests = filteredRequests.Concat(
                     requests.Where(r => r.IdUser == userInfo.IdUser ||
-                        (allowedDepartments.Any() ?
-                        allowedDepartments.Any(d => 
-                        d == r.User.Department.IdDepartment) :
-                        userInfo.IdDepartment == r.User.Department.IdDepartment)));
+                                   allowedDepartments.Any(d => d == r.User.Department.IdDepartment)));
             }
             if (InRole(AclRole.ResourceOwner))
             {
                 filteredRequests = filteredRequests.Concat(
                     requests.Where(r => r.RequestUserAssoc.Any(ru => 
                          !ru.Deleted && ru.RequestUserRightAssocs.Any(rur => 
-                         !rur.Deleted && (allowedDepartments.Any() ? 
-                            allowedDepartments.Any(d => d
-                            == rur.ResourceRight.Resource.IdDepartment) :
-                            userInfo.IdDepartment == rur.ResourceRight.Resource.IdDepartment)))));
+                         !rur.Deleted && 
+                         allowedDepartments.Any(d => d == rur.ResourceRight.Resource.IdDepartment)))));
             }
             if (InRole(new[] {AclRole.Dispatcher, AclRole.Registrar}))
             {
@@ -197,6 +193,24 @@ namespace RequestsForRights.Infrastructure.Security
             return CanRead(request);
         }
 
+        public bool CanAddCoordinator()
+        {
+            return InRole(new [] {AclRole.Dispatcher, AclRole.Administrator });
+        }
+
+        public bool CanAddCoordinator(RequestModel<T> entity)
+        {
+            var request = _requestRepository.GetRequestById(entity.IdRequest);
+            return CanAddCoordinator(request);
+        }
+
+        public bool CanAddCoordinator(Request request)
+        {
+            var idRequestStateType = request.RequestStates.Last(r => !r.Deleted).IdRequestStateType;
+            return InRole(new[] { AclRole.Dispatcher, AclRole.Administrator }) && 
+                new[] { 1, 2 }.Contains(idRequestStateType);
+        }
+
         public bool CanSetRequestState(Request request, int idRequestStateType)
         {
             if (request.RequestStates.Last(r => !r.Deleted).IdRequestStateType == idRequestStateType)
@@ -234,21 +248,20 @@ namespace RequestsForRights.Infrastructure.Security
 
         public bool CanSetRequestStateGlobal(Request request, int idRequestStateType)
         {
-            if (idRequestStateType == 1)
+            if (idRequestStateType != 1) return true;
+            var resourceRights = request.RequestUserAssoc.Where(r => r.RequestUserRightAssocs != null)
+                .Select(r => r.RequestUserRightAssocs).ToList();
+            if (!resourceRights.Any())
             {
-                var resourceRights = request.RequestUserAssoc.Where(r => r.RequestUserRightAssocs != null)
-                    .Select(r => r.RequestUserRightAssocs).ToList();
-                if (!resourceRights.Any())
-                {
-                    return false;
-                }
-                var idResourceRights = resourceRights.Aggregate((acc, v) => acc.Concat(v).ToList())
-                    .Select(r => r.IdResourceRight);
-                return _resourceRepository.GetResourceRights().Where(r => 
-                    idResourceRights.Any(idResourceRight => idResourceRight == r.IdResourceRight))
-                    .Any(r => !r.Deleted && r.Resource.IdDepartment != 24);
+                return false;
             }
-            return true;
+            var idResourceRights = resourceRights.Aggregate((acc, v) => acc.Concat(v).ToList())
+                .Select(r => r.IdResourceRight);
+            var resourceDepartments = _resourceRepository.GetResourceRights().Where(r => !r.Deleted &&
+                idResourceRights.Any(idResourceRight => idResourceRight == r.IdResourceRight)).
+                Select(r => r.Resource.IdDepartment);
+            var allowedDepartments = GetUserAllowedDepartments(request.User).Select(r => r.IdDepartment);
+            return resourceDepartments.Any(dep => dep != 24 && !allowedDepartments.Contains(dep));
         }
 
         public bool CanSetRequestState(RequestModel<T> entity, int idRequestStateType)
@@ -265,24 +278,23 @@ namespace RequestsForRights.Infrastructure.Security
 
         private bool ResourceOwnerCanSetRequestState(Request request)
         {
-            var userInfo = GetUserInfo();
-            if (userInfo == null)
+            var isFirstState = request.RequestStates.
+                Last(r => !r.Deleted).IdRequestStateType == 1;
+            if (!isFirstState)
             {
                 return false;
             }
             var allowedDepartments = GetUserAllowedDepartments().Select(r => r.IdDepartment);
-            return 
-                request.RequestStates.
-                Last(r => !r.Deleted).IdRequestStateType == 1 &&
-                !request.RequestAgreements.Any(r => r.IdUser == userInfo.IdUser &&
-                    new[] { 2, 3 }.Contains(r.IdAgreementState)) &&
-                request.RequestUserAssoc.Any(ru =>
-                ru.RequestUserRightAssocs != null &&
-                ru.RequestUserRightAssocs.Any(rur =>
-                    allowedDepartments.Any()
-                        ? allowedDepartments.Any(ad =>
-                            rur.ResourceRight.Resource.IdDepartment == ad)
-                        : rur.ResourceRight.Resource.IdDepartment == userInfo.IdDepartment));
+            var resourceDepartments = request.RequestUserAssoc.
+                Where(ru => ru.RequestUserRightAssocs != null).
+                SelectMany(ru => ru.RequestUserRightAssocs.Select(
+                    r => r.ResourceRight.Resource.IdDepartment)).Distinct();
+            resourceDepartments = resourceDepartments.Except(new[] {request.User.IdDepartment});
+            var agreementDepartments = request.RequestAgreements
+                .Where(r => r.IdAgreementType == 1 && new[] {2, 3}.Contains(r.IdAgreementState))
+                .SelectMany(r =>
+                    GetUserAllowedDepartments(r.User)).Select(r => r.IdDepartment);
+            return resourceDepartments.Intersect(allowedDepartments).Except(agreementDepartments).Any();
         }
 
         private bool CoordinatorCanSetRequestState(Request request)
@@ -294,11 +306,9 @@ namespace RequestsForRights.Infrastructure.Security
             }
             return
                 request.RequestStates.Last(r => !r.Deleted).IdRequestStateType == 1 &&
-                !request.RequestAgreements.Any(r => r.IdUser == userInfo.IdUser &&
-                    new[] { 2, 3 }.Contains(r.IdAgreementState)) &&
                 request.RequestAgreements.Any(r =>
-                r.IdUser == userInfo.IdUser &&
-                r.IdAgreementType == 2);
+                    r.IdUser == userInfo.IdUser &&
+                    r.IdAgreementType == 2 && r.IdAgreementState == 1);
         }
 
         public bool CanAgreement(RequestModel<T> entity)
@@ -313,7 +323,47 @@ namespace RequestsForRights.Infrastructure.Security
                     return true;
                 }
             }
-            return false;
+            return CanAddCoordinator(entity);
+        }
+
+        public bool CanVisibleUser(RequestModel<T> entity, T user)
+        {
+            return user.Rights.Any(r => CanVisibleRight(entity, r));
+        }
+
+        public bool CanVisibleRight(RequestModel<T> entity, RequestUserRightModel right)
+        {
+            if (InRole(new[]
+            {
+                AclRole.Administrator,
+                AclRole.Coordinator,
+                AclRole.Dispatcher,
+                AclRole.Executor,
+                AclRole.Registrar
+            }))
+            {
+                return true;
+            }
+            if (InRole(AclRole.Requester))
+            {
+                var request = _requestRepository.GetRequestById(entity.IdRequest);
+                if (request.IdUser == GetUserInfo().IdUser || GetUserAllowedDepartments().Any(r =>
+                    GetUserAllowedDepartments(request.User).Any(req => req.IdDepartment == r.IdDepartment)))
+                {
+                    return true;
+                }
+            }
+            if (!InRole(AclRole.ResourceOwner)) return false;
+            var resource = _resourceRepository.GetResourceById(right.IdResource);
+            var allowedDepartments = GetUserAllowedDepartments().Select(r => r.IdDepartment).ToList();
+            if (allowedDepartments.Any()) return allowedDepartments.Contains(resource.IdDepartment);
+            var userInfo = GetUserInfo();
+            if (userInfo == null)
+            {
+                throw new ApplicationException("Неизвестный пользователь");
+            }
+            allowedDepartments.Add(userInfo.IdDepartment);
+            return allowedDepartments.Contains(resource.IdDepartment);
         }
     }
 }

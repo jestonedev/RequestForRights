@@ -86,10 +86,10 @@
             <tr class="@rowClass">
                 <td class="rr-column col-sm-1">@request.IdRequest</td>
                 <td class="rr-column col-sm-2">@request.User.Snp</td>
-                <td class="rr-column col-sm-2">@request.RequestStates.Last().RequestStateType.Name</td>
+                <td class="rr-column col-sm-2">@request.RequestStates.Last(r => !r.Deleted).RequestStateType.Name</td>
                 <td class="rr-column col-sm-2">@request.RequestType.Name</td>
                 <td class="rr-column col-sm-4">@request.Description</td>
-                <td class="rr-column col-sm-1">@request.RequestStates.First().Date.ToString("dd.MM.yyyy", CultureInfo.CurrentCulture)</td>
+                <td class="rr-column col-sm-1">@request.RequestStates.First(r => !r.Deleted).Date.ToString("dd.MM.yyyy", CultureInfo.CurrentCulture)</td>
                 <td class="rr-edit-column text-center">
                     <div class="btn-group btn-group-xs" role="group" aria-label="Панель редактирования записи">
                         <a href="@Url.Action("Detail", new {id = request.IdRequest})"

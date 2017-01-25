@@ -44,3 +44,47 @@ $("form")
         }
         return true;
     });
+
+$("body")
+    .on("change focus",
+        "select",
+        function() {
+            showSelectPopover($(this));
+        });
+
+$("body")
+    .on("mouseenter",
+        "select",
+        function () {
+            if (!$(this).is(":focus")) {
+                showSelectPopover($(this));
+            }
+        });
+
+$("body")
+    .on("blur mouseleave",
+        "select",
+        function () {
+            if (!$(this).is(":focus")) {
+                $(this).popover("hide");
+            }
+        });
+
+function showSelectPopover(select) {
+    var selectedOption = select.find("option:selected");
+    var description = selectedOption.data("description");
+    if (!description) {
+        select.popover("hide");
+        return;
+    }
+    description = $.trim(description).replace(/\n/g, "<br>");
+    if (select.data("prev-content") !== description) {
+        select.data("prev-content", select.attr("data-content"));
+        select.attr("data-content", description);
+        select.popover("show");
+    } else {
+        if (select.next(".popover:visible").length === 0) {
+            select.popover("show");
+        }
+    }
+}

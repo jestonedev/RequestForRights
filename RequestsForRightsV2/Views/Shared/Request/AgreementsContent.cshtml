@@ -7,6 +7,11 @@
     var idRequest = Model.RequestModel.IdRequest;
 }
 
+@if (!successAgreements.Any() && !cancelAgreements.Any() && !waitAgreementUsers.Any())
+{
+    <div class="text-center text-info rr-agreements-empty">Согласование не требуется</div>
+}
+
 @if (waitAgreementUsers.Any())
 {
     <div class=" col-md-8 col-md-offset-2">
@@ -24,10 +29,12 @@
                                     <dd>@user.Snp</dd>
                                     <dt>Почтовый адрес</dt>
                                     <dd><a href="mailto:@(user.Email)">@user.Email</a></dd>
+                                    <dt>Телефон</dt>
+                                    <dd>@user.Phone</dd>
                                     <dt>Тип согласования</dt>
                                     <dd>
                                         @(user.RequestAgreements.Where(r => r.IdRequest == idRequest).
-                                                   Select(r => r.AgreementType.Name).FirstOrDefault())
+                                                Select(r => r.AgreementType.Name).FirstOrDefault() ?? "Первичное")
                                     </dd>
                                 </dl>   
                             }
@@ -53,6 +60,8 @@
                         <dd>@agreement.User.Snp</dd>
                         <dt>Почтовый адрес</dt>
                         <dd><a href="mailto:@(agreement.User.Email)">@agreement.User.Email</a></dd>
+                        <dt>Телефон</dt>
+                        <dd>@agreement.User.Phone</dd>
                         <dt>Дата согласования</dt>
                         <dd>@(agreement.Date != null ? agreement.Date.Value.ToString("dd.MM.yyyy hh:mm") : "")</dd>
                         <dt>Тип согласования</dt>
@@ -79,6 +88,8 @@
                         <dd>@agreement.User.Snp</dd>
                         <dt>Почтовый адрес</dt>
                         <dd><a href="mailto:@(agreement.User.Email)">@agreement.User.Email</a></dd>
+                        <dt>Телефон</dt>
+                        <dd>@agreement.User.Phone</dd>
                         <dt>Дата отклонения</dt>
                         <dd>@(agreement.Date != null ? agreement.Date.Value.ToString("dd.MM.yyyy hh:mm") : "")</dd>
                         <dt>Причина отклонения</dt>

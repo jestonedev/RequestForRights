@@ -43,8 +43,8 @@ namespace RequestsForRights.Infrastructure.Services
 
         private RequestViewModel<RequestUserModel> LoadDepartmentsToViewModel(RequestViewModel<RequestUserModel> viewModel)
         {
-            viewModel.Departments = _userService.GetDepartments();
-            viewModel.Units = _userService.GetUnits();
+            viewModel.Departments = _userService.GetDepartments().OrderBy(r => r.Name);
+            viewModel.Units = _userService.GetUnits().OrderBy(r => r.Name);
             return viewModel;
         }
     }

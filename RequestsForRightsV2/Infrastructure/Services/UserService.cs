@@ -41,10 +41,27 @@ namespace RequestsForRights.Infrastructure.Services
         {
             var dbUsers = FilterUsersFields(_securityRepository.FilterUsers(
                 _userRepository.FindUsers(snpPattern)).Take(maxCount));
-            var ldapUsers = FilterUsersFields(_ldapRepository.FindUsers(snpPattern,
-                GetLdapDepartmentFilter(), maxCount));
+            var ldapUsers = FilterUsersFields(FindActiveDirectoryUsers(snpPattern, maxCount));
            var result = ldapUsers.Concat(dbUsers).OrderBy(r => r.Snp).Distinct().Take(10);
             return result;
+        }
+
+        private IEnumerable<LdapUser> FindActiveDirectoryUsers(string snpPattern, int maxCount)
+        {
+            return _ldapRepository.FindUsers(snpPattern,
+                GetLdapDepartmentFilter(), maxCount);
+        }
+
+        public IEnumerable<LdapUser> FindAllActiveDirectoryUsers(string snpPattern, int maxCount)
+        {
+            return _ldapRepository.FindUsers(snpPattern,
+                new List<LdapDepartmentFilter>
+                {
+                    new LdapDepartmentFilter
+                    {
+                        Company = "*"
+                    }
+                }, maxCount);
         }
 
         public IEnumerable<Department> GetUnits()
@@ -76,10 +93,10 @@ namespace RequestsForRights.Infrastructure.Services
             return users.Select(r => new RequestUser
             {
                 Login = r.Login,
-                Snp = r.DisplayName,
+                Snp = r.Snp,
                 Post = r.Post,
-                Department = r.Company,
-                Unit = r.Department,
+                Department = r.Department,
+                Unit = r.Unit,
                 Office = r.Office,
                 Phone = r.Phone
             });

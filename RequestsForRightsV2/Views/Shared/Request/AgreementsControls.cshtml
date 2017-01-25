@@ -11,7 +11,7 @@
     <div class="clearfix">
         <div class="col-md-8 col-md-offset-2">
             <div class="alert alert-danger rr-agreement-error-alert" style="display: none" role="alert">
-                <button type="button" class="close" data-hide="alert" aria-label="Закрыть">
+                <button type="button" class="close" data-hide="rr-agreement-error-alert" aria-label="Закрыть">
                     <span aria-hidden="true">&times;</span>
                 </button>
                 <span class="rr-alert-message">Произошла непредвиденная ошибка</span>
@@ -26,7 +26,8 @@
                 UpdateTargetId = "rr-agreements",
                 InsertionMode = InsertionMode.Replace,
                 OnFailure = "agreementFailure",
-                OnBegin = "beforeSendAgreementCancel"
+                OnBegin = "beforeSendAgreementCancel",
+                OnSuccess = "sendAgreementSuccess"
             }))
         {
             @Html.Hidden("IdRequest", (int) Model.RequestModel.IdRequest)
@@ -63,10 +64,89 @@
             </div>
         }
     }
-    <div class="text-center rr-agreement-panel">
-        <div class="btn-group" role="group" aria-label="Панель согласования">
-            @{
-    var agreementButtonsParams = new[]
+    
+    if (securityService.CanAddCoordinator(Model.RequestModel))
+    {
+        using (Ajax.BeginForm("AddCoordinator", "Request",
+            new AjaxOptions
+            {
+                UpdateTargetId = "rr-agreements",
+                InsertionMode = InsertionMode.Replace,
+                OnBegin = "beforeCoordinatorAdding",
+                OnFailure = "coordinatorAddingFailure",
+                OnSuccess = "sendAgreementSuccess"
+            }))
+        {
+            @Html.Hidden("IdRequest", ViewData["IdRequest"])
+            @Html.Hidden("Coordinator.Login", "", new { id = "rr-new-coordinator-login" })
+            @Html.Hidden("Coordinator.Phone", "", new { id = "rr-new-coordinator-phone" })
+            @Html.Hidden("Coordinator.Email", "", new { id = "rr-new-coordinator-email" })
+    
+            <div class="rr-request-coordinator-editor">
+                <div class="form-group col-md-8 col-md-offset-2">
+                    @Html.Label("CoordiantorSnpLabel", "ФИО", new
+                    {
+                        @class = "control-label",
+                        @for = "rr-new-coordinator"
+                    })
+                    @Html.TextBox("Coordinator.Snp", "", new
+                    {
+                        @class = "form-control",
+                        placeholder = "Введите ФИО доп. согласующего",
+                        id = "rr-new-coordinator-snp"
+                    })
+                    @Html.ValidationMessage("Coordinator.Snp")
+                </div>
+                <div class="form-group col-md-8 col-md-offset-2">
+                    @Html.Label("CoordiantorDepartmentLabel", "Департамент", new
+                    {
+                        @class = "control-label",
+                        @for = "rr-new-coordinator-department"
+                    })
+                    @Html.TextBox("Coordinator.Department", "", new
+                    {
+                        @class = "form-control",
+                        id = "rr-new-coordinator-department",
+                        @readonly = "readonly"
+                    })
+                </div>
+                <div class="form-group col-md-8 col-md-offset-2">
+                    @Html.Label("CoordiantorUnitLabel", "Отдел", new
+                    {
+                        @class = "control-label",
+                        @for = "rr-new-coordinator-unit"
+                    })
+                    @Html.TextBox("Coordinator.Unit", "", new
+                    {
+                        @class = "form-control",
+                        id = "rr-new-coordinator-unit",
+                        @readonly = "readonly"
+                    })
+                </div>
+            </div>
+            <div class="text-center rr-add-coordinator-panel">
+                <div class="btn-group" role="group" aria-label="Панель дополнительного согласования">
+                    <button class="btn btn-default rr-send-coordinator-button"
+                            title="Отправить на дополнительное согласование"
+                            aria-label="Отправить">
+                        <span class="glyphicon glyphicon-transfer" aria-hidden="true"></span>
+                        Отправить
+                    </button>
+                    <button class="btn btn-default rr-cancel-coordinator-button"
+                            title="Отменить дополнительное согласование"
+                            aria-label="Отменить">
+                        <span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span>
+                        Отменить
+                    </button>
+                </div>
+            </div>
+        }
+    }
+    <div class="rr-agreement-panel-wrapper">
+        <div class="text-center rr-agreement-panel">
+            <div class="btn-group" role="group" aria-label="Панель согласования">
+                @{
+                    var agreementButtonsParams = new[]
                     {
                         new
                         {
@@ -93,15 +173,15 @@
                             LabelText = "Выполнить"
                         }
                     };
-            }
+                }
 
-            @foreach (var buttonsParams in agreementButtonsParams)
-            {
-                if (securityService.CanSetRequestState(
-                    Model.RequestModel,
-                    buttonsParams.IdRequestStateType))
+                @foreach (var buttonsParams in agreementButtonsParams)
                 {
-                    @Ajax.ActionLink(buttonsParams.LabelText, "SetRequestState", "Request",
+                    if (securityService.CanSetRequestState(
+                        Model.RequestModel,
+                        buttonsParams.IdRequestStateType))
+                    {
+                        @Ajax.ActionLink(buttonsParams.LabelText, "SetRequestState", "Request",
                             new
                             {
                                 idRequest = Model.RequestModel.IdRequest,
@@ -111,23 +191,33 @@
                             {
                                 UpdateTargetId = "rr-agreements",
                                 InsertionMode = InsertionMode.Replace,
-                                OnFailure = "agreementFailure"
+                                OnFailure = "agreementFailure",
+                                OnSuccess = "sendAgreementSuccess"
                             }, new
                             {
                                 @class = "btn btn-default",
                                 title = buttonsParams.Title,
                                 ariaLable = buttonsParams.LabelText
                             })
+                    }
                 }
-            }
-            @if (securityService.CanSetRequestState(Model.RequestModel, 5))
-            {
-                <button class="btn btn-default rr-cancel-agreement-dialog-show-button"
-                        title="Отклонить заявку"
-                        aria-label="Отклонить">
-                    Отклонить
-                </button>
-            }
+                @if (securityService.CanAddCoordinator(Model.RequestModel))
+                {
+                    <button class="btn btn-default rr-add-coordinator-button"
+                            title="Добавить дополнительного согласующего"
+                            aria-label="Добавить дополнительного согласующего">
+                        Доп. согласование
+                    </button>
+                }
+                @if (securityService.CanSetRequestState(Model.RequestModel, 5))
+                {
+                    <button class="btn btn-default rr-cancel-agreement-dialog-show-button"
+                            title="Отклонить заявку"
+                            aria-label="Отклонить">
+                        Отклонить
+                    </button>
+                }
+            </div>
         </div>
     </div>
 }

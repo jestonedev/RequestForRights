@@ -197,11 +197,37 @@ namespace RequestsForRights.Database.Repositories
             return requestState;
         }
 
-        public RequestAgreement SetRequestAgreement(RequestAgreement agreement)
+        public RequestAgreement AddAdditionalAgreement(RequestAgreement agreement)
+        {
+            var department = _databaseContext.Departments.FirstOrDefault(
+                r => !r.Deleted && r.IdParentDepartment == null &&
+                r.Name.ToLower() == agreement.User.Department.Name.ToLower());
+            var idDepartment = department == null ? 24 : department.IdDepartment;
+            agreement.User.Department = null;
+            agreement.User.IdDepartment = idDepartment;
+            agreement.User.Roles = agreement.User.Roles.Select(
+                r => _databaseContext.AclRoles.Find(r.IdRole)).ToList();
+            var user = _databaseContext.AclUsers.FirstOrDefault(r => !r.Deleted &&
+                     (r.Login.ToLower() == agreement.User.Login.ToLower())) ??
+                       _databaseContext.AclUsers.Add(agreement.User);
+            foreach (var aclRole in agreement.User.Roles)
+            {
+                if (user.Roles.All(r => r.IdRole != aclRole.IdRole))
+                {
+                    user.Roles.Add(aclRole);
+                }
+            }
+            agreement.User = user;
+            agreement.IdUser = user.IdUser;
+            return UpdateRequestAgreement(agreement);
+        }
+
+        public RequestAgreement UpdateRequestAgreement(RequestAgreement agreement)
         {
             var reqAgreement = _databaseContext.RequestAgreements.
                 FirstOrDefault(r => r.IdUser == agreement.User.IdUser &&
-                                    r.IdRequest == agreement.IdRequest);
+                                    r.IdRequest == agreement.IdRequest && 
+                                    r.IdAgreementType == agreement.IdAgreementType);
             if (reqAgreement == null)
             {
                 return _databaseContext.RequestAgreements.Add(agreement);

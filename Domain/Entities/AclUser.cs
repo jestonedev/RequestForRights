@@ -19,6 +19,9 @@ namespace RequestsForRights.Domain.Entities
         [Required]
         [MaxLength(256)]
         public string Email { get; set; }
+        [Required]
+        [MaxLength(256)]
+        public string Phone { get; set; }
         public int IdDepartment { get; set; }
         [ForeignKey("IdDepartment")]
         public virtual Department Department { get; set; }

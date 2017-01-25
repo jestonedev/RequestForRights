@@ -1,9 +1,7 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Infrastructure.Annotations;
-using System.Data.Entity.Validation;
 using RequestsForRights.Domain.Entities;
 
 namespace RequestsForRights.Database
@@ -111,6 +109,10 @@ namespace RequestsForRights.Database
                 .HasColumnAnnotation(
                     IndexAnnotation.AnnotationName,
                     new IndexAnnotation(new IndexAttribute("IDX_RequestUserLastSeen_IdRequest_IdUser", 2)));
+            modelBuilder.Entity<AclUser>()
+                .Property(f => f.Login)
+                .HasColumnAnnotation(IndexAnnotation.AnnotationName,
+                    new IndexAnnotation(new IndexAttribute("IDX_AclUser", 1) {IsUnique = true}));
         }
 
         public new DbEntityEntry<TEntity> Entry<TEntity>(TEntity entity)

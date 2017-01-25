@@ -71,7 +71,7 @@ var rightsOptionsCache = undefined;
 
 $("#rr-request-form")
     .on("change", ".rr-request-right-resource select",
-        function() {
+        function () {
             var idResource = $(this).find("option:selected").data("id-resource");
             var rightIdSelect = $(this).closest(".rr-request-right").find(".rr-request-right-id select");
             var idResourceRight = rightIdSelect.val();
@@ -298,7 +298,8 @@ function updateDeleteRightButton() {
 }
 
 function initializeUsersAutocomplete(userSnp) {
-    if (userSnp.length === 0 || $.fn.autocomplete === undefined) return;
+    if (userSnp.length === 0 || $.fn.autocomplete === undefined ||
+        userSnp.closest(".rr-request-user-snp").hasClass("rr-no-autocomplete")) return;
     $(userSnp).autocomplete({
         serviceUrl: "/User/GetUsers",
         ajaxSettings: {
