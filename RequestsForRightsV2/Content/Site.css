@@ -262,7 +262,7 @@ button.rr-ext-filter-button.collapsed:hover {
 }
 
 .rr-comments {
-    overflow: auto;
+    overflow: visible;
 }
 
 .blockquote-reverse, blockquote.pull-right {
@@ -294,6 +294,41 @@ button.rr-ext-filter-button.collapsed:hover {
 
 .rr-comments-empty, .rr-agreements-empty {
     margin-bottom: 20px;
+}
+
+.rr-comment .thumbnail {
+    position: absolute;
+    width: 96px;
+    height: 96px;
+    margin-top: -48px;
+    -ms-border-radius: 6px;
+    border-radius: 6px;
+    max-width: initial;
+    display: none;
+}
+
+.rr-comment .popover.left .thumbnail {
+    left: 10px;  
+}
+
+.rr-comment .popover.right .thumbnail {
+    right: 10px;
+}
+
+.rr-comment .popover {
+    -webkit-box-shadow: none;
+    -ms-box-shadow: none;
+    box-shadow: none;
+}
+
+@media(min-width: 992px) {
+    .rr-comment .thumbnail {
+        display: block;
+    }
+
+    .rr-comment .rr-comment-title-phone {
+        display: none;
+    }
 }
 
 .rr-required-field:after {

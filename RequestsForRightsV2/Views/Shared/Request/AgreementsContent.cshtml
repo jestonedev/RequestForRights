@@ -1,7 +1,9 @@
 ﻿@using RequestsForRights.Domain.Entities
 @{
-    var successAgreements = ((IEnumerable<RequestAgreement>)Model.SuccessAgreements).ToList();
-    var cancelAgreements = ((IEnumerable<RequestAgreement>)Model.CancelAgreements).ToList();
+    var successAgreements = ((IEnumerable<RequestAgreement>)Model.SuccessAgreements)
+        .GroupBy(r => r.User.Department).ToList();
+    var cancelAgreements = ((IEnumerable<RequestAgreement>)Model.CancelAgreements)
+        .GroupBy(r => r.User.Department).ToList();
     var waitAgreementUsers = ((IEnumerable<AclUser>)Model.WaitAgreementUsers).
         GroupBy(r => r.Department).ToList();
     var idRequest = Model.RequestModel.IdRequest;
@@ -50,25 +52,29 @@
     <div class=" col-md-8 col-md-offset-2">
         <div class="panel panel-success">
             <div class="panel-heading">Согласовано</div>
-            <div class="panel-body">
-                @foreach (var agreement in successAgreements)
+                @foreach (var agreementDepartment in successAgreements)
                 {
-                    <dl class="dl-horizontal">
-                        <dt>Департамент</dt>
-                        <dd>@agreement.User.Department.Name</dd>
-                        <dt>ФИО сотрудника</dt>
-                        <dd>@agreement.User.Snp</dd>
-                        <dt>Почтовый адрес</dt>
-                        <dd><a href="mailto:@(agreement.User.Email)">@agreement.User.Email</a></dd>
-                        <dt>Телефон</dt>
-                        <dd>@agreement.User.Phone</dd>
-                        <dt>Дата согласования</dt>
-                        <dd>@(agreement.Date != null ? agreement.Date.Value.ToString("dd.MM.yyyy hh:mm") : "")</dd>
-                        <dt>Тип согласования</dt>
-                        <dd>@agreement.AgreementType.Name</dd>
-                    </dl>
+                    <div class="list-group">
+                        <div class="list-group-item">
+                            <h4 class="list-group-item-heading">@agreementDepartment.Key.Name</h4>
+                            @foreach (var agreement in agreementDepartment.Select(r => r))
+                            {
+                                <dl class="dl-horizontal">
+                                    <dt>ФИО сотрудника</dt>
+                                    <dd>@agreement.User.Snp</dd>
+                                    <dt>Почтовый адрес</dt>
+                                    <dd><a href="mailto:@(agreement.User.Email)">@agreement.User.Email</a></dd>
+                                    <dt>Телефон</dt>
+                                    <dd>@agreement.User.Phone</dd>
+                                    <dt>Дата согласования</dt>
+                                    <dd>@(agreement.Date != null ? agreement.Date.Value.ToString("dd.MM.yyyy hh:mm") : "")</dd>
+                                    <dt>Тип согласования</dt>
+                                    <dd>@agreement.AgreementType.Name</dd>
+                                </dl>
+                                }
+                        </div>
+                    </div>
                 }
-            </div>
         </div>
     </div>
 }
@@ -78,27 +84,31 @@
     <div class=" col-md-8 col-md-offset-2">
         <div class="panel panel-danger">
             <div class="panel-heading">Отклонено</div>
-            <div class="panel-body">
-                @foreach (var agreement in cancelAgreements)
-                {
-                    <dl class="dl-horizontal">
-                        <dt>Департамент</dt>
-                        <dd>@agreement.User.Department.Name</dd>
-                        <dt>ФИО сотрудника</dt>
-                        <dd>@agreement.User.Snp</dd>
-                        <dt>Почтовый адрес</dt>
-                        <dd><a href="mailto:@(agreement.User.Email)">@agreement.User.Email</a></dd>
-                        <dt>Телефон</dt>
-                        <dd>@agreement.User.Phone</dd>
-                        <dt>Дата отклонения</dt>
-                        <dd>@(agreement.Date != null ? agreement.Date.Value.ToString("dd.MM.yyyy hh:mm") : "")</dd>
-                        <dt>Причина отклонения</dt>
-                        <dd>@agreement.Description</dd>
-                        <dt>Тип согласования</dt>
-                        <dd>@agreement.AgreementType.Name</dd>
-                    </dl>
-                }
-            </div>
+            @foreach (var agreementDepartment in cancelAgreements)
+            {
+                <div class="list-group">
+                    <div class="list-group-item">
+                        <h4 class="list-group-item-heading">@agreementDepartment.Key.Name</h4>
+                        @foreach (var agreement in agreementDepartment.Select(r => r))
+                        {
+                            <dl class="dl-horizontal">
+                                <dt>ФИО сотрудника</dt>
+                                <dd>@agreement.User.Snp</dd>
+                                <dt>Почтовый адрес</dt>
+                                <dd><a href="mailto:@(agreement.User.Email)">@agreement.User.Email</a></dd>
+                                <dt>Телефон</dt>
+                                <dd>@agreement.User.Phone</dd>
+                                <dt>Дата отклонения</dt>
+                                <dd>@(agreement.Date != null ? agreement.Date.Value.ToString("dd.MM.yyyy hh:mm") : "")</dd>
+                                <dt>Причина отклонения</dt>
+                                <dd>@agreement.Description</dd>
+                                <dt>Тип согласования</dt>
+                                <dd>@agreement.AgreementType.Name</dd>
+                            </dl>
+                        }
+                    </div>
+                </div>
+            }
         </div>
     </div>
 }

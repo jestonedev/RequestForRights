@@ -253,6 +253,7 @@
     <Content Include="Content\Images\ic_polymer_black_18dp.png" />
     <Content Include="Content\Images\ic_polymer_black_24dp.png" />
     <Content Include="Content\Images\ic_polymer_black_48dp.png" />
+    <Content Include="Content\Images\user-avatar.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />

@@ -35,6 +35,7 @@ function commentAddingSuccess() {
     $(".rr-send-comment-button").removeAttr("disabled");
     resetCommentFormState();
     showCommentsCountBadget();
+    initializeCommentTooltips();
 }
 
 function commentAddingFailure() {
@@ -70,4 +71,9 @@ function showCommentsCountBadget() {
     fixIELayoutProblems();
 }
 
+function initializeCommentTooltips() {
+    $('.rr-comment [data-toggle="tooltip"]').tooltip();
+}
+
 showCommentsCountBadget();
+initializeCommentTooltips();

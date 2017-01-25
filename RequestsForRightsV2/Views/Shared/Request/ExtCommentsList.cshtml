@@ -10,15 +10,23 @@
     var comments = Model.ToList();
     for (var i = 0; i < comments.Count; i++)
     {
+        var tooltip = string.Format(
+            "<span style='white-space:nowrap'>Телефон: {0}</span><br>" +
+            "<span style='white-space:nowrap'>Почта: {1}</span>", 
+            comments[i].User.Phone, comments[i].User.Email);
+        
         <div class="col-md-8 col-md-offset-2 rr-comment">
             <div class="popover @(i%2 == 0 ? "right" : "left pull-right") in">
                 <div class="arrow">
+                    <div class="thumbnail" data-toggle="tooltip"
+                         data-html="true" data-placement="bottom" title="@tooltip"
+                         data-original-title="@tooltip">
+                        <img src="~/Content/Images/user-avatar.png" alt="@tooltip" />
+                    </div>
                 </div>
                 <h3 class="popover-title">
                     <span class="glyphicon glyphicon-pushpin" aria-hidden="true"></span>
-                    @comments[i].User.Snp —
-                    @comments[i].User.Phone —
-                    <a href="mailto:@comments[i].User.Email">@comments[i].User.Email</a>
+                    @comments[i].User.Snp <span class="rr-comment-title-phone">— @comments[i].User.Phone</span>
                 </h3>
                 <div class="popover-content">
                     <p>@comments[i].Comment</p>

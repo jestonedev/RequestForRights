@@ -239,6 +239,8 @@ namespace RequestsForRights.Infrastructure.Services
 
         private static Request ConvertToRequest(RequestModel<T> requestModel)
         {
+            requestModel.Users = ClearUsersDuplicates(requestModel.Users);
+
             var request = new Request
             {
                 IdRequest = requestModel.IdRequest,
@@ -282,6 +284,26 @@ namespace RequestsForRights.Infrastructure.Services
                 }
             }
             return request;
+        }
+
+        private static IList<T> ClearUsersDuplicates(IEnumerable<T> users)
+        {
+            return (from user in users
+                group user by new {user.Login, user.Snp, user.Department, user.Unit}
+                into gs
+                select new T
+                {
+                    Login = gs.Key.Login,
+                    Snp = gs.Key.Snp,
+                    Department = gs.Key.Department,
+                    Unit = gs.Key.Unit,
+                    Post = gs.Any() ? gs.First().Post : null,
+                    Office = gs.Any() ? gs.First().Office : null,
+                    Phone = gs.Any() ? gs.First().Phone : null,
+                    Description = gs.Select(r => r.Description).Aggregate((v, acc) => v + "\n" + acc),
+                    Rights = gs.Select(r => r.Rights).Aggregate(
+                        (v, acc) => v.Concat(acc).ToList()).Distinct().ToList()
+                }).ToList();
         }
 
         public IQueryable<RequestType> GetRequestTypes()
