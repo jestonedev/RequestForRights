@@ -237,7 +237,7 @@ namespace RequestsForRights.Infrastructure.Services
             return RequestsRepository.InsertRequest(request);
         }
 
-        private static Request ConvertToRequest(RequestModel<T> requestModel)
+        protected virtual Request ConvertToRequest(RequestModel<T> requestModel)
         {
             requestModel.Users = ClearUsersDuplicates(requestModel.Users);
 
@@ -286,10 +286,10 @@ namespace RequestsForRights.Infrastructure.Services
             return request;
         }
 
-        private static IList<T> ClearUsersDuplicates(IEnumerable<T> users)
+        protected virtual IList<T> ClearUsersDuplicates(IEnumerable<T> users)
         {
             return (from user in users
-                group user by new {user.Login, user.Snp, user.Department, user.Unit}
+                group user by new {user.Login, user.Snp, user.Department, user.Unit, user.Description}
                 into gs
                 select new T
                 {
@@ -301,8 +301,9 @@ namespace RequestsForRights.Infrastructure.Services
                     Office = gs.Any() ? gs.First().Office : null,
                     Phone = gs.Any() ? gs.First().Phone : null,
                     Description = gs.Select(r => r.Description).Aggregate((v, acc) => v + "\n" + acc),
-                    Rights = gs.Select(r => r.Rights).Aggregate(
-                        (v, acc) => v.Concat(acc).ToList()).Distinct().ToList()
+                    Rights = gs.Any(r => r.Rights != null) ? 
+                        gs.Where(r => r.Rights != null).Select(r => r.Rights).
+                        Aggregate((v, acc) => v.Concat(acc).ToList()).Distinct().ToList() : null
                 }).ToList();
         }
 

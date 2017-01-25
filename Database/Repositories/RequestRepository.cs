@@ -153,10 +153,12 @@ namespace RequestsForRights.Database.Repositories
 
         private RequestUser CreateUserIfNotExists(RequestUser requestUser)
         {
-            var user = _databaseContext.Users.FirstOrDefault(r => !r.Deleted &&
-                       requestUser.Login != null ? r.Login == requestUser.Login :
-                       r.Snp == requestUser.Snp && r.Department == requestUser.Department &&
-                       r.Unit == requestUser.Unit);
+            Func<RequestUser, bool> condition = r => !r.Deleted && requestUser.Login != null
+                ? r.Login == requestUser.Login
+                : r.Snp == requestUser.Snp && r.Department == requestUser.Department &&
+                  r.Unit == requestUser.Unit;
+            var user = _databaseContext.Users.FirstOrDefault(condition) ??
+                       _databaseContext.Users.Local.FirstOrDefault(condition);
             if (user == null)
             {
                 return _databaseContext.Users.Add(requestUser);
