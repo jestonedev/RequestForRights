@@ -456,8 +456,8 @@ namespace RequestsForRights.Infrastructure.Services
                         }
                     }
                 },
-                Resources = _resourceRepository.GetResources(),
-                ResourceRights = _resourceRepository.GetResourceRights()
+                Resources = _resourceRepository.GetResources().OrderBy(r => r.Name).ToList(),
+                ResourceRights = _resourceRepository.GetResourceRights().OrderBy(r => r.Name).ToList()
             };
         }
 

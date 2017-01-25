@@ -11,7 +11,7 @@ namespace RequestsForRights.Controllers
 
         public ActionResult Help()
         {
-            return RedirectPermanent("http://rqrights/App_Data/Manual.html");
+            return View();
         }
 
         public ActionResult ForbiddenError()

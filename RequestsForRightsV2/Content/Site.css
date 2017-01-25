@@ -2,6 +2,7 @@
     padding-top: 50px;
     padding-bottom: 20px;
     overflow-y: scroll;
+    position: relative;
 }
 
 body.modal-open #deleteModal {
@@ -366,8 +367,61 @@ button.rr-ext-filter-button.collapsed:hover {
     max-width: 90%;
 }
 
+.rr-help .rr-contents {
+    display: none;
+    margin-top: 20px;
+}
+
+.rr-help .rr-contents li > ul li  {
+    display: none;
+}
+
+.rr-help .rr-contents li.active > ul li  {
+    display: block;
+}
+
+.rr-help .rr-contents a {
+    color: #767676;
+}
+
+.rr-help .rr-contents li.active > a {
+    color: #428bca;
+    font-weight: bold;
+}
+
+.rr-help .rr-contents > ul > li.active > ul a {
+    font-weight: normal;
+    padding-left: 30px;
+}
+
+.rr-help .rr-contents li.active > a:before {
+    content: '';
+    position: absolute;
+    width: 1px;
+    height: 100%;
+    background-color: #428bca;
+    left: 0;
+    top: 0;
+}
+
+.rr-help .rr-fix-p-mainmenu-offset {
+    margin-top: -60px;
+    padding-top: 60px;
+}
+
+.rr-help .rr-fix-h-mainmenu-offset {
+    margin-top: -50px;
+    padding-top: 70px;
+}
+
 @media(min-width: 768px) {
     .popover {
         max-width: 40%;
+    }
+}
+
+@media(min-width: 768px) {
+    .rr-help .rr-contents {
+        display: block;
     }
 }

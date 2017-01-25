@@ -46,9 +46,11 @@ namespace RequestsForRights.Infrastructure.Security
         public bool CanDelete(Request request)
         {
             return InRole(AclRole.Administrator) ||
-                (InRole(AclRole.Requester) &&
-                 request.User.Login.ToLower() == CurrentUser.ToLower() &&
-                 request.RequestStates.Last().IdRequestStateType == 1);
+                   (InRole(AclRole.Requester) &&
+                    request.RequestStates.Last().IdRequestStateType == 1 &&
+                    GetUserAllowedDepartments(request.User)
+                        .Any(r => GetUserAllowedDepartments(GetUserInfo())
+                            .Any(cu => r.IdDepartment == cu.IdDepartment)));
         }
 
         public override bool CanDelete(RequestModel<T> entity)
@@ -74,9 +76,11 @@ namespace RequestsForRights.Infrastructure.Security
         public bool CanUpdate(Request request)
         {
             return InRole(AclRole.Administrator) ||
-                (InRole(AclRole.Requester) &&
-                 request.User.Login.ToLower() == CurrentUser.ToLower() &&
-                 request.RequestStates.Last().IdRequestStateType == 1);
+                   (InRole(AclRole.Requester) &&
+                    request.RequestStates.Last().IdRequestStateType == 1 &&
+                    GetUserAllowedDepartments(request.User)
+                        .Any(r => GetUserAllowedDepartments(GetUserInfo())
+                            .Any(cu => r.IdDepartment == cu.IdDepartment)));
         }
 
         public override bool CanUpdate(RequestModel<T> entity)
@@ -356,13 +360,6 @@ namespace RequestsForRights.Infrastructure.Security
             if (!InRole(AclRole.ResourceOwner)) return false;
             var resource = _resourceRepository.GetResourceById(right.IdResource);
             var allowedDepartments = GetUserAllowedDepartments().Select(r => r.IdDepartment).ToList();
-            if (allowedDepartments.Any()) return allowedDepartments.Contains(resource.IdDepartment);
-            var userInfo = GetUserInfo();
-            if (userInfo == null)
-            {
-                throw new ApplicationException("Неизвестный пользователь");
-            }
-            allowedDepartments.Add(userInfo.IdDepartment);
             return allowedDepartments.Contains(resource.IdDepartment);
         }
     }
