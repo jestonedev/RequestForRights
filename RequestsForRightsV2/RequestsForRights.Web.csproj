@@ -157,11 +157,17 @@
     <Compile Include="Infrastructure\Enums\SortDirection.cs" />
     <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions.cs" />
     <Compile Include="Infrastructure\Extensions\LinqExtensions.cs" />
+    <Compile Include="Infrastructure\Security\Interfaces\IReportSecurityService.cs" />
     <Compile Include="Infrastructure\Security\Interfaces\IUserSecurityService.cs" />
+    <Compile Include="Infrastructure\Security\ReportSecurityService.cs" />
     <Compile Include="Infrastructure\Security\UserSecurityService.cs" />
+    <Compile Include="Infrastructure\Services\Interfaces\IReportService.cs" />
     <Compile Include="Infrastructure\Services\Interfaces\IRequestAddUserService.cs" />
+    <Compile Include="Infrastructure\Services\Interfaces\IRightService.cs" />
     <Compile Include="Infrastructure\Services\Interfaces\IUserService.cs" />
+    <Compile Include="Infrastructure\Services\ReportService.cs" />
     <Compile Include="Infrastructure\Services\RequestAddUserService.cs" />
+    <Compile Include="Infrastructure\Services\RightService.cs" />
     <Compile Include="Infrastructure\Services\UserService.cs" />
     <Compile Include="Infrastructure\Utilities\EntitySorter\EntitySorter.cs" />
     <Compile Include="Infrastructure\Utilities\EntitySorter\OrderBySorter.cs" />
@@ -206,6 +212,7 @@
     <Compile Include="Models\Models\RequestUserModel.cs" />
     <Compile Include="Models\Models\RequestUserRightModel.cs" />
     <Compile Include="Models\FilterOptions\RequestsFilterOptions.cs" />
+    <Compile Include="Models\Models\ResourceUserRightModel.cs" />
     <Compile Include="Models\ViewModels\RequestIndexViewModel.cs" />
     <Compile Include="Models\ViewModels\RequestsByStateTypesCountViewModel.cs" />
     <Compile Include="Models\ViewModels\RequestViewModel.cs" />
@@ -489,6 +496,7 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\rr-report.common.js" />
     <Content Include="Scripts\rr-request.adduser.js" />
     <Content Include="Scripts\rr-request.agreements.js" />
     <Content Include="Scripts\rr-request.comments.js" />
@@ -512,7 +520,11 @@
     <Content Include="Views\ResourceGroup\FilterControl.cshtml" />
     <Content Include="Views\Home\Help.cshtml" />
     <None Include="Views\Report\ResourcePermissions.cshtml" />
+    <None Include="Views\Report\ResourcePermissionsDataTable.cshtml" />
+    <Content Include="Views\Report\ResourcePermissionsFilterControl.cshtml" />
     <None Include="Views\Report\UserPermissions.cshtml" />
+    <None Include="Views\Report\UserPermissionsDataTable.cshtml" />
+    <Content Include="Views\Report\UserPermissionsFilterControl.cshtml" />
     <None Include="Views\RequestAddUser\Detail.cshtml" />
     <Content Include="Views\RequestAddUser\Update.cshtml" />
     <Content Include="Views\RequestAddUser\Create.cshtml" />

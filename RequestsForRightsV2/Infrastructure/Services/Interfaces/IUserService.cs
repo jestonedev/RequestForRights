@@ -6,6 +6,7 @@ namespace RequestsForRights.Infrastructure.Services.Interfaces
 {
     public interface IUserService
     {
+        RequestUser FindUser(RequestUser requestUser);
         IEnumerable<RequestUser> FindUsers(string snpPattern, int maxCount);
         IEnumerable<Department> GetUnits();
         IEnumerable<Department> GetDepartments();

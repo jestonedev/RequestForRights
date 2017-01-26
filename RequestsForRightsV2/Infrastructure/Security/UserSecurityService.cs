@@ -15,7 +15,12 @@ namespace RequestsForRights.Infrastructure.Security
 
         public IQueryable<RequestUser> FilterUsers(IQueryable<RequestUser> users)
         {
-            if (InRole(AclRole.Administrator))
+            if (InRole(new []
+            {
+                AclRole.Administrator, AclRole.Dispatcher, 
+                AclRole.ResourceOwner, AclRole.Executor, 
+                AclRole.Registrar
+            }))
             {
                 return users;
             }
@@ -57,7 +62,8 @@ namespace RequestsForRights.Infrastructure.Security
             return departments.Where(r =>
                 allowedDepartments.
                     Any(department => department == r.IdDepartment ||
-                                      (r.ParentDepartment != null && department == r.ParentDepartment.IdDepartment)));
+                                      (r.ParentDepartment != null && 
+                                      department == r.ParentDepartment.IdDepartment)));
         }
     }
 }

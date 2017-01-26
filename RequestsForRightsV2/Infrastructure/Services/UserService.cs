@@ -37,6 +37,11 @@ namespace RequestsForRights.Infrastructure.Services
             _securityRepository = securityService;
         }
 
+        public RequestUser FindUser(RequestUser requestUser)
+        {
+            return _userRepository.FindUser(requestUser);
+        }
+
         public IEnumerable<RequestUser> FindUsers(string snpPattern, int maxCount)
         {
             var dbUsers = FilterUsersFields(_securityRepository.FilterUsers(

@@ -113,6 +113,41 @@ namespace RequestsForRights.Database
                 .Property(f => f.Login)
                 .HasColumnAnnotation(IndexAnnotation.AnnotationName,
                     new IndexAnnotation(new IndexAttribute("IDX_AclUser", 1) {IsUnique = true}));
+            modelBuilder.Entity<RequestState>()
+                .Property(f => f.IdRequest)
+                .HasColumnAnnotation(
+                    IndexAnnotation.AnnotationName,
+                    new IndexAnnotation(new IndexAttribute("IX_RequestStates_IdRequest_IdRequestStateType_Date_Deleted", 1)));
+            modelBuilder.Entity<RequestState>()
+                .Property(f => f.IdRequestStateType)
+                .HasColumnAnnotation(
+                    IndexAnnotation.AnnotationName,
+                    new IndexAnnotation(new IndexAttribute("IX_RequestStates_IdRequest_IdRequestStateType_Date_Deleted", 2)));
+            modelBuilder.Entity<RequestState>()
+                .Property(f => f.Date)
+                .HasColumnAnnotation(
+                    IndexAnnotation.AnnotationName,
+                    new IndexAnnotation(new IndexAttribute("IX_RequestStates_IdRequest_IdRequestStateType_Date_Deleted", 3)));
+            modelBuilder.Entity<RequestState>()
+                .Property(f => f.Deleted)
+                .HasColumnAnnotation(
+                    IndexAnnotation.AnnotationName,
+                    new IndexAnnotation(new IndexAttribute("IX_RequestStates_IdRequest_IdRequestStateType_Date_Deleted", 4)));
+            modelBuilder.Entity<RequestUserRightAssoc>()
+                .Property(f => f.IdResourceRight)
+                .HasColumnAnnotation(
+                    IndexAnnotation.AnnotationName,
+                    new IndexAnnotation(new IndexAttribute("IX_IdResourceRight_IdRequestRightGrantType_Deleted", 1)));
+            modelBuilder.Entity<RequestUserRightAssoc>()
+                .Property(f => f.IdRequestRightGrantType)
+                .HasColumnAnnotation(
+                    IndexAnnotation.AnnotationName,
+                    new IndexAnnotation(new IndexAttribute("IX_IdResourceRight_IdRequestRightGrantType_Deleted", 2)));
+            modelBuilder.Entity<RequestUserRightAssoc>()
+                .Property(f => f.Deleted)
+                .HasColumnAnnotation(
+                    IndexAnnotation.AnnotationName,
+                    new IndexAnnotation(new IndexAttribute("IX_IdResourceRight_IdRequestRightGrantType_Deleted", 3)));
         }
 
         public new DbEntityEntry<TEntity> Entry<TEntity>(TEntity entity)

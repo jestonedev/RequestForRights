@@ -8,5 +8,7 @@ namespace RequestsForRights.Database.Repositories.Interfaces
         IQueryable<RequestUser> FindUsers(string snpPattern);
         IQueryable<Department> GetDepartments();
         IQueryable<Department> GetUnits();
+
+        RequestUser FindUser(RequestUser requestUser);
     }
 }

@@ -414,6 +414,14 @@ button.rr-ext-filter-button.collapsed:hover {
     padding-top: 70px;
 }
 
+.rr-help .rr-content p {
+    text-align: justify;
+}
+
+.rr-help .rr-content p.rr-img-wrapper {
+    text-align: center;
+}
+
 @media(min-width: 768px) {
     .popover {
         max-width: 40%;

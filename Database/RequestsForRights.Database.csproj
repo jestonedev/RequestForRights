@@ -166,16 +166,28 @@
     <Compile Include="Migrations\201701250305495_UniqueAclUser.Designer.cs">
       <DependentUpon>201701250305495_UniqueAclUser.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201701260607341_IX_RequestStates_IdRequest_IdRequestStateType_Date_Deleted.cs" />
+    <Compile Include="Migrations\201701260607341_IX_RequestStates_IdRequest_IdRequestStateType_Date_Deleted.Designer.cs">
+      <DependentUpon>201701260607341_IX_RequestStates_IdRequest_IdRequestStateType_Date_Deleted.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201701260628011_IX_IdResourceRight_IdRequestRightGrantType_Deleted.cs" />
+    <Compile Include="Migrations\201701260628011_IX_IdResourceRight_IdRequestRightGrantType_Deleted.Designer.cs">
+      <DependentUpon>201701260628011_IX_IdResourceRight_IdRequestRightGrantType_Deleted.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\Interfaces\IReportRepository.cs" />
     <Compile Include="Repositories\Interfaces\IRequestRepository.cs" />
     <Compile Include="Repositories\Interfaces\IResourceRepository.cs" />
     <Compile Include="Repositories\Interfaces\IResourceGroupRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IRightRepository.cs" />
     <Compile Include="Repositories\Interfaces\ISecurityRepository.cs" />
     <Compile Include="Repositories\Interfaces\IUserRepository.cs" />
+    <Compile Include="Repositories\ReportRepository.cs" />
     <Compile Include="Repositories\RequestRepository.cs" />
     <Compile Include="Repositories\ResourceRepository.cs" />
     <Compile Include="Repositories\ResourceGroupRepository.cs" />
+    <Compile Include="Repositories\RightRepository.cs" />
     <Compile Include="Repositories\SecurityRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
   </ItemGroup>
@@ -280,6 +292,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201701250305495_UniqueAclUser.resx">
       <DependentUpon>201701250305495_UniqueAclUser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201701260607341_IX_RequestStates_IdRequest_IdRequestStateType_Date_Deleted.resx">
+      <DependentUpon>201701260607341_IX_RequestStates_IdRequest_IdRequestStateType_Date_Deleted.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201701260628011_IX_IdResourceRight_IdRequestRightGrantType_Deleted.resx">
+      <DependentUpon>201701260628011_IX_IdResourceRight_IdRequestRightGrantType_Deleted.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

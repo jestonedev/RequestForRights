@@ -33,5 +33,14 @@ namespace RequestsForRights.Database.Repositories
         {
             return _databaseContext.Departments.Where(r => !r.Deleted && r.IdParentDepartment != null);
         }
+
+        public RequestUser FindUser(RequestUser requestUser)
+        {
+            return _databaseContext.Users.FirstOrDefault(r => !r.Deleted && (requestUser.Login != null
+                ? r.Login.ToLower() == requestUser.Login.ToLower()
+                : r.Snp == requestUser.Snp &&
+                  r.Department == requestUser.Department &&
+                  r.Unit == requestUser.Unit));
+        }
     }
 }

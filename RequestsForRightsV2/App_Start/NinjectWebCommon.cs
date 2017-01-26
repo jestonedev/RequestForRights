@@ -72,8 +72,10 @@ namespace RequestsForRights
         private static void RegisterServices(IKernel kernel)
         {
             kernel.Bind<IDatabaseContext>().To<DatabaseContext>().InRequestScope();
-            // Repositories
             kernel.Bind<ICachePool>().To<CachePool.CachePool>();
+            // Repositories
+            kernel.Bind<IRightRepository>().To<RightRepository>().InRequestScope();
+            kernel.Bind<IReportRepository>().To<ReportRepository>().InRequestScope();
             kernel.Bind<IRequestRepository>().To<RequestRepository>().InRequestScope();
             kernel.Bind<IResourceGroupRepository>().To<ResourceGroupRepository>().InRequestScope();
             kernel.Bind<IResourceRepository>().To<ResourceRepository>().InRequestScope();
@@ -84,6 +86,8 @@ namespace RequestsForRights
                     ConfigurationManager.AppSettings["ldap_username"],
                     ConfigurationManager.AppSettings["ldap_password"])).InRequestScope();
             // Data services
+            kernel.Bind<IRightService>().To<RightService>();
+            kernel.Bind<IReportService>().To<ReportService>();
             kernel.Bind<IRequestService<RequestUserModel>>().To<RequestService<RequestUserModel>>();
             kernel.Bind<IRequestAddUserService>().To<RequestAddUserService>();
             kernel.Bind<IRequestService<RequestDelegatePermissionsUserModel>>().
@@ -92,6 +96,7 @@ namespace RequestsForRights
             kernel.Bind<IResourceService>().To<ResourceService>();
             kernel.Bind<IUserService>().To<UserService>();
             // Security services
+            kernel.Bind<IReportSecurityService>().To<ReportSecurityService>();
             kernel.Bind<IResourceGroupSecurityService>().To<ResourceGroupSecurityService>();
             kernel.Bind<IResourceSecurityService>().To<ResourceSecurityService>();
             kernel.Bind<IRequestSecurityService<RequestUserModel>>().To<RequestSecurityService<RequestUserModel>>();
