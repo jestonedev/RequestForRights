@@ -1,0 +1,21 @@
+﻿@model RequestsForRights.Models.ViewModels.ReportUserRightsViewModel
+
+@{
+    ViewBag.Title = "Отчет по правам конкретного сотрудника";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Отчет по правам конкретного сотрудника</h2>
+
+@Html.Partial("ErrorAlert")
+@Html.Partial("FilterControl")
+@Html.Action("GetDataTable")
+
+@section scripts {
+    @Styles.Render("~/Content/bootstrap-datepicker")
+    @Scripts.Render("~/bundles/bootstrap-datepicker")
+    @Scripts.Render("~/bundles/jquery.autocomplete")
+    @Scripts.Render("~/bundles/rr-index.common")
+    @Scripts.Render("~/bundles/rr-report.common")
+    @Scripts.Render("~/bundles/rr-report.user-rights")
+}

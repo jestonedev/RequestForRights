@@ -123,7 +123,7 @@ namespace RequestsForRights.Infrastructure.Services
                     DateFrom = gs.Min()
                 };
             return from userRight in lastCurrentUserRights
-                join requestUser in _rightRepository.GetRequestUsers()
+                   join requestUser in _rightRepository.GetRequestUsers()
                     on userRight.IdRequestUser equals requestUser.IdRequestUser
                 join resourceRight in _rightRepository.GetResourceRights()
                     on userRight.IdResourceRight equals resourceRight.IdResourceRight
@@ -131,10 +131,13 @@ namespace RequestsForRights.Infrastructure.Services
                 {
                     IdRequestUser = requestUser.IdRequestUser,
                     RequestUserSnp = requestUser.Snp,
+                    RequestUserDepartment = requestUser.Department,
+                    RequestUserUnit = requestUser.Unit,
                     IdResourceRight = resourceRight.IdResourceRight,
                     ResourceRightName = resourceRight.Name,
                     IdResource = resourceRight.IdResource,
                     ResourceName = resourceRight.Resource.Name,
+                    RightCategory = "Постоянное право",
                     DateFrom = userRight.DateFrom
                 };
         }
@@ -209,6 +212,7 @@ namespace RequestsForRights.Infrastructure.Services
             var delegateRights = from delegateUserAssocRow in delegateUserAssocs
                 join rightAssocRow in _rightRepository.GetRequestUserRightAssocs()
                     on delegateUserAssocRow.IdRequestUserAssoc equals rightAssocRow.IdRequestUserAssoc
+                where idResource == null || rightAssocRow.ResourceRight.IdResource == idResource.Value
                 select new
                 {
                     rightAssocRow.IdResourceRight,
@@ -234,7 +238,7 @@ namespace RequestsForRights.Infrastructure.Services
                     DelegateToDate = gs.Select(r => r.DelegateToDate).Max()
                 };
             return from delegateRight in lastDelegateRights
-                join delegateUserFrom in _rightRepository.GetRequestUsers()
+                   join delegateUserFrom in _rightRepository.GetRequestUsers()
                     on delegateRight.IdDelegateFromUser equals delegateUserFrom.IdRequestUser
                 join delegateUserTo in _rightRepository.GetRequestUsers()
                     on delegateRight.IdDelegateToUser equals delegateUserTo.IdRequestUser
@@ -244,12 +248,17 @@ namespace RequestsForRights.Infrastructure.Services
                 {
                     IdRequestUser = delegateUserTo.IdRequestUser,
                     RequestUserSnp = delegateUserTo.Snp,
+                    RequestUserDepartment = delegateUserTo.Department,
+                    RequestUserUnit = delegateUserTo.Unit,
                     IdResourceRight = resourceRight.IdResourceRight,
                     ResourceRightName = resourceRight.Name,
                     IdResource = resourceRight.IdResource,
                     ResourceName = resourceRight.Resource.Name,
+                    RightCategory = "Делегированное право",
                     IdDelegateFromUser = delegateUserFrom.IdRequestUser,
                     DelegateFromUserSnp = delegateUserFrom.Snp,
+                    DelegateFromUserDepartment = delegateUserFrom.Department,
+                    DelegateFromUserUnit = delegateUserFrom.Unit,
                     DateFrom = delegateRight.DelegateFromDate,
                     DateTo = delegateRight.DelegateToDate
                 };

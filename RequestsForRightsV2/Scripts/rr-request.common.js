@@ -111,7 +111,8 @@ function formIsValid(form) {
     var users = $(".rr-request-users > .rr-request-user");
     users.each(function (userIdx, userElem) {
         var userSnpElem = $(userElem).find(".rr-request-user-snp input");
-        if (userSnpElem.val() === "") {
+        if (userSnpElem.val() === "" ||
+            userSnpElem.closest(".rr-request-user-snp").hasClass("rr-no-autocomplete")) {
             return;
         }
         var userSnpSelection = $(userSnpElem).autocomplete().selection;

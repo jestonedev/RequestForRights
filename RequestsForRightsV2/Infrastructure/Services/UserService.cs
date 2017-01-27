@@ -109,7 +109,12 @@ namespace RequestsForRights.Infrastructure.Services
 
         public IEnumerable<LdapDepartmentFilter> GetLdapDepartmentFilter()
         {
-            if (_securityRepository.InRole(AclRole.Administrator))
+            if (_securityRepository.InRole(new[]
+            {
+                AclRole.Administrator, AclRole.Dispatcher, 
+                AclRole.Executor, AclRole.Registrar, 
+                AclRole.ResourceManager, 
+            }))
             {
                 return new List<LdapDepartmentFilter>{
                     new LdapDepartmentFilter

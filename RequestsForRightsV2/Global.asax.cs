@@ -16,6 +16,8 @@ namespace RequestsForRights
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             ValueProviderFactories.Factories.Add(new FilterOptionsValueProviderFactory<FilterOptions>());
             ValueProviderFactories.Factories.Add(new RequestsFilterOptionsValueProviderFactory());
+            ValueProviderFactories.Factories.Add(new ReportUserRightsOptionsValueProviderFactory());
+            ValueProviderFactories.Factories.Add(new ReportResourceRightsOptionsValueProviderFactory());
         }
     }
 }

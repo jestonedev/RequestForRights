@@ -13,7 +13,7 @@ namespace RequestsForRights.Infrastructure.ValueProviders
         {
             try
             {
-                var action = FilterOptionsHelper.GetControllerActionByContext(HttpContext.Current);
+                var action = ValueProviderHelper.GetControllerActionByContext(HttpContext.Current);
                 return action.GetParameters().Any(p => p.ParameterType == typeof(RequestsFilterOptions)) ?
                     new RequestsFilterOptionsValueProvider() : null;
             }

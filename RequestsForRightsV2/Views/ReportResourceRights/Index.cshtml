@@ -1,4 +1,6 @@
-﻿@{
+﻿@model RequestsForRights.Models.ViewModels.ReportResourceRightsViewModel
+
+@{
     ViewBag.Title = "Отчет по правам на информационный ресурс";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -6,8 +8,8 @@
 <h2>Отчет по правам на информационный ресурс</h2>
 
 @Html.Partial("ErrorAlert")
-@Html.Partial("ResourcePermissionsFilterControl")
-@Html.Action("GetResourcePermissionsDataTable")
+@Html.Partial("FilterControl")
+@Html.Action("GetDataTable")
 
 @section scripts {
     @Styles.Render("~/Content/bootstrap-datepicker")

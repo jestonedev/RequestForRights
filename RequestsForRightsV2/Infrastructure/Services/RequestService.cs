@@ -167,7 +167,11 @@ namespace RequestsForRights.Infrastructure.Services
             }
             return new RequestIndexViewModel
             {
-                VisibleRequests = requests, FilterOptions = filterOptions, RequestCount = filteredRequests.Count(), RequestStateTypes = RequestsRepository.GetRequestStateTypes(), RequestTypes = RequestsRepository.GetRequestTypes(), RequestCatogories = GetRequestCategories()
+                VisibleRequests = requests, FilterOptions = filterOptions, 
+                RequestCount = filteredRequests.Count(), 
+                RequestStateTypes = RequestsRepository.GetRequestStateTypes(), 
+                RequestTypes = RequestsRepository.GetRequestTypes(), 
+                RequestCatogories = GetRequestCategories()
             };
         }
 
@@ -525,8 +529,8 @@ namespace RequestsForRights.Infrastructure.Services
         {
             var preRequestViewModel = new RequestViewModel<T>
             {
-                Resources = _resourceRepository.GetResources().OrderBy(r => r.Name).ToList(),
-                ResourceRights = _resourceRepository.GetResourceRights().OrderBy(r => r.Name).ToList()
+                Resources = _resourceRepository.GetResources().OrderBy(r => r.Name),
+                ResourceRights = _resourceRepository.GetResourceRights().OrderBy(r => r.Name)
             };
             if (default(int) == idRequest)
             {

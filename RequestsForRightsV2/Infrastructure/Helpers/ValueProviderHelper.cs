@@ -7,7 +7,7 @@ using System.Web.Mvc;
 
 namespace RequestsForRights.Infrastructure.Helpers
 {
-    public static class FilterOptionsHelper
+    public static class ValueProviderHelper
     {
         private static T To<T>(this string value, T defaultValue)
         {
@@ -59,7 +59,7 @@ namespace RequestsForRights.Infrastructure.Helpers
             if (!routeValues.ContainsKey("controller") || !routeValues.ContainsKey("action")) return null;
             var controllerName = routeValues["controller"].ToString();
             var actionName = routeValues["action"].ToString();
-            var currentAssemblyTypes = Assembly.GetAssembly(typeof(FilterOptionsHelper))
+            var currentAssemblyTypes = Assembly.GetAssembly(typeof(ValueProviderHelper))
                 .GetTypes();
             var controller = currentAssemblyTypes.
                     FirstOrDefault(t => t.Name == controllerName + "Controller" && t.BaseType == typeof(Controller));

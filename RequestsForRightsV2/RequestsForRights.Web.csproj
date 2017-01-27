@@ -140,7 +140,8 @@
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\ReportController.cs" />
+    <Compile Include="Controllers\ReportResourceRightsController.cs" />
+    <Compile Include="Controllers\ReportUserRightsController.cs" />
     <Compile Include="Controllers\RequestAddUserController.cs" />
     <Compile Include="Controllers\RequestController.cs" />
     <Compile Include="Controllers\RequestDelegatePermissionsController.cs" />
@@ -153,6 +154,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Infrastructure\Enums\AclRole.cs" />
+    <Compile Include="Infrastructure\Enums\ReportDisplayStyle.cs" />
     <Compile Include="Infrastructure\Enums\RequestCategory.cs" />
     <Compile Include="Infrastructure\Enums\SortDirection.cs" />
     <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions.cs" />
@@ -178,7 +180,7 @@
     <Compile Include="Infrastructure\Utilities\TransfertToRoute\Extensions\HttpRequestBaseExtensions.cs" />
     <Compile Include="Infrastructure\Utilities\TransfertToRoute\Extensions\RouteValueDictionaryExtensions.cs" />
     <Compile Include="Infrastructure\Helpers\ExceptionHelper.cs" />
-    <Compile Include="Infrastructure\Helpers\FilterOptionsHelper.cs" />
+    <Compile Include="Infrastructure\Helpers\ValueProviderHelper.cs" />
     <Compile Include="Infrastructure\Helpers\RequestHelper.cs" />
     <Compile Include="Infrastructure\Utilities\EntitySorter\EntitySorterBuilder.cs" />
     <Compile Include="Infrastructure\Utilities\EntitySorter\Interfaces\IEntitySorter.cs" />
@@ -195,7 +197,12 @@
     <Compile Include="Infrastructure\Services\RequestDelegatePermissionsService.cs" />
     <Compile Include="Infrastructure\Services\ResourceService.cs" />
     <Compile Include="Infrastructure\Services\ResourceGroupService.cs" />
+    <Compile Include="Infrastructure\ValueProviders\ReportOptionsValueProvider.cs" />
+    <Compile Include="Infrastructure\ValueProviders\ReportResourceRightsOptionsValueProvider.cs" />
+    <Compile Include="Infrastructure\ValueProviders\ReportUserRightsOptionsValueProvider.cs" />
     <Compile Include="Infrastructure\ValueProviders\FilterOptionsValueProvider.cs" />
+    <Compile Include="Infrastructure\ValueProviders\ReportUserRightsOptionsValueProviderFactory.cs" />
+    <Compile Include="Infrastructure\ValueProviders\ReportResourceRightsOptionsValueProviderFactory.cs" />
     <Compile Include="Infrastructure\ValueProviders\FilterOptionsValueProviderFactory.cs" />
     <Compile Include="Infrastructure\ValueProviders\RequestsFilterOptionsValueProvider.cs" />
     <Compile Include="Infrastructure\ValueProviders\RequestsFilterOptionsValueProviderFactory.cs" />
@@ -213,6 +220,11 @@
     <Compile Include="Models\Models\RequestUserRightModel.cs" />
     <Compile Include="Models\FilterOptions\RequestsFilterOptions.cs" />
     <Compile Include="Models\Models\ResourceUserRightModel.cs" />
+    <Compile Include="Models\ReportOptions\ReportOptions.cs" />
+    <Compile Include="Models\ReportOptions\ReportResourceRightsOptions.cs" />
+    <Compile Include="Models\ReportOptions\ReportUserRightsOptions.cs" />
+    <Compile Include="Models\ViewModels\ReportUserRightsViewModel.cs" />
+    <Compile Include="Models\ViewModels\ReportResourceRightsViewModel.cs" />
     <Compile Include="Models\ViewModels\RequestIndexViewModel.cs" />
     <Compile Include="Models\ViewModels\RequestsByStateTypesCountViewModel.cs" />
     <Compile Include="Models\ViewModels\RequestViewModel.cs" />
@@ -497,6 +509,7 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\rr-report.common.js" />
+    <Content Include="Scripts\rr-report.user-rights.js" />
     <Content Include="Scripts\rr-request.adduser.js" />
     <Content Include="Scripts\rr-request.agreements.js" />
     <Content Include="Scripts\rr-request.comments.js" />
@@ -519,12 +532,12 @@
     <Content Include="Views\ResourceGroup\Index.cshtml" />
     <Content Include="Views\ResourceGroup\FilterControl.cshtml" />
     <Content Include="Views\Home\Help.cshtml" />
-    <None Include="Views\Report\ResourcePermissions.cshtml" />
-    <None Include="Views\Report\ResourcePermissionsDataTable.cshtml" />
-    <Content Include="Views\Report\ResourcePermissionsFilterControl.cshtml" />
-    <None Include="Views\Report\UserPermissions.cshtml" />
-    <None Include="Views\Report\UserPermissionsDataTable.cshtml" />
-    <Content Include="Views\Report\UserPermissionsFilterControl.cshtml" />
+    <None Include="Views\ReportResourceRights\Index.cshtml" />
+    <None Include="Views\ReportResourceRights\DataTable.cshtml" />
+    <Content Include="Views\ReportResourceRights\FilterControl.cshtml" />
+    <None Include="Views\ReportUserRights\Index.cshtml" />
+    <None Include="Views\ReportUserRights\DataTable.cshtml" />
+    <Content Include="Views\ReportUserRights\FilterControl.cshtml" />
     <None Include="Views\RequestAddUser\Detail.cshtml" />
     <Content Include="Views\RequestAddUser\Update.cshtml" />
     <Content Include="Views\RequestAddUser\Create.cshtml" />

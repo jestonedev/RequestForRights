@@ -153,6 +153,11 @@ namespace RequestsForRights.Database.Repositories
 
         private RequestUser CreateUserIfNotExists(RequestUser requestUser)
         {
+            requestUser.Login = string.IsNullOrEmpty(requestUser.Login) ? null : requestUser.Login;
+            requestUser.Snp = string.IsNullOrEmpty(requestUser.Snp) ? null : requestUser.Snp;
+            requestUser.Department = string.IsNullOrEmpty(requestUser.Department) ? null : requestUser.Department;
+            requestUser.Unit = string.IsNullOrEmpty(requestUser.Unit) ? null : requestUser.Unit;
+
             Func<RequestUser, bool> condition = r => !r.Deleted && requestUser.Login != null
                 ? r.Login == requestUser.Login
                 : r.Snp == requestUser.Snp && r.Department == requestUser.Department &&

@@ -1,0 +1,201 @@
+﻿@using System.Globalization
+@using RequestsForRights.Infrastructure.Enums
+@model RequestsForRights.Models.ViewModels.ReportUserRightsViewModel
+
+@{
+    Layout = null;
+}
+
+<div id="main-table-wrapper" class="rr-table-wrapper">
+    @if (Model == null || Model.Rights == null || !Model.Rights.Any())
+    {
+        <div class="text-center text-info">Права отсутствуют</div>
+        return;
+    }
+    @if (Model.Options.ReportDisplayStyle == ReportDisplayStyle.Cards)
+{
+    foreach (var rightGroup in Model.Rights.GroupBy(r => new { r.IdResource, r.ResourceName }))
+    {
+        <div class="panel panel-primary rr-report-right-group" id="panel@(rightGroup.Key.IdResource)">
+            <div class="panel-heading" role="tab" id="heading@(rightGroup.Key.IdResource)">
+                <h4 class="panel-title">
+                    <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                    <a role="button" data-toggle="collapse"
+                       data-parent="#panel@(rightGroup.Key.IdResource)"
+                       href="#collapse@(rightGroup.Key.IdResource)"
+                       aria-expanded="true"
+                       aria-controls="collapse@(rightGroup.Key.IdResource)">
+                        Информационный ресурс @rightGroup.Key.ResourceName
+                    </a>
+                </h4>
+            </div>
+            <ul class="list-group panel-collapse collapse in" id="collapse@(rightGroup.Key.IdResource)"
+                role="tabpanel"
+                aria-labelledby="heading@(rightGroup.Key.IdResource)">
+                @foreach (var right in rightGroup.Select(r => r))
+                {
+                    <li class="list-group-item @(right.IdRequestUser != Model.RequestUser.IdRequestUser ? "rr-list-group-item-danger" : "")">
+                        <dl class="dl-horizontal">
+                            <dt>Право</dt>
+                            <dd>@right.ResourceRightName</dd>
+                            @if (right.IdDelegateFromUser != null)
+                            {
+                                <dt>Дата начала действия</dt>
+                                <dd>@right.DateFrom.ToString("dd.MM.yyyy", CultureInfo.CurrentCulture)</dd>
+                                if (right.DateTo != null)
+                                {
+                                    <dt>Дата окончания</dt>
+                                    <dd>@right.DateTo.Value.ToString("dd.MM.yyyy", CultureInfo.CurrentCulture)</dd>
+                                }
+                                <dt>Категория</dt>
+                                <dd>@right.RightCategory</dd>
+                                if (right.IdRequestUser == Model.RequestUser.IdRequestUser)
+                                {
+                                    <dt>Делегировано от</dt>
+                                    <dd>@right.DelegateFromUserSnp</dd>
+                                    <dt></dt>
+                                    <dd>@right.DelegateFromUserDepartment</dd>
+                                    if (right.DelegateFromUserUnit != null)
+                                    {
+                                        <dt></dt>
+                                        <dd>@right.DelegateFromUserUnit</dd>
+                                    }
+                                }
+                                else
+                                {
+                                    <dt>Делегировано к</dt>
+                                    <dd>@right.RequestUserSnp</dd>
+                                    <dt></dt>
+                                    <dd>@right.RequestUserDepartment</dd>
+                                    if (right.RequestUserUnit != null)
+                                    {
+                                        <dt></dt>
+                                        <dd>@right.RequestUserUnit</dd>
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                <dt>Дата и время выдачи</dt>
+                                <dd>@right.DateFrom</dd>
+                                <dt>Категория</dt>
+                                <dd>@right.RightCategory</dd>
+                            }
+                        </dl>
+                    </li>
+                }
+            </ul>
+        </div>
+    }
+}
+else
+{
+    var headers = new[]
+        {
+            new
+            {
+                Name = "Ресурс",
+                Field = "ResourceName",
+                MinWidth = 200
+            },
+            new
+            {
+                Name = "Право",
+                Field = "ResourceRightName",
+                MinWidth = 100
+            },
+            new
+            {
+                Name = "Когда выдано",
+                Field = "DateFrom",
+                MinWidth = 135
+            },
+            new
+            {
+                Name = "Категория",
+                Field = "RightCategory",
+                MinWidth = 110
+            }
+        };
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    @foreach (var header in headers)
+                    {
+                        var iconClass = "glyphicon-sort";
+                        var sortDirection = RequestsForRights.Infrastructure.Enums.SortDirection.Asc;
+                        if (header.Field == Model.Options.SortField)
+                        {
+                            iconClass = Model.Options.SortDirection == RequestsForRights.Infrastructure.Enums.SortDirection.Asc ?
+                                "glyphicon-sort-by-attributes" :
+                                "glyphicon-sort-by-attributes-alt";
+                            sortDirection = Model.Options.SortDirection ==
+                                            RequestsForRights.Infrastructure.Enums.SortDirection.Asc ?
+                                RequestsForRights.Infrastructure.Enums.SortDirection.Desc : RequestsForRights.Infrastructure.Enums.SortDirection.Asc;
+                        }
+                        <th class="rr-column rr-column-header"
+                            style="min-width: @(header.MinWidth)px">
+                            <a href="@Url.Action("GetDataTable", new {SortField = header.Field, SortDirection = sortDirection})">
+                                @header.Name
+                                <span class="glyphicon @iconClass pull-right" aria-hidden="true"></span>
+                            </a>
+                        </th>
+                    }
+                    <th>Дополнительная информация</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var right in Model.Rights)
+                {
+                    <tr class="@(right.IdRequestUser != Model.RequestUser.IdRequestUser ? "danger" : "")">
+                        <td class="rr-column">
+                            @right.ResourceName
+                        </td>
+                        <td class="rr-column">@right.ResourceRightName</td>
+                        @if (right.IdDelegateFromUser != null)
+                        {
+                            <td class="rr-column">@right.DateFrom.ToString("dd.MM.yyyy", CultureInfo.CurrentCulture)</td>
+                            <td class="rr-column">@right.RightCategory</td>
+                        }
+                        else
+                        {
+                            <td class="rr-column">@right.DateFrom</td>
+                            <td class="rr-column">@right.RightCategory</td>
+                        }
+                        <td>
+                            @if (right.DateTo != null)
+                            {
+                                <p><b>Дата окончания действия:</b> @right.DateTo.Value.ToString("dd.MM.yyyy", CultureInfo.CurrentCulture)</p>
+                            }
+                            @if (right.IdRequestUser == Model.RequestUser.IdRequestUser)
+                            {
+                                if (right.DelegateFromUserSnp != null)
+                                {
+                                    <p><b>Делегировано от:</b> @right.DelegateFromUserSnp</p>
+                                    <p><b>Департамент:</b> @right.DelegateFromUserDepartment</p>
+                                    if (right.DelegateFromUserUnit != null)
+                                    {
+                                        <p><b>Отдел:</b> @right.DelegateFromUserUnit</p>
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (right.DelegateFromUserSnp != null)
+                                {
+                                    <p><b>Делегировано к:</b> @right.RequestUserSnp</p>
+                                    <p><b>Департамент:</b> @right.RequestUserDepartment</p>
+                                    if (right.RequestUserUnit != null)
+                                    {
+                                        <p><b>Отдел:</b> @right.RequestUserUnit</p>
+                                    }
+                                }
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+    }
+</div>

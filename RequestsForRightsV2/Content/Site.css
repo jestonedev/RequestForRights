@@ -51,7 +51,7 @@ input[type="checkbox"].input-validation-error {
     margin-left: 5pt;
 }
 
-.rr-delete-error-alert {
+.rr-error-alert {
     margin-top: 20px;
 }
 
@@ -192,6 +192,17 @@ button.rr-ext-filter-button.collapsed:hover {
 
 .rr-pagination {
     margin-left: 15px;
+}
+
+.rr-col-sm-no-side-padding-always {
+    padding-right: 0;
+    margin-right: 0;
+    padding-left: 0;
+    margin-left: 0;
+}
+
+.rr-report-display-style {
+    margin-bottom: 15px;
 }
 
 @media(min-width: 768px) {
@@ -420,6 +431,47 @@ button.rr-ext-filter-button.collapsed:hover {
 
 .rr-help .rr-content p.rr-img-wrapper {
     text-align: center;
+}
+
+.rr-table-wrapper td p {
+    margin-bottom: 0;
+}
+
+.rr-sub-cell-unit, .rr-sub-cell-department {
+    font-size: 12px;
+    color: #aaa;
+}
+
+.rr-list-group-item-danger {
+    color: #a94442;
+    background-color: #f2dede;
+}
+
+.rr-report-right-group .panel-collapse > .list-group .list-group-item:last-child {
+    border-bottom: 0;
+}
+.rr-report-right-group .panel-collapse > .list-group .list-group-item:first-child {
+    -ms-border-top-right-radius: 0;
+    border-top-right-radius: 0;
+    -ms-border-top-left-radius: 0;
+    border-top-left-radius: 0;
+}
+
+.rr-report-right-group .panel-collapse > .list-group .list-group-item {
+    border-width: 1px 0;
+}
+
+.rr-report-right-group .panel-collapse > .list-group {
+    margin-bottom: 0;
+}
+
+.rr-report-right-group {
+    margin-bottom: 15px;
+}
+
+.rr-loading-data {
+    margin-bottom: 15px;
+    display: none;
 }
 
 @media(min-width: 768px) {

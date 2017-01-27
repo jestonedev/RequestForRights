@@ -6,12 +6,12 @@ using System.Web.Mvc;
 using Newtonsoft.Json;
 using RequestsForRights.Infrastructure.Enums;
 using RequestsForRights.Infrastructure.Helpers;
-using RequestsForRights.Models.FilterOptions;
+using RequestsForRights.Models.ReportOptions;
 
 namespace RequestsForRights.Infrastructure.ValueProviders
 {
-    public class FilterOptionsValueProvider<T>: IValueProvider
-        where T: FilterOptions, new()
+    public class ReportOptionsValueProvider<T> : IValueProvider
+        where T: ReportOptions, new()
     {
         public bool ContainsPrefix(string prefix)
         {
@@ -29,24 +29,23 @@ namespace RequestsForRights.Infrastructure.ValueProviders
 
         public ValueProviderResult GetValue(string key)
         {
-            var filterOptions = GetFilterOptions();
-            return new ValueProviderResult(filterOptions,
-                JsonConvert.SerializeObject(filterOptions),
+            var reportOptions = GetReportOptions();
+            return new ValueProviderResult(reportOptions,
+                JsonConvert.SerializeObject(reportOptions),
                 CultureInfo.InvariantCulture);
         }
 
-        protected T GetFilterOptions()
+        protected T GetReportOptions()
         {
             var context = HttpContext.Current;
-            var filterOptions = new T
+            var reportOptions = new T
             {
-                PageSize = ValueProviderHelper.GetValue("PageSize", context, 25),
-                PageIndex = ValueProviderHelper.GetValue("PageIndex", context, 0),
-                Filter = ValueProviderHelper.GetValue<string>("Filter", context, null),
                 SortField = ValueProviderHelper.GetValue<string>("SortField", context, null),
-                SortDirection = ValueProviderHelper.GetValue("SortDirection", context, SortDirection.Asc)
+                SortDirection = ValueProviderHelper.GetValue("SortDirection", context, SortDirection.Asc),
+                ReportDisplayStyle =
+                    ValueProviderHelper.GetValue("ReportDisplayStyle", context, ReportDisplayStyle.Cards)
             };
-            return filterOptions;
+            return reportOptions;
         }
     }
 }

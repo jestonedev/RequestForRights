@@ -17,9 +17,9 @@ $("body")
 		                        location.href = redirectUri;
 		                    },
                     		error: function (error) {
-                    			var errorAlert = $(".rr-delete-error-alert");
+                    			var errorAlert = $(".rr-error-alert");
                     			errorAlert.find(".rr-alert-message").text(error.responseText || "Произошла ошибка");
-                    			$(".rr-delete-error-alert").css({ "opacity": 1 }).show();
+                    			$(".rr-error-alert").css({ "opacity": 1 }).show();
                     		}
                     	});
                     });

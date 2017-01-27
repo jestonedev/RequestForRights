@@ -36,7 +36,13 @@ namespace RequestsForRights.Database.Repositories
 
         public RequestUser FindUser(RequestUser requestUser)
         {
-            return _databaseContext.Users.FirstOrDefault(r => !r.Deleted && (requestUser.Login != null
+            requestUser.Login = string.IsNullOrEmpty(requestUser.Login) ? null : requestUser.Login;
+            requestUser.Snp = string.IsNullOrEmpty(requestUser.Snp) ? null : requestUser.Snp;
+            requestUser.Department = string.IsNullOrEmpty(requestUser.Department) ? null : requestUser.Department;
+            requestUser.Unit = string.IsNullOrEmpty(requestUser.Unit) ? null : requestUser.Unit;
+
+            return _databaseContext.Users.FirstOrDefault(
+                r => !r.Deleted && (requestUser.Login != null
                 ? r.Login.ToLower() == requestUser.Login.ToLower()
                 : r.Snp == requestUser.Snp &&
                   r.Department == requestUser.Department &&

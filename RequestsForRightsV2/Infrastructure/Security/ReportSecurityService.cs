@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using RequestsForRights.Database.Repositories.Interfaces;
 using RequestsForRights.Domain.Entities;
@@ -11,7 +12,9 @@ namespace RequestsForRights.Infrastructure.Security
     {
         private readonly IUserSecurityService _userSecurityService;
 
-        public ReportSecurityService(ISecurityRepository securityRepository, IUserSecurityService userSecurityService) : 
+        public ReportSecurityService(
+            ISecurityRepository securityRepository, 
+            IUserSecurityService userSecurityService) : 
             base(securityRepository)
         {
             if (userSecurityService == null)
@@ -21,19 +24,43 @@ namespace RequestsForRights.Infrastructure.Security
             _userSecurityService = userSecurityService;
         }
 
+        public IQueryable<Resource> FilterResources(IQueryable<Resource> resources)
+        {
+            if (InRole(new[]
+            {
+                AclRole.Administrator, AclRole.Dispatcher,
+                AclRole.Executor, AclRole.Registrar, 
+                AclRole.ResourceManager, 
+            }))
+            {
+                return resources;
+            }
+            if (InRole(AclRole.ResourceOwner))
+            {
+                var allowedDepartments = GetUserAllowedDepartments().Select(r => r.IdDepartment);
+                return resources.Where(r => allowedDepartments.Contains(r.IdDepartment));
+            }
+            return new List<Resource>().AsQueryable();
+        }
+
         public bool CanReadResourcePermissions()
         {
             return InRole(new[]
             {
                 AclRole.Administrator, AclRole.Dispatcher,
                 AclRole.ResourceOwner, AclRole.Executor,
-                AclRole.Registrar
+                AclRole.Registrar, AclRole.ResourceManager, 
             });
         }
 
         public bool CanReadUserPermissions()
         {
-            return !IsAnonimous();
+            return InRole(new[]
+            {
+                AclRole.Administrator, AclRole.Dispatcher,
+                AclRole.Executor, AclRole.Registrar, 
+                AclRole.Requester, AclRole.ResourceManager, 
+            });
         }
 
         public bool CanReadUserPermissions(RequestUser entity)

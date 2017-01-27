@@ -3,8 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using RequestsForRights.Database.Repositories.Interfaces;
 using RequestsForRights.Domain.Entities;
+using RequestsForRights.Infrastructure.Enums;
 using RequestsForRights.Infrastructure.Services.Interfaces;
 using RequestsForRights.Models.Models;
+using RequestsForRights.Models.ReportOptions;
+using RequestsForRights.Infrastructure.Extensions;
+using RequestsForRights.Infrastructure.Security.Interfaces;
 
 namespace RequestsForRights.Infrastructure.Services
 {
@@ -13,11 +17,13 @@ namespace RequestsForRights.Infrastructure.Services
         private readonly IRightService _rightService;
         private readonly IUserService _userService;
         private readonly IReportRepository _reportRepository;
+        private readonly IReportSecurityService _reportSecurityService;
 
         public ReportService(
             IRightService rightService, 
             IUserService userService,
-            IReportRepository reportRepository)
+            IReportRepository reportRepository,
+            IReportSecurityService reportSecurityService)
         {
             if (rightService == null)
             {
@@ -34,29 +40,65 @@ namespace RequestsForRights.Infrastructure.Services
                 throw new ArgumentNullException("reportRepository");
             }
             _reportRepository = reportRepository;
+            if (reportSecurityService == null)
+            {
+                throw new ArgumentNullException("reportSecurityService");
+            }
+            _reportSecurityService = reportSecurityService;
         }
 
-        public RequestUser FindUser(RequestUser requestUser)
+        public RequestUser FindUser(ReportUserRightsOptions options)
         {
-            return _userService.FindUser(requestUser);
-        }
-
-        public IEnumerable<ResourceUserRightModel> GetUserRightsOnDate(DateTime date, int idRequestUser)
-        {
-            return _rightService.GetUserRightsOnDate(date, idRequestUser).OrderBy(r => r.ResourceName)
-                .ThenBy(r => r.ResourceRightName);
+            return _userService.FindUser(new RequestUser
+            {
+                Login = options.Login,
+                Snp = options.Snp,
+                Department = options.Department,
+                Unit = options.Unit
+            });
         }
 
         public IEnumerable<Resource> GetResources()
         {
-            return _reportRepository.GetResources().OrderBy(r => r.ResourceGroup.Name)
+            return _reportSecurityService.FilterResources(
+                _reportRepository.GetResources())
+                .OrderBy(r => r.ResourceGroup.Name)
                 .ThenBy(r => r.Name).ToList();
         }
 
-        public IEnumerable<ResourceUserRightModel> GetResourceRightsOnDate(DateTime date, int idResource)
+        public IEnumerable<ResourceUserRightModel> GetUserRightsOnDate(ReportUserRightsOptions options, int idRequestUser)
         {
-            return _rightService.GetResourceRightsOnDate(date, idResource).OrderBy(r => r.RequestUserSnp)
+            if (options.Date == null)
+            {
+                return null;
+            }
+            return _rightService.GetUserRightsOnDate(options.Date.Value, idRequestUser).OrderBy(r => r.ResourceName)
                 .ThenBy(r => r.ResourceRightName);
+        }
+
+        public IEnumerable<ResourceUserRightModel> GetResourceRightsOnDate(ReportResourceRightsOptions options)
+        {
+            if (options.Date == null)
+            {
+                return null;
+            }
+            if (options.IdResource == null)
+            {
+                return null;
+            }
+            if (!_reportRepository.GetResources().Select(r => r.IdResource).
+                Contains(options.IdResource.Value))
+            {
+                return null;
+            }
+            var rights = _rightService.GetResourceRightsOnDate(options.Date.Value, options.IdResource);
+            if (options.ReportDisplayStyle == ReportDisplayStyle.Cards)
+            {
+                return rights
+                    .OrderBy(r => r.RequestUserSnp)
+                    .ThenBy(r => r.ResourceRightName);
+            }
+            return rights.AsQueryable().OrderBy(options.SortDirection, options.SortField);
         }
     }
 }

@@ -30,6 +30,7 @@ namespace RequestsForRights
             bundles.Add(new ScriptBundle("~/bundles/rr-request.agreements").Include("~/Scripts/rr-request.agreements.js"));
             bundles.Add(new ScriptBundle("~/bundles/rr-help").Include("~/Scripts/rr-help.js"));
             bundles.Add(new ScriptBundle("~/bundles/rr-report.common").Include("~/Scripts/rr-report.common.js"));
+            bundles.Add(new ScriptBundle("~/bundles/rr-report.user-rights").Include("~/Scripts/rr-report.user-rights.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js",

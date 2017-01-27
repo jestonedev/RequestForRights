@@ -18,8 +18,8 @@ namespace RequestsForRights.Infrastructure.Security
             if (InRole(new []
             {
                 AclRole.Administrator, AclRole.Dispatcher, 
-                AclRole.ResourceOwner, AclRole.Executor, 
-                AclRole.Registrar
+                AclRole.Executor, AclRole.Registrar, 
+                AclRole.ResourceManager
             }))
             {
                 return users;

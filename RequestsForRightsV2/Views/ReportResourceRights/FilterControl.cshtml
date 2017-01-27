@@ -1,0 +1,72 @@
+﻿@using System.Globalization
+@using RequestsForRights.Infrastructure.Enums
+@model RequestsForRights.Models.ViewModels.ReportResourceRightsViewModel
+
+@{
+    Layout = null;
+}
+
+<div class="rr-filter-control">
+    @using (Ajax.BeginForm("GetDataTable", new AjaxOptions
+    {
+        UpdateTargetId = "main-table-wrapper",
+        InsertionMode = InsertionMode.Replace,
+        Url = Url.Action("GetDataTable"),
+        OnBegin = "showWaitingElement",
+        OnSuccess = "hideWaitingElement",
+        OnFailure = "errorLoading"
+    }))
+    {
+        <div class="form-group col-sm-3 rr-col-sm-no-left-padding">
+            @Html.Label("Date", "На дату")
+            <div class="input-group date">
+                @Html.TextBox("Date", Model.Options.Date != null ?
+                   Model.Options.Date.Value.ToString("dd.MM.yyyy", CultureInfo.CurrentCulture) : "",
+                    new {@class = "form-control"})
+                <div class="input-group-addon">
+                    <span class="glyphicon glyphicon-th"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group col-sm-6">
+            @Html.Label("IdResource", "Информационный ресурс")
+
+            <select class="form-control" name="IdResource" id="IdResource">
+                <option selected>Выберите информационный ресурс</option>
+                @foreach (var resourceGroup in Model.Resources.GroupBy(r => r.ResourceGroup))
+                {
+                    <optgroup label="@resourceGroup.Key.Name">
+                        @Html.Raw(
+                            resourceGroup.Select(r =>
+                            {
+                                var selected = "";
+                                if (r.IdResource == Model.Options.IdResource)
+                                {
+                                    selected = "selected";
+                                }
+                                return string.Format("<option value=\"{1}\" {2}>{0}</option>",
+                                    Html.Encode(r.Name), r.IdResource, selected);
+                            }).Aggregate((acc, v) => acc + v));
+                    </optgroup>
+                }
+            </select>
+        </div>
+        <div class=" rr-col-sm-no-right-padding col-sm-3 rr-report-display-style">
+            @Html.Label("ReportDisplayStyle", "Представление")
+            <div class="btn-group col-xs-12 rr-col-sm-no-side-padding-always" data-toggle="buttons">
+                <label class="btn btn-primary col-xs-6 @(Model.Options.ReportDisplayStyle == ReportDisplayStyle.Cards ? "active" : "")">
+                    <input type="radio" name="ReportDisplayStyle" id="option1" value="Cards" autocomplete="off"
+                           @(Model.Options.ReportDisplayStyle == ReportDisplayStyle.Cards ? "checked" : "")> Карточки
+                </label>
+                <label class="btn btn-primary col-xs-6 @(Model.Options.ReportDisplayStyle == ReportDisplayStyle.Table ? "active" : "")">
+                    <input type="radio" name="ReportDisplayStyle" id="option2" value="Table" autocomplete="off"
+                           @(Model.Options.ReportDisplayStyle == ReportDisplayStyle.Table ? "checked" : "")> Таблица
+                </label>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="rr-loading-data text-info text-center">
+            Загрузка...
+        </div>
+    }
+</div>

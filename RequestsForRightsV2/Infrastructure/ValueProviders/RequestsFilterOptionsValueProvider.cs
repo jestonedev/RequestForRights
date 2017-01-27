@@ -16,11 +16,11 @@ namespace RequestsForRights.Infrastructure.ValueProviders
         {
             var context = HttpContext.Current;
             var filterOptions = GetFilterOptions();
-            filterOptions.RequestCategory = FilterOptionsHelper.GetValue("RequestCategory", context, RequestCategory.AllRequests);
-            filterOptions.IdRequestStateType = FilterOptionsHelper.GetValue<int?>("IdRequestStateType", context, null);
-            filterOptions.IdRequestType = FilterOptionsHelper.GetValue<int?>("IdRequestType", context, null);
-            filterOptions.DateOfFillingFrom = FilterOptionsHelper.GetValue<DateTime?>("DateOfFillingFrom", context, null);
-            filterOptions.DateOfFillingTo = FilterOptionsHelper.GetValue<DateTime?>("DateOfFillingTo", context, null);
+            filterOptions.RequestCategory = ValueProviderHelper.GetValue("RequestCategory", context, RequestCategory.AllRequests);
+            filterOptions.IdRequestStateType = ValueProviderHelper.GetValue<int?>("IdRequestStateType", context, null);
+            filterOptions.IdRequestType = ValueProviderHelper.GetValue<int?>("IdRequestType", context, null);
+            filterOptions.DateOfFillingFrom = ValueProviderHelper.GetValue<DateTime?>("DateOfFillingFrom", context, null);
+            filterOptions.DateOfFillingTo = ValueProviderHelper.GetValue<DateTime?>("DateOfFillingTo", context, null);
             return new ValueProviderResult(filterOptions,
                 JsonConvert.SerializeObject(filterOptions), 
                 CultureInfo.InvariantCulture);

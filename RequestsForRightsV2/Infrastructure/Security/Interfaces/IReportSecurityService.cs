@@ -1,4 +1,5 @@
-﻿using RequestsForRights.Domain.Entities;
+﻿using System.Linq;
+using RequestsForRights.Domain.Entities;
 
 namespace RequestsForRights.Infrastructure.Security.Interfaces
 {
@@ -7,5 +8,6 @@ namespace RequestsForRights.Infrastructure.Security.Interfaces
         bool CanReadResourcePermissions();
         bool CanReadUserPermissions();
         bool CanReadUserPermissions(RequestUser requestUser);
+        IQueryable<Resource> FilterResources(IQueryable<Resource> resources);
     }
 }

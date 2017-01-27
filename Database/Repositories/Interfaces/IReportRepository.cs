@@ -6,5 +6,6 @@ namespace RequestsForRights.Database.Repositories.Interfaces
     public interface IReportRepository
     {
         IQueryable<Resource> GetResources();
+        IQueryable<RequestUser> GetUsers();
     }
 }
