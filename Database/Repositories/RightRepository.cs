@@ -26,7 +26,7 @@ namespace RequestsForRights.Database.Repositories
 
         public IQueryable<RequestState> GetRequestStates()
         {
-            return _databaseContext.RequestStates.Where(r => !r.Deleted);
+            return _databaseContext.RequestStates.OrderBy(rs => rs.IdRequestState).Where(r => !r.Deleted);
         }
 
         public IQueryable<RequestUserAssoc> GetRequestUserAssocs()

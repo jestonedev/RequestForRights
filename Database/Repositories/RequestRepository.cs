@@ -41,6 +41,11 @@ namespace RequestsForRights.Database.Repositories
             return _databaseContext.RequestStateTypes;
         }
 
+        public IQueryable<RequestRightGrantType> GetRequestRightGrantTypes()
+        {
+            return _databaseContext.RequestRightGrantTypes;
+        }
+
         public IQueryable<RequestType> GetRequestTypes()
         {
             return _databaseContext.RequestTypes;

@@ -315,6 +315,7 @@ button.rr-ext-filter-button.collapsed:hover {
     margin-top: -48px;
     -ms-border-radius: 6px;
     border-radius: 6px;
+    max-width: none;
     max-width: initial;
     display: none;
 }
@@ -450,6 +451,11 @@ button.rr-ext-filter-button.collapsed:hover {
 .rr-report-right-group .panel-collapse > .list-group .list-group-item:last-child {
     border-bottom: 0;
 }
+
+.rr-report-right-group .panel-heading + .list-group .list-group-item:first-child {
+    border-top-width: 0;
+}
+
 .rr-report-right-group .panel-collapse > .list-group .list-group-item:first-child {
     -ms-border-top-right-radius: 0;
     border-top-right-radius: 0;
@@ -467,10 +473,15 @@ button.rr-ext-filter-button.collapsed:hover {
 
 .rr-report-right-group {
     margin-bottom: 15px;
+    overflow: hidden;
 }
 
 .rr-loading-data {
     margin-bottom: 15px;
+    display: none;
+}
+
+.rr-request-right-resource select option[disabled] {
     display: none;
 }
 

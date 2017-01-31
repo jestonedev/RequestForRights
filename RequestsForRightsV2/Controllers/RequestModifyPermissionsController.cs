@@ -7,16 +7,16 @@ using RequestsForRights.Infrastructure.Security.Interfaces;
 using RequestsForRights.Infrastructure.Services.Interfaces;
 using RequestsForRights.Infrastructure.Utilities.TransfertToRoute;
 using RequestsForRights.Models.Models;
-using RequestsForRights.Models.ViewModels;
+using RequestsForRights.Models.ViewModels.Request;
 
 namespace RequestsForRights.Controllers
 {
     public class RequestModifyPermissionsController : Controller
     {
-        private readonly IRequestService<RequestUserModel> _requestService;
+        private readonly IRequestModifyPermissionsService _requestService;
         private readonly IRequestSecurityService<RequestUserModel> _securityService;
 
-        public RequestModifyPermissionsController(IRequestService<RequestUserModel> requestService,
+        public RequestModifyPermissionsController(IRequestModifyPermissionsService requestService,
             IRequestSecurityService<RequestUserModel> securityService)
         {
             if (requestService == null)
@@ -58,7 +58,7 @@ namespace RequestsForRights.Controllers
 
         [TransferActionOnly]
         [HttpPut]
-        public ActionResult Update(RequestViewModel<RequestUserModel> requestViewModel)
+        public ActionResult Update(RequestModifyPermissionsViewModel requestViewModel)
         {
             if (requestViewModel == null || requestViewModel.RequestModel == null)
             {
@@ -104,7 +104,7 @@ namespace RequestsForRights.Controllers
 
         [TransferActionOnly]
         [HttpPost]
-        public ActionResult Create(RequestViewModel<RequestUserModel> requestViewModel)
+        public ActionResult Create(RequestModifyPermissionsViewModel requestViewModel)
         {
             if (requestViewModel == null || requestViewModel.RequestModel == null)
             {
@@ -123,15 +123,40 @@ namespace RequestsForRights.Controllers
             }
             try
             {
-                _requestService.InsertRequest(requestViewModel.RequestModel);
+                var request = _requestService.InsertRequest(requestViewModel.RequestModel);
                 _requestService.SaveChanges();
+                return RedirectToAction("Detail", "Request", new { id = request.IdRequest });
             }
             catch (DbUpdateException e)
             {
                 return RedirectToAction("ConflictError", "Home",
                     new { message = ExceptionHelper.RollToInnerException(e).Message });
             }
-            return RedirectToAction("Index", "Request");
+        }
+
+        [HttpGet]
+        public ActionResult GetEmptyUserTemplate()
+        {
+            if (!Request.IsAjaxRequest())
+            {
+                return RedirectToAction("ForbiddenError", "Home");
+            }
+            ViewData["UserIndex"] = 0;
+            ViewData["SecurityService"] = _securityService;
+            return PartialView("UserEditor", _requestService.GetEmptyRequestViewModel());
+        }
+
+        [HttpGet]
+        public ActionResult GetEmptyRightTemplate()
+        {
+            if (!Request.IsAjaxRequest())
+            {
+                return RedirectToAction("ForbiddenError", "Home");
+            }
+            ViewData["UserIndex"] = 0;
+            ViewData["RightIndex"] = 0;
+            ViewData["SecurityService"] = _securityService;
+            return PartialView("RightEditor", _requestService.GetEmptyRequestViewModel());
         }
 
         private void Validate(RequestModel<RequestUserModel> request)
@@ -148,7 +173,7 @@ namespace RequestsForRights.Controllers
             }
             if (request.Users != null && request.Users.Any(
                 r => r.Rights != null &&
-                     r.Rights.Any(right => new[] {1, 2}.Contains(right.IdRequestRightGrantType))))
+                     !r.Rights.All(right => new[] {1, 2}.Contains(right.IdRequestRightGrantType))))
             {
                 ModelState.AddModelError(string.Empty, "Некорректно задан тип одного из прав доступа");
             }

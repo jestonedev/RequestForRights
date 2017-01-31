@@ -4,11 +4,13 @@ using RequestsForRights.Domain.Entities;
 using RequestsForRights.Models.FilterOptions;
 using RequestsForRights.Models.Models;
 using RequestsForRights.Models.ViewModels;
+using RequestsForRights.Models.ViewModels.Request;
 
 namespace RequestsForRights.Infrastructure.Services.Interfaces
 {
-    public interface IRequestService<T>
-        where T: RequestUserModel
+    public interface IRequestService<TUserModel, out TViewModel>
+        where TUserModel: RequestUserModel
+        where TViewModel: RequestViewModel<TUserModel>
     {
         IEnumerable<RequestsCountByStateTypesViewModel> GetRequestsCountByStateTypes();
         bool DidNotSeenRequest(Request request);
@@ -18,16 +20,16 @@ namespace RequestsForRights.Infrastructure.Services.Interfaces
         RequestIndexViewModel GetRequestIndexModelView(RequestsFilterOptions filterOptions,
             IQueryable<Request> filteredRequests);
         Request GetRequestById(int idRequest);
-        RequestModel<T> GetRequestModelBy(Request request);
-        RequestViewModel<T> GetRequestViewModelBy(Request request);
-        RequestViewModel<T> GetRequestViewModelBy(RequestModel<T> request);
-        RequestViewModel<T> GetEmptyRequestViewModel();
+        RequestModel<TUserModel> GetRequestModelBy(Request request);
+        TViewModel GetRequestViewModelBy(Request request);
+        TViewModel GetRequestViewModelBy(RequestModel<TUserModel> request);
+        TViewModel GetEmptyRequestViewModel();
         IQueryable<RequestExtComment> GetRequestExtComments(int idRequest);
         IQueryable<RequestAgreement> GetRequestAgreements(int idRequest);
         int SaveChanges();
         Request DeleteRequest(int idRequest);
-        Request UpdateRequest(RequestModel<T> requestModel);
-        Request InsertRequest(RequestModel<T> requestModel);
+        Request UpdateRequest(RequestModel<TUserModel> requestModel);
+        Request InsertRequest(RequestModel<TUserModel> requestModel);
         IQueryable<RequestType> GetRequestTypes();
         void UpdateUserLastSeen(int idRequest, int idUser);
         RequestExtComment AddComment(int idRequest, string comment);

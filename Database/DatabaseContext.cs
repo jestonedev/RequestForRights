@@ -27,6 +27,7 @@ namespace RequestsForRights.Database
         public IDbSet<RequestAgreement> RequestAgreements { get; set; }
         public IDbSet<RequestUserLastSeen> RequestUserLastSeens { get; set; }
         public IDbSet<RequestState> RequestStates { get; set; }
+        public IDbSet<RequestRightGrantType> RequestRightGrantTypes { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

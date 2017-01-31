@@ -11,7 +11,9 @@ namespace RequestsForRights.Models.Models
         [DisplayName("Право")]
         public string ResourceRightName { get; set; }
         [DisplayName("Действие")]
+        [Required(ErrorMessage = "Обязательно для заполнения")]
         public int IdRequestRightGrantType { get; set; }
+        [DisplayName("Действие")]
         public string RequestRightGrantTypeName { get; set; }
         [DisplayName("Примечание")]
         public string Description { get; set; }

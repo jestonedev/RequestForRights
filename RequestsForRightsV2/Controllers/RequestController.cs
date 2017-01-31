@@ -8,17 +8,19 @@ using RequestsForRights.Infrastructure.Utilities.TransfertToRoute;
 using RequestsForRights.Infrastructure.Utilities.TransfertToRoute.Extensions;
 using RequestsForRights.Models.FilterOptions;
 using RequestsForRights.Models.Models;
-using RequestsForRights.Models.ViewModels;
+using RequestsForRights.Models.ViewModels.Request;
 using WebGrease.Css.Extensions;
 
 namespace RequestsForRights.Controllers
 {
     public class RequestController : Controller
     {
-        private readonly IRequestService<RequestUserModel> _requestService;
+        private readonly IRequestService<RequestUserModel, 
+            RequestViewModel<RequestUserModel>> _requestService;
         private readonly IRequestSecurityService<RequestUserModel> _securityService;
 
-        public RequestController(IRequestService<RequestUserModel> requestService,
+        public RequestController(IRequestService<RequestUserModel, 
+            RequestViewModel<RequestUserModel>> requestService,
             IRequestSecurityService<RequestUserModel> securityService)
         {
             if (requestService == null)

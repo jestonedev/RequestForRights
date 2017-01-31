@@ -47,7 +47,7 @@ namespace RequestsForRights.Infrastructure.Security
         {
             return InRole(AclRole.Administrator) ||
                    (InRole(AclRole.Requester) &&
-                    request.RequestStates.Last().IdRequestStateType == 1 &&
+                    request.RequestStates.OrderBy(rs => rs.IdRequestState).Last().IdRequestStateType == 1 &&
                     GetUserAllowedDepartments(request.User)
                         .Any(r => GetUserAllowedDepartments(GetUserInfo())
                             .Any(cu => r.IdDepartment == cu.IdDepartment)));
@@ -77,7 +77,7 @@ namespace RequestsForRights.Infrastructure.Security
         {
             return InRole(AclRole.Administrator) ||
                    (InRole(AclRole.Requester) &&
-                    request.RequestStates.Last().IdRequestStateType == 1 &&
+                    request.RequestStates.OrderBy(rs => rs.IdRequestState).Last().IdRequestStateType == 1 &&
                     GetUserAllowedDepartments(request.User)
                         .Any(r => GetUserAllowedDepartments(GetUserInfo())
                             .Any(cu => r.IdDepartment == cu.IdDepartment)));
@@ -210,14 +210,14 @@ namespace RequestsForRights.Infrastructure.Security
 
         public bool CanAddCoordinator(Request request)
         {
-            var idRequestStateType = request.RequestStates.Last(r => !r.Deleted).IdRequestStateType;
+            var idRequestStateType = request.RequestStates.OrderBy(rs => rs.IdRequestState).Last(r => !r.Deleted).IdRequestStateType;
             return InRole(new[] { AclRole.Dispatcher, AclRole.Administrator }) && 
                 new[] { 1, 2 }.Contains(idRequestStateType);
         }
 
         public bool CanSetRequestState(Request request, int idRequestStateType)
         {
-            if (request.RequestStates.Last(r => !r.Deleted).IdRequestStateType == idRequestStateType)
+            if (request.RequestStates.OrderBy(rs => rs.IdRequestState).Last(r => !r.Deleted).IdRequestStateType == idRequestStateType)
             {
                 return false;
             }
@@ -276,13 +276,13 @@ namespace RequestsForRights.Infrastructure.Security
 
         private bool DispatcherCanSetRequestState(Request request)
         {
-            return request.RequestStates.
+            return request.RequestStates.OrderBy(rs => rs.IdRequestState).
                 Last(r => !r.Deleted).IdRequestStateType == 2;
         }
 
         private bool ResourceOwnerCanSetRequestState(Request request)
         {
-            var isFirstState = request.RequestStates.
+            var isFirstState = request.RequestStates.OrderBy(rs => rs.IdRequestState).
                 Last(r => !r.Deleted).IdRequestStateType == 1;
             if (!isFirstState)
             {
@@ -309,7 +309,7 @@ namespace RequestsForRights.Infrastructure.Security
                 return false;
             }
             return
-                request.RequestStates.Last(r => !r.Deleted).IdRequestStateType == 1 &&
+                request.RequestStates.OrderBy(rs => rs.IdRequestState).Last(r => !r.Deleted).IdRequestStateType == 1 &&
                 request.RequestAgreements.Any(r =>
                     r.IdUser == userInfo.IdUser &&
                     r.IdAgreementType == 2 && r.IdAgreementState == 1);

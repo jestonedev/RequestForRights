@@ -35,8 +35,10 @@ $(function() {
 $("form")
     .keypress(function (e) {
         if (e.which === 13) {
-            if (e.target.type === "textarea" || e.target.type === "select") {
-                return true;
+            if (e.target.tagName.toLowerCase() === "textarea" ||
+                e.target.tagName.toLowerCase() === "select") {
+                e.preventDefault();
+                return false;
             }
             $(this).find(".rr-save-button").click();
             e.preventDefault();
@@ -48,16 +50,27 @@ $("form")
 $("body")
     .on("change focus",
         "select",
-        function() {
-            showSelectPopover($(this));
+        function () {
+            if ($(this).is(":focus")) {
+                if (timer) {
+                    clearTimeout(timer);
+                }
+                showSelectPopover($(this));
+            }
         });
+
+var timer = undefined;
 
 $("body")
     .on("mouseenter",
         "select",
         function () {
             if (!$(this).is(":focus")) {
-                showSelectPopover($(this));
+                if (timer) {
+                    clearTimeout(timer);
+                }
+                var select = $(this);
+                timer = setTimeout(function () { showSelectPopover(select); }, 300);
             }
         });
 
@@ -66,6 +79,9 @@ $("body")
         "select",
         function () {
             if (!$(this).is(":focus")) {
+                if (timer) {
+                    clearTimeout(timer);
+                }
                 $(this).popover("hide");
             }
         });
@@ -78,8 +94,7 @@ function showSelectPopover(select) {
         return;
     }
     description = $.trim(description).replace(/\n/g, "<br>");
-    if (select.data("prev-content") !== description) {
-        select.data("prev-content", select.attr("data-content"));
+    if (select.data("data-content") !== description) {
         select.attr("data-content", description);
         select.popover("show");
     } else {
@@ -88,3 +103,11 @@ function showSelectPopover(select) {
         }
     }
 }
+
+function getCurrentDate() {
+        var date = new Date();
+        var year = date.getFullYear();
+        var month = date.getMonth()+1;
+        var day = date.getDate();
+        return year + "-" + (month < 10 ? "0" : "") + month + "-" + (day < 10 ? "0" : "") + day;
+    }

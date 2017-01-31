@@ -7,17 +7,17 @@ using RequestsForRights.Infrastructure.Security.Interfaces;
 using RequestsForRights.Infrastructure.Services.Interfaces;
 using RequestsForRights.Infrastructure.Utilities.TransfertToRoute;
 using RequestsForRights.Models.Models;
-using RequestsForRights.Models.ViewModels;
+using RequestsForRights.Models.ViewModels.Request;
 
 namespace RequestsForRights.Controllers
 {
     public class RequestDelegatePermissionsController : Controller
     {
-        private readonly IRequestService<RequestDelegatePermissionsUserModel> _requestService;
+        private readonly IRequestDelegatePermissionsService _requestService;
         private readonly IRequestSecurityService<RequestDelegatePermissionsUserModel> _securityService;
 
         public RequestDelegatePermissionsController(
-            IRequestService<RequestDelegatePermissionsUserModel> requestService,
+            IRequestDelegatePermissionsService requestService,
             IRequestSecurityService<RequestDelegatePermissionsUserModel> securityService)
         {
             if (requestService == null)
@@ -59,7 +59,7 @@ namespace RequestsForRights.Controllers
 
         [TransferActionOnly]
         [HttpPut]
-        public ActionResult Update(RequestViewModel<RequestDelegatePermissionsUserModel> requestViewModel)
+        public ActionResult Update(RequestDelegatePermissionsViewModel requestViewModel)
         {
             if (requestViewModel == null || requestViewModel.RequestModel == null)
             {
@@ -105,7 +105,7 @@ namespace RequestsForRights.Controllers
 
         [TransferActionOnly]
         [HttpPost]
-        public ActionResult Create(RequestViewModel<RequestDelegatePermissionsUserModel> requestViewModel)
+        public ActionResult Create(RequestDelegatePermissionsViewModel requestViewModel)
         {
             if (requestViewModel == null || requestViewModel.RequestModel == null)
             {
@@ -124,15 +124,15 @@ namespace RequestsForRights.Controllers
             }
             try
             {
-                _requestService.InsertRequest(requestViewModel.RequestModel);
+                var request = _requestService.InsertRequest(requestViewModel.RequestModel);
                 _requestService.SaveChanges();
+                return RedirectToAction("Detail", "Request", new { id = request.IdRequest });
             }
             catch (DbUpdateException e)
             {
                 return RedirectToAction("ConflictError", "Home",
                     new { message = ExceptionHelper.RollToInnerException(e).Message });
             }
-            return RedirectToAction("Index", "Request");
         }
 
         private void Validate(RequestModel<RequestDelegatePermissionsUserModel> request)

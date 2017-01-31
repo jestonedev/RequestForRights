@@ -6,7 +6,7 @@ namespace RequestsForRights.Models.ViewModels
 {
     public class RequestIndexViewModel
     {
-        public IEnumerable<Request> VisibleRequests { get; set; }
+        public IEnumerable<Domain.Entities.Request> VisibleRequests { get; set; }
         public int RequestCount { get; set; }
         public FilterOptions.RequestsFilterOptions FilterOptions { get; set; }
         public IEnumerable<RequestStateType> RequestStateTypes { get; set; }

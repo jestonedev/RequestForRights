@@ -7,6 +7,7 @@ namespace RequestsForRights.Database.Repositories.Interfaces
     {
         IQueryable<Request> GetRequests();
         IQueryable<RequestStateType> GetRequestStateTypes();
+        IQueryable<RequestRightGrantType> GetRequestRightGrantTypes();
         IQueryable<RequestType> GetRequestTypes();
         IQueryable<RequestUserLastSeen> GetRequestsUserLastSeens(string login);
         Request GetRequestById(int idRequest);

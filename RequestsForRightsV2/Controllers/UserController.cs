@@ -50,10 +50,10 @@ namespace RequestsForRights.Controllers
 
         public ActionResult GetPermanentRightsOnDate(DateTime date, RequestUser requestUser)
         {
-            requestUser = _userService.FindUser(requestUser);
+           requestUser = _userService.FindUser(requestUser);
             if (requestUser == null)
             {
-                return Json(new List<ResourceUserRightModel>());
+                return Json(new List<ResourceUserRightModel>(), JsonRequestBehavior.AllowGet);
             }
             if (!_userSecurityService.CanRead(requestUser))
             {

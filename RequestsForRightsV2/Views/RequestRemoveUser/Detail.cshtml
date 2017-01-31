@@ -1,6 +1,6 @@
 ﻿@using RequestsForRights.Infrastructure.Security.Interfaces
 @using RequestsForRights.Models.Models
-@model RequestsForRights.Models.ViewModels.RequestViewModel<RequestUserModel>
+@model RequestsForRights.Models.ViewModels.Request.RequestRemoveUserViewModel
 
 @{
     var securityService = (IRequestSecurityService<RequestUserModel>)ViewData["SecurityService"];
@@ -89,7 +89,7 @@
 @section scripts {
     @Scripts.Render("~/bundles/jquery.autocomplete")
     @Scripts.Render("~/bundles/rr-request.common")
+    @Scripts.Render("~/bundles/rr-detail.update.common")
     @Scripts.Render("~/bundles/rr-request.comments")
     @Scripts.Render("~/bundles/rr-request.agreements")
-    @Scripts.Render("~/bundles/rr-detail.update.common")
 }

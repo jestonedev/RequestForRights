@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using RequestsForRights.Domain.Entities;
 
 namespace RequestsForRights.Database.Repositories.Interfaces

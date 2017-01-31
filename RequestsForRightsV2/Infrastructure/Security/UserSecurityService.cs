@@ -4,6 +4,7 @@ using RequestsForRights.Domain.Entities;
 using RequestsForRights.Infrastructure.Security.Interfaces;
 using AclRole = RequestsForRights.Infrastructure.Enums.AclRole;
 using System;
+using System.Collections.Generic;
 
 namespace RequestsForRights.Infrastructure.Security
 {
@@ -64,6 +65,11 @@ namespace RequestsForRights.Infrastructure.Security
                     Any(department => department == r.IdDepartment ||
                                       (r.ParentDepartment != null && 
                                       department == r.ParentDepartment.IdDepartment)));
+        }
+
+        public override bool CanRead(RequestUser requestUser)
+        {
+            return FilterUsers(new List<RequestUser> {requestUser}.AsQueryable()).Any();
         }
     }
 }

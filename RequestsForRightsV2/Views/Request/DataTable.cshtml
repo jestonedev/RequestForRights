@@ -2,12 +2,14 @@
 @using RequestsForRights.Infrastructure.Security.Interfaces
 @using RequestsForRights.Infrastructure.Services.Interfaces
 @using RequestsForRights.Models.Models
+@using RequestsForRights.Models.ViewModels.Request
 @using SortDirection = RequestsForRights.Infrastructure.Enums.SortDirection
 @model RequestsForRights.Models.ViewModels.RequestIndexViewModel
 
 @{
     var securityService = (IRequestSecurityService<RequestUserModel>)ViewData["SecurityService"];
-    var requestService = (IRequestService<RequestUserModel>)ViewData["RequestService"];
+    var requestService = (IRequestService<RequestUserModel, 
+        RequestViewModel<RequestUserModel>>)ViewData["RequestService"];
     var headers = new[]
     {
         new
@@ -86,10 +88,10 @@
             <tr class="@rowClass">
                 <td class="rr-column col-sm-1">@request.IdRequest</td>
                 <td class="rr-column col-sm-2">@request.User.Snp</td>
-                <td class="rr-column col-sm-2">@request.RequestStates.Last(r => !r.Deleted).RequestStateType.Name</td>
+                <td class="rr-column col-sm-2">@request.RequestStates.OrderBy(rs => rs.IdRequestState).Last(r => !r.Deleted).RequestStateType.Name</td>
                 <td class="rr-column col-sm-2">@request.RequestType.Name</td>
                 <td class="rr-column col-sm-4">@request.Description</td>
-                <td class="rr-column col-sm-1">@request.RequestStates.First(r => !r.Deleted).Date.ToString("dd.MM.yyyy", CultureInfo.CurrentCulture)</td>
+                <td class="rr-column col-sm-1">@request.RequestStates.OrderBy(rs => rs.IdRequestState).First(r => !r.Deleted).Date.ToString("dd.MM.yyyy", CultureInfo.CurrentCulture)</td>
                 <td class="rr-edit-column text-center">
                     <div class="btn-group btn-group-xs" role="group" aria-label="Панель редактирования записи">
                         <a href="@Url.Action("Detail", new {id = request.IdRequest})"

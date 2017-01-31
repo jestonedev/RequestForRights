@@ -19,19 +19,6 @@ namespace RequestsForRights
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
                         "~/Scripts/modernizr-*"));
 
-            bundles.Add(new ScriptBundle("~/bundles/rr-common").Include("~/Scripts/rr-common.js"));
-            bundles.Add(new ScriptBundle("~/bundles/rr-index.common").Include("~/Scripts/rr-index.common.js"));
-            bundles.Add(new ScriptBundle("~/bundles/rr-detail.update.common").Include("~/Scripts/rr-detail.update.common.js"));
-            bundles.Add(new ScriptBundle("~/bundles/rr-resource.common").Include("~/Scripts/rr-resource.common.js"));
-            bundles.Add(new ScriptBundle("~/bundles/rr-request.index").Include("~/Scripts/rr-request.index.js"));
-            bundles.Add(new ScriptBundle("~/bundles/rr-request.common").Include("~/Scripts/rr-request.common.js"));
-            bundles.Add(new ScriptBundle("~/bundles/rr-request.adduser").Include("~/Scripts/rr-request.adduser.js"));
-            bundles.Add(new ScriptBundle("~/bundles/rr-request.comments").Include("~/Scripts/rr-request.comments.js"));
-            bundles.Add(new ScriptBundle("~/bundles/rr-request.agreements").Include("~/Scripts/rr-request.agreements.js"));
-            bundles.Add(new ScriptBundle("~/bundles/rr-help").Include("~/Scripts/rr-help.js"));
-            bundles.Add(new ScriptBundle("~/bundles/rr-report.common").Include("~/Scripts/rr-report.common.js"));
-            bundles.Add(new ScriptBundle("~/bundles/rr-report.user-rights").Include("~/Scripts/rr-report.user-rights.js"));
-
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js"));
@@ -49,6 +36,24 @@ namespace RequestsForRights
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
+
+            bundles.Add(new ScriptBundle("~/bundles/json2").Include(
+                      "~/Scripts/json2.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/rr-common").Include("~/Scripts/rr-common.js"));
+            bundles.Add(new ScriptBundle("~/bundles/rr-index.common").Include("~/Scripts/rr-index.common.js"));
+            bundles.Add(new ScriptBundle("~/bundles/rr-request.common").Include("~/Scripts/rr-request.common.js"));
+            bundles.Add(new ScriptBundle("~/bundles/rr-detail.update.common").Include("~/Scripts/rr-detail.update.common.js"));
+            bundles.Add(new ScriptBundle("~/bundles/rr-request.update.insert.common").Include("~/Scripts/rr-request.update.insert.common.js"));
+            bundles.Add(new ScriptBundle("~/bundles/rr-resource.common").Include("~/Scripts/rr-resource.common.js"));
+            bundles.Add(new ScriptBundle("~/bundles/rr-request.index").Include("~/Scripts/rr-request.index.js"));
+            bundles.Add(new ScriptBundle("~/bundles/rr-request.add-user").Include("~/Scripts/rr-request.add-user.js"));
+            bundles.Add(new ScriptBundle("~/bundles/rr-request.rr-request.modify-permissions").Include("~/Scripts/rr-request.modify-permissions.js"));
+            bundles.Add(new ScriptBundle("~/bundles/rr-request.comments").Include("~/Scripts/rr-request.comments.js"));
+            bundles.Add(new ScriptBundle("~/bundles/rr-request.agreements").Include("~/Scripts/rr-request.agreements.js"));
+            bundles.Add(new ScriptBundle("~/bundles/rr-help").Include("~/Scripts/rr-help.js"));
+            bundles.Add(new ScriptBundle("~/bundles/rr-report.common").Include("~/Scripts/rr-report.common.js"));
+            bundles.Add(new ScriptBundle("~/bundles/rr-report.user-rights").Include("~/Scripts/rr-report.user-rights.js"));
         }
     }
 }

@@ -20,8 +20,23 @@ namespace RequestsForRights.Database.Repositories
 
         public IQueryable<RequestUser> FindUsers(string snpPattern)
         {
-            return _databaseContext.Users.Where(r => !r.Deleted && 
-                r.Snp.Contains(snpPattern));
+            return _databaseContext.Users.Where(r => !r.Deleted &&
+                  r.Snp.Contains(snpPattern));
+        }
+
+        public IQueryable<Request> GetRequests()
+        {
+            return _databaseContext.Requests.Where(r => !r.Deleted);
+        }
+
+        public IQueryable<RequestState> GetRequestStates()
+        {
+            return _databaseContext.RequestStates.Where(r => !r.Deleted);
+        }
+
+        public IQueryable<RequestUserAssoc> GetRequestUserAssocs()
+        {
+            return _databaseContext.RequestUserAssocs.Where(r => !r.Deleted);
         }
 
         public IQueryable<Department> GetDepartments()

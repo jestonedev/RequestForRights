@@ -44,11 +44,70 @@ namespace RequestsForRights.Infrastructure.Services
 
         public IEnumerable<RequestUser> FindUsers(string snpPattern, int maxCount)
         {
-            var dbUsers = FilterUsersFields(_securityRepository.FilterUsers(
-                _userRepository.FindUsers(snpPattern)).Take(maxCount));
+            var dbUsers = FilterUsersFields(FindDbUsers(snpPattern, maxCount));
             var ldapUsers = FilterUsersFields(FindActiveDirectoryUsers(snpPattern, maxCount));
-           var result = ldapUsers.Concat(dbUsers).OrderBy(r => r.Snp).Distinct().Take(10);
+            var result = ldapUsers.Concat(dbUsers).OrderBy(r => r.Snp).Distinct().Take(10);
             return result;
+        }
+
+        private IEnumerable<RequestUser> FindDbUsers(string snpPattern, int maxCount)
+        {
+            var users = _userRepository.FindUsers(snpPattern);
+
+            var lastStatesByRequest = from stateRow in _userRepository.GetRequestStates()
+                                      group stateRow.IdRequestState by stateRow.IdRequest
+                                          into gs
+                                          select new
+                                          {
+                                              IdRequest = gs.Key,
+                                              IdRequestState = gs.Max()
+                                          };
+            var completedRequests = from lastStateRow in lastStatesByRequest
+                join stateRow in _userRepository.GetRequestStates()
+                    on lastStateRow.IdRequestState equals stateRow.IdRequestState
+                join requestRow in _userRepository.GetRequests()
+                    on stateRow.IdRequest equals requestRow.IdRequest
+                join userAssocRow in _userRepository.GetRequestUserAssocs()
+                    on requestRow.IdRequest equals userAssocRow.IdRequest
+                where stateRow.IdRequestStateType == 4
+                select new
+                {
+                    requestRow.IdRequest,
+                    requestRow.IdRequestType,
+                    userAssocRow.IdRequestUser,
+                    stateRow.Date
+                };
+
+            var lastRequestsDateForUsers = from row in completedRequests
+                group row.Date by row.IdRequestUser
+                into gs
+                select new
+                {
+                    Date = gs.Max(),
+                    IdRequestUser = gs.Key
+                };
+
+            completedRequests = from requestRow in completedRequests
+                join lrRow in lastRequestsDateForUsers
+                    on new {requestRow.IdRequestUser, requestRow.Date} equals
+                    new {lrRow.IdRequestUser, lrRow.Date}
+                where requestRow.IdRequestType == 3
+                select new
+                {
+                    requestRow.IdRequest,
+                    requestRow.IdRequestType,
+                    requestRow.IdRequestUser,
+                    requestRow.Date
+                };
+
+            var excludeUsers = from request in completedRequests
+                join userAssoc in _userRepository.GetRequestUserAssocs()
+                    on request.IdRequest equals userAssoc.IdRequest
+                select userAssoc.RequestUser;
+
+            users = users.Except(excludeUsers);
+
+            return _securityRepository.FilterUsers(users).Take(maxCount);
         }
 
         private IEnumerable<LdapUser> FindActiveDirectoryUsers(string snpPattern, int maxCount)

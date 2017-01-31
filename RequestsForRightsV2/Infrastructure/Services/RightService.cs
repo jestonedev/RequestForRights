@@ -56,8 +56,10 @@ namespace RequestsForRights.Infrastructure.Services
                     requestUserAssocRow.IdRequestUser,
                     requestUserAssocRow.IdRequestUserAssoc
                 };
+            date = date.Date.AddDays(1).AddSeconds(-1);
             var excludedUserDates = from completedUserRow in completedUsers
-                where completedUserRow.IdRequestType == 3
+                where completedUserRow.IdRequestType == 3 &&
+                    completedUserRow.DateFrom <= date
                 // Disconnect user
                 group completedUserRow.DateFrom by completedUserRow.IdRequestUser
                 into gs
@@ -66,7 +68,6 @@ namespace RequestsForRights.Infrastructure.Services
                     IdRequestUser = gs.Key,
                     DisconnectDate = gs.Max()
                 };
-            date = date.Date.AddDays(1).AddSeconds(-1);
             var changingUserAssocs = from completedUserRow in completedUsers
                 join excludeUserDateRow in excludedUserDates
                     on completedUserRow.IdRequestUser equals excludeUserDateRow.IdRequestUser into exUser
@@ -177,8 +178,10 @@ namespace RequestsForRights.Infrastructure.Services
                     requestUserAssocRow.IdRequestUser,
                     requestUserAssocRow.IdRequestUserAssoc
                 };
+            date = date.Date.AddDays(1).AddSeconds(-1);
             var excludedUserDates = from completedUserRow in completedUsers
-                where completedUserRow.IdRequestType == 3
+                where completedUserRow.IdRequestType == 3 &&
+                      completedUserRow.DateFrom <= date
                 // Disconnect user
                 group completedUserRow.DateFrom by completedUserRow.IdRequestUser
                 into gs
@@ -195,9 +198,9 @@ namespace RequestsForRights.Infrastructure.Services
                 from exUserRow in exUser.DefaultIfEmpty()
                 where completedUserRow.IdRequestType == 4 &&
                       date >= delegateExtInfoRow.DelegateFromDate && 
-                      date < delegateExtInfoRow.DelegateToDate  &&
-                      (exUserRow == null || exUserRow.DisconnectDate > date ||
-                       exUserRow.DisconnectDate < delegateExtInfoRow.DelegateFromDate) &&
+                      date <= delegateExtInfoRow.DelegateToDate  &&
+                      (exUserRow == null || 
+                      exUserRow.DisconnectDate < delegateExtInfoRow.DelegateFromDate) &&
                       (idRequestUser == null || 
                       completedUserRow.IdRequestUser == idRequestUser.Value ||
                       delegateExtInfoRow.IdDelegateToUser == idRequestUser.Value)

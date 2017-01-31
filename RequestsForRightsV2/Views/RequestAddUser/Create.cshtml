@@ -1,4 +1,4 @@
-﻿@model RequestsForRights.Models.ViewModels.RequestViewModel<RequestsForRights.Models.Models.RequestUserModel>
+﻿@model RequestsForRights.Models.ViewModels.Request.RequestAddUserViewModel
 
 @{
     ViewBag.Title = "Добавить заявку на подключение нового сотрудника";
@@ -22,5 +22,6 @@
 @section scripts {
     @Scripts.Render("~/bundles/jquery.autocomplete")
     @Scripts.Render("~/bundles/rr-request.common")
-    @Scripts.Render("~/bundles/rr-request.adduser")
+    @Scripts.Render("~/bundles/rr-request.update.insert.common")
+    @Scripts.Render("~/bundles/rr-request.add-user")
 }

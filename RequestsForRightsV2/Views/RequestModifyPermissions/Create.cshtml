@@ -1,16 +1,16 @@
-﻿@model RequestsForRights.Models.ViewModels.RequestViewModel<RequestsForRights.Models.Models.RequestUserModel>
+﻿@model RequestsForRights.Models.ViewModels.Request.RequestModifyPermissionsViewModel
 
 @{
-    ViewBag.Title = "Добавить заявку на выдачу и лишиние прав пользователя";
+    ViewBag.Title = "Добавить заявку на изменение прав сотрудника";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Новая заявка на выдачу и лишение прав пользователя</h2>
+<h2>Новая заявка на изменение прав сотрудника</h2>
 
 @using (Html.BeginForm("Create", "Request", new { IdRequestType = 2 }, FormMethod.Post,
     new { @class = "form-horizontal", id = "rr-request-form" }))
 {
-    @Html.Hidden("Request.IdRequestType", 2)
+    @Html.Hidden("RequestModel.IdRequestType", 2)
     <div class="text-center">
         @Html.ValidationSummary(true)
     </div>
@@ -22,5 +22,8 @@
 
 @section scripts {
     @Scripts.Render("~/bundles/jquery.autocomplete")
+    @Scripts.Render("~/bundles/json2")
     @Scripts.Render("~/bundles/rr-request.common")
+    @Scripts.Render("~/bundles/rr-request.update.insert.common")
+    @Scripts.Render("~/bundles/rr-request.rr-request.modify-permissions")
 }

@@ -12,20 +12,20 @@ using RequestsForRights.Infrastructure.Services.Interfaces;
 using RequestsForRights.Models.FilterOptions;
 using RequestsForRights.Models.Models;
 using RequestsForRights.Models.ViewModels;
+using RequestsForRights.Models.ViewModels.Request;
 using AclRole = RequestsForRights.Infrastructure.Enums.AclRole;
 
 namespace RequestsForRights.Infrastructure.Services
 {
-    public class RequestService<T> : IRequestService<T>
-        where T: RequestUserModel, new()
+    public class RequestService<TUserModel, TViewModel> : IRequestService<TUserModel, TViewModel>
+        where TUserModel: RequestUserModel, new()
+        where TViewModel: RequestViewModel<TUserModel>, new()
     {
         protected readonly IRequestRepository RequestsRepository;
-        private readonly IResourceRepository _resourceRepository;
-        protected readonly IRequestSecurityService<T> RequestSecurityService;
+        protected readonly IRequestSecurityService<TUserModel> RequestSecurityService;
 
         public RequestService(IRequestRepository requestsRepository,
-            IResourceRepository resourceRepository,
-            IRequestSecurityService<T> requestSecurityService)
+            IRequestSecurityService<TUserModel> requestSecurityService)
         {
             if (requestsRepository == null)
             {
@@ -37,11 +37,6 @@ namespace RequestsForRights.Infrastructure.Services
                 throw new ArgumentNullException("requestSecurityService");
             }
             RequestSecurityService = requestSecurityService;
-            if (resourceRepository == null)
-            {
-                throw new ArgumentNullException("resourceRepository");
-            }
-            _resourceRepository = resourceRepository;
         }
 
         public IQueryable<Request> GetNotSeenRequests()
@@ -97,9 +92,9 @@ namespace RequestsForRights.Infrastructure.Services
                     switch (sortDirection)
                     {
                         case SortDirection.Asc:
-                            return requests.OrderBy(r => r.RequestStates.FirstOrDefault().Date);
+                            return requests.OrderBy(r => r.RequestStates.OrderBy(rs => rs.IdRequestState).FirstOrDefault().Date);
                         case SortDirection.Desc:
-                            return requests.OrderByDescending(r => r.RequestStates.FirstOrDefault().Date);
+                            return requests.OrderByDescending(r => r.RequestStates.OrderBy(rs => rs.IdRequestState).FirstOrDefault().Date);
                         default:
                             return requests;
                     }
@@ -117,7 +112,7 @@ namespace RequestsForRights.Infrastructure.Services
             }
             if (filterOptions.IdRequestStateType != null)
             {
-                requests = requests.Where(r => r.RequestStates.Where(rs => !rs.Deleted).
+                requests = requests.Where(r => r.RequestStates.OrderBy(rs => rs.IdRequestState).Where(rs => !rs.Deleted).
                     OrderByDescending(rs => rs.IdRequestState).FirstOrDefault().IdRequestStateType == 
                     filterOptions.IdRequestStateType);
             }
@@ -128,14 +123,14 @@ namespace RequestsForRights.Infrastructure.Services
             }
             if (filterOptions.DateOfFillingFrom != null)
             {
-                requests = requests.Where(r => 
-                    r.RequestStates.FirstOrDefault(rs => !rs.Deleted).Date >= 
+                requests = requests.Where(r =>
+                    r.RequestStates.OrderBy(rs => rs.IdRequestState).FirstOrDefault(rs => !rs.Deleted).Date >= 
                     DbFunctions.TruncateTime(filterOptions.DateOfFillingFrom.Value));
             }
             if (filterOptions.DateOfFillingTo != null)
             {
                 requests = requests.Where(r =>
-                    r.RequestStates.FirstOrDefault(rs => !rs.Deleted).Date <= 
+                    r.RequestStates.OrderBy(rs => rs.IdRequestState).FirstOrDefault(rs => !rs.Deleted).Date <= 
                     DbFunctions.AddSeconds(DbFunctions.AddDays(DbFunctions.TruncateTime(filterOptions.DateOfFillingTo.Value), 1), -1));
             }
             if (filterOptions.RequestCategory == RequestCategory.NotSeenRequests)
@@ -167,7 +162,8 @@ namespace RequestsForRights.Infrastructure.Services
             }
             return new RequestIndexViewModel
             {
-                VisibleRequests = requests, FilterOptions = filterOptions, 
+                VisibleRequests = requests, 
+                FilterOptions = filterOptions, 
                 RequestCount = filteredRequests.Count(), 
                 RequestStateTypes = RequestsRepository.GetRequestStateTypes(), 
                 RequestTypes = RequestsRepository.GetRequestTypes(), 
@@ -199,9 +195,9 @@ namespace RequestsForRights.Infrastructure.Services
             return RequestsRepository.GetRequestById(idRequest);
         }
 
-        public virtual RequestModel<T> GetRequestModelBy(Request request)
+        public virtual RequestModel<TUserModel> GetRequestModelBy(Request request)
         {
-            return new RequestModel<T>
+            return new RequestModel<TUserModel>
             {
                 IdRequest = request.IdRequest,
                 Description = request.Description,
@@ -216,14 +212,14 @@ namespace RequestsForRights.Infrastructure.Services
             return RequestsRepository.DeleteRequest(idRequest);
         }
 
-        public virtual Request UpdateRequest(RequestModel<T> requestModel)
+        public virtual Request UpdateRequest(RequestModel<TUserModel> requestModel)
         {
             var request = ConvertToRequest(requestModel);
             return RequestsRepository.UpdateRequest(request, 
                 !RequestSecurityService.InRole(AclRole.Administrator));
         }
 
-        public virtual Request InsertRequest(RequestModel<T> requestModel)
+        public virtual Request InsertRequest(RequestModel<TUserModel> requestModel)
         {
             var request = ConvertToRequest(requestModel);
             request.User = RequestSecurityService.GetUserInfo();
@@ -241,7 +237,7 @@ namespace RequestsForRights.Infrastructure.Services
             return RequestsRepository.InsertRequest(request);
         }
 
-        protected virtual Request ConvertToRequest(RequestModel<T> requestModel)
+        protected virtual Request ConvertToRequest(RequestModel<TUserModel> requestModel)
         {
             requestModel.Users = ClearUsersDuplicates(requestModel.Users);
 
@@ -290,12 +286,12 @@ namespace RequestsForRights.Infrastructure.Services
             return request;
         }
 
-        protected virtual IList<T> ClearUsersDuplicates(IEnumerable<T> users)
+        protected virtual IList<TUserModel> ClearUsersDuplicates(IEnumerable<TUserModel> users)
         {
             return (from user in users
                 group user by new {user.Login, user.Snp, user.Department, user.Unit, user.Description}
                 into gs
-                select new T
+                select new TUserModel
                 {
                     Login = gs.Key.Login,
                     Snp = gs.Key.Snp,
@@ -443,15 +439,15 @@ namespace RequestsForRights.Infrastructure.Services
                 GetRequestAgreements(idRequest).ToList().Concat(new[] {newAgreement}).ToList()).Any();
         }
 
-        public virtual RequestViewModel<T> GetEmptyRequestViewModel()
+        public virtual TViewModel GetEmptyRequestViewModel()
         {
-            return new RequestViewModel<T>
+            return new TViewModel
             {
-                RequestModel = new RequestModel<T>
+                RequestModel = new RequestModel<TUserModel>
                 {
-                    Users = new List<T>
+                    Users = new List<TUserModel>
                     {
-                        new T
+                        new TUserModel
                         {
                             Rights = new List<RequestUserRightModel>
                             {
@@ -459,9 +455,7 @@ namespace RequestsForRights.Infrastructure.Services
                             }
                         }
                     }
-                },
-                Resources = _resourceRepository.GetResources().OrderBy(r => r.Name).ToList(),
-                ResourceRights = _resourceRepository.GetResourceRights().OrderBy(r => r.Name).ToList()
+                }
             };
         }
 
@@ -480,9 +474,9 @@ namespace RequestsForRights.Infrastructure.Services
             return RequestsRepository.GetRequestAgreements(idRequest);
         }
 
-        protected T FillRequestUserModel(RequestUserAssoc userAssoc)
+        protected TUserModel FillRequestUserModel(RequestUserAssoc userAssoc)
         {
-            return new T
+            return new TUserModel
             {
                 Description = userAssoc.Description, 
                 Login = userAssoc.RequestUser.Login, 
@@ -511,27 +505,23 @@ namespace RequestsForRights.Infrastructure.Services
             };
         }
 
-        public virtual RequestViewModel<T> GetRequestViewModelBy(Request request)
+        public virtual TViewModel GetRequestViewModelBy(Request request)
         {
             var viewModel = GetPreRequestViewModel(request.IdRequest);
             viewModel.RequestModel = GetRequestModelBy(request);
             return viewModel;
         }
 
-        public virtual RequestViewModel<T> GetRequestViewModelBy(RequestModel<T> request)
+        public virtual TViewModel GetRequestViewModelBy(RequestModel<TUserModel> request)
         {
             var viewModel = GetPreRequestViewModel(request.IdRequest);
             viewModel.RequestModel = request;
             return viewModel;
         }
 
-        private RequestViewModel<T> GetPreRequestViewModel(int idRequest)
+        private TViewModel GetPreRequestViewModel(int idRequest)
         {
-            var preRequestViewModel = new RequestViewModel<T>
-            {
-                Resources = _resourceRepository.GetResources().OrderBy(r => r.Name),
-                ResourceRights = _resourceRepository.GetResourceRights().OrderBy(r => r.Name)
-            };
+            var preRequestViewModel = new TViewModel();
             if (default(int) == idRequest)
             {
                 return preRequestViewModel;
@@ -560,7 +550,7 @@ namespace RequestsForRights.Infrastructure.Services
             IList<RequestAgreement> agreements)
         {
             var request = GetRequestById(idRequest);
-            if (request.RequestStates.Last(r => !r.Deleted).IdRequestStateType != 1)
+            if (request.RequestStates.OrderBy(r => r.IdRequestState).Last(r => !r.Deleted).IdRequestStateType != 1)
             {
                 return new List<AclUser>();
             }

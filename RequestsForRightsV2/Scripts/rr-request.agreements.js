@@ -164,6 +164,9 @@ function coordinatorAddingFailure() {
 }
 
 function sendAgreementSuccess() {
+    $("#rr-new-coordinator-snp").val("");
+    $("#rr-new-coordinator-department").val("");
+    $("#rr-new-coordinator-unit").val("");
     initializeCoordinatorAutocomplete();
 }
 

@@ -1,16 +1,15 @@
 ﻿@using RequestsForRights.Infrastructure.Security.Interfaces
 @using RequestsForRights.Models.Models
-@model RequestsForRights.Models.ViewModels.RequestViewModel<RequestUserModel>
+@model RequestsForRights.Models.ViewModels.Request.RequestModifyPermissionsViewModel
 
 @{
     var securityService = (IRequestSecurityService<RequestUserModel>)ViewData["SecurityService"];
-    ViewData["IdRequest"] = Model.RequestModel.IdRequest;
     ViewData["IdRequest"] = Model.RequestModel.IdRequest;
     ViewBag.Title = "Заявка на выдачу и лишение прав пользователя";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Заявка # @Model.RequestModel.IdRequest на выдачу и лишение прав пользователя </h2>
+<h2>Заявка # @Model.RequestModel.IdRequest на изменение прав пользователя </h2>
 
 @Html.Partial("ErrorAlert")
 
@@ -19,7 +18,100 @@
     <div class="tab-content">
         <div role="tabpanel" class="tab-pane fade in active rr-tab-pane" id="rr-request-content">
             <div>
-                @Model.RequestModel.IdRequest
+                <div class="col-sm-12">
+                    <dl class="dl-horizontal">
+                        <dt>@Html.DisplayNameFor(r => r.RequestModel.Description)</dt>
+                        <dd>@Model.RequestModel.Description</dd>
+                    </dl>
+                </div>
+                <div class="panel-group rr-request-users" id="accordion" role="tablist" aria-multiselectable="true">
+                    @if (Model.RequestModel.Users != null)
+                    {
+                        for (var i = 0; i < Model.RequestModel.Users.Count; i++)
+                        {
+                            if (!securityService.CanVisibleUser(Model.RequestModel,
+                                Model.RequestModel.Users[i]))
+                            {
+                                continue;
+                            }
+                            var id = string.Format("collapse{0}", i);
+
+                            <div class="panel panel-primary rr-request-user">
+                                <div class="panel-heading" role="tab" id="heading@id">
+                                    <h4 class="panel-title">
+                                        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                                        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#@id" aria-expanded="true" aria-controls="@id">
+                                            Сотрудник «@(Model.RequestModel.Users[i].Snp)»
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="@id" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                                    <div class="panel-body">
+                                        <dl class="dl-horizontal">
+                                            <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].Snp)</dt>
+                                            <dd>@Model.RequestModel.Users[i].Snp</dd>
+                                            @if (securityService.CanSeeLogin())
+                                            {
+                                                <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].Login)</dt>
+                                                <dd>@Model.RequestModel.Users[i].Login</dd>
+                                            }
+                                            <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].Post)</dt>
+                                            <dd>@Model.RequestModel.Users[i].Post</dd>
+                                            <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].Department)</dt>
+                                            <dd>@Model.RequestModel.Users[i].Department</dd>
+                                            <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].Unit)</dt>
+                                            <dd>@Model.RequestModel.Users[i].Unit</dd>
+                                            <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].Office)</dt>
+                                            <dd>@Model.RequestModel.Users[i].Office</dd>
+                                            <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].Phone)</dt>
+                                            <dd>@Model.RequestModel.Users[i].Phone</dd>
+                                            @if (!string.IsNullOrEmpty(Model.RequestModel.Users[i].Description))
+                                            {
+                                                <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].Description)</dt>
+                                                <dd>@Model.RequestModel.Users[i].Description</dd>
+                                            }
+                                        </dl>
+                                        @if (Model.RequestModel.Users[i].Rights != null &&
+                                             Model.RequestModel.Users[i].Rights.Any())
+                                        {
+                                            <div class="panel panel-primary rr-request-rights">
+                                                <div class="panel-heading">
+                                                    <h3 class="panel-title">Изменить права</h3>
+                                                </div>
+                                                <ul class="list-group">
+                                                    @for (var j = 0; j < Model.RequestModel.Users[i].Rights.Count; j++)
+                                                    {
+                                                        if (!securityService.CanVisibleRight(
+                                                            Model.RequestModel,
+                                                            Model.RequestModel.Users[i].Rights[j]))
+                                                        {
+                                                            continue;
+                                                        }
+                                                        <li class="list-group-item">
+                                                            <dl class="dl-horizontal">
+                                                                <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].Rights[j].RequestRightGrantTypeName)</dt>
+                                                                <dd>@Model.RequestModel.Users[i].Rights[j].RequestRightGrantTypeName</dd>
+                                                                <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].Rights[j].ResourceName)</dt>
+                                                                <dd>@Model.RequestModel.Users[i].Rights[j].ResourceName</dd>
+                                                                <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].Rights[j].ResourceRightName)</dt>
+                                                                <dd>@Model.RequestModel.Users[i].Rights[j].ResourceRightName</dd>
+                                                                @if (!string.IsNullOrEmpty(Model.RequestModel.Users[i].Rights[j].Description))
+                                                                {
+                                                                    <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].Rights[j].Description)</dt>
+                                                                    <dd>@Model.RequestModel.Users[i].Rights[j].Description</dd>
+                                                                }
+                                                            </dl>
+                                                        </li>
+                                                    }
+                                                </ul>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
             </div>
             @Html.Partial("Request/EditPanels/Detail")
         </div>
@@ -37,7 +129,7 @@
 @section scripts {
     @Scripts.Render("~/bundles/jquery.autocomplete")
     @Scripts.Render("~/bundles/rr-request.common")
+    @Scripts.Render("~/bundles/rr-detail.update.common")
     @Scripts.Render("~/bundles/rr-request.comments")
     @Scripts.Render("~/bundles/rr-request.agreements")
-    @Scripts.Render("~/bundles/rr-detail.update.common")
 }

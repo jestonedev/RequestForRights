@@ -15,6 +15,7 @@ using RequestsForRights.Infrastructure.Services;
 using RequestsForRights.Infrastructure.Services.Interfaces;
 using RequestsForRights.Ldap;
 using RequestsForRights.Models.Models;
+using RequestsForRights.Models.ViewModels.Request;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
 [assembly: WebActivatorEx.ApplicationShutdownMethodAttribute(typeof(NinjectWebCommon), "Stop")]
@@ -88,10 +89,13 @@ namespace RequestsForRights
             // Data services
             kernel.Bind<IRightService>().To<RightService>();
             kernel.Bind<IReportService>().To<ReportService>();
-            kernel.Bind<IRequestService<RequestUserModel>>().To<RequestService<RequestUserModel>>();
+            kernel.Bind<IRequestService<RequestUserModel, RequestViewModel<RequestUserModel>>>().
+                To<RequestService<RequestUserModel, RequestViewModel<RequestUserModel>>>();
             kernel.Bind<IRequestAddUserService>().To<RequestAddUserService>();
-            kernel.Bind<IRequestService<RequestDelegatePermissionsUserModel>>().
-                To<RequestDelegatePermissionsService>();
+            kernel.Bind<RequestDelegatePermissionsService>().To<RequestDelegatePermissionsService>();
+            kernel.Bind<IRequestModifyPermissionsService>().To<RequestModifyPermissionsService>();
+            kernel.Bind<IRequestRemoveUserService>().To<RequestRemoveUserService>();
+            kernel.Bind<IRequestDelegatePermissionsService>().To<RequestDelegatePermissionsService>();
             kernel.Bind<IResourceGroupService>().To<ResourceGroupService>();
             kernel.Bind<IResourceService>().To<ResourceService>();
             kernel.Bind<IUserService>().To<UserService>();

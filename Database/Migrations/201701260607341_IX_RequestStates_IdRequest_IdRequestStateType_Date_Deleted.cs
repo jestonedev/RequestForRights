@@ -1,6 +1,5 @@
 namespace RequestsForRights.Database.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
     
     public partial class IX_RequestStates_IdRequest_IdRequestStateType_Date_Deleted : DbMigration
