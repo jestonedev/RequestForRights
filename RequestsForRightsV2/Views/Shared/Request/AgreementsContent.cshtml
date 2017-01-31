@@ -29,8 +29,11 @@
                                 <dl class="dl-horizontal">
                                     <dt>ФИО сотрудника</dt>
                                     <dd>@user.Snp</dd>
-                                    <dt>Почтовый адрес</dt>
-                                    <dd><a href="mailto:@(user.Email)">@user.Email</a></dd>
+                                    @if (!string.IsNullOrEmpty(user.Email))
+                                    {
+                                        <dt>Почтовый адрес</dt>
+                                        <dd><a href="mailto:@(user.Email)">@user.Email</a></dd>
+                                    }
                                     <dt>Телефон</dt>
                                     <dd>@user.Phone</dd>
                                     <dt>Тип согласования</dt>
@@ -62,8 +65,11 @@
                                 <dl class="dl-horizontal">
                                     <dt>ФИО сотрудника</dt>
                                     <dd>@agreement.User.Snp</dd>
-                                    <dt>Почтовый адрес</dt>
-                                    <dd><a href="mailto:@(agreement.User.Email)">@agreement.User.Email</a></dd>
+                                    @if (!string.IsNullOrEmpty(agreement.User.Email))
+                                    {
+                                        <dt>Почтовый адрес</dt>
+                                        <dd><a href="mailto:@(agreement.User.Email)">@agreement.User.Email</a></dd>
+                                    }
                                     <dt>Телефон</dt>
                                     <dd>@agreement.User.Phone</dd>
                                     <dt>Дата согласования</dt>
@@ -94,8 +100,11 @@
                             <dl class="dl-horizontal">
                                 <dt>ФИО сотрудника</dt>
                                 <dd>@agreement.User.Snp</dd>
-                                <dt>Почтовый адрес</dt>
-                                <dd><a href="mailto:@(agreement.User.Email)">@agreement.User.Email</a></dd>
+                                @if (!string.IsNullOrEmpty(agreement.User.Email))
+                                {
+                                    <dt>Почтовый адрес</dt>
+                                    <dd><a href="mailto:@(agreement.User.Email)">@agreement.User.Email</a></dd>
+                                }
                                 <dt>Телефон</dt>
                                 <dd>@agreement.User.Phone</dd>
                                 <dt>Дата отклонения</dt>

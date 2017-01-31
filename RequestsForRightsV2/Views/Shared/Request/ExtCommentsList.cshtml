@@ -10,10 +10,21 @@
     var comments = Model.ToList();
     for (var i = 0; i < comments.Count; i++)
     {
-        var tooltip = string.Format(
-            "<span style='white-space:nowrap'>Телефон: {0}</span><br>" +
-            "<span style='white-space:nowrap'>Почта: {1}</span>", 
-            comments[i].User.Phone, comments[i].User.Email);
+        var tooltip = "";
+        if (!string.IsNullOrEmpty(comments[i].User.Phone))
+        {
+            tooltip += string.Format(
+            "<span style='white-space:nowrap'>Телефон: {0}</span>", comments[i].User.Phone);
+        }
+        if (!string.IsNullOrEmpty(comments[i].User.Phone) && !string.IsNullOrEmpty(comments[i].User.Email))
+        {
+            tooltip += "<br>";
+        }
+        if (!string.IsNullOrEmpty(comments[i].User.Email))
+        {
+            tooltip += string.Format(
+                "<span style='white-space:nowrap'>Почта: {0}</span>", comments[i].User.Email);
+        }
         
         <div class="col-md-8 col-md-offset-2 rr-comment">
             <div class="popover @(i%2 == 0 ? "right" : "left pull-right") in">

@@ -40,6 +40,7 @@ namespace RequestsForRights.Ldap
                 using (var domain = Domain.GetDomain(context))
                 using (var domainEntry = domain.GetDirectoryEntry())
                 {
+                    var domainLoginPrefix = domain.Name.Split('.')[0];
                     using (var searcher = new DirectorySearcher())
                     {
                         searcher.SearchRoot = domainEntry;
@@ -67,7 +68,7 @@ namespace RequestsForRights.Ldap
                                 var user = new LdapUser
                                 {
                                     Snp = GetValue(result.Properties, "displayName"),
-                                    Login = GetValue(result.Properties, "samAccountName").ToLower(),
+                                    Login = domainLoginPrefix+"\\"+GetValue(result.Properties, "samAccountName").ToLower(),
                                     Post = GetValue(result.Properties, "title"),
                                     Department = GetValue(result.Properties, "company"),
                                     Unit = GetValue(result.Properties, "department"),

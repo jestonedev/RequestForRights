@@ -41,7 +41,7 @@ namespace RequestsForRights.Infrastructure.Services
 
         public IQueryable<Request> GetNotSeenRequests()
         {
-            var requests = RequestsRepository.GetRequests();
+            var requests = RequestSecurityService.FilterRequests(RequestsRepository.GetRequests());
             var requestsUserLastSeens = RequestsRepository.GetRequestsUserLastSeens(RequestSecurityService.CurrentUser);
             return from request in requests
                 join lastSeen in requestsUserLastSeens
@@ -153,6 +153,7 @@ namespace RequestsForRights.Infrastructure.Services
             if (filterOptions.SortField == null)
             {
                 filterOptions.SortField = "IdRequest";
+                filterOptions.SortDirection = SortDirection.Desc;
             }
             var requests = GetVisibleRequests(filterOptions, filteredRequests).ToList();
             if (!requests.Any())
@@ -342,6 +343,8 @@ namespace RequestsForRights.Infrastructure.Services
                 IdRequestStateType = idRequestStateType,
                 Date = DateTime.Now
             };
+            var waitAgreementUsers = GetWaitAgreementUsers(idRequest,
+                GetRequestAgreements(idRequest).ToList());
             var agreement = new RequestAgreement
             {
                 IdRequest = idRequest,
@@ -363,7 +366,12 @@ namespace RequestsForRights.Infrastructure.Services
                         RequestsRepository.AddRequestState(requestState, false);
                         break;
                     }
-                    if (RequestSecurityService.InRole(AclRole.Coordinator))
+                    if (RequestSecurityService.InRole(AclRole.Coordinator) &&
+                        !waitAgreementUsers.Any(r =>
+                            !r.RequestAgreements.Any(
+                                ra => ra.IdRequest == idRequest &&
+                                      ra.IdUser == userInfo.IdUser &&
+                                      ra.IdAgreementType == 2) && r.IdUser == userInfo.IdUser))
                     {
                         agreement.IdAgreementType = 2;
                     }
@@ -378,7 +386,12 @@ namespace RequestsForRights.Infrastructure.Services
                     break;
                 case 5:
                     RequestsRepository.AddRequestState(requestState, false);
-                    if (RequestSecurityService.InRole(AclRole.Coordinator))
+                    if (RequestSecurityService.InRole(AclRole.Coordinator) &&
+                        !waitAgreementUsers.Any(r =>
+                            !r.RequestAgreements.Any(
+                                ra => ra.IdRequest == idRequest &&
+                                      ra.IdUser == userInfo.IdUser &&
+                                      ra.IdAgreementType == 2) && r.IdUser == userInfo.IdUser))
                     {
                         agreement.IdAgreementType = 2;
                     }
@@ -405,7 +418,7 @@ namespace RequestsForRights.Infrastructure.Services
                 IdAgreementState = 1,
                 User = new AclUser
                 {
-                    Login = "pwr\\"+coordinator.Login,
+                    Login = coordinator.Login,
                     Snp = coordinator.Snp,
                     Email = coordinator.Email,
                     Phone = coordinator.Phone,

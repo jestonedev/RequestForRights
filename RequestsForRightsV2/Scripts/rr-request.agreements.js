@@ -168,6 +168,7 @@ function sendAgreementSuccess() {
     $("#rr-new-coordinator-department").val("");
     $("#rr-new-coordinator-unit").val("");
     initializeCoordinatorAutocomplete();
+    agreementPanel = $(".rr-agreement-panel").clone();
 }
 
 function beforeCoordinatorAdding() {
