@@ -72,8 +72,14 @@ namespace RequestsForRights.Infrastructure.Services
             {
                 return null;
             }
-            return _rightService.GetUserRightsOnDate(options.Date.Value, idRequestUser).OrderBy(r => r.ResourceName)
-                .ThenBy(r => r.ResourceRightName);
+            var rights = _rightService.GetUserRightsOnDate(options.Date.Value, idRequestUser);
+            if (options.ReportDisplayStyle == ReportDisplayStyle.Cards)
+            {
+                return rights
+                    .OrderBy(r => r.ResourceName)
+                    .ThenBy(r => r.ResourceRightName);
+            }
+            return rights.AsQueryable().OrderBy(options.SortDirection, options.SortField);
         }
 
         public IEnumerable<ResourceUserRightModel> GetResourceRightsOnDate(ReportResourceRightsOptions options)
