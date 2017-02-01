@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Data.Entity.Infrastructure;
 using System.Web.Mvc;
+using RequestsForRights.Domain.Entities;
 using RequestsForRights.Infrastructure.Helpers;
 using RequestsForRights.Infrastructure.Security.Interfaces;
 using RequestsForRights.Infrastructure.Services.Interfaces;
+using RequestsForRights.Infrastructure.Utilities.EmailNotify;
 using RequestsForRights.Infrastructure.Utilities.TransfertToRoute;
 using RequestsForRights.Infrastructure.Utilities.TransfertToRoute.Extensions;
 using RequestsForRights.Models.FilterOptions;
@@ -18,10 +20,14 @@ namespace RequestsForRights.Controllers
         private readonly IRequestService<RequestUserModel, 
             RequestViewModel<RequestUserModel>> _requestService;
         private readonly IRequestSecurityService<RequestUserModel> _securityService;
+        private readonly IEmailBuilder _emailBuilder;
+        private readonly IEmailSender _emailSender;
 
         public RequestController(IRequestService<RequestUserModel, 
             RequestViewModel<RequestUserModel>> requestService,
-            IRequestSecurityService<RequestUserModel> securityService)
+            IRequestSecurityService<RequestUserModel> securityService,
+            IEmailBuilder emailBuilder,
+            IEmailSender emailSender)
         {
             if (requestService == null)
             {
@@ -33,6 +39,16 @@ namespace RequestsForRights.Controllers
                 throw new ArgumentNullException("securityService");
             }
             _securityService = securityService;
+            if (emailBuilder == null)
+            {
+                throw new ArgumentNullException("emailBuilder");
+            }
+            _emailBuilder = emailBuilder;
+            if (emailSender == null)
+            {
+                throw new ArgumentNullException("emailSender");
+            }
+            _emailSender = emailSender;
         }
 
         public ActionResult Index(RequestsFilterOptions filterOptions)
@@ -116,8 +132,8 @@ namespace RequestsForRights.Controllers
         [HttpDelete]
         public ActionResult Delete(int id)
         {
-            var request = _requestService.GetRequestModelBy(_requestService.GetRequestById(id));
-            if (!_securityService.CanDelete(request))
+            var request = _requestService.GetRequestById(id);
+            if (!_securityService.CanDelete())
             {
                 return RedirectToAction("ForbiddenError", "Home");
             }
@@ -125,6 +141,8 @@ namespace RequestsForRights.Controllers
             {
                 _requestService.DeleteRequest(id);
                 _requestService.SaveChanges();
+                var emails = _emailBuilder.DeleteRequestEmails(request);
+                _emailSender.Send(emails);
             }
             catch (DbUpdateException e)
             {
@@ -234,6 +252,10 @@ namespace RequestsForRights.Controllers
             {
                 _requestService.SetRequestState(idRequest, idRequestStateType, agreementReason);
                 _requestService.SaveChanges();
+                var emails = _emailBuilder.SetRequestStateEmails(
+                    _requestService.GetRequestById(idRequest, true),
+                    idRequestStateType, agreementReason);
+                _emailSender.Send(emails);
             }
             catch (DbUpdateException e)
             {
@@ -255,6 +277,10 @@ namespace RequestsForRights.Controllers
             {
                 _requestService.AddCooordinator(idRequest, coordinator);
                 _requestService.SaveChanges();
+                var emails = _emailBuilder.AddCoordinatorEmails(
+                    _requestService.GetRequestById(idRequest, true),
+                    coordinator);
+                _emailSender.Send(emails);
             }
             catch (DbUpdateException e)
             {

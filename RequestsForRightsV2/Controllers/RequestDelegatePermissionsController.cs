@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using RequestsForRights.Infrastructure.Helpers;
 using RequestsForRights.Infrastructure.Security.Interfaces;
 using RequestsForRights.Infrastructure.Services.Interfaces;
+using RequestsForRights.Infrastructure.Utilities.EmailNotify;
 using RequestsForRights.Infrastructure.Utilities.TransfertToRoute;
 using RequestsForRights.Models.Models;
 using RequestsForRights.Models.ViewModels.Request;
@@ -15,10 +16,13 @@ namespace RequestsForRights.Controllers
     {
         private readonly IRequestDelegatePermissionsService _requestService;
         private readonly IRequestSecurityService<RequestDelegatePermissionsUserModel> _securityService;
+        private readonly IEmailBuilder _emailBuilder;
+        private readonly IEmailSender _emailSender;
 
         public RequestDelegatePermissionsController(
             IRequestDelegatePermissionsService requestService,
-            IRequestSecurityService<RequestDelegatePermissionsUserModel> securityService)
+            IRequestSecurityService<RequestDelegatePermissionsUserModel> securityService,
+            IEmailBuilder emailBuilder, IEmailSender emailSender)
         {
             if (requestService == null)
             {
@@ -30,6 +34,16 @@ namespace RequestsForRights.Controllers
                 throw new ArgumentNullException("securityService");
             }
             _securityService = securityService;
+            if (emailBuilder == null)
+            {
+                throw new ArgumentNullException("emailBuilder");
+            }
+            _emailBuilder = emailBuilder;
+            if (emailSender == null)
+            {
+                throw new ArgumentNullException("emailSender");
+            }
+            _emailSender = emailSender;
         }
 
         [TransferActionOnly]
@@ -81,6 +95,9 @@ namespace RequestsForRights.Controllers
             {
                 _requestService.UpdateRequest(requestViewModel.RequestModel);
                 _requestService.SaveChanges();
+                var emails = _emailBuilder.UpdateRequestEmails(
+                    _requestService.GetRequestById(request.IdRequest, true));
+                _emailSender.Send(emails);
             }
             catch (DbUpdateException e)
             {
@@ -126,6 +143,9 @@ namespace RequestsForRights.Controllers
             {
                 var request = _requestService.InsertRequest(requestViewModel.RequestModel);
                 _requestService.SaveChanges();
+                var emails = _emailBuilder.CreateRequestEmails(
+                    _requestService.GetRequestById(request.IdRequest, true));
+                _emailSender.Send(emails);
                 return RedirectToAction("Detail", "Request", new { id = request.IdRequest });
             }
             catch (DbUpdateException e)

@@ -176,6 +176,10 @@
     <Compile Include="Infrastructure\Services\RequestRemoveUserService.cs" />
     <Compile Include="Infrastructure\Services\RightService.cs" />
     <Compile Include="Infrastructure\Services\UserService.cs" />
+    <Compile Include="Infrastructure\Utilities\EmailNotify\EmailBuilder.cs" />
+    <Compile Include="Infrastructure\Utilities\EmailNotify\EmailSender.cs" />
+    <Compile Include="Infrastructure\Utilities\EmailNotify\IEmailBuilder.cs" />
+    <Compile Include="Infrastructure\Utilities\EmailNotify\IEmailSender.cs" />
     <Compile Include="Infrastructure\Utilities\EntitySorter\EntitySorter.cs" />
     <Compile Include="Infrastructure\Utilities\EntitySorter\OrderBySorter.cs" />
     <Compile Include="Infrastructure\Utilities\EntitySorter\ThenBySorter.cs" />
@@ -216,7 +220,6 @@
     <Compile Include="Infrastructure\Services\RequestService.cs" />
     <Compile Include="Infrastructure\Security\SecurityService.cs" />
     <Compile Include="Models\FilterOptions\FilterOptions.cs" />
-    <Compile Include="Models\Models\Coordinator.cs" />
     <Compile Include="Models\Models\DelegationRequestUsersExtInfoModel.cs" />
     <Compile Include="Models\Models\RequestCategoryModel.cs" />
     <Compile Include="Models\Models\RequestDelegatePermissionsUserModel.cs" />

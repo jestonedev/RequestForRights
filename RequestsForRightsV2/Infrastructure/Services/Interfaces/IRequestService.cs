@@ -19,13 +19,14 @@ namespace RequestsForRights.Infrastructure.Services.Interfaces
         IQueryable<Request> GetFilteredRequests(RequestsFilterOptions filterOptions);
         RequestIndexViewModel GetRequestIndexModelView(RequestsFilterOptions filterOptions,
             IQueryable<Request> filteredRequests);
-        Request GetRequestById(int idRequest);
+        Request GetRequestById(int idRequest, bool dropCache = false);
         RequestModel<TUserModel> GetRequestModelBy(Request request);
         TViewModel GetRequestViewModelBy(Request request);
         TViewModel GetRequestViewModelBy(RequestModel<TUserModel> request);
         TViewModel GetEmptyRequestViewModel();
         IQueryable<RequestExtComment> GetRequestExtComments(int idRequest);
         IQueryable<RequestAgreement> GetRequestAgreements(int idRequest);
+        IEnumerable<AclUser> GetWaitAgreementUsers(int idRequest, IList<RequestAgreement> agreements);
         int SaveChanges();
         Request DeleteRequest(int idRequest);
         Request UpdateRequest(RequestModel<TUserModel> requestModel);

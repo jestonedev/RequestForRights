@@ -23,5 +23,6 @@ namespace RequestsForRights.Infrastructure.Security.Interfaces
         bool CanDelete();
         bool CanCreate();
         bool CanModify();
+        IQueryable<AclUser> GetUsersBy(AclRole role);
     }
 }

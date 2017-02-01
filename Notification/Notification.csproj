@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F4CCA6B9-9648-47F4-A750-4ECCBA53F5FB}</ProjectGuid>
+    <ProjectGuid>{1D6B22EA-4564-4A0E-AF07-91F314B9C1F1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RequestsForRights.Domain</RootNamespace>
-    <AssemblyName>Domain</AssemblyName>
+    <RootNamespace>Notification</RootNamespace>
+    <AssemblyName>Notification</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,18 +30,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -49,34 +39,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Entities\AclUser.cs" />
-    <Compile Include="Entities\AclRole.cs" />
-    <Compile Include="Entities\Coordinator.cs" />
-    <Compile Include="Entities\DelegationRequestUserRightExtInfo.cs" />
-    <Compile Include="Entities\Department.cs" />
-    <Compile Include="Entities\Request.cs" />
-    <Compile Include="Entities\RequestAgreement.cs" />
-    <Compile Include="Entities\RequestAgreementState.cs" />
-    <Compile Include="Entities\RequestAgreementType.cs" />
-    <Compile Include="Entities\RequestExtComment.cs" />
-    <Compile Include="Entities\RequestRightGrantType.cs" />
-    <Compile Include="Entities\RequestState.cs" />
-    <Compile Include="Entities\RequestStateType.cs" />
-    <Compile Include="Entities\RequestUserRightAssoc.cs" />
-    <Compile Include="Entities\RequestUser.cs" />
-    <Compile Include="Entities\RequestUserLastSeen.cs" />
-    <Compile Include="Entities\RequestUserAssoc.cs" />
+    <Compile Include="Class1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Entities\RequestType.cs" />
-    <Compile Include="Entities\Resource.cs" />
-    <Compile Include="Entities\ResourceGroup.cs" />
-    <Compile Include="Entities\ResourceRight.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

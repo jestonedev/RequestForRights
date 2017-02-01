@@ -53,5 +53,11 @@ namespace RequestsForRights.Database.Repositories
             return userInfo == null ? new List<Department>().AsQueryable() :
                 userInfo.AclDepartments.Where(r => !r.Deleted).AsQueryable();
         }
+
+        public IQueryable<AclUser> GetUsersBy(int idRole)
+        {
+            return _databaseContext.AclUsers.Where(u => !u.Deleted && 
+                u.Roles.Any(r => r.IdRole == idRole));
+        }
     }
 }

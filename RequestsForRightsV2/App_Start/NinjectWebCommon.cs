@@ -1,5 +1,6 @@
 using System;
 using System.Configuration;
+using System.Net.Mail;
 using System.Web;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Ninject;
@@ -13,6 +14,7 @@ using RequestsForRights.Infrastructure.Security;
 using RequestsForRights.Infrastructure.Security.Interfaces;
 using RequestsForRights.Infrastructure.Services;
 using RequestsForRights.Infrastructure.Services.Interfaces;
+using RequestsForRights.Infrastructure.Utilities.EmailNotify;
 using RequestsForRights.Ldap;
 using RequestsForRights.Models.Models;
 using RequestsForRights.Models.ViewModels.Request;
@@ -107,6 +109,25 @@ namespace RequestsForRights
             kernel.Bind<IRequestSecurityService<RequestDelegatePermissionsUserModel>>().
                 To<RequestSecurityService<RequestDelegatePermissionsUserModel>>();
             kernel.Bind<IUserSecurityService>().To<UserSecurityService>();
+            // Email notification
+            kernel.Bind<IEmailBuilder>().ToConstant(
+                new EmailBuilder(new MailAddress(ConfigurationManager.AppSettings["smtp_from"]),
+                    kernel.Get<IRequestService<RequestUserModel, RequestViewModel<RequestUserModel>>>(),
+                    kernel.Get<IRequestSecurityService<RequestUserModel>>()));
+            int port;
+            try
+            {
+                if (!int.TryParse(ConfigurationManager.AppSettings["smtp_port"], out port))
+                {
+                    port = 25;
+                }
+            }
+            catch (ConfigurationErrorsException)
+            {
+                port = 25;
+            }
+            kernel.Bind<IEmailSender>().ToConstant(
+                new EmailSender(port, ConfigurationManager.AppSettings["smtp_host"]));
         }        
     }
 }

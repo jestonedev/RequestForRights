@@ -6,6 +6,9 @@
     }
 }
 
+<div class="clearfix"></div>
+<div class="text-center text-info rr-agreement-sending">Отправка...</div>
+
 @if (securityService.CanAgreement(Model.RequestModel))
 {
     <div class="clearfix">
@@ -25,7 +28,7 @@
             {
                 UpdateTargetId = "rr-agreements",
                 InsertionMode = InsertionMode.Replace,
-                OnFailure = "agreementFailure",
+                OnFailure = "sendAgreementFailure",
                 OnBegin = "beforeSendAgreementCancel",
                 OnSuccess = "sendAgreementSuccess"
             }))
@@ -191,13 +194,14 @@
                             {
                                 UpdateTargetId = "rr-agreements",
                                 InsertionMode = InsertionMode.Replace,
-                                OnFailure = "agreementFailure",
+                                OnFailure = "sendAgreementFailure",
+                                OnBegin = "beforeSendAgreement",
                                 OnSuccess = "sendAgreementSuccess"
                             }, new
                             {
                                 @class = "btn btn-default",
                                 title = buttonsParams.Title,
-                                ariaLable = buttonsParams.LabelText
+                                aria_lable = buttonsParams.LabelText
                             })
                     }
                 }

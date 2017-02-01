@@ -57,10 +57,10 @@ namespace RequestsForRights.Database.Repositories
                 .Where(r => r.User.Login.ToLower() == login.ToLower());
         }
 
-        public Request GetRequestById(int id)
+        public Request GetRequestById(int id, bool dropCache = false)
         {
             var key = id.ToString();
-            if (_cachePool.HasValue<Request>(key))
+            if (!dropCache && _cachePool.HasValue<Request>(key))
             {
                 return _cachePool.GetValue<Request>(key);
             }
@@ -70,6 +70,7 @@ namespace RequestsForRights.Database.Repositories
                 Include(r => r.RequestUserAssoc.Select(ru => ru.RequestUserRightAssocs)).
                 Include(r => r.RequestUserAssoc.Select(ru => ru.RequestUser)).
                 Include(r => r.RequestStates).
+                Include(r => r.RequestStates.Select(rs => rs.RequestStateType)).
                 Include(r => r.RequestAgreements).
                 Include(r => r.RequestAgreements.Select(ra => ra.User)).
                 FirstOrDefault();

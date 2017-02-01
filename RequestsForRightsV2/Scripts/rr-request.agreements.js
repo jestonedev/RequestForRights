@@ -107,10 +107,25 @@ function beforeSendAgreementCancel() {
     $(".rr-send-agreement-button").attr("disabled", "disabled");
 }
 
-function agreementFailure() {
+function beforeSendAgreement() {
+    $(".rr-agreement-panel").hide();
+    $(".rr-agreement-sending").show();
+}
+
+function sendAgreementFailure() {
     $(".rr-agreement-error-alert").css({ "opacity": 1 }).show();
     $("#rr-cancel-agreement-reason").attr("readonly", false);
     $(".rr-agreement-send-button").removeAttr("disabled");
+    $(".rr-agreement-panel").show();
+    $(".rr-agreement-sending").hide();
+}
+
+function sendAgreementSuccess() {
+    $("#rr-new-coordinator-snp").val("");
+    $("#rr-new-coordinator-department").val("");
+    $("#rr-new-coordinator-unit").val("");
+    initializeCoordinatorAutocomplete();
+    agreementPanel = $(".rr-agreement-panel").clone();
 }
 
 function initializeCoordinatorAutocomplete() {
@@ -161,14 +176,6 @@ function coordinatorAddingFailure() {
     $(".rr-agreement-error-alert").css({ "opacity": 1 }).show();
     $("#rr-new-coordinator-snp").attr("readonly", false);
     $(".rr-send-coordinator-button").removeAttr("disabled");
-}
-
-function sendAgreementSuccess() {
-    $("#rr-new-coordinator-snp").val("");
-    $("#rr-new-coordinator-department").val("");
-    $("#rr-new-coordinator-unit").val("");
-    initializeCoordinatorAutocomplete();
-    agreementPanel = $(".rr-agreement-panel").clone();
 }
 
 function beforeCoordinatorAdding() {

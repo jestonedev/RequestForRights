@@ -10,7 +10,7 @@ namespace RequestsForRights.Database.Repositories.Interfaces
         IQueryable<RequestRightGrantType> GetRequestRightGrantTypes();
         IQueryable<RequestType> GetRequestTypes();
         IQueryable<RequestUserLastSeen> GetRequestsUserLastSeens(string login);
-        Request GetRequestById(int idRequest);
+        Request GetRequestById(int idRequest, bool dropCache = false);
 
         IQueryable<RequestExtComment> GetRequestExtComments(int idRequest);
         IQueryable<RequestAgreement> GetRequestAgreements(int idRequest);

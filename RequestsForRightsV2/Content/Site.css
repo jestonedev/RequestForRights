@@ -138,6 +138,12 @@ button.rr-ext-filter-button.collapsed:hover {
     margin-bottom: 15px;
 }
 
+.rr-agreement-sending {
+    display: none;
+    padding: 7px;
+    margin-bottom: 15px;
+}
+
 .rr-edit-panel > .btn-group a, .rr-edit-panel > .btn-group button,
 .rr-add-comment-panel > .btn-group a, .rr-add-comment-panel > .btn-group button,
 .rr-add-request-user-panel > button, .rr-remove-user-button,

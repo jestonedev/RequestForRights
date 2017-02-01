@@ -53,6 +53,11 @@ namespace RequestsForRights.Infrastructure.Security
             return allowedDepartments;
         }
 
+        public IQueryable<AclUser> GetUsersBy(AclRole role)
+        {
+            return _securityRepository.GetUsersBy((int) role);
+        }
+
         public AclUser GetUserInfo()
         {
             return _securityRepository.GetUserInfo(CurrentUser);

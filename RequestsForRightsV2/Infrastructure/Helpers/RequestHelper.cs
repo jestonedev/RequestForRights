@@ -10,6 +10,12 @@ namespace RequestsForRights.Infrastructure.Helpers
             return requestState;
         }
 
+        public static string VerbRequestState(string requestState)
+        {
+            requestState = Regex.Replace(requestState, "нная$", "на");
+            return requestState;
+        }
+
         public static string IdRequestTypeToControllerName(int idRequestType)
         {
             switch (idRequestType)

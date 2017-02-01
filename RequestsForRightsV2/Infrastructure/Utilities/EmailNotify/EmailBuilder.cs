@@ -1,0 +1,494 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Mail;
+using System.Web;
+using RequestsForRights.Domain.Entities;
+using RequestsForRights.Infrastructure.Helpers;
+using RequestsForRights.Infrastructure.Security.Interfaces;
+using RequestsForRights.Infrastructure.Services.Interfaces;
+using RequestsForRights.Models.Models;
+using RequestsForRights.Models.ViewModels.Request;
+using AclRole = RequestsForRights.Infrastructure.Enums.AclRole;
+
+namespace RequestsForRights.Infrastructure.Utilities.EmailNotify
+{
+    public class EmailBuilder: IEmailBuilder
+    {
+        private readonly MailAddress _from;
+        private readonly IRequestService<RequestUserModel, 
+            RequestViewModel<RequestUserModel>> _requestService;
+        private readonly IRequestSecurityService<RequestUserModel> _requestSecurityService;
+
+        public EmailBuilder(MailAddress from, 
+            IRequestService<RequestUserModel, RequestViewModel<RequestUserModel>> requestService,
+            IRequestSecurityService<RequestUserModel> requestSecurityService)
+        {
+            if (from == null)
+            {
+                throw new ArgumentNullException("from");
+            }
+            _from = from;
+            if (requestService == null)
+            {
+                throw new ArgumentNullException("requestService");
+            }
+            _requestService = requestService;
+            if (requestSecurityService == null)
+            {
+                throw new ArgumentNullException("requestSecurityService");
+            }
+            _requestSecurityService = requestSecurityService;
+        }
+
+        private string GetRequestDescriptionPart(Request request)
+        {
+            return !string.IsNullOrEmpty(request.Description) ?
+                string.Format("<br><br><b>Описание:</b><br>{0}", request.Description.Replace("\n", "<br>")) : "";
+        }
+
+        private string GetRequestLink(Request request)
+        {
+            var host = "rqrights";
+            var port = 80;
+            if (HttpContext.Current != null)
+            {
+                host = HttpContext.Current.Request.Url.Host;
+                port = HttpContext.Current.Request.Url.Port;
+            }
+            return
+                string.Format(
+                    "<br><br><b>Ссылка: </b><a href=\"http://{1}{2}/Request/Detail/{0}\">http://{1}{2}/Request/Detail/{0}</a>",
+                    request.IdRequest, host, port == 80 ? "" : ":"+port);
+        }
+
+        private MailMessage CreateRequestRequesterEmail(Request request, 
+            IList<AclUser> waitAgreementUsers)
+        {
+            var requester = request.User;
+            var subject = string.Format("Ваша заявка №{0} {1} успешно создана",
+                    request.IdRequest, request.RequestType.Name.ToLower());
+            var body = string.Format("Здравствуйте, {0}!<br>{1}.", requester.Snp, subject);
+            body += GetRequestDescriptionPart(request);
+            if (waitAgreementUsers.Any())
+            {
+                body += "<br><br><b>Ожидается согласование следующих сотрудников:</b>";
+                foreach (var user in waitAgreementUsers)
+                {
+                    body += "<br><b>ФИО: </b>" + user.Snp;
+                    body += "<br><b>Департамент: </b>" + user.Department.Name;
+                    if (!string.IsNullOrEmpty(user.Phone))
+                    {
+                        body += "<br><b>Телефон: </b>" + user.Phone;
+                    }
+                    if (!string.IsNullOrEmpty(user.Email))
+                    {
+                        body += string.Format("<br><b>Почтовый адрес: </b><a href=\"mailto:{0}\">{0}</a>", user.Email);
+                    }
+                    body += "<br>";
+                }
+            }
+            body += GetRequestLink(request);
+            var message = new MailMessage
+            {
+                IsBodyHtml = true,
+                From = _from,
+                Subject = subject,
+                Body = body
+            };
+            message.To.Add(new MailAddress(requester.Email));
+            return message;
+        }
+
+        private MailMessage CreateRequestCoordinatorEmail(Request request, AclUser user)
+        {
+            var subject = string.Format("Создана заявка №{0} {1}", 
+                request.IdRequest, 
+                request.RequestType.Name.ToLower());
+            var body = string.Format("Здравствуйте, {0}!<br>{1}, требующая вашего согласования.", 
+                user.Snp, subject);
+            body += GetRequestDescriptionPart(request);
+            body += GetRequestLink(request);
+            var message = new MailMessage
+            {
+                IsBodyHtml = true,
+                From = _from,
+                Subject = subject,
+                Body = body
+            };
+            message.To.Add(new MailAddress(user.Email));
+            return message;
+        }
+
+        private MailMessage CreateRequestDispatcherEmail(Request request, AclUser user)
+        {
+            var subject = string.Format("Создана заявка №{0} {1}", 
+                request.IdRequest,
+                request.RequestType.Name.ToLower());
+            var body = string.Format("Здравствуйте, {0}!<br>{1}. Данная заявка является автоматически согласованной.",
+                user.Snp, subject);
+            body += GetRequestDescriptionPart(request);
+            body += GetRequestLink(request);
+            var message = new MailMessage
+            {
+                IsBodyHtml = true,
+                From = _from,
+                Subject = subject,
+                Body = body
+            };
+            message.To.Add(new MailAddress(user.Email));
+            return message;
+        }
+
+        public IEnumerable<MailMessage> CreateRequestEmails(Request request)
+        {
+            var messages = new List<MailMessage>();
+            var requester = request.User;
+            var waitAgreementUsers = _requestService.GetWaitAgreementUsers(request.IdRequest,
+                _requestService.GetRequestAgreements(request.IdRequest).ToList()).ToList();
+            if (!string.IsNullOrEmpty(requester.Email))
+            {
+                var message = CreateRequestRequesterEmail(request, waitAgreementUsers);
+                messages.Add(message);
+            }
+            foreach (var user in waitAgreementUsers)
+            {
+                if (string.IsNullOrEmpty(user.Email))
+                {
+                    continue;
+                }
+                var message = CreateRequestCoordinatorEmail(request, user);
+                messages.Add(message);
+            }
+            if (waitAgreementUsers.Any())
+            {
+                return messages;
+            }
+            
+            var users = _requestSecurityService.GetUsersBy(AclRole.Dispatcher)
+                .Union(_requestSecurityService.GetUsersBy(AclRole.Registrar));
+            foreach (var user in users)
+            {
+                if (string.IsNullOrEmpty(user.Email))
+                {
+                    continue;
+                }
+                var message = CreateRequestDispatcherEmail(request, user);
+                messages.Add(message);
+            }
+            return messages;
+        }
+
+        private MailMessage UpdateRequestRequesterEmail(Request request,
+            IList<AclUser> waitAgreementUsers)
+        {
+
+            var requester = request.User; 
+            var subject = string.Format("Ваша заявка №{0} {1} успешно изменена",
+                    request.IdRequest, request.RequestType.Name.ToLower());
+            var body = string.Format("Здравствуйте, {0}!<br>{1}.", requester.Snp, subject);
+            body += GetRequestDescriptionPart(request);
+            if (waitAgreementUsers.Any())
+            {
+                body += "<br><br><b>Ожидается согласование следующих сотрудников:</b>";
+                foreach (var user in waitAgreementUsers)
+                {
+                    body += "<br><b>ФИО: </b>" + user.Snp;
+                    body += "<br><b>Департамент: </b>" + user.Department.Name;
+                    if (!string.IsNullOrEmpty(user.Phone))
+                    {
+                        body += "<br><b>Телефон: </b>" + user.Phone;
+                    }
+                    if (!string.IsNullOrEmpty(user.Email))
+                    {
+                        body += string.Format("<br><b>Почтовый адрес: </b><a href=\"mailto:{0}\">{0}</a>", user.Email);
+                    }
+                    body += "<br>";
+                }
+            }
+            body += GetRequestLink(request);
+            var message = new MailMessage
+            {
+                IsBodyHtml = true,
+                From = _from,
+                Subject = subject,
+                Body = body
+            };
+            message.To.Add(new MailAddress(requester.Email));
+            return message;
+        }
+
+        private MailMessage UpdateRequestCoordinatorEmail(Request request, AclUser user)
+        {
+            var subject = string.Format("Заявка №{0} {1} была изменена",
+                    request.IdRequest, request.RequestType.Name.ToLower());
+            var body = string.Format("Здравствуйте, {0}!<br>{1} и требует вашего согласования.",
+                user.Snp, subject);
+            body += GetRequestDescriptionPart(request);
+            body += GetRequestLink(request);
+            var message = new MailMessage
+            {
+                IsBodyHtml = true,
+                From = _from,
+                Subject = subject,
+                Body = body
+            };
+            message.To.Add(new MailAddress(user.Email));
+            return message;
+        }
+
+        public IEnumerable<MailMessage> UpdateRequestEmails(Request request)
+        {
+            var messages = new List<MailMessage>();
+            if (_requestSecurityService.InRole(AclRole.Administrator))
+            {
+                return messages;
+            }
+            var requester = request.User; 
+            var waitAgreementUsers = _requestService.GetWaitAgreementUsers(request.IdRequest,
+                _requestService.GetRequestAgreements(request.IdRequest).ToList()).ToList();
+            if (!string.IsNullOrEmpty(requester.Email))
+            {
+                var message = UpdateRequestRequesterEmail(request, waitAgreementUsers);
+                messages.Add(message);
+            }
+            foreach (var user in waitAgreementUsers)
+            {
+                if (string.IsNullOrEmpty(user.Email))
+                {
+                    continue;
+                }
+                var message = UpdateRequestCoordinatorEmail(request, user);
+                messages.Add(message);
+            }
+            return messages;
+        }
+
+        private MailMessage DeleteRequestCoordinatorEmail(Request request, AclUser user)
+        {
+            var subject = string.Format("Заявка №{0} {1} была удалена",
+                request.IdRequest, request.RequestType.Name.ToLower());
+            var body = string.Format("Здравствуйте, {0}!<br>{1}.", user.Snp, subject);
+            body += GetRequestDescriptionPart(request);
+            var message = new MailMessage
+            {
+                IsBodyHtml = true,
+                From = _from,
+                Subject = subject,
+                Body = body
+            };
+            message.To.Add(new MailAddress(user.Email));
+            return message;
+        }
+
+        private MailMessage DeleteRequestRequesterEmail(Request request)
+        {
+            var requester = request.User;
+            var subject = string.Format("Ваша заявка №{0} {1} успешно удалена",
+                    request.IdRequest, request.RequestType.Name.ToLower());
+            var body = string.Format("Здравствуйте, {0}!<br>{1}.", requester.Snp, subject);
+            body += GetRequestDescriptionPart(request);
+            var message = new MailMessage
+            {
+                IsBodyHtml = true,
+                From = _from,
+                Subject = subject,
+                Body = body
+            };
+            message.To.Add(new MailAddress(requester.Email));
+            return message;
+        }
+
+        public IEnumerable<MailMessage> DeleteRequestEmails(Request request)
+        {
+            var messages = new List<MailMessage>();
+            var requester = request.User;
+            var waitAgreementUsers = _requestService.GetWaitAgreementUsers(request.IdRequest,
+                _requestService.GetRequestAgreements(request.IdRequest).ToList()).ToList();
+            if (!string.IsNullOrEmpty(requester.Email))
+            {
+                var message = DeleteRequestRequesterEmail(request);
+                messages.Add(message);
+            }
+            foreach (var user in waitAgreementUsers)
+            {
+                if (string.IsNullOrEmpty(user.Email))
+                {
+                    continue;
+                }
+                var message = DeleteRequestCoordinatorEmail(request, user);
+                messages.Add(message);
+            }
+            return messages;
+        }
+
+        private MailMessage SetRequestStateRequesterEmail(Request request, 
+            RequestStateType requestStateType, 
+            string agreementReason)
+        {
+            var requester = request.User;
+            var subject = string.Format("Изменен статус заявки №{0} {1}",
+                    request.IdRequest, request.RequestType.Name.ToLower());
+            var body = string.Format("Здравствуйте, {0}!<br>{1} на <b>«{2}»</b>.",
+                requester.Snp, subject, RequestHelper.VerbRequestState(requestStateType.Name).ToLower());
+            if (!string.IsNullOrEmpty(agreementReason))
+            {
+                body += "<br><br><b>Причина: </b>" + agreementReason;
+            }
+            body += GetRequestDescriptionPart(request);
+            body += GetRequestLink(request);
+            var message = new MailMessage
+            {
+                IsBodyHtml = true,
+                From = _from,
+                Subject = subject,
+                Body = body
+            };
+            message.To.Add(new MailAddress(requester.Email));
+            return message;
+        }
+
+        private MailMessage SetRequestStateDispatcherEmail(Request request,
+            RequestStateType requestStateType,
+            string agreementReason, AclUser user)
+        {
+            var requester = request.User;
+            var subject = string.Format("Изменен статус заявки №{0} {1}",
+                    request.IdRequest, request.RequestType.Name.ToLower());
+            var body = string.Format("Здравствуйте, {0}!<br>{1} на <b>«{2}»</b>.", user.Snp, subject,
+                RequestHelper.VerbRequestState(requestStateType.Name).ToLower());
+            if (requestStateType.IdRequestStateType == 2)
+            {
+                subject = string.Format("Поступила заявка №{0} {1}",
+                    request.IdRequest, request.RequestType.Name.ToLower());
+                body = string.Format("Здравствуйте, {0}!<br>{1}.", user.Snp, subject);
+            }
+            if (!string.IsNullOrEmpty(agreementReason))
+            {
+                body += "<br><br><b>Причина: </b>" + agreementReason;
+            }
+            body += GetRequestDescriptionPart(request);
+            body += GetRequestLink(request);
+            var message = new MailMessage
+            {
+                IsBodyHtml = true,
+                From = _from,
+                Subject = subject,
+                Body = body
+            };
+            message.To.Add(new MailAddress(requester.Email));
+            return message;
+        }
+
+        public IEnumerable<MailMessage> SetRequestStateEmails(Request request, int idRequestStateType, string agreementReason)
+        {
+            var messages = new List<MailMessage>();
+            var lastRequestState = request.RequestStates.OrderByDescending(r => r.IdRequestState).
+                FirstOrDefault();
+            if (lastRequestState == null ||
+                lastRequestState.IdRequestStateType != idRequestStateType)
+            {
+                return messages;
+            }
+            var requester = request.User;
+            if (!string.IsNullOrEmpty(requester.Email))
+            {
+                var message = SetRequestStateRequesterEmail(request, 
+                    lastRequestState.RequestStateType, agreementReason);
+                messages.Add(message);
+            }
+            if (idRequestStateType == 2 ||
+                (new[] {4, 5}.Contains(idRequestStateType) &&
+                 request.RequestStates.Any(r => !r.Deleted && r.IdRequestStateType == 2)))
+            {
+                var users = _requestSecurityService.GetUsersBy(AclRole.Dispatcher)
+                    .Union(_requestSecurityService.GetUsersBy(AclRole.Registrar));
+                var userInfo = _requestSecurityService.GetUserInfo();
+                foreach (var user in users)
+                {
+                    if (string.IsNullOrEmpty(user.Email))
+                    {
+                        continue;
+                    }
+                    if (user.IdUser == userInfo.IdUser)
+                    {
+                        continue;
+                    }
+                    var message = SetRequestStateDispatcherEmail(request, 
+                        lastRequestState.RequestStateType, agreementReason, user);
+                    messages.Add(message);
+                }
+            }
+            return messages;
+        }
+
+        private MailMessage AddCoordinatorRequesterEmail(Request request, Coordinator coordinator)
+        {
+            var requester = request.User;
+            var subject = string.Format("Ваша заявка №{0} {1} отправлена на дополнительное согласование",
+                    request.IdRequest, request.RequestType.Name.ToLower());
+            var body = string.Format("Здравствуйте, {0}!<br>{1}.", requester.Snp, subject);
+            body += GetRequestDescriptionPart(request);
+            
+            body += "<br><br><b>Ожидается согласование от:</b>";
+            body += "<br><b>ФИО: </b>" + coordinator.Snp;
+            body += "<br><b>Департамент: </b>" + coordinator.Department;
+            if (!string.IsNullOrEmpty(coordinator.Phone))
+            {
+                body += "<br><b>Телефон: </b>" + coordinator.Phone;
+            }
+            if (!string.IsNullOrEmpty(coordinator.Email))
+            {
+                body += string.Format("<br><b>Почтовый адрес: </b><a href=\"mailto:{0}\">{0}</a>", coordinator.Email);
+            }
+            body += "<br>";
+
+            body += GetRequestLink(request);
+            var message = new MailMessage
+            {
+                IsBodyHtml = true,
+                From = _from,
+                Subject = subject,
+                Body = body
+            };
+            message.To.Add(new MailAddress(requester.Email));
+            return message;
+        }
+
+        private MailMessage AddCoordinatorEmail(Request request, Coordinator coordinator)
+        {
+            var subject = string.Format("Заявка №{0} {1} отправлена на дополнительное согласование",
+                request.IdRequest,
+                request.RequestType.Name.ToLower());
+            var body = string.Format("Здравствуйте, {0}!<br>{1}. Требуется ваше согласование.",
+                coordinator.Snp, subject);
+            body += GetRequestDescriptionPart(request);
+            body += GetRequestLink(request);
+            var message = new MailMessage
+            {
+                IsBodyHtml = true,
+                From = _from,
+                Subject = subject,
+                Body = body
+            };
+            message.To.Add(new MailAddress(coordinator.Email));
+            return message;
+        }
+
+        public IEnumerable<MailMessage> AddCoordinatorEmails(Request request, Coordinator coordinator)
+        {
+            var messages = new List<MailMessage>();
+            if (!string.IsNullOrEmpty(request.User.Email))
+            {
+                var message = AddCoordinatorRequesterEmail(request, coordinator);
+                messages.Add(message);
+            }
+            if (!string.IsNullOrEmpty(coordinator.Email))
+            {
+                var message = AddCoordinatorEmail(request, coordinator);
+                messages.Add(message);
+            }
+            return messages;
+        }
+    }
+}

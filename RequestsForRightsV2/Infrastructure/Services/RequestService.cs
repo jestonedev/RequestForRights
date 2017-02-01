@@ -191,9 +191,9 @@ namespace RequestsForRights.Infrastructure.Services
             };
         }
 
-        public Request GetRequestById(int idRequest)
+        public Request GetRequestById(int idRequest, bool dropCache = false)
         {
-            return RequestsRepository.GetRequestById(idRequest);
+            return RequestsRepository.GetRequestById(idRequest, dropCache);
         }
 
         public virtual RequestModel<TUserModel> GetRequestModelBy(Request request)
@@ -559,7 +559,7 @@ namespace RequestsForRights.Infrastructure.Services
             return agreements.Where(r => r.IdAgreementState == 3).ToList();
         }
 
-        private IEnumerable<AclUser> GetWaitAgreementUsers(int idRequest,
+        public IEnumerable<AclUser> GetWaitAgreementUsers(int idRequest,
             IList<RequestAgreement> agreements)
         {
             var request = GetRequestById(idRequest);
@@ -567,7 +567,8 @@ namespace RequestsForRights.Infrastructure.Services
             {
                 return new List<AclUser>();
             }
-            var requestResourceOwners = request.RequestUserAssoc.SelectMany(r => r.RequestUserRightAssocs).
+            var requestResourceOwners = request.RequestUserAssoc.Where(r => !r.Deleted).
+                SelectMany(r => r.RequestUserRightAssocs).Where(r => !r.Deleted).
                 SelectMany(r =>
                 {
                     var aclUsers = r.ResourceRight.Resource.Department.AclUsers;

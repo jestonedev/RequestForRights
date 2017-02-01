@@ -8,5 +8,7 @@ namespace RequestsForRights.Database.Repositories.Interfaces
         IQueryable<AclRole> GetUserRoles(string login);
         AclUser GetUserInfo(string login);
         IQueryable<Department> GetUserAllowedDepartments(string login);
+
+        IQueryable<AclUser> GetUsersBy(int idRole);
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace RequestsForRights.Models.Models
+﻿namespace RequestsForRights.Domain.Entities
 {
     public class Coordinator
     {
