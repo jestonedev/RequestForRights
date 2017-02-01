@@ -110,7 +110,7 @@ namespace RequestsForRights
                 To<RequestSecurityService<RequestDelegatePermissionsUserModel>>();
             kernel.Bind<IUserSecurityService>().To<UserSecurityService>();
             // Email notification
-            kernel.Bind<IEmailBuilder>().ToConstant(
+            kernel.Bind<IEmailBuilder>().ToMethod(r =>
                 new EmailBuilder(new MailAddress(ConfigurationManager.AppSettings["smtp_from"]),
                     kernel.Get<IRequestService<RequestUserModel, RequestViewModel<RequestUserModel>>>(),
                     kernel.Get<IRequestSecurityService<RequestUserModel>>()));

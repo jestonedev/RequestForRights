@@ -68,6 +68,7 @@ namespace RequestsForRights.Database.Repositories
                 Include(r => r.RequestType).
                 Include(r => r.RequestUserAssoc).
                 Include(r => r.RequestUserAssoc.Select(ru => ru.RequestUserRightAssocs)).
+                Include(r => r.RequestUserAssoc.Select(ru => ru.RequestUserRightAssocs.Select(rur => rur.ResourceRight))).
                 Include(r => r.RequestUserAssoc.Select(ru => ru.RequestUser)).
                 Include(r => r.RequestStates).
                 Include(r => r.RequestStates.Select(rs => rs.RequestStateType)).
