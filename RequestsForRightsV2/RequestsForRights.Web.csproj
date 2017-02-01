@@ -530,7 +530,6 @@
     <Content Include="Scripts\rr-request.common.js" />
     <Content Include="Scripts\rr-request.update.insert.common.js" />
     <Content Include="Scripts\rr-request.index.js" />
-    <Content Include="Scripts\rr-request.modify-permissions.js" />
     <Content Include="Scripts\rr-resource.common.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />

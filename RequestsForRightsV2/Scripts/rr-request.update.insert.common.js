@@ -80,25 +80,33 @@ $("#rr-request-form")
         var idResourceRight = rightIdSelect.val();
         clearResources(rightPanel);
         resourceSelect.val("");
+        var user = getUserInfo(rightPanel);
+        var ajaxData = {
+            date: getCurrentDate(),
+            "requestUser.Login": user.Login,
+            "requestUser.Snp": user.Snp,
+            "requestUser.Department": user.Department,
+            "requestUser.Unit": user.Unit
+        };
         if (idRequestRightGrantType !== "2") {
             loadResources(resourceSelect);
             setResourceAndRightsValues(rightPanel, idResource, idResourceRight);
+            if (userRightsBuffer[JSON.stringify(user)] != undefined) {
+                return;
+            }
+            $.getJSON("/User/GetPermanentRightsOnDate",
+                ajaxData,
+                function(userRights) {
+                    userRightsBuffer[JSON.stringify(user)] = userRights;
+                });
             return;
         }
-        var user = getUserInfo(rightPanel);
         if (userRightsBuffer[JSON.stringify(user)] != undefined) {
             loadResources(resourceSelect, userRightsBuffer[JSON.stringify(user)]);
             setResourceAndRightsValues(rightPanel, idResource, idResourceRight);
             return;
         }
-        $.getJSON("/User/GetPermanentRightsOnDate",
-            {
-                date: getCurrentDate(),
-                "requestUser.Login": user.Login,
-                "requestUser.Snp": user.Snp,
-                "requestUser.Department": user.Department,
-                "requestUser.Unit": user.Unit
-            },
+        $.getJSON("/User/GetPermanentRightsOnDate", ajaxData,
             function(userRights) {
                 userRightsBuffer[JSON.stringify(user)] = userRights;
                 loadResources(resourceSelect, userRights);
