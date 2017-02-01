@@ -294,7 +294,7 @@ namespace RequestsForRights.Infrastructure.Security
             var resourceDepartments = request.RequestUserAssoc.
                 Where(ru => ru.RequestUserRightAssocs != null).
                 SelectMany(ru => ru.RequestUserRightAssocs.Select(
-                    r => r.ResourceRight.Resource.IdDepartment)).Distinct();
+                    r => r.ResourceRight.Resource.IdDepartment)).Except(new[] { 24 }).Distinct();
             resourceDepartments = resourceDepartments.Except(new[] {request.User.IdDepartment});
             var agreementDepartments = request.RequestAgreements
                 .Where(r => r.IdAgreementType == 1 && new[] {2, 3}.Contains(r.IdAgreementState))

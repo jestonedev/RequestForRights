@@ -87,7 +87,7 @@ namespace RequestsForRights
             kernel.Bind<ILdapRepository>().ToConstant(
                 new LdapRepository(
                     ConfigurationManager.AppSettings["ldap_username"],
-                    ConfigurationManager.AppSettings["ldap_password"])).InRequestScope();
+                    ConfigurationManager.AppSettings["ldap_password"]));
             // Data services
             kernel.Bind<IRightService>().To<RightService>();
             kernel.Bind<IReportService>().To<ReportService>();

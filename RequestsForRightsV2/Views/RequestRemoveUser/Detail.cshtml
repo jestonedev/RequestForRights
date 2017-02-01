@@ -1,4 +1,5 @@
-﻿@using RequestsForRights.Infrastructure.Security.Interfaces
+﻿@using System.Globalization
+@using RequestsForRights.Infrastructure.Security.Interfaces
 @using RequestsForRights.Models.Models
 @model RequestsForRights.Models.ViewModels.Request.RequestRemoveUserViewModel
 
@@ -20,6 +21,12 @@
             <div>
                 <div class="col-sm-12">
                     <dl class="dl-horizontal">
+                        <dt>@Html.DisplayNameFor(r => r.RequestModel.OwnerSnp)</dt>
+                        <dd>@Model.RequestModel.OwnerSnp</dd>
+                        <dt>@Html.DisplayNameFor(r => r.RequestModel.OwnerDepartment)</dt>
+                        <dd>@Model.RequestModel.OwnerDepartment</dd>
+                        <dt>@Html.DisplayNameFor(r => r.RequestModel.Date)</dt>
+                        <dd>@Model.RequestModel.Date.ToString("dd.MM.yyyy HH:mm", CultureInfo.CurrentCulture)</dd>
                         <dt>@Html.DisplayNameFor(r => r.RequestModel.Description)</dt>
                         <dd>@Model.RequestModel.Description</dd>
                     </dl>

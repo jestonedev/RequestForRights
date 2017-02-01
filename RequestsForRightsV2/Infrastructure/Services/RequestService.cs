@@ -202,6 +202,9 @@ namespace RequestsForRights.Infrastructure.Services
             {
                 IdRequest = request.IdRequest,
                 Description = request.Description,
+                OwnerSnp = request.User.Snp,
+                OwnerDepartment = request.User.Department.Name,
+                Date = request.RequestStates.First(r => !r.Deleted).Date,
                 IdRequestType = request.IdRequestType,
                 Users = request.RequestUserAssoc.Where(ru => !ru.Deleted).
                     Select(FillRequestUserModel).ToList()
