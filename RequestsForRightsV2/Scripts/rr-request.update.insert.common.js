@@ -11,7 +11,7 @@ $("#rr-request-form")
     .on("click",
         '[name="deleteUser"]',
         function (e) {
-            var userDeletingElem = $(this).closest(".rr-request-user");
+            var userDeletingElem = $(this).closest(".rr-request-user-wrapper");
             var userOpeningElem = userDeletingElem.prev();
             if (userOpeningElem.length === 0) {
                 userOpeningElem = userDeletingElem.next();
@@ -39,7 +39,7 @@ $("#rr-request-form")
     .on("click",
         '[name="addRight"]',
         function (e) {
-            addRight($(this).closest(".rr-request-user").find(".rr-request-rights"));
+            addRight($(this).closest(".rr-request-user-wrapper").find(".rr-request-rights"));
             e.preventDefault();
             return false;
         });
@@ -73,46 +73,51 @@ var userRightsBuffer = [];
 $("#rr-request-form")
     .on("change", ".rr-request-right-grant-type select", function () {
         var rightPanel = $(this).closest(".rr-request-right");
-        var resourceSelect = rightPanel.find(".rr-request-right-resource select");
-        var rightIdSelect = rightPanel.find(".rr-request-right-id select");
-        var idRequestRightGrantType = $(this).val();
-        var idResource = resourceSelect.val();
-        var idResourceRight = rightIdSelect.val();
-        clearResources(rightPanel);
-        resourceSelect.val("");
-        var user = getUserInfo(rightPanel);
-        var ajaxData = {
-            date: getCurrentDate(),
-            "requestUser.Login": user.Login,
-            "requestUser.Snp": user.Snp,
-            "requestUser.Department": user.Department,
-            "requestUser.Unit": user.Unit
-        };
-        if (idRequestRightGrantType !== "2") {
-            loadResources(resourceSelect);
-            setResourceAndRightsValues(rightPanel, idResource, idResourceRight);
-            if (userRightsBuffer[JSON.stringify(user)] != undefined) {
-                return;
-            }
-            $.getJSON("/User/GetPermanentRightsOnDate",
-                ajaxData,
-                function(userRights) {
-                    userRightsBuffer[JSON.stringify(user)] = userRights;
-                });
-            return;
-        }
+        updateVisibleRights(rightPanel);
+    });
+
+function updateVisibleRights(rightPanel) {
+    var resourceSelect = rightPanel.find(".rr-request-right-resource select");
+    var rightIdSelect = rightPanel.find(".rr-request-right-id select");
+    var idRequestRightGrantType = rightPanel.find(".rr-request-right-grant-type select, .rr-request-right-grant-type input").
+        first().val();
+    var idResource = resourceSelect.val();
+    var idResourceRight = rightIdSelect.val();
+    clearResources(rightPanel);
+    resourceSelect.val("");
+    var user = getUserInfo(rightPanel);
+    var ajaxData = {
+        date: getCurrentDate(),
+        "requestUser.Login": user.Login,
+        "requestUser.Snp": user.Snp,
+        "requestUser.Department": user.Department,
+        "requestUser.Unit": user.Unit
+    };
+    if (idRequestRightGrantType !== "2" && idRequestRightGrantType !== "3") {
+        loadResources(rightPanel);
+        setResourceAndRightsValues(rightPanel, idResource, idResourceRight);
         if (userRightsBuffer[JSON.stringify(user)] != undefined) {
-            loadResources(resourceSelect, userRightsBuffer[JSON.stringify(user)]);
-            setResourceAndRightsValues(rightPanel, idResource, idResourceRight);
             return;
         }
-        $.getJSON("/User/GetPermanentRightsOnDate", ajaxData,
+        $.getJSON("/User/GetPermanentRightsOnDate",
+            ajaxData,
             function(userRights) {
                 userRightsBuffer[JSON.stringify(user)] = userRights;
-                loadResources(resourceSelect, userRights);
-                setResourceAndRightsValues(rightPanel, idResource, idResourceRight);
             });
-    });
+        return;
+    }
+    if (userRightsBuffer[JSON.stringify(user)] != undefined) {
+        loadResources(rightPanel, userRightsBuffer[JSON.stringify(user)]);
+        setResourceAndRightsValues(rightPanel, idResource, idResourceRight);
+        return;
+    }
+    $.getJSON("/User/GetPermanentRightsOnDate", ajaxData,
+        function(userRights) {
+            userRightsBuffer[JSON.stringify(user)] = userRights;
+            loadResources(rightPanel, userRights);
+            setResourceAndRightsValues(rightPanel, idResource, idResourceRight);
+        });
+}
 
 function clearResources(rightPanel) {
     var optGroups = rightPanel.find(".rr-request-right-resource select optgroup");
@@ -122,11 +127,11 @@ function clearResources(rightPanel) {
     optGroups.remove();
 }
 
-function loadResources(resourceSelect, userRights) {
-    var idRequestRightGrantType = $(resourceSelect)
-        .closest(".rr-request-right")
-        .find(".rr-request-right-grant-type select")
-        .val();
+function loadResources(rightPanel, userRights) {
+    var idRequestRightGrantType = $(rightPanel)
+        .find(".rr-request-right-grant-type select, .rr-request-right-grant-type input")
+        .first().val();
+    var resourceSelect = $(rightPanel).find(".rr-request-right-resource select");
     resourceOptionsCache.each(function(idx, option) {
         resourceSelect.append($(option).clone(true));
     });
@@ -134,7 +139,7 @@ function loadResources(resourceSelect, userRights) {
         if ($(option).val() === "") {
             return;
         }
-        if (idRequestRightGrantType === "2") {
+        if (idRequestRightGrantType === "2" || idRequestRightGrantType === "3") {
             var has = false;
             for (var i = 0; i < userRights.length; i++) {
                 if (userRights[i].IdResource === $(option).data("id-resource")) {
@@ -155,7 +160,7 @@ function loadResources(resourceSelect, userRights) {
 }
 
 function getUserInfo(rightPanel) {
-    var userPanel = $(rightPanel).closest(".rr-request-user");
+    var userPanel = $(rightPanel).closest(".rr-request-user-wrapper").find(".rr-request-user").first();
     return {
         Login: userPanel.find(".rr-request-user-login input").val(),
         Snp: userPanel.find(".rr-request-user-snp input").val(),
@@ -193,7 +198,8 @@ $("#rr-request-form")
             }
             options.remove();
 
-            var idRequestRightGrantType = rightPanel.find(".rr-request-right-grant-type select").val();
+            var idRequestRightGrantType = rightPanel.find(".rr-request-right-grant-type select," +
+                ".rr-request-right-grant-type input").first().val();
             var userInfo = getUserInfo(rightPanel);
             var userRights = userRightsBuffer[JSON.stringify(userInfo)];
             rightsOptionsCache.each(function (idx, option) {
@@ -201,7 +207,9 @@ $("#rr-request-form")
                     rightIdSelect.append($(option).clone());
                     return;
                 }
-                if (idRequestRightGrantType !== "2" && $(option).data("id-resource") === idResource) {
+                if (idRequestRightGrantType !== "2" &&
+                    idRequestRightGrantType !== "3" &&
+                    $(option).data("id-resource") === idResource) {
                     rightIdSelect.append($(option).clone());
                     return;
                 }
@@ -240,7 +248,7 @@ function formIsValid(form) {
     if ($.fn.autocomplete === undefined) {
         return formValid;
     }
-    var users = $(".rr-request-users > .rr-request-user");
+    var users = $(".rr-request-user");
     users.each(function (userIdx, userElem) {
         var userSnpElem = $(userElem).find(".rr-request-user-snp input");
         if (userSnpElem.val() === "" ||
@@ -264,7 +272,7 @@ function updateControls() {
     var rightNamePropRegex = /(Rights)\[\d+\]/;
     var userIdPropRegex = /(Users)_\d+__/;
     var rightIdPropRegex = /(Rights)_\d+__/;
-    var users = $(".rr-request-users > .rr-request-user");
+    var users = $(".rr-request-users > .rr-request-user-wrapper");
     users.each(function (userIdx, userElem) {
         updateControl(userIdx, userElem, userNamePropRegex, userIdPropRegex);
         $(userElem).find(".panel-heading").attr("id", "heading" + userIdx);
@@ -323,11 +331,14 @@ function addUserAfterLoad(userLayout, template) {
     refreshValidation();
     updateDeleteUserButton();
     updateDeleteRightButton();
-    var addedUser = $(".rr-request-user").last();
+    var addedUser = $(".rr-request-user-wrapper").last();
     initializeUsersAutocomplete(addedUser.find(".rr-request-user-snp input"));
     addedUser.find(".panel-heading a").click();
     addedUser.find(".rr-request-user-department select").change();
-    addedUser.find(".rr-request-right .rr-request-right-resource select").change();
+    var rightPanels = addedUser.find(".rr-request-right");
+    for (var i = 0; i < rightPanels.length; i++) {
+        updateVisibleRights($(rightPanels[i]));
+    }
     $(window).scrollTop($(document).height());
 }
 
@@ -360,7 +371,7 @@ function addRightAfterLoad(rightLayout, template) {
     refreshValidation();
     updateDeleteRightButton();
     var addedRight = rightLayout.find(".rr-request-right").last();
-    addedRight.find(".rr-request-right-resource select").change();
+    updateVisibleRights(addedRight);
     $(window).scrollTop($(document).height());
 }
 
@@ -376,7 +387,7 @@ function showErrorBadgets() {
     var titleToShow = undefined;
     var panelToShow = undefined;
     var totalErrors = 0;
-    $(".rr-request-user")
+    $(".rr-request-user-wrapper")
         .each(function (idx, elem) {
             var title = $(elem).find(".panel-title");
             var id = $(title).find("a").attr("href");
@@ -410,7 +421,7 @@ function showErrorBadgets() {
 }
 
 function updateDeleteUserButton() {
-    var users = $(".rr-request-users > .rr-request-user");
+    var users = $(".rr-request-users > .rr-request-user-wrapper");
     if (users.length === 1) {
         users.find("button[name=deleteUser]").prop("disabled", true);
     } else {
@@ -419,7 +430,7 @@ function updateDeleteUserButton() {
 }
 
 function updateDeleteRightButton() {
-    var users = $(".rr-request-users > .rr-request-user");
+    var users = $(".rr-request-users > .rr-request-user-wrapper");
     users.each(function(idx, user) {
         var rights = $(user).find(".rr-request-rights > .rr-request-right");
         if (rights.length === 1) {
@@ -462,7 +473,11 @@ function initializeUsersAutocomplete(userSnp) {
         onSelect: function (suggestion) {
             var user = $(this).closest(".rr-request-user");
             updateUserFields(user, suggestion);
-            $(user).find(".rr-request-right-grant-type select").change();
+            updateUserWrapperHeader(user.closest(".rr-request-user-wrapper"));
+            var rightPanels = user.closest(".rr-request-user-wrapper").find(".rr-request-right");
+            for (var i = 0; i < rightPanels.length; i++) {
+                updateVisibleRights($(rightPanels[i]));
+            }
             updateRequestDescription();
         }
     });
@@ -475,11 +490,48 @@ function updateUserFields(user, suggestion) {
     user.find(".rr-request-user-unit input").val(suggestion.data.Unit);
     user.find(".rr-request-user-office input").val(suggestion.data.Office);
     user.find(".rr-request-user-phone input").val(suggestion.data.Phone);
-    if (suggestion.data.Snp) {
-        user.find(".panel-title a").text("Сотрудник «" + suggestion.data.Snp + "»");
-    } else {
-        user.find(".panel-title a").text("Новый сотрудник");
+}
+
+function updateUserWrapperHeader(userWrapper) {
+    var users = userWrapper.find(".rr-request-user");
+    var title = "";
+    var idRequestType = userWrapper.closest("form").find('[name="RequestModel.IdRequestType"]').val();
+
+    for (var i = 0; i < users.length; i++) {
+        var snp = $(users[i]).find(".rr-request-user-snp input").val();
+        var hasNextSnp = false;
+        if (i !== users.length - 1 && $(users[i + 1]).find(".rr-request-user-snp input").val()) {
+            hasNextSnp = true;
+        }
+        if ($.trim(snp)) {
+            title += "«" + snp + "»";
+            if (hasNextSnp) {
+                title += " — ";
+            }
+        }
     }
+    if ($.trim(title) === "") {
+        if (idRequestType === "4") {
+            title = "Новое делегирование";
+        } else {
+            if (users.length === 1) {
+                title = "Новый сотрудник";
+            } else {
+                title = "Новые сотрудники";
+            }
+        }
+    } else {
+        if (idRequestType === "4") {
+            title = "Делегирование " + title;
+        } else {
+            if (users.length === 1) {
+                title = "Сотрудник " + title;
+            } else {
+                title = "Cотрудники " + title;
+            }
+        }
+    }
+    userWrapper.find(".panel-title a").text(title);
 }
 
 function updateRequestDescription() {
@@ -490,8 +542,26 @@ function updateRequestDescription() {
     requestDescription.off("change");
     var idRequestType = $('[name="RequestModel.IdRequestType"]').val();
     var description = getRequestDescriptionPreamble(idRequestType);
-    $(".rr-request-user").each(function (index, userElem) {
-        description += $(userElem).find(".rr-request-user-snp input").val() + ",\n";
+    $(".rr-request-user-wrapper").each(function (index, userWrapperElem) {
+        var userElems = $(userWrapperElem).find(".rr-request-user");
+        var textLine = "";
+        for (var i = 0; i < userElems.length; i++) {
+            var snp = $(userElems[i]).find(".rr-request-user-snp input").val();
+            var hasNextSnp = false;
+            if (i !== userElems.length - 1 && $(userElems[i + 1]).find(".rr-request-user-snp input").val()) {
+                hasNextSnp = true;
+            }
+            if ($.trim(snp)) {
+                textLine += snp;
+                if (hasNextSnp) {
+                    textLine += " — ";
+                }
+            }
+        }
+        if ($.trim(textLine)) {
+            textLine += ",\n";
+        }
+        description += textLine;
     });
     requestDescription.val(description.replace(/,\n$/, "."));
     requestDescription.on("change",
@@ -533,5 +603,8 @@ initializeUsersAutocomplete($(".rr-request-user-snp input"));
 loadUserCache();
 loadRightCache();
 
-$("#rr-request-form .rr-request-right-grant-type select").change();
-$("#rr-request-form .rr-request-right-resource select").change();
+var rightPanels = $(".rr-request-right");
+for (var i = 0; i < rightPanels.length; i++) {
+    updateVisibleRights($(rightPanels[i]));
+}
+updateRequestDescription();

@@ -1,0 +1,288 @@
+﻿@using RequestsForRights.Infrastructure.Extensions
+@using RequestsForRights.Infrastructure.Security.Interfaces
+@using RequestsForRights.Models.Models
+@model RequestsForRights.Models.ViewModels.Request.RequestDelegatePermissionsViewModel
+
+@{
+    var securityService = (IRequestSecurityService<RequestDelegatePermissionsUserModel>) ViewData["SecurityService"];
+    var userIndex = -1;
+    if (ViewData.Keys.Contains("UserIndex"))
+    {
+        int.TryParse(ViewData["UserIndex"].ToString(), out userIndex);
+    }
+    var id = string.Format("collapse{0}", userIndex);
+    var delegateFrom = Model.RequestModel.Users[userIndex].Snp;
+    var delegateTo = Model.RequestModel.Users[userIndex].DelegationRequestUsersExtInfoModel.SnpDelegateTo;
+    string title;
+    if (string.IsNullOrEmpty(delegateFrom) && string.IsNullOrEmpty(delegateTo))
+    {
+        title = "Новое делегирование";
+    } else
+    if (!string.IsNullOrEmpty(delegateFrom) && !string.IsNullOrEmpty(delegateTo))
+    {
+        title = "Делегирование «" + delegateFrom + "» — «" + delegateTo + "»";
+    }
+    else
+    if (!string.IsNullOrEmpty(delegateFrom))
+    {
+        title = "Делегирование «" + delegateFrom + "»";
+    }
+    else
+    {
+        title = "Делегирование «" + delegateTo + "»";
+    }
+}
+
+<div class="panel panel-primary rr-request-user-wrapper">
+<div class="panel-heading" role="tab" id="heading@id">
+    <h4 class="panel-title">
+        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#@id" aria-expanded="true" aria-controls="@id">
+            @title
+        </a>
+        <span class="badge rr-badge">0</span>
+    </h4>
+</div>
+<div id="@id" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+<div class="panel-body">
+<div class="col-lg-6 rr-request-delegation-from-user rr-request-user">
+    <div class="panel panel-primary">
+        <div class="panel-heading">Делегировать от</div>
+        <div class="panel-body">
+            @Html.Hidden("rr-request-user-prev-snp", Model.RequestModel.Users[userIndex].Snp)
+            <div class="form-group rr-request-user-snp">
+                @Html.RequiredLabelFor(r => r.RequestModel.Users[userIndex].Snp,
+                    new {@class = "col-sm-2 col-lg-3 control-label"})
+                <div class="col-sm-10 col-lg-9">
+                    @Html.TextBoxFor(r => r.RequestModel.Users[userIndex].Snp,
+                        new
+                        {
+                            @class = "form-control",
+                            placeholder = "Введите ФИО пользователя"
+                        })
+                    @Html.ValidationMessageFor(r => r.RequestModel.Users[userIndex].Snp)
+                </div>
+            </div>
+            @if (securityService.CanSeeLogin())
+            {
+                <div class="form-group rr-request-user-login">
+                    @Html.RequiredLabelFor(r => r.RequestModel.Users[userIndex].Login,
+                        new {@class = "col-sm-2 col-lg-3 control-label"})
+                    <div class="col-sm-10 col-lg-9">
+                        @Html.TextBoxFor(r => r.RequestModel.Users[userIndex].Login,
+                            new
+                            {
+                                @class = "form-control",
+                                @readonly = "readonly"
+                            })
+                        @Html.ValidationMessageFor(r => r.RequestModel.Users[userIndex].Login)
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="rr-request-user-login">
+                    @Html.HiddenFor(r => r.RequestModel.Users[userIndex].Login)
+                </div>
+            }
+            <div class="form-group rr-request-user-post">
+                @Html.RequiredLabelFor(r => r.RequestModel.Users[userIndex].Post,
+                    new {@class = "col-sm-2 col-lg-3 control-label"})
+                <div class="col-sm-10 col-lg-9">
+                    @Html.TextBoxFor(r => r.RequestModel.Users[userIndex].Post,
+                        new
+                        {
+                            @class = "form-control",
+                            @readonly = "readonly"
+                        })
+                    @Html.ValidationMessageFor(r => r.RequestModel.Users[userIndex].Post)
+                </div>
+            </div>
+            <div class="form-group rr-request-user-department">
+                @Html.RequiredLabelFor(r => r.RequestModel.Users[userIndex].Department,
+                    new {@class = "col-sm-2 col-lg-3 control-label"})
+                <div class="col-sm-10 col-lg-9">
+                    @Html.TextBoxFor(r => r.RequestModel.Users[userIndex].Department,
+                        new
+                        {
+                            @class = "form-control",
+                            @readonly = "readonly"
+                        })
+                    @Html.ValidationMessageFor(r => r.RequestModel.Users[userIndex].Department)
+                </div>
+            </div>
+            <div class="form-group rr-request-user-unit">
+                @Html.RequiredLabelFor(r => r.RequestModel.Users[userIndex].Unit,
+                    new {@class = "col-sm-2 col-lg-3 control-label"})
+                <div class="col-sm-10 col-lg-9">
+                    @Html.TextBoxFor(r => r.RequestModel.Users[userIndex].Unit,
+                        new
+                        {
+                            @class = "form-control",
+                            @readonly = "readonly"
+                        })
+                    @Html.ValidationMessageFor(r => r.RequestModel.Users[userIndex].Unit)
+                </div>
+            </div>
+            <div class="rr-request-user-office">
+                @Html.HiddenFor(r => r.RequestModel.Users[userIndex].Office)
+            </div>
+            <div class="rr-request-user-phone">
+                @Html.HiddenFor(r => r.RequestModel.Users[userIndex].Phone)
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-lg-6 rr-request-delegation-to-user rr-request-user">
+    <div class="panel panel-primary">
+        <div class="panel-heading">Делегировать к</div>
+        <div class="panel-body">
+            @Html.Hidden("rr-request-user-prev-snp", Model.RequestModel.Users[userIndex].DelegationRequestUsersExtInfoModel.SnpDelegateTo)
+            <div class="form-group rr-request-user-snp">
+                @Html.RequiredLabelFor(r => r.RequestModel.Users[userIndex].DelegationRequestUsersExtInfoModel.SnpDelegateTo,
+                    new {@class = "col-sm-2 col-lg-3 control-label"})
+                <div class="col-sm-10 col-lg-9">
+                    @Html.TextBoxFor(r => r.RequestModel.Users[userIndex].DelegationRequestUsersExtInfoModel.SnpDelegateTo,
+                        new
+                        {
+                            @class = "form-control",
+                            placeholder = "Введите ФИО пользователя"
+                        })
+                    @Html.ValidationMessageFor(r => r.RequestModel.Users[userIndex].DelegationRequestUsersExtInfoModel.SnpDelegateTo)
+                </div>
+            </div>
+            @if (securityService.CanSeeLogin())
+            {
+                <div class="form-group rr-request-user-login">
+                    @Html.RequiredLabelFor(r => r.RequestModel.Users[userIndex].DelegationRequestUsersExtInfoModel.LoginDelegateTo,
+                        new {@class = "col-sm-2 col-lg-3 control-label"})
+                    <div class="col-sm-10 col-lg-9">
+                        @Html.TextBoxFor(r => r.RequestModel.Users[userIndex].DelegationRequestUsersExtInfoModel.LoginDelegateTo,
+                            new
+                            {
+                                @class = "form-control",
+                                @readonly = "readonly"
+                            })
+                        @Html.ValidationMessageFor(r => r.RequestModel.Users[userIndex].DelegationRequestUsersExtInfoModel.LoginDelegateTo)
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="rr-request-user-login">
+                    @Html.HiddenFor(r => r.RequestModel.Users[userIndex].DelegationRequestUsersExtInfoModel.LoginDelegateTo)
+                </div>
+            }
+            <div class="form-group rr-request-user-post">
+                @Html.RequiredLabelFor(r => r.RequestModel.Users[userIndex].DelegationRequestUsersExtInfoModel.PostDelegateTo,
+                    new {@class = "col-sm-2 col-lg-3 control-label"})
+                <div class="col-sm-10 col-lg-9">
+                    @Html.TextBoxFor(r => r.RequestModel.Users[userIndex].DelegationRequestUsersExtInfoModel.PostDelegateTo,
+                        new
+                        {
+                            @class = "form-control",
+                            @readonly = "readonly"
+                        })
+                    @Html.ValidationMessageFor(r => r.RequestModel.Users[userIndex].DelegationRequestUsersExtInfoModel.PostDelegateTo)
+                </div>
+            </div>
+            <div class="form-group rr-request-user-department">
+                @Html.RequiredLabelFor(r => r.RequestModel.Users[userIndex].DelegationRequestUsersExtInfoModel.DepartmentDelegateTo,
+                    new {@class = "col-sm-2 col-lg-3 control-label"})
+                <div class="col-sm-10 col-lg-9">
+                    @Html.TextBoxFor(r => r.RequestModel.Users[userIndex].DelegationRequestUsersExtInfoModel.DepartmentDelegateTo,
+                        new
+                        {
+                            @class = "form-control",
+                            @readonly = "readonly"
+                        })
+                    @Html.ValidationMessageFor(r => r.RequestModel.Users[userIndex].DelegationRequestUsersExtInfoModel.DepartmentDelegateTo)
+                </div>
+            </div>
+            <div class="form-group rr-request-user-unit">
+                @Html.RequiredLabelFor(r => r.RequestModel.Users[userIndex].DelegationRequestUsersExtInfoModel.UnitDelegateTo,
+                    new {@class = "col-sm-2 col-lg-3 control-label"})
+                <div class="col-sm-10 col-lg-9">
+                    @Html.TextBoxFor(r => r.RequestModel.Users[userIndex].DelegationRequestUsersExtInfoModel.UnitDelegateTo,
+                        new
+                        {
+                            @class = "form-control",
+                            @readonly = "readonly"
+                        })
+                    @Html.ValidationMessageFor(r => r.RequestModel.Users[userIndex].DelegationRequestUsersExtInfoModel.UnitDelegateTo)
+                </div>
+            </div>
+            <div class="rr-request-user-office">
+                @Html.HiddenFor(r => r.RequestModel.Users[userIndex].DelegationRequestUsersExtInfoModel.OfficeDelegateTo)
+            </div>
+            <div class="rr-request-user-phone">
+                @Html.HiddenFor(r => r.RequestModel.Users[userIndex].DelegationRequestUsersExtInfoModel.PhoneDelegateTo)
+            </div>
+        </div>
+    </div>
+</div>
+<div class="clearfix"></div>
+<div class="form-group col-sm-6 rr-col-sm-no-left-padding rr-request-delegation-from-date">
+    @Html.RequiredLabelFor(r => r.RequestModel.Users[userIndex].DelegationRequestUsersExtInfoModel.DelegateFromDate,
+        new {@class = "control-label"})
+    @Html.TextBoxFor(r => r.RequestModel.Users[userIndex].DelegationRequestUsersExtInfoModel.DelegateFromDate,
+        "{0:dd.MM.yyyy}",
+        new
+        {
+            @class = "form-control date"
+        })
+    @Html.ValidationMessageFor(r => r.RequestModel.Users[userIndex].DelegationRequestUsersExtInfoModel.DelegateFromDate)
+</div>
+<div class="form-group col-sm-6 rr-col-sm-no-right-padding rr-request-delegation-to-date">
+    @Html.RequiredLabelFor(r => r.RequestModel.Users[userIndex].DelegationRequestUsersExtInfoModel.DelegateToDate,
+        new {@class = "control-label"})
+    @Html.TextBoxFor(r => r.RequestModel.Users[userIndex].DelegationRequestUsersExtInfoModel.DelegateToDate,
+        "{0:dd.MM.yyyy}",
+        new
+        {
+            @class = "form-control date"
+        })
+    @Html.ValidationMessageFor(r => r.RequestModel.Users[userIndex].DelegationRequestUsersExtInfoModel.DelegateToDate)
+</div>
+<div class="clearfix"></div>
+<div class=" col-xs-12">
+    <div class="form-group rr-request-user-description">
+        @Html.RequiredLabelFor(r => r.RequestModel.Users[userIndex].Description,
+            new {@class = "control-label"})
+        @Html.TextAreaFor(r => r.RequestModel.Users[userIndex].Description,
+            new
+            {
+                @class = "form-control",
+                placeholder = "Введите примечание",
+                rows = "4"
+            })
+        @Html.ValidationMessageFor(r => r.RequestModel.Users[userIndex].Description)
+    </div>
+</div>
+<div class="panel panel-primary rr-request-rights-wrapper">
+    <div class="panel-heading">Делегировать права</div>
+    <ul class="list-group rr-request-rights">
+        @if (Model.RequestModel.Users[userIndex].Rights != null &&
+             Model.RequestModel.Users[userIndex].Rights.Any())
+        {
+            for (var i = 0; i < Model.RequestModel.Users[userIndex].Rights.Count; i++)
+            {
+                @Html.Partial("RightEditor", Model, new ViewDataDictionary
+                {
+                    {"UserIndex", userIndex},
+                    {"RightIndex", i},
+                    {"SecurityService", ViewData["SecurityService"]}
+                })
+            }
+        }
+    </ul>
+</div>
+<div class="text-center rr-edit-user-panel">
+    <div class="btn-group" role="group" aria-label="Панель редактирования сотрудника">
+        <button name="deleteUser" class="btn btn-danger rr-remove-user-button">Удалить сотрудника</button>
+        <button name="addRight" class="btn btn-success btn-default rr-add-request-right-button">Добавить право</button>
+    </div>
+</div>
+</div>
+</div>
+</div>

@@ -1,4 +1,4 @@
-﻿@model RequestsForRights.Models.ViewModels.Request.RequestViewModel<RequestsForRights.Models.Models.RequestDelegatePermissionsUserModel>
+﻿@model RequestsForRights.Models.ViewModels.Request.RequestDelegatePermissionsViewModel
 
 @{
     ViewBag.Title = "Добавить заявку на делегирование прав";
@@ -21,7 +21,10 @@
 
 
 @section scripts {
+    @Styles.Render("~/Content/bootstrap-datepicker")
+    @Scripts.Render("~/bundles/bootstrap-datepicker")
     @Scripts.Render("~/bundles/jquery.autocomplete")
     @Scripts.Render("~/bundles/rr-request.common")
     @Scripts.Render("~/bundles/rr-request.update.insert.common")
+    @Scripts.Render("~/bundles/rr-request.delegate-permissions")
 }

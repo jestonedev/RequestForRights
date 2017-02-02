@@ -425,6 +425,18 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Content\Favicon\manifest.json" />
+    <Content Include="Scripts\cldr.js" />
+    <Content Include="Scripts\cldr\event.js" />
+    <Content Include="Scripts\cldr\supplemental.js" />
+    <Content Include="Scripts\cldr\unresolved.js" />
+    <Content Include="Scripts\globalize.js" />
+    <Content Include="Scripts\globalize\currency.js" />
+    <Content Include="Scripts\globalize\date.js" />
+    <Content Include="Scripts\globalize\message.js" />
+    <Content Include="Scripts\globalize\number.js" />
+    <Content Include="Scripts\globalize\plural.js" />
+    <Content Include="Scripts\globalize\relative-time.js" />
+    <Content Include="Scripts\globalize\unit.js" />
     <Content Include="Scripts\jquery.autocomplete.js" />
     <Content Include="Scripts\jquery.autocomplete.min.js" />
     <Content Include="Scripts\json2.js" />
@@ -528,6 +540,7 @@
     <Content Include="Scripts\rr-request.agreements.js" />
     <Content Include="Scripts\rr-request.comments.js" />
     <Content Include="Scripts\rr-request.common.js" />
+    <Content Include="Scripts\rr-request.delegate-permissions.js" />
     <Content Include="Scripts\rr-request.update.insert.common.js" />
     <Content Include="Scripts\rr-request.index.js" />
     <Content Include="Scripts\rr-resource.common.js" />
@@ -575,6 +588,8 @@
     <Content Include="Views\RequestRemoveUser\UserEditor.cshtml" />
     <Content Include="Views\RequestModifyPermissions\RightEditor.cshtml" />
     <Content Include="Views\RequestModifyPermissions\UserEditor.cshtml" />
+    <Content Include="Views\RequestDelegatePermissions\RightEditor.cshtml" />
+    <Content Include="Views\RequestDelegatePermissions\UserEditor.cshtml" />
     <None Include="Views\Request\Index.cshtml" />
     <None Include="Views\RequestModifyPermissions\Detail.cshtml" />
     <None Include="Views\RequestRemoveUser\Detail.cshtml" />

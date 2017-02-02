@@ -110,4 +110,4 @@ function getCurrentDate() {
         var month = date.getMonth()+1;
         var day = date.getDate();
         return year + "-" + (month < 10 ? "0" : "") + month + "-" + (day < 10 ? "0" : "") + day;
-    }
+}

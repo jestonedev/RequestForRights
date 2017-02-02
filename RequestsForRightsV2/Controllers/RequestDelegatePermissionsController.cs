@@ -155,6 +155,31 @@ namespace RequestsForRights.Controllers
             }
         }
 
+        [HttpGet]
+        public ActionResult GetEmptyUserTemplate()
+        {
+            if (!Request.IsAjaxRequest())
+            {
+                return RedirectToAction("ForbiddenError", "Home");
+            }
+            ViewData["UserIndex"] = 0;
+            ViewData["SecurityService"] = _securityService;
+            return PartialView("UserEditor", _requestService.GetEmptyRequestViewModel());
+        }
+
+        [HttpGet]
+        public ActionResult GetEmptyRightTemplate()
+        {
+            if (!Request.IsAjaxRequest())
+            {
+                return RedirectToAction("ForbiddenError", "Home");
+            }
+            ViewData["UserIndex"] = 0;
+            ViewData["RightIndex"] = 0;
+            ViewData["SecurityService"] = _securityService;
+            return PartialView("RightEditor", _requestService.GetEmptyRequestViewModel());
+        }
+
         private void Validate(RequestModel<RequestDelegatePermissionsUserModel> request)
         {
             if (request.Users == null || !request.Users.Any())

@@ -15,7 +15,7 @@
         Model.RequestModel.Users[userIndex].Snp + "»";
 }
 
-<div class="panel panel-primary rr-request-user">
+<div class="panel panel-primary rr-request-user-wrapper">
     <div class="panel-heading" role="tab" id="heading@id">
         <h4 class="panel-title">
             <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
@@ -27,131 +27,133 @@
     </div>
     <div id="@id" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
         <div class="panel-body">
-            <div class="form-group rr-request-user-snp rr-no-autocomplete">
-                @Html.RequiredLabelFor(r => r.RequestModel.Users[userIndex].Snp,
-                    new { @class = "col-sm-2 control-label" })
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(r => r.RequestModel.Users[userIndex].Snp,
+            <div class="rr-request-user">
+                <div class="form-group rr-request-user-snp rr-no-autocomplete">
+                    @Html.RequiredLabelFor(r => r.RequestModel.Users[userIndex].Snp,
+                    new {@class = "col-sm-2 control-label"})
+                    <div class="col-sm-10">
+                        @Html.TextBoxFor(r => r.RequestModel.Users[userIndex].Snp,
                         new
                         {
                             @class = "form-control",
                             placeholder = "Введите ФИО пользователя"
                         })
-                    @Html.ValidationMessageFor(r => r.RequestModel.Users[userIndex].Snp)
+                        @Html.ValidationMessageFor(r => r.RequestModel.Users[userIndex].Snp)
+                    </div>
                 </div>
-            </div>
-            @if (securityService.CanSeeLogin())
-            {
-                <div class="form-group rr-request-user-login">
-                    @Html.RequiredLabelFor(r => r.RequestModel.Users[userIndex].Login,
-                        new { @class = "col-sm-2 control-label" })
-                    <div class="col-sm-10">
-                        @Html.TextBoxFor(r => r.RequestModel.Users[userIndex].Login,
+                @if (securityService.CanSeeLogin())
+                {
+                    <div class="form-group rr-request-user-login">
+                        @Html.RequiredLabelFor(r => r.RequestModel.Users[userIndex].Login,
+                        new {@class = "col-sm-2 control-label"})
+                        <div class="col-sm-10">
+                            @Html.TextBoxFor(r => r.RequestModel.Users[userIndex].Login,
                             new
                             {
                                 @class = "form-control",
                                 @readonly = "readonly"
                             })
-                        @Html.ValidationMessageFor(r => r.RequestModel.Users[userIndex].Login)
+                            @Html.ValidationMessageFor(r => r.RequestModel.Users[userIndex].Login)
+                        </div>
                     </div>
-                </div>
-            }
-            else
-            {
-                <div class="rr-request-user-login">
-                    @Html.HiddenFor(r => r.RequestModel.Users[userIndex].Login)
-                </div>
-            }
-            <div class="form-group rr-request-user-post">
-                @Html.RequiredLabelFor(r => r.RequestModel.Users[userIndex].Post,
-                    new { @class = "col-sm-2 control-label" })
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(r => r.RequestModel.Users[userIndex].Post,
+                }
+                else
+                {
+                    <div class="rr-request-user-login">
+                        @Html.HiddenFor(r => r.RequestModel.Users[userIndex].Login)
+                    </div>
+                }
+                <div class="form-group rr-request-user-post">
+                    @Html.RequiredLabelFor(r => r.RequestModel.Users[userIndex].Post,
+                    new {@class = "col-sm-2 control-label"})
+                    <div class="col-sm-10">
+                        @Html.TextBoxFor(r => r.RequestModel.Users[userIndex].Post,
                         new
                         {
                             @class = "form-control"
                         })
-                    @Html.ValidationMessageFor(r => r.RequestModel.Users[userIndex].Post)
+                        @Html.ValidationMessageFor(r => r.RequestModel.Users[userIndex].Post)
+                    </div>
                 </div>
-            </div>
-            <div class="form-group rr-request-user-department">
-                @Html.RequiredLabelFor(r => r.RequestModel.Users[userIndex].Department,
-                    new { @class = "col-sm-2 control-label" })
-                <div class="col-sm-10">
-                    <select class="form-control"
-                            name="@Html.NameFor(r => r.RequestModel.Users[userIndex].Department)"
-                            id="@Html.IdFor(r => r.RequestModel.Users[userIndex].Department)"
-                            data-val="true"
-                            data-val-required="Департамент является обязательным для заполнения"
-                            aria-required="true">
-                        <option value="" selected>Выберите департамент</option>
-                        @foreach (var department in Model.Departments)
+                <div class="form-group rr-request-user-department">
+                    @Html.RequiredLabelFor(r => r.RequestModel.Users[userIndex].Department,
+                    new {@class = "col-sm-2 control-label"})
+                    <div class="col-sm-10">
+                        <select class="form-control"
+                                name="@Html.NameFor(r => r.RequestModel.Users[userIndex].Department)"
+                                id="@Html.IdFor(r => r.RequestModel.Users[userIndex].Department)"
+                                data-val="true"
+                                data-val-required="Департамент является обязательным для заполнения"
+                                aria-required="true">
+                            <option value="" selected>Выберите департамент</option>
+                            @foreach (var department in Model.Departments)
                         {
                             var selected = department.Name == Model.RequestModel.Users[userIndex].Department;
-                            <option @(selected ? "selected" : "") data-id-department="@department.IdDepartment">
-                                @department.Name
-                            </option>
+                        <option @(selected ? "selected" : "") data-id-department="@department.IdDepartment">
+                            @department.Name
+                        </option>
                         }
-                    </select>
-                    @Html.ValidationMessageFor(r => r.RequestModel.Users[userIndex].Department)
+                        </select>
+                        @Html.ValidationMessageFor(r => r.RequestModel.Users[userIndex].Department)
+                    </div>
                 </div>
-            </div>
-            <div class="form-group rr-request-user-unit">
-                @Html.RequiredLabelFor(r => r.RequestModel.Users[userIndex].Unit,
-                    new { @class = "col-sm-2 control-label" })
-                <div class="col-sm-10">
-                    <select class="form-control"
-                            name="@Html.NameFor(r => r.RequestModel.Users[userIndex].Unit)">
-                        <option value="" selected></option>
-                        @foreach (var unit in Model.Units)
+                <div class="form-group rr-request-user-unit">
+                    @Html.RequiredLabelFor(r => r.RequestModel.Users[userIndex].Unit,
+                    new {@class = "col-sm-2 control-label"})
+                    <div class="col-sm-10">
+                        <select class="form-control"
+                                name="@Html.NameFor(r => r.RequestModel.Users[userIndex].Unit)">
+                            <option value="" selected></option>
+                            @foreach (var unit in Model.Units)
                         {
                             var selected = unit.ParentDepartment.Name == Model.RequestModel.Users[userIndex].Department &&
                                            unit.Name == Model.RequestModel.Users[userIndex].Unit;
-                            <option @(selected ? "selected" : "")
-                                    data-id-department="@unit.IdParentDepartment">
-                                @unit.Name
-                            </option>
+                        <option @(selected ? "selected" : "")
+                                data-id-department="@unit.IdParentDepartment">
+                            @unit.Name
+                        </option>
                         }
-                    </select>
-                    @Html.ValidationMessageFor(r => r.RequestModel.Users[userIndex].Unit)
+                        </select>
+                        @Html.ValidationMessageFor(r => r.RequestModel.Users[userIndex].Unit)
+                    </div>
                 </div>
-            </div>
-            <div class="form-group rr-request-user-office">
-                @Html.RequiredLabelFor(r => r.RequestModel.Users[userIndex].Office,
+                <div class="form-group rr-request-user-office">
+                    @Html.RequiredLabelFor(r => r.RequestModel.Users[userIndex].Office,
                     new { @class = "col-sm-2 control-label" })
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(r => r.RequestModel.Users[userIndex].Office,
+                    <div class="col-sm-10">
+                        @Html.TextBoxFor(r => r.RequestModel.Users[userIndex].Office,
                         new
                         {
                             @class = "form-control"
                         })
-                    @Html.ValidationMessageFor(r => r.RequestModel.Users[userIndex].Office)
+                        @Html.ValidationMessageFor(r => r.RequestModel.Users[userIndex].Office)
+                    </div>
                 </div>
-            </div>
-            <div class="form-group rr-request-user-phone">
-                @Html.RequiredLabelFor(r => r.RequestModel.Users[userIndex].Phone,
+                <div class="form-group rr-request-user-phone">
+                    @Html.RequiredLabelFor(r => r.RequestModel.Users[userIndex].Phone,
                     new { @class = "col-sm-2 control-label" })
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(r => r.RequestModel.Users[userIndex].Phone,
+                    <div class="col-sm-10">
+                        @Html.TextBoxFor(r => r.RequestModel.Users[userIndex].Phone,
                         new
                         {
                             @class = "form-control"
                         })
-                    @Html.ValidationMessageFor(r => r.RequestModel.Users[userIndex].Phone)
+                        @Html.ValidationMessageFor(r => r.RequestModel.Users[userIndex].Phone)
+                    </div>
                 </div>
-            </div>
-            <div class="form-group rr-request-user-description">
-                @Html.RequiredLabelFor(r => r.RequestModel.Users[userIndex].Description,
-                    new { @class = "col-sm-2 control-label" })
-                <div class="col-sm-10">
-                    @Html.TextAreaFor(r => r.RequestModel.Users[userIndex].Description,
-                        new
-                        {
-                            @class = "form-control",
-                            placeholder = "Введите примечание к пользователю",
-                            rows = "4"
-                        })
-                    @Html.ValidationMessageFor(r => r.RequestModel.Users[userIndex].Description)
+                <div class="form-group rr-request-user-description">
+                    @Html.RequiredLabelFor(r => r.RequestModel.Users[userIndex].Description,
+                        new { @class = "col-sm-2 control-label" })
+                    <div class="col-sm-10">
+                        @Html.TextAreaFor(r => r.RequestModel.Users[userIndex].Description,
+                            new
+                            {
+                                @class = "form-control",
+                                placeholder = "Введите примечание к пользователю",
+                                rows = "4"
+                            })
+                        @Html.ValidationMessageFor(r => r.RequestModel.Users[userIndex].Description)
+                    </div>
                 </div>
             </div>
             <div class="panel panel-primary rr-request-rights-wrapper">
@@ -160,15 +162,15 @@
                     @if (Model.RequestModel.Users[userIndex].Rights != null &&
                          Model.RequestModel.Users[userIndex].Rights.Any())
                     {
-                            for (var i = 0; i < Model.RequestModel.Users[userIndex].Rights.Count; i++)
+                        for (var i = 0; i < Model.RequestModel.Users[userIndex].Rights.Count; i++)
+                        {
+                            @Html.Partial("RightEditor", Model, new ViewDataDictionary
                             {
-                                    @Html.Partial("RightEditor", Model, new ViewDataDictionary
-                                    {
-                                        {"UserIndex", userIndex},
-                                        {"RightIndex", i},
-                                        {"SecurityService", ViewData["SecurityService"]}
-                                    })
-                            }
+                                {"UserIndex", userIndex},
+                                {"RightIndex", i},
+                                {"SecurityService", ViewData["SecurityService"]}
+                            })
+                        }
                     }
                 </ul>
             </div>

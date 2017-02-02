@@ -4,4 +4,4 @@ function fixIELayoutProblems() {
     $(".rr-requests-tabs").removeClass("fix-layout");
 }
 
-$(".rr-request-user").first().find(".panel-heading a").click();
+$(".rr-request-users > .panel").first().find(".panel-heading a").click();

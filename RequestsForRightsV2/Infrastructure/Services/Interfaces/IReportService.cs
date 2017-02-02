@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using RequestsForRights.Domain.Entities;
 using RequestsForRights.Models.Models;
 using RequestsForRights.Models.ReportOptions;

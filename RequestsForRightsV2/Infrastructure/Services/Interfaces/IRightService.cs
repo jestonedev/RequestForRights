@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using RequestsForRights.Domain.Entities;
 using RequestsForRights.Models.Models;
 
 namespace RequestsForRights.Infrastructure.Services.Interfaces

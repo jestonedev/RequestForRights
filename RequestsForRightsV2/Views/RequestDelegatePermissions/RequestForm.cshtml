@@ -1,3 +1,30 @@
-﻿@model RequestsForRights.Models.ViewModels.Request.RequestViewModel<RequestsForRights.Models.Models.RequestDelegatePermissionsUserModel>
+﻿@using RequestsForRights.Infrastructure.Extensions
+@model RequestsForRights.Models.ViewModels.Request.RequestDelegatePermissionsViewModel
 
-@Model.RequestModel.IdRequest
+<div class="col-sm-12">
+    <div class="form-group rr-request-description">
+        @Html.RequiredLabelFor(r => r.RequestModel.Description, new { @class = "col-sm-2 control-label" })
+        <div class="col-sm-10">
+            @Html.TextAreaFor(r => r.RequestModel.Description,
+            new { @class = "form-control", placeholder = "Введите описание заявки", rows = "4" })
+            @Html.ValidationMessageFor(r => r.RequestModel.Description)
+        </div>
+    </div>
+</div>
+
+<div class="panel-group rr-request-users" id="accordion" role="tablist" aria-multiselectable="true">
+    @if (Model.RequestModel.Users != null)
+    {
+        for (var i = 0; i < Model.RequestModel.Users.Count; i++)
+        {
+            @Html.Partial("UserEditor", Model, new ViewDataDictionary
+            {
+                {"UserIndex", i},
+                {"SecurityService", ViewData["SecurityService"]}
+            })
+        }
+    }
+</div>
+<div class="text-center rr-add-request-user-panel">
+    <button name="addUser" class="btn btn-success btn-default">Добавить сотрудника</button>
+</div>

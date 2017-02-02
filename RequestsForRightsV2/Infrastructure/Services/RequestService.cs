@@ -241,7 +241,7 @@ namespace RequestsForRights.Infrastructure.Services
             return RequestsRepository.InsertRequest(request);
         }
 
-        protected virtual Request ConvertToRequest(RequestModel<TUserModel> requestModel)
+        protected Request ConvertToRequest(RequestModel<TUserModel> requestModel, Action<RequestUserAssoc, TUserModel> requestUserAssocAddedCallback = null)
         {
             requestModel.Users = ClearUsersDuplicates(requestModel.Users);
 
@@ -271,6 +271,10 @@ namespace RequestsForRights.Infrastructure.Services
                     Description = user.Description
                 };
                 request.RequestUserAssoc.Add(requestUserAssoc);
+                if (requestUserAssocAddedCallback != null)
+                {
+                    requestUserAssocAddedCallback(requestUserAssoc, user);
+                }
                 if (user.Rights != null)
                 {
                     requestUserAssoc.RequestUserRightAssocs = new List<RequestUserRightAssoc>();

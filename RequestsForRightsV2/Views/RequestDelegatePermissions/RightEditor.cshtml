@@ -1,5 +1,5 @@
 ﻿@using RequestsForRights.Infrastructure.Extensions
-@model RequestsForRights.Models.ViewModels.Request.RequestAddUserViewModel
+@model RequestsForRights.Models.ViewModels.Request.RequestDelegatePermissionsViewModel
 
 @{
     var userIndex = -1;
@@ -17,8 +17,8 @@
 <li class="list-group-item rr-request-right">
     <div class="rr-request-right-grant-type">
         @Html.Hidden(
-            string.Format(
-                "RequestModel.Users[{0}].Rights[{1}].IdRequestRightGrantType", userIndex, rightIndex), 1)
+        string.Format(
+            "RequestModel.Users[{0}].Rights[{1}].IdRequestRightGrantType", userIndex, rightIndex), 3)
     </div>
     <div class="form-group col-sm-6 col-xs-12 rr-request-right-resource">
         @Html.Label("Информационный ресурс",
@@ -34,7 +34,7 @@
                 data-trigger="manual"
                 data-html="true"
                 data-container="body">
-            <option selected>Выберите информационный ресурс</option>
+            <option value="" selected>Выберите информационный ресурс</option>
             @foreach (var resourceGroup in Model.Resources.GroupBy(r => r.ResourceGroup))
             {
                 var idResourceRight =

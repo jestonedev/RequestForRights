@@ -40,6 +40,14 @@ namespace RequestsForRights
             bundles.Add(new ScriptBundle("~/bundles/json2").Include(
                       "~/Scripts/json2.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/globalize")
+                .Include("~/Scripts/cldr.js")
+                .Include("~/Scripts/cldr/event.js")
+                .Include("~/Scripts/cldr/supplemental.js")
+                .Include("~/Scripts/globalize.js")
+                .Include("~/Scripts/globalize/number.js")
+                .Include("~/Scripts/globalize/date.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/rr-common").Include("~/Scripts/rr-common.js"));
             bundles.Add(new ScriptBundle("~/bundles/rr-index.common").Include("~/Scripts/rr-index.common.js"));
             bundles.Add(new ScriptBundle("~/bundles/rr-request.common").Include("~/Scripts/rr-request.common.js"));
@@ -48,6 +56,7 @@ namespace RequestsForRights
             bundles.Add(new ScriptBundle("~/bundles/rr-resource.common").Include("~/Scripts/rr-resource.common.js"));
             bundles.Add(new ScriptBundle("~/bundles/rr-request.index").Include("~/Scripts/rr-request.index.js"));
             bundles.Add(new ScriptBundle("~/bundles/rr-request.add-user").Include("~/Scripts/rr-request.add-user.js"));
+            bundles.Add(new ScriptBundle("~/bundles/rr-request.delegate-permissions").Include("~/Scripts/rr-request.delegate-permissions.js"));
             bundles.Add(new ScriptBundle("~/bundles/rr-request.comments").Include("~/Scripts/rr-request.comments.js"));
             bundles.Add(new ScriptBundle("~/bundles/rr-request.agreements").Include("~/Scripts/rr-request.agreements.js"));
             bundles.Add(new ScriptBundle("~/bundles/rr-help").Include("~/Scripts/rr-help.js"));

@@ -1,5 +1,4 @@
 ﻿using System;
-using RequestsForRights.Infrastructure.Enums;
 
 namespace RequestsForRights.Models.ReportOptions
 {

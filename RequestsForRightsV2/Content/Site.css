@@ -160,7 +160,7 @@ button.rr-ext-filter-button.collapsed:hover {
     margin-bottom: 20px;
 }
 
-.tab-content > .rr-tab-pane, .rr-request-user .collapse {
+.tab-content > .rr-tab-pane, .rr-request-user-wrapper .collapse {
     margin-top: 20px;
     position: absolute;
     left: -33333px;
@@ -209,37 +209,6 @@ button.rr-ext-filter-button.collapsed:hover {
 
 .rr-report-display-style {
     margin-bottom: 15px;
-}
-
-@media(min-width: 768px) {
-    .rr-col-sm-no-left-padding {
-        padding-left: 0;
-        margin-left: 0;
-    }
-
-    .rr-col-sm-no-right-padding {
-        padding-right: 0;
-        margin-right: 0;
-    }
-
-    .rr-col-sm-no-side-padding {
-        padding-right: 0;
-        margin-right: 0;
-        padding-left: 0;
-        margin-left: 0;
-    }
-
-    .rr-ext-filter-button {
-        margin-top: 24px;
-    }
-
-    .rr-add-button {
-        margin-top: 20px;
-    }
-
-    .rr-pagination {
-        margin-left: 0;
-    }
 }
 
 .rr-request-user .form-control[readonly] {
@@ -357,12 +326,12 @@ button.rr-ext-filter-button.collapsed:hover {
     margin-left: 6px;
 }
 
-.rr-request-user .rr-request-right .form-group {
+.rr-request-user-wrapper .rr-request-right .form-group {
     margin-left: 0;
     margin-right: 0;
 }
 
-.rr-request-user .rr-request-right {
+.rr-request-user-wrapper .rr-request-right {
     padding-left: 0;
     padding-right: 0;
 }
@@ -491,14 +460,71 @@ button.rr-ext-filter-button.collapsed:hover {
     display: none;
 }
 
+.rr-request-delegation-from-user, .rr-request-delegation-to-user {
+    margin-bottom: 15px;
+}
+
 @media(min-width: 768px) {
-    .popover {
-        max-width: 40%;
+    .rr-col-sm-no-left-padding {
+        padding-left: 0;
+        margin-left: 0;
+    }
+
+    .rr-col-sm-no-right-padding {
+        padding-right: 0;
+        margin-right: 0;
+    }
+
+    .rr-col-sm-no-side-padding {
+        padding-right: 0;
+        margin-right: 0;
+        padding-left: 0;
+        margin-left: 0;
+    }
+
+    .rr-ext-filter-button {
+        margin-top: 24px;
+    }
+
+    .rr-add-button {
+        margin-top: 20px;
+    }
+
+    .rr-pagination {
+        margin-left: 0;
     }
 }
 
 @media(min-width: 768px) {
+    .popover {
+        max-width: 40%;
+    }
+
     .rr-help .rr-contents {
         display: block;
+    }
+
+    .form-group.rr-request-delegation-from-date, .form-group.rr-request-delegation-to-date {
+        margin-right: 0;
+        margin-left: 0;
+    }
+}
+
+.rr-request-delegation-to-user, .rr-request-delegation-from-user {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.panel.rr-delegation-general-info-panel {
+    margin-bottom: 15px;
+}
+
+@media (min-width: 1200px) {
+    .rr-request-delegation-to-user {
+        padding-left: 15px;
+    }
+
+    .rr-request-delegation-from-user {
+        padding-right: 15px;
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using RequestsForRights.Domain.Entities;
 using RequestsForRights.Models.Models;
-using RequestsForRights.Models.ViewModels;
 
 namespace RequestsForRights.Infrastructure.Security.Interfaces
 {

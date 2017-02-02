@@ -252,6 +252,38 @@ namespace RequestsForRights.Database.Repositories
             return reqAgreement;
         }
 
+        public void UpdateDelegationRequestUsersExtInfo(int idRequest, List<DelegationRequestUsersExtInfo> delegationRequestUsersExtInfo)
+        {
+            var oldExtInfo = _databaseContext.DelegationRequestUsersExtInfo.
+                Where(r => !r.Deleted && r.RequestUserAssoc.IdRequest == idRequest);
+            foreach (var extInfo in oldExtInfo)
+            {
+                extInfo.Deleted = true;
+            }
+            delegationRequestUsersExtInfo.ForEach(r =>
+            {
+                var user = CreateUserIfNotExists(r.DelegateToUser);
+                r.DelegateToUser = user;
+            });
+            foreach (var extInfo in delegationRequestUsersExtInfo)
+            {
+                _databaseContext.DelegationRequestUsersExtInfo.Add(extInfo);
+            }
+        }
+
+        public void InsertDelegationRequestUsersExtInfo(List<DelegationRequestUsersExtInfo> delegationRequestUsersExtInfo)
+        {
+            delegationRequestUsersExtInfo.ForEach(r =>
+            {
+                var user = CreateUserIfNotExists(r.DelegateToUser);
+                r.DelegateToUser = user;
+            });
+            foreach (var extInfo in delegationRequestUsersExtInfo)
+            {
+                _databaseContext.DelegationRequestUsersExtInfo.Add(extInfo);
+            }
+        }
+
         public Request InsertRequest(Request request)
         {
             request.RequestUserAssoc.ToList().ForEach(r =>

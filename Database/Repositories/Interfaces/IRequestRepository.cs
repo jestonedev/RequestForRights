@@ -24,5 +24,11 @@ namespace RequestsForRights.Database.Repositories.Interfaces
         RequestState AddRequestState(RequestState state, bool resetAgreements);
         RequestAgreement AddAdditionalAgreement(RequestAgreement agreement);
         RequestAgreement UpdateRequestAgreement(RequestAgreement agreement);
+
+        void UpdateDelegationRequestUsersExtInfo(int idRequest, 
+            System.Collections.Generic.List<DelegationRequestUsersExtInfo> delegationRequestUsersExtInfo);
+
+        void InsertDelegationRequestUsersExtInfo(
+            System.Collections.Generic.List<DelegationRequestUsersExtInfo> delegationRequestUsersExtInfo);
     }
 }
