@@ -25,9 +25,11 @@ namespace RequestsForRights.Models.Models
         public string PhoneDelegateTo { get; set; }
         [DisplayName("Дата начала")]
         [Required(ErrorMessage = "Поле является обязательным для заполнения")]
+        [DataType(DataType.Date, ErrorMessage = "Некорректно задана дата")]
         public DateTime DelegateFromDate { get; set; }
         [DisplayName("Дата окончания")]
         [Required(ErrorMessage = "Поле является обязательным для заполнения")]
+        [DataType(DataType.Date, ErrorMessage = "Некорректно задана дата")]
         public DateTime DelegateToDate { get; set; }
     }
 }

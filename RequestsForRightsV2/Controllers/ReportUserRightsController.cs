@@ -52,6 +52,10 @@ namespace RequestsForRights.Controllers
             {
                 return PartialView("DataTable", null);
             }
+            if (options.SortField == null)
+            {
+                options.SortField = "ResourceName";
+            }
             return PartialView("DataTable",
                 new ReportUserRightsViewModel
                 {

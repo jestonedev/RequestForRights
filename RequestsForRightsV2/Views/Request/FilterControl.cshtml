@@ -17,7 +17,8 @@
     {
         UpdateTargetId = "main-table-wrapper",
         InsertionMode = InsertionMode.Replace,
-        Url = Url.Action("GetDataTable")
+        Url = Url.Action("GetDataTable"),
+        OnFailure = "errorLoading"
     }))
     {
         <div class="clearfix rr-main-filter-panel">

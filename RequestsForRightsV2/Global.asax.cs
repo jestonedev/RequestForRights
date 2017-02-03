@@ -18,6 +18,8 @@ namespace RequestsForRights
             ValueProviderFactories.Factories.Add(new RequestsFilterOptionsValueProviderFactory());
             ValueProviderFactories.Factories.Add(new ReportUserRightsOptionsValueProviderFactory());
             ValueProviderFactories.Factories.Add(new ReportResourceRightsOptionsValueProviderFactory());
+            ClientDataTypeModelValidatorProvider.ResourceClassKey = "ErrorMessagesResource";
+            DefaultModelBinder.ResourceClassKey = "ErrorMessagesResource";
         }
     }
 }

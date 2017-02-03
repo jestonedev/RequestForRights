@@ -45,9 +45,9 @@
                             Перечень заявок <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu requests-menu">
-                            <li>@Html.ActionLink("Мои заявки", "Index", "Request", new { RequestCategory = RequestCategory.MyRequests }, null)</li>
-                            <li>@Html.ActionLink("Все заявки", "Index", "Request", new { RequestCategory = RequestCategory.AllRequests }, null)</li>
-                            <li>@Html.ActionLink("Непросмотренные", "Index", "Request", new { RequestCategory = RequestCategory.NotSeenRequests }, null)</li>
+                            <li>@Html.ActionLink("Все заявки", "Index", "Request", null, new { id = "rr-dropdown-menu-all-requests" })</li>
+                            <li>@Html.ActionLink("Мои заявки", "Index", "Request", null, new { id = "rr-dropdown-menu-my-requests" })</li>
+                            <li>@Html.ActionLink("Непросмотренные", "Index", "Request", null, new { id = "rr-dropdown-menu-not-seen-requests" })</li>
                             <li role="separator" class="divider"></li>
                             @Html.Action("RequestsByStatesMenuItems", "Request")
                         </ul>

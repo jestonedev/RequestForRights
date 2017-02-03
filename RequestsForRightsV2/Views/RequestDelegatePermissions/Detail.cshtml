@@ -54,55 +54,57 @@
                                 </div>
                                 <div id="@id" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
                                     <div class="panel-body">
-                                        <div class="col-lg-6 rr-request-delegation-from-user rr-request-user">
-                                            <div class="panel panel-primary">
-                                                <div class="panel-heading">Делегировать от</div>
-                                                <div class="panel-body">
-                                                    <dl class="dl-horizontal">
-                                                        <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].Snp)</dt>
-                                                        <dd>@Model.RequestModel.Users[i].Snp</dd>
-                                                        @if (securityService.CanSeeLogin())
+                                        <div class="rr-request-user-lg-flex-wrapper">
+                                            <div class="col-lg-6 rr-request-delegation-from-user rr-request-user">
+                                                <div class="panel panel-primary">
+                                                    <div class="panel-heading">Делегировать от</div>
+                                                    <div class="panel-body">
+                                                        <dl class="dl-horizontal">
+                                                            <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].Snp)</dt>
+                                                            <dd>@Model.RequestModel.Users[i].Snp</dd>
+                                                            @if (securityService.CanSeeLogin())
                                                         {
-                                                            <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].Login)</dt>
-                                                            <dd>@Model.RequestModel.Users[i].Login</dd>
+                                                                <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].Login)</dt>
+                                                                <dd>@Model.RequestModel.Users[i].Login</dd>
                                                         }
-                                                        <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].Post)</dt>
-                                                        <dd>@Model.RequestModel.Users[i].Post</dd>
-                                                        <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].Department)</dt>
-                                                        <dd>@Model.RequestModel.Users[i].Department</dd>
-                                                        <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].Unit)</dt>
-                                                        <dd>@Model.RequestModel.Users[i].Unit</dd>
-                                                        <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].Office)</dt>
-                                                        <dd>@Model.RequestModel.Users[i].Office</dd>
-                                                        <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].Phone)</dt>
-                                                        <dd>@Model.RequestModel.Users[i].Phone</dd>
-                                                    </dl>
+                                                            <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].Post)</dt>
+                                                            <dd>@Model.RequestModel.Users[i].Post</dd>
+                                                            <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].Department)</dt>
+                                                            <dd>@Model.RequestModel.Users[i].Department</dd>
+                                                            <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].Unit)</dt>
+                                                            <dd>@Model.RequestModel.Users[i].Unit</dd>
+                                                            <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].Office)</dt>
+                                                            <dd>@Model.RequestModel.Users[i].Office</dd>
+                                                            <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].Phone)</dt>
+                                                            <dd>@Model.RequestModel.Users[i].Phone</dd>
+                                                        </dl>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="col-lg-6 rr-request-delegation-to-user rr-request-user">
-                                            <div class="panel panel-primary">
-                                                <div class="panel-heading">Делегировать к</div>
-                                                <div class="panel-body">
-                                                    <dl class="dl-horizontal">
-                                                        <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].DelegationRequestUsersExtInfoModel.SnpDelegateTo)</dt>
-                                                        <dd>@Model.RequestModel.Users[i].DelegationRequestUsersExtInfoModel.SnpDelegateTo</dd>
-                                                        @if (securityService.CanSeeLogin())
+                                            <div class="col-lg-6 rr-request-delegation-to-user rr-request-user">
+                                                <div class="panel panel-primary">
+                                                    <div class="panel-heading">Делегировать к</div>
+                                                    <div class="panel-body">
+                                                        <dl class="dl-horizontal">
+                                                            <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].DelegationRequestUsersExtInfoModel.SnpDelegateTo)</dt>
+                                                            <dd>@Model.RequestModel.Users[i].DelegationRequestUsersExtInfoModel.SnpDelegateTo</dd>
+                                                            @if (securityService.CanSeeLogin())
                                                         {
-                                                            <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].DelegationRequestUsersExtInfoModel.LoginDelegateTo)</dt>
-                                                            <dd>@Model.RequestModel.Users[i].DelegationRequestUsersExtInfoModel.LoginDelegateTo</dd>
+                                                                <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].DelegationRequestUsersExtInfoModel.LoginDelegateTo)</dt>
+                                                                <dd>@Model.RequestModel.Users[i].DelegationRequestUsersExtInfoModel.LoginDelegateTo</dd>
                                                         }
-                                                        <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].DelegationRequestUsersExtInfoModel.PostDelegateTo)</dt>
-                                                        <dd>@Model.RequestModel.Users[i].DelegationRequestUsersExtInfoModel.PostDelegateTo</dd>
-                                                        <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].DelegationRequestUsersExtInfoModel.DepartmentDelegateTo)</dt>
-                                                        <dd>@Model.RequestModel.Users[i].DelegationRequestUsersExtInfoModel.DepartmentDelegateTo</dd>
-                                                        <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].DelegationRequestUsersExtInfoModel.UnitDelegateTo)</dt>
-                                                        <dd>@Model.RequestModel.Users[i].DelegationRequestUsersExtInfoModel.UnitDelegateTo</dd>
-                                                        <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].DelegationRequestUsersExtInfoModel.OfficeDelegateTo)</dt>
-                                                        <dd>@Model.RequestModel.Users[i].DelegationRequestUsersExtInfoModel.OfficeDelegateTo</dd>
-                                                        <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].DelegationRequestUsersExtInfoModel.PhoneDelegateTo)</dt>
-                                                        <dd>@Model.RequestModel.Users[i].DelegationRequestUsersExtInfoModel.PhoneDelegateTo</dd>
-                                                    </dl>
+                                                            <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].DelegationRequestUsersExtInfoModel.PostDelegateTo)</dt>
+                                                            <dd>@Model.RequestModel.Users[i].DelegationRequestUsersExtInfoModel.PostDelegateTo</dd>
+                                                            <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].DelegationRequestUsersExtInfoModel.DepartmentDelegateTo)</dt>
+                                                            <dd>@Model.RequestModel.Users[i].DelegationRequestUsersExtInfoModel.DepartmentDelegateTo</dd>
+                                                            <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].DelegationRequestUsersExtInfoModel.UnitDelegateTo)</dt>
+                                                            <dd>@Model.RequestModel.Users[i].DelegationRequestUsersExtInfoModel.UnitDelegateTo</dd>
+                                                            <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].DelegationRequestUsersExtInfoModel.OfficeDelegateTo)</dt>
+                                                            <dd>@Model.RequestModel.Users[i].DelegationRequestUsersExtInfoModel.OfficeDelegateTo</dd>
+                                                            <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].DelegationRequestUsersExtInfoModel.PhoneDelegateTo)</dt>
+                                                            <dd>@Model.RequestModel.Users[i].DelegationRequestUsersExtInfoModel.PhoneDelegateTo</dd>
+                                                        </dl>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

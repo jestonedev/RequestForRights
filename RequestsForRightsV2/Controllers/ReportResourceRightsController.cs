@@ -35,10 +35,6 @@ namespace RequestsForRights.Controllers
             {
                 return RedirectToAction("ForbiddenError", "Home");
             }
-            if (options.SortField == null)
-            {
-                options.SortField = "RequestUserSnp";
-            }
             return View(new ReportResourceRightsViewModel
             {
                 Resources = _reportService.GetResources(),

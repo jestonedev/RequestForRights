@@ -519,6 +519,10 @@ button.rr-ext-filter-button.collapsed:hover {
     margin-bottom: 15px;
 }
 
+.clearfix {
+    clear: both;
+}
+
 @media (min-width: 1200px) {
     .rr-request-delegation-to-user {
         padding-left: 15px;
@@ -526,5 +530,13 @@ button.rr-ext-filter-button.collapsed:hover {
 
     .rr-request-delegation-from-user {
         padding-right: 15px;
+    }
+
+    .rr-request-delegation-to-user .panel,  .rr-request-delegation-from-user .panel {
+        height: 100%;
+    }
+
+    .rr-request-user-lg-flex-wrapper {
+        display: flex;
     }
 }

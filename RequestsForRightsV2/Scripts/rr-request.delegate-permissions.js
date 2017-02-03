@@ -8,7 +8,8 @@
         orientation: "bottom auto",
         daysOfWeekDisabled: "0,6",
         autoclose: true,
-        todayHighlight: true
+        todayHighlight: true,
+        startDate: "01/01/1753"
     };
 
     $(".rr-request-delegation-from-date input").datepicker(datePickerOptions);
@@ -29,7 +30,14 @@
 
     jQuery.extend(jQuery.validator.methods, {
         date: function (value, element) {
-            return this.optional(element) || true;
+            if (this.optional(element) && value === "") {
+                return true;
+            }
+            var dateParts = value.split(".");
+            if (dateParts.length !== 3) {
+                return false;
+            }
+            return !isNaN(Date.parse(dateParts[2] + "/" + dateParts[1] + "/" + dateParts[0]));
         }
     });
 });

@@ -9,7 +9,8 @@
     {
         UpdateTargetId = "main-table-wrapper",
         InsertionMode = InsertionMode.Replace,
-        Url = Url.Action("GetDataTable")
+        Url = Url.Action("GetDataTable"),
+        OnFailure = "errorLoading"
     }))
     {
         <div class="form-group col-sm-3 rr-col-sm-no-left-padding">

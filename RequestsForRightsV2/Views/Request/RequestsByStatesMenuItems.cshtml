@@ -9,7 +9,7 @@
 {
     var requestSateType = value.RequestStateType;
     <li>
-        <a href="@Url.Action("Index", "Request", new { requestSateType.IdRequestStateType })">
+        <a href="@Url.Action("Index", "Request")" class="rr-dropdown-menu-request-state-type" data-id="@requestSateType.IdRequestStateType">
             @RequestHelper.PluralRequestState(value.RequestStateType.Name)
             @if (value.RequestCount > 0)
             {
