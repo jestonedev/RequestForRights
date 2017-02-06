@@ -6,7 +6,8 @@ namespace RequestsForRights.Database.Repositories.Interfaces
     public interface IResourceRepository
     {
         IQueryable<ResourceGroup> GetResourceGroups();
-        IQueryable<Department> GetOwnerDepartments();
+        IQueryable<ResourceInformationType> GetResourceInformationTypes();
+        IQueryable<Department> GetDepartments();
         IQueryable<Resource> GetResources();
         IQueryable<ResourceRight> GetResourceRights();
         Resource DeleteResource(int idResource);

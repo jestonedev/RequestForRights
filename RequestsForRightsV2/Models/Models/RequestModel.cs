@@ -8,13 +8,13 @@ namespace RequestsForRights.Models.Models
         where T: RequestUserModel
     {
         public int IdRequest { get; set; }
-        [DisplayName("Описание")]
+        [DisplayName(@"Описание")]
         public string Description { get; set; }
-        [DisplayName("Дата подачи")]
+        [DisplayName(@"Дата подачи")]
         public DateTime Date { get; set; }
-        [DisplayName("Заявитель")]
+        [DisplayName(@"Заявитель")]
         public string OwnerSnp { get; set; }
-        [DisplayName("Департамент")]
+        [DisplayName(@"Департамент")]
         public string OwnerDepartment { get; set; }
         public int IdRequestType { get; set; }
         public IList<T> Users { get; set; }

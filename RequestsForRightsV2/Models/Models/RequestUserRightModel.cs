@@ -5,21 +5,21 @@ namespace RequestsForRights.Models.Models
 {
     public class RequestUserRightModel
     {
-        [DisplayName("Право")]
-        [Required(ErrorMessage = "Право является обязательным для заполнения")]
+        [DisplayName(@"Право")]
+        [Required(ErrorMessage = @"Право является обязательным для заполнения")]
         public int IdResourceRight { get; set; }
-        [DisplayName("Право")]
+        [DisplayName(@"Право")]
         public string ResourceRightName { get; set; }
-        [DisplayName("Действие")]
-        [Required(ErrorMessage = "Обязательно для заполнения")]
+        [DisplayName(@"Действие")]
+        [Required(ErrorMessage = @"Обязательно для заполнения")]
         public int IdRequestRightGrantType { get; set; }
-        [DisplayName("Действие")]
+        [DisplayName(@"Действие")]
         public string RequestRightGrantTypeName { get; set; }
-        [DisplayName("Примечание")]
+        [DisplayName(@"Примечание")]
         public string Description { get; set; }
-        [DisplayName("Ресурс")]
+        [DisplayName(@"Ресурс")]
         public int IdResource { get; set; } // Using on detail forms only
-        [DisplayName("Ресурс")]
+        [DisplayName(@"Ресурс")]
         public string ResourceName { get; set; } // Using on detail forms only
 
         public override bool Equals(object obj)

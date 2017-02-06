@@ -28,6 +28,17 @@ namespace RequestsForRights.Database
         public IDbSet<RequestUserLastSeen> RequestUserLastSeens { get; set; }
         public IDbSet<RequestState> RequestStates { get; set; }
         public IDbSet<RequestRightGrantType> RequestRightGrantTypes { get; set; }
+        public IDbSet<ResourceInformationType> ResourceInformationTypes { get; set; }
+        public IDbSet<ResourceDeviceAddress> ResourceDeviceAddresses { get; set; }
+        public IDbSet<ResourceInternetAddress> ResourceInternetAddresses { get; set; }
+        public IDbSet<ResourceOperatorPerson> ResourceOperatorPersons { get; set; }
+        public IDbSet<ResourceOperatorPersonAct> ResourceOperatorPersonActs { get; set; }
+        public IDbSet<ResourceOwnerPerson> ResourceOwnerPersons { get; set; }
+        public IDbSet<ResourceOwnerPersonAct> ResourceOwnerPersonActs { get; set; }
+        public IDbSet<ResourceAuthorityAct> ResourceAuthorityActs { get; set; }
+        public IDbSet<ResourceOperatorAct> ResourceOperatorActs { get; set; }
+        public IDbSet<ResourceUsingAct> ResourceUsingActs { get; set; }
+        public IDbSet<ActFile> ActFiles { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -99,6 +110,10 @@ namespace RequestsForRights.Database
             modelBuilder.Entity<RequestAgreementType>()
                 .HasMany(f => f.RequestAgreements)
                 .WithRequired(f => f.AgreementType)
+                .WillCascadeOnDelete(false);
+            modelBuilder.Entity<ResourceInformationType>()
+                .HasMany(f => f.Resources)
+                .WithOptional(f => f.ResourceInformationType)
                 .WillCascadeOnDelete(false);
             modelBuilder.Entity<RequestUserLastSeen>()
                 .Property(f => f.IdRequest)

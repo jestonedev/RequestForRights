@@ -1,0 +1,236 @@
+﻿@using RequestsForRights.Infrastructure.Extensions
+@model RequestsForRights.Models.ViewModels.ResourceViewModel
+@{
+    Layout = null;
+}
+
+<div class="panel panel-primary rr-resource-owner">
+<div class="panel-heading">Общие сведения</div>
+<div class="panel-body rr-col-sm-no-side-padding-always">
+<div class="col-xs-12">
+    <div class="form-group">
+        @Html.RequiredLabelFor(r => r.Resource.IdDepartment, new {@class = "control-label"})
+        @Html.DropDownListFor(r => r.Resource.IdDepartment,
+                     new SelectList(Model.Departments, "IdDepartment", "Name", Model.Resource.IdDepartment),
+            "Выберите департамент-владелец",
+            new {@class = "form-control"})
+        @Html.ValidationMessageFor(r => r.Resource.IdDepartment)
+    </div>
+</div>
+<div class="col-xs-12">
+    <div class="form-group">
+        @Html.RequiredLabelFor(r => r.Resource.Department.TaxPayerNumber,
+            new {@class = "control-label"})
+        @Html.TextBoxFor(r => r.Resource.Department.TaxPayerNumber,
+            new {@class = "form-control", placeholder = "Введите идентификационный номер налогоплательщика"})
+        @Html.ValidationMessageFor(r => r.Resource.Department.TaxPayerNumber)
+    </div>
+</div>
+<div class="col-xs-12">
+    <div class="form-group">
+        @Html.RequiredLabelFor(r => r.Resource.Department.OfficialNameLongRu,
+            new {@class = "control-label"})
+        @Html.TextBoxFor(r => r.Resource.Department.OfficialNameLongRu,
+            new {@class = "form-control", placeholder = "Введите полное наименование владельца на русском языке"})
+        @Html.ValidationMessageFor(r => r.Resource.Department.OfficialNameLongRu)
+    </div>
+</div>
+<div class="col-xs-12">
+    <div class="form-group">
+        @Html.RequiredLabelFor(r => r.Resource.Department.OfficialNameLongEn,
+            new {@class = "control-label"})
+        @Html.TextBoxFor(r => r.Resource.Department.OfficialNameLongEn,
+            new {@class = "form-control", placeholder = "Введите полное наименование владельца на английском языке"})
+        @Html.ValidationMessageFor(r => r.Resource.Department.OfficialNameLongEn)
+    </div>
+</div>
+<div class="col-xs-12 col-sm-6">
+    <div class="form-group">
+        @Html.RequiredLabelFor(r => r.Resource.Department.OfficialNameShortRu,
+            new {@class = "control-label"})
+        @Html.TextBoxFor(r => r.Resource.Department.OfficialNameShortRu,
+            new {@class = "form-control", placeholder = "Введите сокращенное наименование владельца на русском языке"})
+        @Html.ValidationMessageFor(r => r.Resource.Department.OfficialNameShortRu)
+    </div>
+</div>
+<div class="col-xs-12 col-sm-6">
+    <div class="form-group">
+        @Html.RequiredLabelFor(r => r.Resource.Department.OfficialNameShortEn,
+            new {@class = "control-label"})
+        @Html.TextBoxFor(r => r.Resource.Department.OfficialNameShortEn,
+            new {@class = "form-control", placeholder = "Введите сокращенное наименование владельца на английском языке"})
+        @Html.ValidationMessageFor(r => r.Resource.Department.OfficialNameShortEn)
+    </div>
+</div>
+<div class="clearfix"></div>
+<div class="panel panel-primary rr-resource-address-panel">
+    <div class="panel-heading">Адрес постоянно действующего исполнительного органа владельца ИС</div>
+    <div class="panel-body rr-col-sm-no-side-padding-always">
+        <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+                @Html.RequiredLabelFor(r => r.Resource.Department.SelfAddressIndex,
+                    new {@class = "control-label"})
+                <div>
+                    @Html.TextBoxFor(r => Model.Resource.Department.SelfAddressIndex,
+                        new {@class = "form-control", placeholder = "Введите индекс"})
+                    @Html.ValidationMessageFor(r => r.Resource.Department.SelfAddressIndex)
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+                @Html.RequiredLabelFor(r => r.Resource.Department.SelfAddressRegion,
+                    new {@class = "control-label"})
+                <div>
+                    @Html.TextBoxFor(r => Model.Resource.Department.SelfAddressRegion,
+                        new {@class = "form-control", placeholder = "Введите регион"})
+                    @Html.ValidationMessageFor(r => r.Resource.Department.SelfAddressRegion)
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+                @Html.RequiredLabelFor(r => r.Resource.Department.SelfAddressArea,
+                    new {@class = "control-label"})
+                <div>
+                    @Html.TextBoxFor(r => Model.Resource.Department.SelfAddressArea,
+                        new {@class = "form-control", placeholder = "Введите район"})
+                    @Html.ValidationMessageFor(r => r.Resource.Department.SelfAddressArea)
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+                @Html.RequiredLabelFor(r => r.Resource.Department.SelfAddressCity,
+                    new {@class = "control-label"})
+                <div>
+                    @Html.TextBoxFor(r => Model.Resource.Department.SelfAddressCity,
+                        new {@class = "form-control", placeholder = "Введите город"})
+                    @Html.ValidationMessageFor(r => r.Resource.Department.SelfAddressCity)
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+                @Html.RequiredLabelFor(r => r.Resource.Department.SelfAddressStreet,
+                    new {@class = "control-label"})
+                <div>
+                    @Html.TextBoxFor(r => Model.Resource.Department.SelfAddressStreet,
+                        new {@class = "form-control", placeholder = "Введите улицу"})
+                    @Html.ValidationMessageFor(r => r.Resource.Department.SelfAddressStreet)
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+                @Html.RequiredLabelFor(r => r.Resource.Department.SelfAddressHouse,
+                    new {@class = "control-label"})
+                <div>
+                    @Html.TextBoxFor(r => Model.Resource.Department.SelfAddressHouse,
+                        new {@class = "form-control", placeholder = "Введите дом"})
+                    @Html.ValidationMessageFor(r => r.Resource.Department.SelfAddressHouse)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="panel panel-primary rr-resource-address-panel">
+    <div class="panel-heading">Адрес управляющего или адрес управляющей организации-владельца</div>
+    <div class="panel-body rr-col-sm-no-side-padding-always">
+        <div class="col-xs-12">
+            <div class="checkbox-inline rr-resource-equal-address-checkbox">
+                @Html.CheckBoxFor(r => r.Resource.Department.СontrolOrgAddressesAreEqualSelfAddress)
+                @Html.LabelFor(r => r.Resource.Department.СontrolOrgAddressesAreEqualSelfAddress,
+            new { @class = "control-label" })
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+                @Html.RequiredLabelFor(r => r.Resource.Department.ControlOrgAddressIndex,
+                    new {@class = "control-label"})
+                <div>
+                    @Html.TextBoxFor(r => Model.Resource.Department.ControlOrgAddressIndex,
+                        new {@class = "form-control", placeholder = "Введите индекс"})
+                    @Html.ValidationMessageFor(r => r.Resource.Department.ControlOrgAddressIndex)
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+                @Html.RequiredLabelFor(r => r.Resource.Department.ControlOrgAddressRegion,
+                    new {@class = "control-label"})
+                <div>
+                    @Html.TextBoxFor(r => Model.Resource.Department.ControlOrgAddressRegion,
+                        new {@class = "form-control", placeholder = "Введите регион"})
+                    @Html.ValidationMessageFor(r => r.Resource.Department.ControlOrgAddressRegion)
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+                @Html.RequiredLabelFor(r => r.Resource.Department.ControlOrgAddressArea,
+                    new {@class = "control-label"})
+                <div>
+                    @Html.TextBoxFor(r => Model.Resource.Department.ControlOrgAddressArea,
+                        new {@class = "form-control", placeholder = "Введите район"})
+                    @Html.ValidationMessageFor(r => r.Resource.Department.ControlOrgAddressArea)
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+                @Html.RequiredLabelFor(r => r.Resource.Department.ControlOrgAddressCity,
+                    new {@class = "control-label"})
+                <div>
+                    @Html.TextBoxFor(r => Model.Resource.Department.ControlOrgAddressCity,
+                        new {@class = "form-control", placeholder = "Введите город"})
+                    @Html.ValidationMessageFor(r => r.Resource.Department.ControlOrgAddressCity)
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+                @Html.RequiredLabelFor(r => r.Resource.Department.ControlOrgAddressStreet,
+                    new {@class = "control-label"})
+                <div>
+                    @Html.TextBoxFor(r => Model.Resource.Department.ControlOrgAddressStreet,
+                        new {@class = "form-control", placeholder = "Введите улицу"})
+                    @Html.ValidationMessageFor(r => r.Resource.Department.ControlOrgAddressStreet)
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+                @Html.RequiredLabelFor(r => r.Resource.Department.ControlOrgAddressHouse,
+                    new {@class = "control-label"})
+                <div>
+                    @Html.TextBoxFor(r => Model.Resource.Department.ControlOrgAddressHouse,
+                        new {@class = "form-control", placeholder = "Введите дом"})
+                    @Html.ValidationMessageFor(r => r.Resource.Department.ControlOrgAddressHouse)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+</div>
+<div class="panel panel-primary">
+    <div class="panel-heading">Должностные лица</div>
+    <ul class="list-group rr-owner-persons">
+        @if (Model.Resource.ResourceOwnerPersons != null)
+        {
+            for (var i = 0; i < Model.Resource.ResourceOwnerPersons.Count; i++)
+            {
+                @Html.Partial("OwnerPersonEditor", Model, new ViewDataDictionary
+                {
+                    {"OwnerPersonIndex", i}
+                })
+            }
+        }
+    </ul>
+    <div class="text-center rr-add-owner-person-panel">
+        <button name="addOwnerPerson" class="btn btn-success btn-default">Добавить должностное лицо</button>
+    </div>
+</div>

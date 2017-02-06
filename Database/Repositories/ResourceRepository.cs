@@ -92,12 +92,17 @@ namespace RequestsForRights.Database.Repositories
 
         public IQueryable<ResourceGroup> GetResourceGroups()
         {
-            return _databaseContext.ResourceGroups.Where(r => !r.Deleted).OrderBy(r => r.Name);
+            return _databaseContext.ResourceGroups.Where(r => !r.Deleted);
         }
 
-        public IQueryable<Department> GetOwnerDepartments()
+        public IQueryable<ResourceInformationType> GetResourceInformationTypes()
         {
-            return _databaseContext.Departments.Where(r => r.IdParentDepartment == null).Where(r => !r.Deleted).OrderBy(r => r.Name);
+            return _databaseContext.ResourceInformationTypes;
+        }
+
+        public IQueryable<Department> GetDepartments()
+        {
+            return _databaseContext.Departments.Where(r => r.IdParentDepartment == null).Where(r => !r.Deleted);
         }
     }
 }

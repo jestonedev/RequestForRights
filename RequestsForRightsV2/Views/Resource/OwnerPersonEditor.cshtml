@@ -1,0 +1,88 @@
+﻿
+@using RequestsForRights.Infrastructure.Extensions
+@model RequestsForRights.Models.ViewModels.ResourceViewModel
+
+@{
+    var ownerPersonIndex = -1;
+    if (ViewData.Keys.Contains("OwnerPersonIndex"))
+    {
+        int.TryParse(ViewData["OwnerPersonIndex"].ToString(), out ownerPersonIndex);
+    }
+    if (Model.Resource.ResourceOwnerPersons[ownerPersonIndex].Deleted)
+    {
+        return;
+    }
+}
+
+<li class="list-group-item clearfix rr-owner-person rr-col-sm-no-side-padding-always">
+    @Html.HiddenFor(r => r.Resource.ResourceOwnerPersons[ownerPersonIndex].IdResourceOwnerPerson)
+    <div class="col-xs-12">
+        <div class="form-group">
+            @Html.RequiredLabelFor(r => r.Resource.ResourceOwnerPersons[ownerPersonIndex].Post,
+                new { @class = "control-label" })
+            <div>
+                @Html.TextBoxFor(r => r.Resource.ResourceOwnerPersons[ownerPersonIndex].Post,
+                    new { @class = "form-control", placeholder = "Введите должность" })
+                @Html.ValidationMessageFor(r => r.Resource.ResourceOwnerPersons[ownerPersonIndex].Post)
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-4">
+        <div class="form-group">
+            @Html.RequiredLabelFor(r => r.Resource.ResourceOwnerPersons[ownerPersonIndex].Surname,
+                new { @class = "control-label" })
+            <div>
+                @Html.TextBoxFor(r => r.Resource.ResourceOwnerPersons[ownerPersonIndex].Surname,
+                    new { @class = "form-control", placeholder = "Введите фамилию" })
+                @Html.ValidationMessageFor(r => r.Resource.ResourceOwnerPersons[ownerPersonIndex].Surname)
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-4">
+        <div class="form-group">
+            @Html.RequiredLabelFor(r => r.Resource.ResourceOwnerPersons[ownerPersonIndex].Name,
+                new { @class = "control-label" })
+            <div>
+                @Html.TextBoxFor(r => r.Resource.ResourceOwnerPersons[ownerPersonIndex].Name,
+                    new { @class = "form-control", placeholder = "Введите имя" })
+                @Html.ValidationMessageFor(r => r.Resource.ResourceOwnerPersons[ownerPersonIndex].Name)
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-4">
+        <div class="form-group">
+            @Html.RequiredLabelFor(r => r.Resource.ResourceOwnerPersons[ownerPersonIndex].Patronimic,
+                new {@class = "control-label"})
+            <div>
+                @Html.TextBoxFor(r => r.Resource.ResourceOwnerPersons[ownerPersonIndex].Patronimic,
+                    new {@class = "form-control", placeholder = "Введите отчество"})
+                @Html.ValidationMessageFor(r => r.Resource.ResourceOwnerPersons[ownerPersonIndex].Patronimic)
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="panel panel-primary rr-resource-person-panel">
+        <div class="panel-heading">Реквизиты актов о возложении соответствующих полномочий</div>
+        <ul class="list-group rr-owner-person-acts">
+            @if (Model.Resource.ResourceOwnerPersons[ownerPersonIndex].Acts != null)
+            {
+                for (var i = 0; i < Model.Resource.ResourceOwnerPersons[ownerPersonIndex].Acts.Count; i++)
+                {
+                    @Html.Partial("OwnerPersonActEditor", Model, new ViewDataDictionary
+                    {
+                        {"OwnerPersonIndex", ownerPersonIndex},
+                        {"OwnerPersonActIndex", i}
+                    })
+                }
+            }
+        </ul>
+        <div class="text-center rr-add-owner-person-panel">
+            <button name="addOwnerPersonAct" class="btn btn-success btn-default">Добавить акт</button>
+        </div>
+    </div>
+    <div class="col-xs-12">
+        <button name="deleteOwnerPerson" class="btn btn-danger pull-right">Удалить должностное лицо</button>
+    </div>
+</li>

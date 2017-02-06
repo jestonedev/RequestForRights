@@ -26,6 +26,8 @@ namespace RequestsForRights.Database
         IDbSet<RequestUserLastSeen> RequestUserLastSeens { get; set; }
         IDbSet<RequestState> RequestStates { get; set; }
         IDbSet<RequestRightGrantType> RequestRightGrantTypes { get; set; }
+        IDbSet<ResourceInformationType> ResourceInformationTypes { get; set; }
+        IDbSet<ActFile> ActFiles { get; set; }
         int SaveChanges();
         DbEntityEntry<TEntity> Entry<TEntity>(TEntity entity)
             where TEntity : class;

@@ -174,6 +174,26 @@
     <Compile Include="Migrations\201701260628011_IX_IdResourceRight_IdRequestRightGrantType_Deleted.Designer.cs">
       <DependentUpon>201701260628011_IX_IdResourceRight_IdRequestRightGrantType_Deleted.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201702030451292_FederalRegistryEntities.cs" />
+    <Compile Include="Migrations\201702030451292_FederalRegistryEntities.Designer.cs">
+      <DependentUpon>201702030451292_FederalRegistryEntities.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201702030726219_ExtractActFilesToCommonTable.cs" />
+    <Compile Include="Migrations\201702030726219_ExtractActFilesToCommonTable.Designer.cs">
+      <DependentUpon>201702030726219_ExtractActFilesToCommonTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201702060146312_InnControlSubjectAdd.cs" />
+    <Compile Include="Migrations\201702060146312_InnControlSubjectAdd.Designer.cs">
+      <DependentUpon>201702060146312_InnControlSubjectAdd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201702060320333_CorrectResourceDeviceAddressPrimaryKey.cs" />
+    <Compile Include="Migrations\201702060320333_CorrectResourceDeviceAddressPrimaryKey.Designer.cs">
+      <DependentUpon>201702060320333_CorrectResourceDeviceAddressPrimaryKey.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201702060622336_DepartmentOperatorRequired.cs" />
+    <Compile Include="Migrations\201702060622336_DepartmentOperatorRequired.Designer.cs">
+      <DependentUpon>201702060622336_DepartmentOperatorRequired.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\Interfaces\IReportRepository.cs" />
@@ -298,6 +318,21 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201701260628011_IX_IdResourceRight_IdRequestRightGrantType_Deleted.resx">
       <DependentUpon>201701260628011_IX_IdResourceRight_IdRequestRightGrantType_Deleted.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201702030451292_FederalRegistryEntities.resx">
+      <DependentUpon>201702030451292_FederalRegistryEntities.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201702030726219_ExtractActFilesToCommonTable.resx">
+      <DependentUpon>201702030726219_ExtractActFilesToCommonTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201702060146312_InnControlSubjectAdd.resx">
+      <DependentUpon>201702060146312_InnControlSubjectAdd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201702060320333_CorrectResourceDeviceAddressPrimaryKey.resx">
+      <DependentUpon>201702060320333_CorrectResourceDeviceAddressPrimaryKey.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201702060622336_DepartmentOperatorRequired.resx">
+      <DependentUpon>201702060622336_DepartmentOperatorRequired.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

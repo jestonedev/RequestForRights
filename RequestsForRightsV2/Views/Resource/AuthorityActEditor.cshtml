@@ -1,0 +1,104 @@
+﻿@using RequestsForRights.Infrastructure.Extensions
+@model RequestsForRights.Models.ViewModels.ResourceViewModel
+
+@{
+    var authorityActIndex = -1;
+    if (ViewData.Keys.Contains("AuthorityActIndex"))
+    {
+        int.TryParse(ViewData["AuthorityActIndex"].ToString(), out authorityActIndex);
+    }
+    if (Model.Resource.ResourceAuthorityActs[authorityActIndex].Deleted)
+    {
+        return;
+    }
+}
+
+<li class="list-group-item clearfix rr-authority-act rr-col-sm-no-side-padding-always">
+    @Html.HiddenFor(r => r.Resource.ResourceAuthorityActs[authorityActIndex].IdResourceAuthorityAct)
+    <div class="col-xs-12 col-sm-6">
+        <div class="form-group">
+            @Html.RequiredLabelFor(r => r.Resource.
+                ResourceAuthorityActs[authorityActIndex].ActType,
+                new { @class = "control-label" })
+            <div>
+                @Html.TextBoxFor(r => r.Resource.
+                    ResourceAuthorityActs[authorityActIndex].ActType,
+                    new { @class = "form-control", placeholder = "Введите вид акта" })
+                @Html.ValidationMessageFor(r => r.Resource.
+                    ResourceAuthorityActs[authorityActIndex].ActType)
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-6">
+        <div class="form-group">
+            @Html.RequiredLabelFor(r => r.Resource.
+                ResourceAuthorityActs[authorityActIndex].ActName,
+                new { @class = "control-label" })
+            <div>
+                @Html.TextBoxFor(r => r.Resource.
+                    ResourceAuthorityActs[authorityActIndex].ActName,
+                    new { @class = "form-control", placeholder = "Введите наименование акта" })
+                @Html.ValidationMessageFor(r => r.Resource.
+                    ResourceAuthorityActs[authorityActIndex].ActName)
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-6 rr-resource-date">
+        <div class="form-group">
+            @Html.RequiredLabelFor(r => r.Resource.
+                ResourceAuthorityActs[authorityActIndex].ActDate,
+                new { @class = "control-label" })
+            <div>
+                @Html.TextBoxFor(r => r.Resource.
+                             ResourceAuthorityActs[authorityActIndex].ActDate, "{0:dd.MM.yyyy}",
+                    new { @class = "form-control", placeholder = "Введите дату акта" })
+                @Html.ValidationMessageFor(r => r.Resource.
+                    ResourceAuthorityActs[authorityActIndex].ActDate)
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-6">
+        <div class="form-group">
+            @Html.RequiredLabelFor(r => r.Resource.
+                ResourceAuthorityActs[authorityActIndex].ActNumber,
+                new { @class = "control-label" })
+            <div>
+                @Html.TextBoxFor(r => r.Resource.
+                    ResourceAuthorityActs[authorityActIndex].ActNumber,
+                    new { @class = "form-control", placeholder = "Введите номер акта" })
+                @Html.ValidationMessageFor(r => r.Resource.
+                    ResourceAuthorityActs[authorityActIndex].ActNumber)
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="col-xs-12">
+        <div class="rr-act-file">
+            <div class="rr-id-file">
+                @Html.HiddenFor(r => r.Resource.
+                    ResourceAuthorityActs[authorityActIndex].IdFile)
+            </div>
+            <label class="btn btn-default pull-left">
+                Загрузить файл
+                <input type="file" name="File.ResourceAuthorityActs[@(authorityActIndex)]"
+                       id="ResourceAuthorityActs_@(authorityActIndex)" />
+            </label>
+            <div class="rr-act-file-name pull-left text-info"></div>
+            @if (Model.Resource.
+                ResourceAuthorityActs[authorityActIndex].IdFile != default(int))
+            {
+                <div class="rr-act-file-link pull-left text-info">
+                    <a href="@Url.Action("LoadFile", "Resource", new
+                             {
+                                 Model.Resource.
+                                     ResourceAuthorityActs[authorityActIndex].IdFile
+                             })"></a>
+                </div>
+            }
+        </div>
+        <button name="deleteAuthorityAct" class="btn btn-danger pull-right">Удалить акт</button>
+    </div>
+</li>

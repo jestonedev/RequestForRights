@@ -7,7 +7,7 @@
 
 <h2>Новый информационный ресурс</h2>
 
-@using (Html.BeginForm("Create", "Resource", new { }, FormMethod.Post, new { @class = "form-horizontal" }))
+@using (Html.BeginForm("Create", "Resource", new { }, FormMethod.Post))
 {
     <div class="text-center">
         @Html.ValidationSummary(true)
@@ -35,5 +35,7 @@
 }
 
 @section scripts {
+    @Styles.Render("~/Content/bootstrap-datepicker")
+    @Scripts.Render("~/bundles/bootstrap-datepicker")
     @Scripts.Render("~/bundles/rr-resource.common")
 }

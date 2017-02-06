@@ -1,0 +1,61 @@
+﻿@model RequestsForRights.Models.ViewModels.ResourceViewModel
+@{
+    Layout = null;
+}
+
+<div class="panel panel-primary">
+    <div class="panel-heading">Правовые акты, определяющие оператора ИС</div>
+    <ul class="list-group rr-operator-acts">
+        @if (Model.Resource.ResourceOperatorActs != null)
+        {
+            for (var i = 0; i < Model.Resource.ResourceOperatorActs.Count; i++)
+            {
+                @Html.Partial("OperatorActEditor", Model, new ViewDataDictionary
+                {
+                    {"OperatorActIndex", i}
+                })
+            }
+        }
+    </ul>
+    <div class="text-center rr-add-operator-act-panel">
+        <button name="addOperatorAct" class="btn btn-success btn-default">Добавить акт</button>
+    </div>
+</div>
+
+<div class="panel panel-primary">
+    <div class="panel-heading">Правовые акты, определяющие порядок размещения и использования информации, размещенной в ИС</div>
+    <ul class="list-group rr-using-acts">
+        @if (Model.Resource.ResourceUsingActs != null)
+        {
+            for (var i = 0; i < Model.Resource.ResourceUsingActs.Count; i++)
+            {
+                @Html.Partial("UsingActEditor", Model, new ViewDataDictionary
+                {
+                    {"UsingActIndex", i}
+                })
+            }
+        }
+    </ul>
+    <div class="text-center rr-add-using-act-panel">
+        <button name="addUsingAct" class="btn btn-success btn-default">Добавить акт</button>
+    </div>
+</div>
+
+<div class="panel panel-primary">
+    <div class="panel-heading">Правовые акты, устанавливающие полномочия размещения субъектами контроля информации в ИС</div>
+    <ul class="list-group rr-authority-acts">
+        @if (Model.Resource.ResourceAuthorityActs != null)
+        {
+            for (var i = 0; i < Model.Resource.ResourceAuthorityActs.Count; i++)
+            {
+                @Html.Partial("AuthorityActEditor", Model, new ViewDataDictionary
+                {
+                    {"AuthorityActIndex", i}
+                })
+            }
+        }
+    </ul>
+    <div class="text-center rr-add-authority-act-panel">
+        <button name="addAuthorityAct" class="btn btn-success btn-default">Добавить акт</button>
+    </div>
+</div>

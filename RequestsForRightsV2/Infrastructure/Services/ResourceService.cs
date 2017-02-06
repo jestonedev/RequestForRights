@@ -76,7 +76,8 @@ namespace RequestsForRights.Infrastructure.Services
             {
                 Resource = _resourceRepository.GetResourceById(id),
                 ResourceGroups = _resourceRepository.GetResourceGroups().OrderBy(r => r.Name),
-                OwnerDepartments = _resourceRepository.GetOwnerDepartments()
+                ResourceInformationTypes = _resourceRepository.GetResourceInformationTypes().OrderBy(r => r.Name),
+                Departments = _resourceRepository.GetDepartments().OrderBy(r => r.Name)
             };
         }
 
@@ -86,7 +87,8 @@ namespace RequestsForRights.Infrastructure.Services
             {
                 Resource = resource,
                 ResourceGroups = _resourceRepository.GetResourceGroups().OrderBy(r => r.Name),
-                OwnerDepartments = _resourceRepository.GetOwnerDepartments()
+                ResourceInformationTypes = _resourceRepository.GetResourceInformationTypes().OrderBy(r => r.Name),
+                Departments = _resourceRepository.GetDepartments().OrderBy(r => r.Name)
             };
         }
 
@@ -99,10 +101,12 @@ namespace RequestsForRights.Infrastructure.Services
                     ResourceRights = new List<ResourceRight>
                     {
                         new ResourceRight()
-                    }
+                    },
+                    HasNotInternetAccess = true
                 },
                 ResourceGroups = _resourceRepository.GetResourceGroups().OrderBy(r => r.Name),
-                OwnerDepartments = _resourceRepository.GetOwnerDepartments()
+                ResourceInformationTypes = _resourceRepository.GetResourceInformationTypes().OrderBy(r => r.Name),
+                Departments = _resourceRepository.GetDepartments().OrderBy(r => r.Name)
             };
         }
 

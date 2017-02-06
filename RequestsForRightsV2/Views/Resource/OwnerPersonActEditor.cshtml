@@ -1,0 +1,110 @@
+﻿@using RequestsForRights.Infrastructure.Extensions
+@model RequestsForRights.Models.ViewModels.ResourceViewModel
+
+@{
+    var ownerPersonIndex = -1;
+    if (ViewData.Keys.Contains("OwnerPersonIndex"))
+    {
+        int.TryParse(ViewData["OwnerPersonIndex"].ToString(), out ownerPersonIndex);
+    }
+    var ownerPersonActIndex = -1;
+    if (ViewData.Keys.Contains("OwnerPersonActIndex"))
+    {
+        int.TryParse(ViewData["OwnerPersonActIndex"].ToString(), out ownerPersonActIndex);
+    }
+    if (Model.Resource.ResourceOwnerPersons[ownerPersonIndex].Deleted)
+    {
+        return;
+    }
+}
+
+<li class="list-group-item clearfix rr-owner-person-act rr-col-sm-no-side-padding-always">
+    @Html.HiddenFor(r => r.Resource.ResourceOwnerPersons[ownerPersonIndex].
+        Acts[ownerPersonActIndex].IdResourceOwnerPersonAct)
+    <div class="col-xs-12 col-sm-6">
+        <div class="form-group">
+            @Html.RequiredLabelFor(r => r.Resource.ResourceOwnerPersons[ownerPersonIndex].
+                Acts[ownerPersonActIndex].ActType,
+                new {@class = "control-label"})
+            <div>
+                @Html.TextBoxFor(r => r.Resource.ResourceOwnerPersons[ownerPersonIndex].
+                    Acts[ownerPersonActIndex].ActType,
+                    new {@class = "form-control", placeholder = "Введите вид акта"})
+                @Html.ValidationMessageFor(r => r.Resource.ResourceOwnerPersons[ownerPersonIndex].
+                    Acts[ownerPersonActIndex].ActType)
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-6">
+        <div class="form-group">
+            @Html.RequiredLabelFor(r => r.Resource.ResourceOwnerPersons[ownerPersonIndex].
+                Acts[ownerPersonActIndex].ActName,
+                new {@class = "control-label"})
+            <div>
+                @Html.TextBoxFor(r => r.Resource.ResourceOwnerPersons[ownerPersonIndex].
+                    Acts[ownerPersonActIndex].ActName,
+                    new {@class = "form-control", placeholder = "Введите наименование акта"})
+                @Html.ValidationMessageFor(r => r.Resource.ResourceOwnerPersons[ownerPersonIndex].
+                    Acts[ownerPersonActIndex].ActName)
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-6 rr-resource-date">
+        <div class="form-group">
+            @Html.RequiredLabelFor(r => r.Resource.ResourceOwnerPersons[ownerPersonIndex].
+                Acts[ownerPersonActIndex].ActDate,
+                new {@class = "control-label"})
+            <div>
+                @Html.TextBoxFor(r => r.Resource.ResourceOwnerPersons[ownerPersonIndex].
+                    Acts[ownerPersonActIndex].ActDate, "{0:dd.MM.yyyy}",
+                    new {@class = "form-control", placeholder = "Введите дату акта"})
+                @Html.ValidationMessageFor(r => r.Resource.ResourceOwnerPersons[ownerPersonIndex].
+                    Acts[ownerPersonActIndex].ActDate)
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-6">
+        <div class="form-group">
+            @Html.RequiredLabelFor(r => r.Resource.ResourceOwnerPersons[ownerPersonIndex].
+                Acts[ownerPersonActIndex].ActNumber,
+                new {@class = "control-label"})
+            <div>
+                @Html.TextBoxFor(r => r.Resource.ResourceOwnerPersons[ownerPersonIndex].
+                    Acts[ownerPersonActIndex].ActNumber,
+                    new {@class = "form-control", placeholder = "Введите номер акта"})
+                @Html.ValidationMessageFor(r => r.Resource.ResourceOwnerPersons[ownerPersonIndex].
+                    Acts[ownerPersonActIndex].ActNumber)
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="col-xs-12">
+        <div class="rr-act-file">
+            <div class="rr-id-file">
+                @Html.HiddenFor(r => r.Resource.ResourceOwnerPersons[ownerPersonIndex].
+                    Acts[ownerPersonActIndex].IdFile)
+            </div>
+            <label class="btn btn-default pull-left">
+                Загрузить файл
+                <input type="file" name="File.ResourceOwnerPersons[@(ownerPersonIndex)].Acts[@(ownerPersonActIndex)]"
+                       id="Resource_ResourceOwnerPersons_@(ownerPersonIndex)__Acts_@(ownerPersonActIndex)" />
+            </label>
+            <div class="rr-act-file-name pull-left text-info"></div>
+            @if (Model.Resource.ResourceOwnerPersons[ownerPersonIndex].
+                Acts[ownerPersonActIndex].IdFile != default(int))
+            {
+                <div class="rr-act-file-link pull-left text-info">
+                    <a href="@Url.Action("LoadFile", "Resource", new
+                             {
+                                 Model.Resource.ResourceOwnerPersons[ownerPersonIndex].
+                                     Acts[ownerPersonActIndex].IdFile
+                             })"></a>
+                </div>
+            }
+        </div>
+        <button name="deleteOwnerPersonAct" class="btn btn-danger pull-right">Удалить акт</button>
+    </div>
+</li>

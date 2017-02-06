@@ -1,0 +1,87 @@
+﻿@using RequestsForRights.Infrastructure.Extensions
+@model RequestsForRights.Models.ViewModels.ResourceViewModel
+
+@{
+    var operatorPersonIndex = -1;
+    if (ViewData.Keys.Contains("OperatorPersonIndex"))
+    {
+        int.TryParse(ViewData["OperatorPersonIndex"].ToString(), out operatorPersonIndex);
+    }
+    if (Model.Resource.ResourceOperatorPersons[operatorPersonIndex].Deleted)
+    {
+        return;
+    }
+}
+
+<li class="list-group-item clearfix rr-operator-person rr-col-sm-no-side-padding-always">
+    @Html.HiddenFor(r => r.Resource.ResourceOperatorPersons[operatorPersonIndex].IdResourceOperatorPerson)
+    <div class="col-xs-12">
+        <div class="form-group">
+            @Html.RequiredLabelFor(r => r.Resource.ResourceOperatorPersons[operatorPersonIndex].Post,
+                new { @class = "control-label" })
+            <div>
+                @Html.TextBoxFor(r => r.Resource.ResourceOperatorPersons[operatorPersonIndex].Post,
+                    new { @class = "form-control", placeholder = "Введите должность" })
+                @Html.ValidationMessageFor(r => r.Resource.ResourceOperatorPersons[operatorPersonIndex].Post)
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-4">
+        <div class="form-group">
+            @Html.RequiredLabelFor(r => r.Resource.ResourceOperatorPersons[operatorPersonIndex].Surname,
+                new { @class = "control-label" })
+            <div>
+                @Html.TextBoxFor(r => r.Resource.ResourceOperatorPersons[operatorPersonIndex].Surname,
+                    new { @class = "form-control", placeholder = "Введите фамилию" })
+                @Html.ValidationMessageFor(r => r.Resource.ResourceOperatorPersons[operatorPersonIndex].Surname)
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-4">
+        <div class="form-group">
+            @Html.RequiredLabelFor(r => r.Resource.ResourceOperatorPersons[operatorPersonIndex].Name,
+                new { @class = "control-label" })
+            <div>
+                @Html.TextBoxFor(r => r.Resource.ResourceOperatorPersons[operatorPersonIndex].Name,
+                    new { @class = "form-control", placeholder = "Введите имя" })
+                @Html.ValidationMessageFor(r => r.Resource.ResourceOperatorPersons[operatorPersonIndex].Name)
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-4">
+        <div class="form-group">
+            @Html.RequiredLabelFor(r => r.Resource.ResourceOperatorPersons[operatorPersonIndex].Patronimic,
+                new { @class = "control-label" })
+            <div>
+                @Html.TextBoxFor(r => r.Resource.ResourceOperatorPersons[operatorPersonIndex].Patronimic,
+                    new { @class = "form-control", placeholder = "Введите отчество" })
+                @Html.ValidationMessageFor(r => r.Resource.ResourceOperatorPersons[operatorPersonIndex].Patronimic)
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="panel panel-primary rr-resource-person-panel">
+        <div class="panel-heading">Реквизиты актов о возложении соответствующих полномочий</div>
+        <ul class="list-group rr-operator-person-acts">
+            @if (Model.Resource.ResourceOperatorPersons[operatorPersonIndex].Acts != null)
+            {
+                for (var i = 0; i < Model.Resource.ResourceOperatorPersons[operatorPersonIndex].Acts.Count; i++)
+                {
+                    @Html.Partial("OperatorPersonActEditor", Model, new ViewDataDictionary
+                    {
+                        {"OperatorPersonIndex", operatorPersonIndex},
+                        {"OperatorPersonActIndex", i}
+                    })
+                }
+            }
+        </ul>
+        <div class="text-center rr-add-operator-person-panel">
+            <button name="addOperatorPersonAct" class="btn btn-success btn-default">Добавить акт</button>
+        </div>
+    </div>
+    <div class="col-xs-12">
+        <button name="deleteOperatorPerson" class="btn btn-danger pull-right">Удалить должностное лицо</button>
+    </div>
+</li>

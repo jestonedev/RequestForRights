@@ -1,0 +1,104 @@
+﻿@using RequestsForRights.Infrastructure.Extensions
+@model RequestsForRights.Models.ViewModels.ResourceViewModel
+
+@{
+    var usingActIndex = -1;
+    if (ViewData.Keys.Contains("UsingActIndex"))
+    {
+        int.TryParse(ViewData["UsingActIndex"].ToString(), out usingActIndex);
+    }
+    if (Model.Resource.ResourceUsingActs[usingActIndex].Deleted)
+    {
+        return;
+    }
+}
+
+<li class="list-group-item clearfix rr-using-act rr-col-sm-no-side-padding-always">
+    @Html.HiddenFor(r => r.Resource.ResourceUsingActs[usingActIndex].IdResourceUsingAct)
+    <div class="col-xs-12 col-sm-6">
+        <div class="form-group">
+            @Html.RequiredLabelFor(r => r.Resource.
+                ResourceUsingActs[usingActIndex].ActType,
+                new { @class = "control-label" })
+            <div>
+                @Html.TextBoxFor(r => r.Resource.
+                    ResourceUsingActs[usingActIndex].ActType,
+                    new { @class = "form-control", placeholder = "Введите вид акта" })
+                @Html.ValidationMessageFor(r => r.Resource.
+                    ResourceUsingActs[usingActIndex].ActType)
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-6">
+        <div class="form-group">
+            @Html.RequiredLabelFor(r => r.Resource.
+                ResourceUsingActs[usingActIndex].ActName,
+                new { @class = "control-label" })
+            <div>
+                @Html.TextBoxFor(r => r.Resource.
+                    ResourceUsingActs[usingActIndex].ActName,
+                    new { @class = "form-control", placeholder = "Введите наименование акта" })
+                @Html.ValidationMessageFor(r => r.Resource.
+                    ResourceUsingActs[usingActIndex].ActName)
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-6 rr-resource-date">
+        <div class="form-group">
+            @Html.RequiredLabelFor(r => r.Resource.
+                ResourceUsingActs[usingActIndex].ActDate,
+                new { @class = "control-label" })
+            <div>
+                @Html.TextBoxFor(r => r.Resource.
+                             ResourceUsingActs[usingActIndex].ActDate, "{0:dd.MM.yyyy}",
+                    new { @class = "form-control", placeholder = "Введите дату акта" })
+                @Html.ValidationMessageFor(r => r.Resource.
+                    ResourceUsingActs[usingActIndex].ActDate)
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-6">
+        <div class="form-group">
+            @Html.RequiredLabelFor(r => r.Resource.
+                ResourceUsingActs[usingActIndex].ActNumber,
+                new { @class = "control-label" })
+            <div>
+                @Html.TextBoxFor(r => r.Resource.
+                    ResourceUsingActs[usingActIndex].ActNumber,
+                    new { @class = "form-control", placeholder = "Введите номер акта" })
+                @Html.ValidationMessageFor(r => r.Resource.
+                    ResourceUsingActs[usingActIndex].ActNumber)
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="col-xs-12">
+        <div class="rr-act-file">
+            <div class="rr-id-file">
+                @Html.HiddenFor(r => r.Resource.
+                    ResourceUsingActs[usingActIndex].IdFile)
+            </div>
+            <label class="btn btn-default pull-left">
+                Загрузить файл
+                <input type="file" name="File.ResourceUsingActs[@(usingActIndex)]"
+                       id="ResourceUsingActs_@(usingActIndex)" />
+            </label>
+            <div class="rr-act-file-name pull-left text-info"></div>
+            @if (Model.Resource.
+                ResourceUsingActs[usingActIndex].IdFile != default(int))
+            {
+                <div class="rr-act-file-link pull-left text-info">
+                    <a href="@Url.Action("LoadFile", "Resource", new
+                             {
+                                 Model.Resource.
+                                     ResourceUsingActs[usingActIndex].IdFile
+                             })"></a>
+                </div>
+            }
+        </div>
+        <button name="deleteUsingAct" class="btn btn-danger pull-right">Удалить акт</button>
+    </div>
+</li>

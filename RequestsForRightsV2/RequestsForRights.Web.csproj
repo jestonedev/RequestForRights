@@ -613,6 +613,8 @@
     <Content Include="Views\Resource\Detail.cshtml" />
     <Content Include="Views\Shared\Request\Agreements.cshtml" />
     <Content Include="Views\Shared\Request\ExtComments.cshtml" />
+    <Content Include="Views\Resource\DeviceAddressEditor.cshtml" />
+    <Content Include="Views\Resource\AuthorityActEditor.cshtml" />
     <None Include="Views\Resource\Index.cshtml" />
     <Content Include="Views\Shared\DeleteModal.cshtml" />
     <Content Include="Views\Shared\ErrorAlert.cshtml" />
@@ -628,6 +630,18 @@
     <Content Include="Views\Shared\Request\ExtCommentsList.cshtml" />
     <Content Include="Views\Shared\Request\AgreementsContent.cshtml" />
     <Content Include="Views\Shared\Request\AgreementsControls.cshtml" />
+    <Content Include="Views\Resource\ResourceFormGeneral.cshtml" />
+    <Content Include="Views\Resource\ResourceFormOwner.cshtml" />
+    <Content Include="Views\Resource\ResourceFormOperator.cshtml" />
+    <Content Include="Views\Resource\ResourceFormActs.cshtml" />
+    <Content Include="Views\Resource\ResourceFormRights.cshtml" />
+    <Content Include="Views\Resource\InternetAddressEditor.cshtml" />
+    <Content Include="Views\Resource\OwnerPersonEditor.cshtml" />
+    <Content Include="Views\Resource\OperatorPersonEditor.cshtml" />
+    <Content Include="Views\Resource\OwnerPersonActEditor.cshtml" />
+    <Content Include="Views\Resource\OperatorPersonActEditor.cshtml" />
+    <Content Include="Views\Resource\OperatorActEditor.cshtml" />
+    <Content Include="Views\Resource\UsingActEditor.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Database\RequestsForRights.Database.csproj">

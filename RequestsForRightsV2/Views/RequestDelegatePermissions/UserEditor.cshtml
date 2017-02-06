@@ -58,7 +58,7 @@
                         new
                         {
                             @class = "form-control",
-                            placeholder = "Введите ФИО пользователя"
+                            placeholder = "Введите ФИО сотрудника"
                         })
                     @Html.ValidationMessageFor(r => r.RequestModel.Users[userIndex].Snp)
                 </div>
@@ -146,7 +146,7 @@
                         new
                         {
                             @class = "form-control",
-                            placeholder = "Введите ФИО пользователя"
+                            placeholder = "Введите ФИО сотрудника"
                         })
                     @Html.ValidationMessageFor(r => r.RequestModel.Users[userIndex].DelegationRequestUsersExtInfoModel.SnpDelegateTo)
                 </div>
@@ -253,7 +253,7 @@
             new
             {
                 @class = "form-control",
-                placeholder = "Введите примечание",
+                placeholder = "Введите примечание к делегированию",
                 rows = "4"
             })
         @Html.ValidationMessageFor(r => r.RequestModel.Users[userIndex].Description)

@@ -540,3 +540,87 @@ button.rr-ext-filter-button.collapsed:hover {
         display: flex;
     }
 }
+
+.rr-right .form-group {
+    overflow: auto;
+}
+
+.rr-right {
+    padding: 15px 0;
+}
+
+.rr-add-internet-address-panel, .rr-add-device-address-panel,
+.rr-add-owner-person-panel, .rr-add-operator-person-panel,
+.rr-add-owner-person-act-panel, .rr-add-operator-person-act-panel,
+.rr-add-operator-act-panel, .rr-add-using-act-panel,
+.rr-add-authority-act-panel {
+    margin-bottom: 15px;
+}
+
+.panel .rr-internet-addresses, .panel .rr-device-addresses,
+.panel .rr-owner-persons, .panel .rr-operator-persons,
+.panel .rr-owner-person-acts, .panel .rr-operator-person-acts,
+.panel .rr-operator-acts, .panel .rr-using-acts,
+.panel .rr-authority-acts {
+    margin-bottom: 15px;
+}
+
+.panel .rr-internet-address .checkbox-inline {
+    margin-top: 5px;
+}
+
+.rr-resource-label-stub {
+    display: none;
+}
+
+@media(min-width: 768px) { 
+    .rr-resource-label-stub {
+        margin-bottom: 5px;
+        display: block;
+    }
+}
+
+@media (min-width: 768px)
+{
+    .rr-right .control-label {
+        text-align: right;
+    }
+}
+
+.rr-right .control-label {
+    padding-top: 7px;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.rr-resource-form-group-header {
+    padding-left: 15px;
+}
+
+.rr-resource-address-panel, .rr-resource-person-panel {
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+.rr-resource-equal-address-checkbox {
+    padding-bottom: 5px;
+}
+
+.rr-act-file input[type="file"] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    border: 0;
+}
+
+.rr-act-file-link, .rr-act-file-name {
+    padding: 6px;
+}
+
+.rr-resource-has-not-internet-access-checkbox {
+    margin-bottom: 10px;
+}

@@ -54,6 +54,7 @@
     <Compile Include="Entities\Coordinator.cs" />
     <Compile Include="Entities\DelegationRequestUserRightExtInfo.cs" />
     <Compile Include="Entities\Department.cs" />
+    <Compile Include="Entities\ActFile.cs" />
     <Compile Include="Entities\Request.cs" />
     <Compile Include="Entities\RequestAgreement.cs" />
     <Compile Include="Entities\RequestAgreementState.cs" />
@@ -66,6 +67,16 @@
     <Compile Include="Entities\RequestUser.cs" />
     <Compile Include="Entities\RequestUserLastSeen.cs" />
     <Compile Include="Entities\RequestUserAssoc.cs" />
+    <Compile Include="Entities\ResourceAuthorityAct.cs" />
+    <Compile Include="Entities\ResourceDeviceAddress.cs" />
+    <Compile Include="Entities\ResourceInformationType.cs" />
+    <Compile Include="Entities\ResourceInternetAddress.cs" />
+    <Compile Include="Entities\ResourceOperatorAct.cs" />
+    <Compile Include="Entities\ResourceOperatorPerson.cs" />
+    <Compile Include="Entities\ResourceOwnerPerson.cs" />
+    <Compile Include="Entities\ResourceOperatorPersonAct.cs" />
+    <Compile Include="Entities\ResourceOwnerPersonAct.cs" />
+    <Compile Include="Entities\ResourceUsingAct.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Entities\RequestType.cs" />
     <Compile Include="Entities\Resource.cs" />

@@ -36,7 +36,7 @@
                         new
                         {
                             @class = "form-control",
-                            placeholder = "Введите ФИО пользователя"
+                            placeholder = "Введите ФИО сотрудника"
                         })
                         @Html.ValidationMessageFor(r => r.RequestModel.Users[userIndex].Snp)
                     </div>
@@ -149,7 +149,7 @@
                             new
                             {
                                 @class = "form-control",
-                                placeholder = "Введите примечание к пользователю",
+                                placeholder = "Введите примечание к сотруднику",
                                 rows = "4"
                             })
                         @Html.ValidationMessageFor(r => r.RequestModel.Users[userIndex].Description)
@@ -157,7 +157,9 @@
                 </div>
             </div>
             <div class="panel panel-primary rr-request-rights-wrapper">
-                <div class="panel-heading">Предоставить права</div>
+                <div class="panel-heading">
+                    Предоставить права
+                </div>
                 <ul class="list-group rr-request-rights">
                     @if (Model.RequestModel.Users[userIndex].Rights != null &&
                          Model.RequestModel.Users[userIndex].Rights.Any())

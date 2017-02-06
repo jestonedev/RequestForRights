@@ -159,12 +159,12 @@ namespace RequestsForRights.Controllers
             if (request.Users == null || !request.Users.Any())
             {
                 ModelState.AddModelError(string.Empty,
-                    "Необходимо указать по меньшей мере одного сотрудника");
+                    @"Необходимо указать по меньшей мере одного сотрудника");
             }
             if (request.Users != null && request.Users.Any(r => r.Rights != null && r.Rights.Any()))
             {
                 ModelState.AddModelError(string.Empty,
-                    "В заявках на отключение сотрудников нельзя задавать права");
+                    @"В заявках на отключение сотрудников нельзя задавать права");
             }
         }
 

@@ -7,7 +7,8 @@ namespace RequestsForRights.Models.ViewModels
     {
         public Resource Resource { get; set; }
         public IEnumerable<ResourceGroup> ResourceGroups { get; set; }
-        public IEnumerable<Department> OwnerDepartments { get; set; }
+        public IEnumerable<ResourceInformationType> ResourceInformationTypes { get; set; }
+        public IEnumerable<Department> Departments { get; set; }
         public ResourceViewModel()
         {
             Resource = new Resource();

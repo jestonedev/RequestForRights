@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity.Infrastructure;
 using System.Web.Mvc;
+using RequestsForRights.Domain.Entities;
 using RequestsForRights.Infrastructure.Helpers;
 using RequestsForRights.Infrastructure.Security.Interfaces;
 using RequestsForRights.Infrastructure.Services.Interfaces;
@@ -80,7 +82,7 @@ namespace RequestsForRights.Controllers
                 resourceViewModel.Resource.ResourceRights.Count < 1)
             {
                 ModelState.AddModelError(string.Empty, 
-                    "Необходимо задать по меньшей мере одно право для ресурса");
+                    @"Необходимо задать по меньшей мере одно право для ресурса");
             }
             if (!ModelState.IsValid)
             {
@@ -159,7 +161,7 @@ namespace RequestsForRights.Controllers
                 resourceViewModel.Resource.ResourceRights.Count < 1)
             {
                 ModelState.AddModelError(string.Empty, 
-                    "Необходимо задать по меньшей мере одно право для ресурса");
+                    @"Необходимо задать по меньшей мере одно право для ресурса");
             }
             if (!ModelState.IsValid)
             {
@@ -187,6 +189,175 @@ namespace RequestsForRights.Controllers
             }
             ViewData["RightIndex"] = 0;
             return PartialView("RightEditor", _resourceService.GetEmptyResourceViewModel());
+        }
+
+        public ActionResult GetEmptyInternetAddressTemplate()
+        {
+            if (!Request.IsAjaxRequest())
+            {
+                return RedirectToAction("ForbiddenError", "Home");
+            }
+            ViewData["InternetAddressIndex"] = 0;
+            var emtpyViewModel = _resourceService.GetEmptyResourceViewModel();
+            emtpyViewModel.Resource.ResourceInternetAddresses = new List<ResourceInternetAddress>
+            {
+                new ResourceInternetAddress()
+            };
+            return PartialView("InternetAddressEditor", emtpyViewModel);
+        }
+
+        public ActionResult GetEmptyDeviceAddressTemplate()
+        {
+            if (!Request.IsAjaxRequest())
+            {
+                return RedirectToAction("ForbiddenError", "Home");
+            }
+            ViewData["DeviceAddressIndex"] = 0;
+            var emtpyViewModel = _resourceService.GetEmptyResourceViewModel();
+            emtpyViewModel.Resource.ResourceDeviceAddresses = new List<ResourceDeviceAddress>
+            {
+                new ResourceDeviceAddress()
+            };
+            return PartialView("DeviceAddressEditor", emtpyViewModel);
+        }
+
+        public ActionResult GetEmptyOwnerPersonTemplate()
+        {
+            if (!Request.IsAjaxRequest())
+            {
+                return RedirectToAction("ForbiddenError", "Home");
+            }
+            ViewData["OwnerPersonIndex"] = 0;
+            var emtpyViewModel = _resourceService.GetEmptyResourceViewModel();
+            emtpyViewModel.Resource.ResourceOwnerPersons = new List<ResourceOwnerPerson>
+            {
+                new ResourceOwnerPerson()
+            };
+            return PartialView("OwnerPersonEditor", emtpyViewModel);
+        }
+
+        public ActionResult GetEmptyOwnerPersonActTemplate()
+        {
+            if (!Request.IsAjaxRequest())
+            {
+                return RedirectToAction("ForbiddenError", "Home");
+            }
+            ViewData["OwnerPersonIndex"] = 0;
+            ViewData["OwnerPersonActIndex"] = 0;
+            var emtpyViewModel = _resourceService.GetEmptyResourceViewModel();
+            emtpyViewModel.Resource.ResourceOwnerPersons = new List<ResourceOwnerPerson>
+            {
+                new ResourceOwnerPerson
+                {
+                    Acts = new List<ResourceOwnerPersonAct>
+                    {
+                        new ResourceOwnerPersonAct
+                        {
+                            ActDate = DateTime.Now.Date
+                        }
+                    }
+                }
+            };
+            return PartialView("OwnerPersonActEditor", emtpyViewModel);
+        }
+
+        public ActionResult GetEmptyOperatorPersonTemplate()
+        {
+            if (!Request.IsAjaxRequest())
+            {
+                return RedirectToAction("ForbiddenError", "Home");
+            }
+            ViewData["OperatorPersonIndex"] = 0;
+            var emtpyViewModel = _resourceService.GetEmptyResourceViewModel();
+            emtpyViewModel.Resource.ResourceOperatorPersons = new List<ResourceOperatorPerson>
+            {
+                new ResourceOperatorPerson()
+            };
+            return PartialView("OperatorPersonEditor", emtpyViewModel);
+        }
+
+        public ActionResult GetEmptyOperatorPersonActTemplate()
+        {
+            if (!Request.IsAjaxRequest())
+            {
+                return RedirectToAction("ForbiddenError", "Home");
+            }
+            ViewData["OperatorPersonIndex"] = 0;
+            ViewData["OperatorPersonActIndex"] = 0;
+            var emtpyViewModel = _resourceService.GetEmptyResourceViewModel();
+            emtpyViewModel.Resource.ResourceOperatorPersons = new List<ResourceOperatorPerson>
+            {
+                new ResourceOperatorPerson
+                {
+                    Acts = new List<ResourceOperatorPersonAct>
+                    {
+                        new ResourceOperatorPersonAct
+                        {
+                            ActDate = DateTime.Now.Date
+                        }
+                    }
+                }
+            };
+            return PartialView("OperatorPersonActEditor", emtpyViewModel);
+        }
+
+        public ActionResult GetEmptyOperatorActTemplate()
+        {
+            if (!Request.IsAjaxRequest())
+            {
+                return RedirectToAction("ForbiddenError", "Home");
+            }
+            ViewData["OperatorActIndex"] = 0;
+            var emtpyViewModel = _resourceService.GetEmptyResourceViewModel();
+            emtpyViewModel.Resource.ResourceOperatorActs = new List<ResourceOperatorAct>
+            {
+                new ResourceOperatorAct
+                {
+                    ActDate = DateTime.Now.Date
+                }
+            };
+            return PartialView("OperatorActEditor", emtpyViewModel);
+        }
+
+        public ActionResult GetEmptyAuthorityActTemplate()
+        {
+            if (!Request.IsAjaxRequest())
+            {
+                return RedirectToAction("ForbiddenError", "Home");
+            }
+            ViewData["AuthorityActIndex"] = 0;
+            var emtpyViewModel = _resourceService.GetEmptyResourceViewModel();
+            emtpyViewModel.Resource.ResourceAuthorityActs = new List<ResourceAuthorityAct>
+            {
+                new ResourceAuthorityAct
+                {
+                    ActDate = DateTime.Now.Date
+                }
+            };
+            return PartialView("AuthorityActEditor", emtpyViewModel);
+        }
+
+        public ActionResult GetEmptyUsingActTemplate()
+        {
+            if (!Request.IsAjaxRequest())
+            {
+                return RedirectToAction("ForbiddenError", "Home");
+            }
+            ViewData["UsingActIndex"] = 0;
+            var emtpyViewModel = _resourceService.GetEmptyResourceViewModel();
+            emtpyViewModel.Resource.ResourceUsingActs = new List<ResourceUsingAct>
+            {
+                new ResourceUsingAct
+                {
+                    ActDate = DateTime.Now.Date
+                }
+            };
+            return PartialView("UsingActEditor", emtpyViewModel);
+        }
+
+        public FileResult LoadFile(int idFile)
+        {
+            return null;
         }
     }
 }

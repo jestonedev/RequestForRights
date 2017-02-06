@@ -1,4 +1,32 @@
-﻿$(function () {
+﻿var datePickerOptions = {
+    format: "dd.mm.yyyy",
+    weekStart: 1,
+    maxViewMode: 2,
+    todayBtn: "linked",
+    language: "ru",
+    orientation: "bottom auto",
+    daysOfWeekDisabled: "0,6",
+    autoclose: true,
+    todayHighlight: true,
+    startDate: "01/01/1753"
+};
+
+if ($.validator !== undefined) {
+    $.extend($.validator.methods, {
+        date: function (value, element) {
+            if (this.optional(element) && value === "") {
+                return true;
+            }
+            var dateParts = value.split(".");
+            if (dateParts.length !== 3) {
+                return false;
+            }
+            return !isNaN(Date.parse(dateParts[2] + "/" + dateParts[1] + "/" + dateParts[0]));
+        }
+    });
+}
+
+$(function () {
     var timer = undefined;
 
     $("body")
@@ -175,4 +203,20 @@ function getCurrentDate() {
     var month = date.getMonth()+1;
     var day = date.getDate();
     return year + "-" + (month < 10 ? "0" : "") + month + "-" + (day < 10 ? "0" : "") + day;
+}
+
+function updateControl(idx, control, namePropRegex, idPropRegex) {
+    $(control)
+        .find("[name]")
+        .filter(function (fieldIdx, field) {
+            return $(field).prop("name").match(namePropRegex) != null;
+        })
+        .each(function (fieldIdx, field) {
+            var name = $(field).prop("name").replace(namePropRegex, "$1[" + idx + "]");
+            $(field).prop("name", name);
+            var id = $(field).prop("id").replace(idPropRegex, "$1_" + idx + "__");
+            $(field).prop("id", id);
+            $(field).closest(".form-group").find("label").prop("for", id);
+            $(field).closest(".form-group").find("span[data-valmsg-for]").attr("data-valmsg-for", name);
+        });
 }

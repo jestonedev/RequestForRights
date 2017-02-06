@@ -1,0 +1,23 @@
+﻿@model RequestsForRights.Models.ViewModels.ResourceViewModel
+@{
+    Layout = null;
+}
+
+<div class="text-center rr-rights-error">
+    @Html.ValidationMessageFor(r => r.Resource.ResourceRights)
+</div>
+<ul class="list-group rr-rights">
+    @if (Model.Resource.ResourceRights != null)
+    {
+        for (var i = 0; i < Model.Resource.ResourceRights.Count; i++)
+        {
+            @Html.Partial("RightEditor", Model, new ViewDataDictionary
+            {
+                {"RightIndex", i}
+            })
+        }
+    }
+</ul>
+<div class="text-center rr-add-right-panel">
+    <button name="addRight" class="btn btn-success btn-default">Добавить право</button>
+</div>
