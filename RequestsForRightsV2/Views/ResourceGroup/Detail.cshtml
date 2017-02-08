@@ -14,8 +14,11 @@
 <dl class="dl-horizontal">
     <dt>@Html.DisplayNameFor(r => r.Name)</dt>
     <dd>@Model.Name</dd>
-    <dt>@Html.DisplayNameFor(r => r.Description)</dt>
-    <dd>@Model.Description</dd>
+    @if (!string.IsNullOrEmpty(Model.Description))
+    {
+        <dt>@Html.DisplayNameFor(r => r.Description)</dt>
+        <dd>@Html.Raw(Model.Description.Replace("\n", "<br>"))</dd>
+    }
 </dl>
 
 <div class="text-center rr-edit-panel">

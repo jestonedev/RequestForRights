@@ -37,5 +37,15 @@ namespace RequestsForRights.Infrastructure.Security
         {
             return CanModify();
         }
+
+        public override bool CanUpdate(Resource entity)
+        {
+            return CanUpdate() && entity != null && !entity.Deleted;
+        }
+
+        public override bool CanRead(Resource entity)
+        {
+            return CanRead() && entity != null && !entity.Deleted;
+        }
     }
 }

@@ -1,0 +1,401 @@
+﻿@using System.Globalization
+@model RequestsForRights.Domain.Entities.Resource
+
+<div class="panel panel-primary">
+    <div class="panel-heading">Общие сведения</div>
+    <div class="panel-body rr-detail-resource-panel-body">
+        <dl class="col-xs-12">
+            <dt>@Html.DisplayNameFor(r => r.IdOperatorDepartment)</dt>
+            <dd>@Model.OperatorDepartment.Name</dd>
+            <dt>@Html.DisplayNameFor(r => r.OperatorDepartment.TaxPayerNumber)</dt>
+            <dd>
+                @if (string.IsNullOrEmpty(Model.OperatorDepartment.TaxPayerNumber))
+                {
+                    <i>Отсутствует</i>
+                }
+                else
+                {
+                    @Model.OperatorDepartment.TaxPayerNumber
+                }
+            </dd>
+            <dt>@Html.DisplayNameFor(r => r.OperatorDepartment.OfficialNameLongRu)</dt>
+            <dd>
+                @if (string.IsNullOrEmpty(Model.OperatorDepartment.OfficialNameLongRu))
+                {
+                    <i>Отсутствует</i>
+                }
+                else
+                {
+                    @Model.OperatorDepartment.OfficialNameLongRu
+                }
+            </dd>
+            <dt>@Html.DisplayNameFor(r => r.OperatorDepartment.OfficialNameLongEn)</dt>
+            <dd>
+                @if (string.IsNullOrEmpty(Model.OperatorDepartment.OfficialNameLongEn))
+                {
+                    <i>Отсутствует</i>
+                }
+                else
+                {
+                    @Model.OperatorDepartment.OfficialNameLongEn
+                }
+            </dd>
+        </dl>
+        <dl class="col-sm-6">
+            <dt>@Html.DisplayNameFor(r => r.OperatorDepartment.OfficialNameShortRu)</dt>
+            <dd>
+                @if (string.IsNullOrEmpty(Model.OperatorDepartment.OfficialNameShortRu))
+                {
+                    <i>Отсутствует</i>
+                }
+                else
+                {
+                    @Model.OperatorDepartment.OfficialNameShortRu
+                }
+            </dd>
+        </dl>
+        <dl class="col-sm-6">
+            <dt>@Html.DisplayNameFor(r => r.OperatorDepartment.OfficialNameShortEn)</dt>
+            <dd>
+                @if (string.IsNullOrEmpty(Model.OperatorDepartment.OfficialNameShortEn))
+                {
+                    <i>Отсутствует</i>
+                }
+                else
+                {
+                    @Model.OperatorDepartment.OfficialNameShortEn
+                }
+            </dd>
+        </dl>
+        <div class="clearfix"></div>
+
+        <div class="panel panel-primary rr-resource-address-panel">
+            <div class="panel-heading">Адрес постоянно действующего исполнительного органа оператора ИС</div>
+            <div class="panel-body rr-detail-resource-panel-body">
+                <dl class="col-sm-6">
+                    <dt>@Html.DisplayNameFor(r => r.OperatorDepartment.SelfAddressIndex)</dt>
+                    <dd>
+                        @if (string.IsNullOrEmpty(Model.OperatorDepartment.SelfAddressIndex))
+                        {
+                            <i>Отсутствует</i>
+                        }
+                        else
+                        {
+                            @Model.OperatorDepartment.SelfAddressIndex
+                        }
+                    </dd>
+                    <dt>@Html.DisplayNameFor(r => r.OperatorDepartment.SelfAddressArea)</dt>
+                    <dd>
+                        @if (string.IsNullOrEmpty(Model.OperatorDepartment.SelfAddressArea))
+                        {
+                            <i>Отсутствует</i>
+                        }
+                        else
+                        {
+                            @Model.OperatorDepartment.SelfAddressArea
+                        }
+                    </dd>
+                    <dt>@Html.DisplayNameFor(r => r.OperatorDepartment.SelfAddressStreet)</dt>
+                    <dd>
+                        @if (string.IsNullOrEmpty(Model.OperatorDepartment.SelfAddressStreet))
+                        {
+                            <i>Отсутствует</i>
+                        }
+                        else
+                        {
+                            @Model.OperatorDepartment.SelfAddressStreet
+                        }
+                    </dd>
+                </dl>
+                <dl class="col-sm-6">
+                    <dt>@Html.DisplayNameFor(r => r.OperatorDepartment.SelfAddressRegion)</dt>
+                    <dd>
+                        @if (string.IsNullOrEmpty(Model.OperatorDepartment.SelfAddressRegion))
+                        {
+                            <i>Отсутствует</i>
+                        }
+                        else
+                        {
+                            @Model.OperatorDepartment.SelfAddressRegion
+                        }
+                    </dd>
+                    <dt>@Html.DisplayNameFor(r => r.OperatorDepartment.SelfAddressCity)</dt>
+                    <dd>
+                        @if (string.IsNullOrEmpty(Model.OperatorDepartment.SelfAddressCity))
+                        {
+                            <i>Отсутствует</i>
+                        }
+                        else
+                        {
+                            @Model.OperatorDepartment.SelfAddressCity
+                        }
+                    </dd>
+                    <dt>@Html.DisplayNameFor(r => r.OperatorDepartment.SelfAddressHouse)</dt>
+                    <dd>
+                        @if (string.IsNullOrEmpty(Model.OperatorDepartment.SelfAddressHouse))
+                        {
+                            <i>Отсутствует</i>
+                        }
+                        else
+                        {
+                            @Model.OperatorDepartment.SelfAddressHouse
+                        }
+                    </dd>
+                </dl>
+            </div>
+        </div>
+
+        <div class="panel panel-primary rr-resource-address-panel">
+            <div class="panel-heading">Адрес управляющего или адрес управляющей организации-оператора</div>
+
+            @if (Model.OperatorDepartment.СontrolOrgAddressesAreEqualSelfAddress)
+            {
+                <div class="panel-body">
+                    <div class="text-center">
+                        @Html.DisplayNameFor(r => r.OperatorDepartment.СontrolOrgAddressesAreEqualSelfAddress)
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="panel-body rr-detail-resource-panel-body">
+                    <dl class="col-sm-6">
+                        <dt>@Html.DisplayNameFor(r => r.OperatorDepartment.ControlOrgAddressIndex)</dt>
+                        <dd>
+                            @if (string.IsNullOrEmpty(Model.OperatorDepartment.ControlOrgAddressIndex))
+                            {
+                                <i>Отсутствует</i>
+                            }
+                            else
+                            {
+                                @Model.OperatorDepartment.ControlOrgAddressIndex
+                            }
+                        </dd>
+                        <dt>@Html.DisplayNameFor(r => r.OperatorDepartment.ControlOrgAddressArea)</dt>
+                        <dd>
+                            @if (string.IsNullOrEmpty(Model.OperatorDepartment.ControlOrgAddressArea))
+                            {
+                                <i>Отсутствует</i>
+                            }
+                            else
+                            {
+                                @Model.OperatorDepartment.ControlOrgAddressArea
+                            }
+                        </dd>
+                        <dt>@Html.DisplayNameFor(r => r.OperatorDepartment.ControlOrgAddressStreet)</dt>
+                        <dd>
+                            @if (string.IsNullOrEmpty(Model.OperatorDepartment.ControlOrgAddressStreet))
+                            {
+                                <i>Отсутствует</i>
+                            }
+                            else
+                            {
+                                @Model.OperatorDepartment.ControlOrgAddressStreet
+                            }
+                        </dd>
+                    </dl>
+                    <dl class="col-sm-6">
+                        <dt>@Html.DisplayNameFor(r => r.OperatorDepartment.ControlOrgAddressRegion)</dt>
+                        <dd>
+                            @if (string.IsNullOrEmpty(Model.OperatorDepartment.ControlOrgAddressRegion))
+                            {
+                                <i>Отсутствует</i>
+                            }
+                            else
+                            {
+                                @Model.OperatorDepartment.ControlOrgAddressRegion
+                            }
+                        </dd>
+                        <dt>@Html.DisplayNameFor(r => r.OperatorDepartment.ControlOrgAddressCity)</dt>
+                        <dd>
+                            @if (string.IsNullOrEmpty(Model.OperatorDepartment.ControlOrgAddressCity))
+                            {
+                                <i>Отсутствует</i>
+                            }
+                            else
+                            {
+                                @Model.OperatorDepartment.ControlOrgAddressCity
+                            }
+                        </dd>
+                        <dt>@Html.DisplayNameFor(r => r.OperatorDepartment.ControlOrgAddressHouse)</dt>
+                        <dd>
+                            @if (string.IsNullOrEmpty(Model.OperatorDepartment.ControlOrgAddressHouse))
+                            {
+                                <i>Отсутствует</i>
+                            }
+                            else
+                            {
+                                @Model.OperatorDepartment.ControlOrgAddressHouse
+                            }
+                        </dd>
+                    </dl>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<div class="panel panel-primary">
+    <div class="panel-heading">Должностные лица</div>
+    @if (Model.ResourceOperatorPersons != null && Model.ResourceOperatorPersons.Any(r => !r.Deleted))
+    {
+        <ul class="list-group rr-operator-persons">
+            @for (var j = 0; j < Model.ResourceOperatorPersons.Count; j++)
+            {
+                if (Model.ResourceOperatorPersons[j].Deleted)
+                {
+                    continue;
+                }
+
+                <li class="list-group-item clearfix rr-col-sm-no-side-padding-always">
+                    <dl class="col-sm-6">
+                        <dt>@Html.DisplayNameFor(r => r.ResourceOperatorPersons[j].Post)</dt>
+                        <dd>
+                            @if (string.IsNullOrEmpty(Model.ResourceOperatorPersons[j].Post))
+                            {
+                                <i>Отсутствует</i>
+                            }
+                            else
+                            {
+                                @Model.ResourceOperatorPersons[j].Post
+                            }
+                        </dd>
+                        <dt>@Html.DisplayNameFor(r => r.ResourceOperatorPersons[j].Name)</dt>
+                        <dd>
+                            @if (string.IsNullOrEmpty(Model.ResourceOperatorPersons[j].Name))
+                            {
+                                <i>Отсутствует</i>
+                            }
+                            else
+                            {
+                                @Model.ResourceOperatorPersons[j].Name
+                            }
+                        </dd>
+                    </dl>
+                    <dl class="col-sm-6">
+                        <dt>@Html.DisplayNameFor(r => r.ResourceOperatorPersons[j].Surname)</dt>
+                        <dd>
+                            @if (string.IsNullOrEmpty(Model.ResourceOperatorPersons[j].Surname))
+                            {
+                                <i>Отсутствует</i>
+                            }
+                            else
+                            {
+                                @Model.ResourceOperatorPersons[j].Surname
+                            }
+                        </dd>
+                        <dt>@Html.DisplayNameFor(r => r.ResourceOperatorPersons[j].Patronimic)</dt>
+                        <dd>
+                            @if (string.IsNullOrEmpty(Model.ResourceOperatorPersons[j].Patronimic))
+                            {
+                                <i>Отсутствует</i>
+                            }
+                            else
+                            {
+                                @Model.ResourceOperatorPersons[j].Patronimic
+                            }
+                        </dd>
+                    </dl>
+                    <div class="clearfix"></div>
+                    <div class="panel panel-primary rr-resource-person-panel">
+                        <div class="panel-heading">Реквизиты актов о возложении соответствующих полномочий</div>
+                        @if (Model.ResourceOperatorPersons[j].Acts != null && Model.ResourceOperatorPersons[j].Acts.Any(r => !r.Deleted))
+                        {
+                            <ul class="list-group rr-operator-person-acts">
+                                @for (var i = 0; i < Model.ResourceOperatorPersons[j].Acts.Count; i++)
+                                {
+                                    if (Model.ResourceOperatorPersons[j].Acts[i].Deleted)
+                                    {
+                                        continue;
+                                    }
+                                    <li class="list-group-item clearfix rr-col-sm-no-side-padding-always">
+                                        <div>
+                                            <dl class="col-sm-6">
+                                                <dt>@Html.DisplayNameFor(r => r.ResourceOperatorPersons[j].Acts[i].ActType)</dt>
+                                                <dd>
+                                                    @if (string.IsNullOrEmpty(Model.ResourceOperatorPersons[j].Acts[i].ActType))
+                                                    {
+                                                        <i>Отсутствует</i>
+                                                    }
+                                                    else
+                                                    {
+                                                        @Model.ResourceOperatorPersons[j].Acts[i].ActType
+                                                    }
+                                                </dd>
+                                                <dt>@Html.DisplayNameFor(r => r.ResourceOperatorPersons[j].Acts[i].ActDate)</dt>
+                                                <dd>
+                                                    @if (Model.ResourceOperatorPersons[j].Acts[i].ActDate == null)
+                                                    {
+                                                        <i>Отсутствует</i>
+                                                    }
+                                                    else
+                                                    {
+                                                        @Model.ResourceOperatorPersons[j].Acts[i].ActDate.Value.ToString("dd.MM.yyyy", CultureInfo.CurrentCulture)
+                                                    }
+                                                </dd>
+                                            </dl>
+
+                                            <dl class="col-xs-12 col-sm-6">
+                                                <dt>@Html.DisplayNameFor(r => r.ResourceOperatorPersons[j].Acts[i].ActName)</dt>
+                                                <dd>
+                                                    @if (string.IsNullOrEmpty(Model.ResourceOperatorPersons[j].Acts[i].ActName))
+                                                    {
+                                                        <i>Отсутствует</i>
+                                                    }
+                                                    else
+                                                    {
+                                                        @Model.ResourceOperatorPersons[j].Acts[i].ActName
+                                                    }
+                                                </dd>
+                                            </dl>
+                                            <dl class="col-xs-12 col-sm-6">
+                                                <dt>@Html.DisplayNameFor(r => r.ResourceOperatorPersons[j].Acts[i].ActNumber)</dt>
+                                                <dd>
+                                                    @if (string.IsNullOrEmpty(Model.ResourceOperatorPersons[j].Acts[i].ActNumber))
+                                                    {
+                                                        <i>Отсутствует</i>
+                                                    }
+                                                    else
+                                                    {
+                                                        @Model.ResourceOperatorPersons[j].Acts[i].ActNumber
+                                                    }
+                                                </dd>
+                                            </dl>
+                                        </div>
+                                        @if (Model.ResourceOperatorPersons[j].Acts[i].IdFile != null)
+                                        {
+                                            <div class="clearfix"></div>
+                                            <div class="col-xs-12 pull-left text-info rr-act-file-link">
+                                                <a href="@Url.Action("LoadFile", "Resource", new
+                                                         {
+                                                             Model.ResourceOperatorPersons[j].Acts[i].IdFile
+                                                         })">Скачать</a>
+                                            </div>
+                                        }
+                                    </li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <div class="panel-body">
+                                <div class="text-center">
+                                    <i>Отсутствуют</i>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </li>
+
+            }
+        </ul>
+    }
+    else
+    {
+        <div class="panel-body">
+            <div class="text-center">
+                <i>Отсутствуют</i>
+            </div>
+        </div>
+    }
+</div>

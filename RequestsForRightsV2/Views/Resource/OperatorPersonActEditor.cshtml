@@ -12,7 +12,7 @@
     {
         int.TryParse(ViewData["OperatorPersonActIndex"].ToString(), out operatorPersonActIndex);
     }
-    if (Model.Resource.ResourceOperatorPersons[operatorPersonIndex].Deleted)
+    if (Model.Resource.ResourceOperatorPersons[operatorPersonIndex].Acts[operatorPersonActIndex].Deleted)
     {
         return;
     }
@@ -21,62 +21,66 @@
 <li class="list-group-item clearfix rr-operator-person-act rr-col-sm-no-side-padding-always">
     @Html.HiddenFor(r => r.Resource.ResourceOperatorPersons[operatorPersonIndex].
         Acts[operatorPersonActIndex].IdResourceOperatorPersonAct)
-    <div class="col-xs-12 col-sm-6">
-        <div class="form-group">
-            @Html.RequiredLabelFor(r => r.Resource.ResourceOperatorPersons[operatorPersonIndex].
-                Acts[operatorPersonActIndex].ActType,
-                new {@class = "control-label"})
-            <div>
-                @Html.TextBoxFor(r => r.Resource.ResourceOperatorPersons[operatorPersonIndex].
+    <div>
+        <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+                @Html.RequiredLabelFor(r => r.Resource.ResourceOperatorPersons[operatorPersonIndex].
                     Acts[operatorPersonActIndex].ActType,
-                    new {@class = "form-control", placeholder = "Введите вид акта"})
-                @Html.ValidationMessageFor(r => r.Resource.ResourceOperatorPersons[operatorPersonIndex].
-                    Acts[operatorPersonActIndex].ActType)
+                    new {@class = "control-label"})
+                <div>
+                    @Html.TextBoxFor(r => r.Resource.ResourceOperatorPersons[operatorPersonIndex].
+                        Acts[operatorPersonActIndex].ActType,
+                        new {@class = "form-control", placeholder = "Введите вид акта"})
+                    @Html.ValidationMessageFor(r => r.Resource.ResourceOperatorPersons[operatorPersonIndex].
+                        Acts[operatorPersonActIndex].ActType)
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="col-xs-12 col-sm-6">
-        <div class="form-group">
-            @Html.RequiredLabelFor(r => r.Resource.ResourceOperatorPersons[operatorPersonIndex].
-                Acts[operatorPersonActIndex].ActName,
-                new {@class = "control-label"})
-            <div>
-                @Html.TextBoxFor(r => r.Resource.ResourceOperatorPersons[operatorPersonIndex].
+        <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+                @Html.RequiredLabelFor(r => r.Resource.ResourceOperatorPersons[operatorPersonIndex].
                     Acts[operatorPersonActIndex].ActName,
-                    new {@class = "form-control", placeholder = "Введите наименование акта"})
-                @Html.ValidationMessageFor(r => r.Resource.ResourceOperatorPersons[operatorPersonIndex].
-                    Acts[operatorPersonActIndex].ActName)
+                    new {@class = "control-label"})
+                <div>
+                    @Html.TextBoxFor(r => r.Resource.ResourceOperatorPersons[operatorPersonIndex].
+                        Acts[operatorPersonActIndex].ActName,
+                        new {@class = "form-control", placeholder = "Введите наименование акта"})
+                    @Html.ValidationMessageFor(r => r.Resource.ResourceOperatorPersons[operatorPersonIndex].
+                        Acts[operatorPersonActIndex].ActName)
+                </div>
             </div>
         </div>
     </div>
-
-    <div class="col-xs-12 col-sm-6 rr-resource-date">
-        <div class="form-group">
-            @Html.RequiredLabelFor(r => r.Resource.ResourceOperatorPersons[operatorPersonIndex].
+    <div class="clearfix"></div>
+    <div>
+        <div class="col-xs-12 col-sm-6 rr-resource-date">
+            <div class="form-group">
+                @Html.RequiredLabelFor(r => r.Resource.ResourceOperatorPersons[operatorPersonIndex].
                 Acts[operatorPersonActIndex].ActDate,
-                new {@class = "control-label"})
-            <div>
-                @Html.TextBoxFor(r => r.Resource.ResourceOperatorPersons[operatorPersonIndex].
+                new { @class = "control-label" })
+                <div>
+                    @Html.TextBoxFor(r => r.Resource.ResourceOperatorPersons[operatorPersonIndex].
                              Acts[operatorPersonActIndex].ActDate, "{0:dd.MM.yyyy}",
-                    new {@class = "form-control", placeholder = "Введите дату акта"})
-                @Html.ValidationMessageFor(r => r.Resource.ResourceOperatorPersons[operatorPersonIndex].
+                    new { @class = "form-control", placeholder = "Введите дату акта" })
+                    @Html.ValidationMessageFor(r => r.Resource.ResourceOperatorPersons[operatorPersonIndex].
                     Acts[operatorPersonActIndex].ActDate)
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="col-xs-12 col-sm-6">
-        <div class="form-group">
-            @Html.RequiredLabelFor(r => r.Resource.ResourceOperatorPersons[operatorPersonIndex].
+        <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+                @Html.RequiredLabelFor(r => r.Resource.ResourceOperatorPersons[operatorPersonIndex].
                 Acts[operatorPersonActIndex].ActNumber,
-                new {@class = "control-label"})
-            <div>
-                @Html.TextBoxFor(r => r.Resource.ResourceOperatorPersons[operatorPersonIndex].
+                new { @class = "control-label" })
+                <div>
+                    @Html.TextBoxFor(r => r.Resource.ResourceOperatorPersons[operatorPersonIndex].
                     Acts[operatorPersonActIndex].ActNumber,
-                    new {@class = "form-control", placeholder = "Введите номер акта"})
-                @Html.ValidationMessageFor(r => r.Resource.ResourceOperatorPersons[operatorPersonIndex].
+                    new { @class = "form-control", placeholder = "Введите номер акта" })
+                    @Html.ValidationMessageFor(r => r.Resource.ResourceOperatorPersons[operatorPersonIndex].
                     Acts[operatorPersonActIndex].ActNumber)
+                </div>
             </div>
         </div>
     </div>
@@ -88,20 +92,21 @@
                     Acts[operatorPersonActIndex].IdFile)
             </div>
             <label class="btn btn-default pull-left">
+                <span class="glyphicon glyphicon-link"></span>
                 Загрузить файл
-                <input type="file" name="File.ResourceOperatorPersons[@(operatorPersonIndex)].Acts[@(operatorPersonActIndex)]"
-                       id="Resource_ResourceOperatorPersons_@(operatorPersonIndex)__Acts_@(operatorPersonActIndex)" />
+                <input type="file" name="Files.ResourceOperatorPersons[@(operatorPersonIndex)].Acts[@(operatorPersonActIndex)]"
+                       id="Resource_ResourceOperatorPersons_@(operatorPersonIndex)__Acts_@(operatorPersonActIndex)"/>
             </label>
-            <div class="rr-act-file-name pull-left text-info"></div>
+            <div class="rr-act-file-name col-md-8 col-sm-6 col-xs-4 pull-left text-info"></div>
             @if (Model.Resource.ResourceOperatorPersons[operatorPersonIndex].
-                Acts[operatorPersonActIndex].IdFile != default(int))
+                Acts[operatorPersonActIndex].IdFile != null)
             {
                 <div class="rr-act-file-link pull-left text-info">
                     <a href="@Url.Action("LoadFile", "Resource", new
                              {
                                  Model.Resource.ResourceOperatorPersons[operatorPersonIndex].
                                      Acts[operatorPersonActIndex].IdFile
-                             })"></a>
+                             })">Скачать</a>
                 </div>
             }
         </div>

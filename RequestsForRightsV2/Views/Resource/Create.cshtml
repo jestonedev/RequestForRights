@@ -7,7 +7,7 @@
 
 <h2>Новый информационный ресурс</h2>
 
-@using (Html.BeginForm("Create", "Resource", new { }, FormMethod.Post))
+@using (Html.BeginForm("Create", "Resource", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     <div class="text-center">
         @Html.ValidationSummary(true)
@@ -37,5 +37,6 @@
 @section scripts {
     @Styles.Render("~/Content/bootstrap-datepicker")
     @Scripts.Render("~/bundles/bootstrap-datepicker")
+    @Scripts.Render("~/bundles/inputmask")
     @Scripts.Render("~/bundles/rr-resource.common")
 }

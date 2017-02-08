@@ -15,62 +15,66 @@
 
 <li class="list-group-item clearfix rr-operator-act rr-col-sm-no-side-padding-always">
     @Html.HiddenFor(r => r.Resource.ResourceOperatorActs[operatorActIndex].IdResourceOperatorAct)
-    <div class="col-xs-12 col-sm-6">
-        <div class="form-group">
-            @Html.RequiredLabelFor(r => r.Resource.
-                ResourceOperatorActs[operatorActIndex].ActType,
-                new { @class = "control-label" })
-            <div>
-                @Html.TextBoxFor(r => r.Resource.
+    <div>
+        <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+                @Html.RequiredLabelFor(r => r.Resource.
                     ResourceOperatorActs[operatorActIndex].ActType,
-                    new { @class = "form-control", placeholder = "Введите вид акта" })
-                @Html.ValidationMessageFor(r => r.Resource.
-                    ResourceOperatorActs[operatorActIndex].ActType)
+                    new {@class = "control-label"})
+                <div>
+                    @Html.TextBoxFor(r => r.Resource.
+                        ResourceOperatorActs[operatorActIndex].ActType,
+                        new {@class = "form-control", placeholder = "Введите вид акта"})
+                    @Html.ValidationMessageFor(r => r.Resource.
+                        ResourceOperatorActs[operatorActIndex].ActType)
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="col-xs-12 col-sm-6">
-        <div class="form-group">
-            @Html.RequiredLabelFor(r => r.Resource.
-                ResourceOperatorActs[operatorActIndex].ActName,
-                new { @class = "control-label" })
-            <div>
-                @Html.TextBoxFor(r => r.Resource.
+        <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+                @Html.RequiredLabelFor(r => r.Resource.
                     ResourceOperatorActs[operatorActIndex].ActName,
-                    new { @class = "form-control", placeholder = "Введите наименование акта" })
-                @Html.ValidationMessageFor(r => r.Resource.
-                    ResourceOperatorActs[operatorActIndex].ActName)
+                    new {@class = "control-label"})
+                <div>
+                    @Html.TextBoxFor(r => r.Resource.
+                        ResourceOperatorActs[operatorActIndex].ActName,
+                        new {@class = "form-control", placeholder = "Введите наименование акта"})
+                    @Html.ValidationMessageFor(r => r.Resource.
+                        ResourceOperatorActs[operatorActIndex].ActName)
+                </div>
             </div>
         </div>
     </div>
-
-    <div class="col-xs-12 col-sm-6 rr-resource-date">
-        <div class="form-group">
-            @Html.RequiredLabelFor(r => r.Resource.
+    <div class="clearfix"></div>
+    <div>
+        <div class="col-xs-12 col-sm-6 rr-resource-date">
+            <div class="form-group">
+                @Html.RequiredLabelFor(r => r.Resource.
                 ResourceOperatorActs[operatorActIndex].ActDate,
                 new { @class = "control-label" })
-            <div>
-                @Html.TextBoxFor(r => r.Resource.
+                <div>
+                    @Html.TextBoxFor(r => r.Resource.
                              ResourceOperatorActs[operatorActIndex].ActDate, "{0:dd.MM.yyyy}",
                     new { @class = "form-control", placeholder = "Введите дату акта" })
-                @Html.ValidationMessageFor(r => r.Resource.
+                    @Html.ValidationMessageFor(r => r.Resource.
                     ResourceOperatorActs[operatorActIndex].ActDate)
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="col-xs-12 col-sm-6">
-        <div class="form-group">
-            @Html.RequiredLabelFor(r => r.Resource.
+        <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+                @Html.RequiredLabelFor(r => r.Resource.
                 ResourceOperatorActs[operatorActIndex].ActNumber,
                 new { @class = "control-label" })
-            <div>
-                @Html.TextBoxFor(r => r.Resource.
+                <div>
+                    @Html.TextBoxFor(r => r.Resource.
                     ResourceOperatorActs[operatorActIndex].ActNumber,
                     new { @class = "form-control", placeholder = "Введите номер акта" })
-                @Html.ValidationMessageFor(r => r.Resource.
+                    @Html.ValidationMessageFor(r => r.Resource.
                     ResourceOperatorActs[operatorActIndex].ActNumber)
+                </div>
             </div>
         </div>
     </div>
@@ -82,23 +86,26 @@
                     ResourceOperatorActs[operatorActIndex].IdFile)
             </div>
             <label class="btn btn-default pull-left">
+                <span class="glyphicon glyphicon-link"></span>
                 Загрузить файл
-                <input type="file" name="File.ResourceOperatorActs[@(operatorActIndex)]"
-                       id="ResourceOperatorActs_@(operatorActIndex)" />
+                <input type="file" name="Files.ResourceOperatorActs[@(operatorActIndex)]"
+                       id="ResourceOperatorActs_@(operatorActIndex)"/>
             </label>
-            <div class="rr-act-file-name pull-left text-info"></div>
+            <div class="rr-act-file-name col-md-8 col-sm-6 col-xs-4 pull-left text-info"></div>
             @if (Model.Resource.
-                ResourceOperatorActs[operatorActIndex].IdFile != default(int))
+                ResourceOperatorActs[operatorActIndex].IdFile != null)
             {
                 <div class="rr-act-file-link pull-left text-info">
                     <a href="@Url.Action("LoadFile", "Resource", new
                              {
                                  Model.Resource.
                                      ResourceOperatorActs[operatorActIndex].IdFile
-                             })"></a>
+                             })">Скачать</a>
                 </div>
             }
         </div>
-        <button name="deleteOperatorAct" class="btn btn-danger pull-right">Удалить акт</button>
+        <div>
+            <button name="deleteOperatorAct" class="btn btn-danger pull-right">Удалить акт</button>
+        </div>
     </div>
 </li>

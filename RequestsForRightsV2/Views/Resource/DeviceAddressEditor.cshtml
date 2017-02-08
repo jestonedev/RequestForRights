@@ -26,76 +26,89 @@
             </div>
         </div>
     </div>
-    <h4 class="rr-resource-form-group-header">
-        Адрес
-    </h4>
-    <div class="col-xs-12 col-sm-6">
-        <div class="form-group">
-            @Html.RequiredLabelFor(r => r.Resource.ResourceDeviceAddresses[deviceAddressIndex].AddressIndex,
-                new { @class = "control-label" })
-            <div>
-                @Html.TextBoxFor(r => r.Resource.ResourceDeviceAddresses[deviceAddressIndex].AddressIndex,
-                    new { @class = "form-control", placeholder = "Введите индекс" })
-                @Html.ValidationMessageFor(r => r.Resource.ResourceDeviceAddresses[deviceAddressIndex].AddressIndex)
-            </div>
+    <div class="panel panel-primary rr-resource-address-panel">
+        <div class="panel-heading">
+            Адрес
         </div>
-    </div>
-    <div class="col-xs-12 col-sm-6">
-        <div class="form-group">
-            @Html.RequiredLabelFor(r => r.Resource.ResourceDeviceAddresses[deviceAddressIndex].AddressRegion,
-                new { @class = "control-label" })
+        <div class="panel-body rr-col-sm-no-side-padding-always">
+
             <div>
-                @Html.TextBoxFor(r => r.Resource.ResourceDeviceAddresses[deviceAddressIndex].AddressRegion,
-                    new { @class = "form-control", placeholder = "Введите регион" })
-                @Html.ValidationMessageFor(r => r.Resource.ResourceDeviceAddresses[deviceAddressIndex].AddressRegion)
+                <div class="col-xs-12 col-sm-6 rr-resource-address-index">
+                    <div class="form-group">
+                        @Html.RequiredLabelFor(r => r.Resource.ResourceDeviceAddresses[deviceAddressIndex].AddressIndex,
+                            new { @class = "control-label" })
+                        <div>
+                            @Html.TextBoxFor(r => r.Resource.ResourceDeviceAddresses[deviceAddressIndex].AddressIndex,
+                                new { @class = "form-control", placeholder = "Введите индекс" })
+                            @Html.ValidationMessageFor(r => r.Resource.ResourceDeviceAddresses[deviceAddressIndex].AddressIndex)
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                    <div class="form-group">
+                        @Html.RequiredLabelFor(r => r.Resource.ResourceDeviceAddresses[deviceAddressIndex].AddressRegion,
+                            new { @class = "control-label" })
+                        <div>
+                            @Html.TextBoxFor(r => r.Resource.ResourceDeviceAddresses[deviceAddressIndex].AddressRegion,
+                                new { @class = "form-control", placeholder = "Введите регион" })
+                            @Html.ValidationMessageFor(r => r.Resource.ResourceDeviceAddresses[deviceAddressIndex].AddressRegion)
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-    <div class="col-xs-12 col-sm-6">
-        <div class="form-group">
-            @Html.RequiredLabelFor(r => r.Resource.ResourceDeviceAddresses[deviceAddressIndex].AddressArea,
-                new { @class = "control-label" })
+            <div class="clearfix"></div>
             <div>
-                @Html.TextBoxFor(r => r.Resource.ResourceDeviceAddresses[deviceAddressIndex].AddressArea,
+                <div class="col-xs-12 col-sm-6">
+                    <div class="form-group">
+                        @Html.RequiredLabelFor(r => r.Resource.ResourceDeviceAddresses[deviceAddressIndex].AddressArea,
+                new { @class = "control-label" })
+                        <div>
+                            @Html.TextBoxFor(r => r.Resource.ResourceDeviceAddresses[deviceAddressIndex].AddressArea,
                     new { @class = "form-control", placeholder = "Введите район" })
-                @Html.ValidationMessageFor(r => r.Resource.ResourceDeviceAddresses[deviceAddressIndex].AddressArea)
-            </div>
-        </div>
-    </div>
-    <div class="col-xs-12 col-sm-6">
-        <div class="form-group">
-            @Html.RequiredLabelFor(r => r.Resource.ResourceDeviceAddresses[deviceAddressIndex].AddressCity,
+                            @Html.ValidationMessageFor(r => r.Resource.ResourceDeviceAddresses[deviceAddressIndex].AddressArea)
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                    <div class="form-group">
+                        @Html.RequiredLabelFor(r => r.Resource.ResourceDeviceAddresses[deviceAddressIndex].AddressCity,
                 new { @class = "control-label" })
-            <div>
-                @Html.TextBoxFor(r => r.Resource.ResourceDeviceAddresses[deviceAddressIndex].AddressCity,
+                        <div>
+                            @Html.TextBoxFor(r => r.Resource.ResourceDeviceAddresses[deviceAddressIndex].AddressCity,
                     new { @class = "form-control", placeholder = "Введите город" })
-                @Html.ValidationMessageFor(r => r.Resource.ResourceDeviceAddresses[deviceAddressIndex].AddressCity)
+                            @Html.ValidationMessageFor(r => r.Resource.ResourceDeviceAddresses[deviceAddressIndex].AddressCity)
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-    <div class="col-xs-12 col-sm-6">
-        <div class="form-group">
-            @Html.RequiredLabelFor(r => r.Resource.ResourceDeviceAddresses[deviceAddressIndex].AddressStreet,
+            <div class="clearfix"></div>
+            <div>
+                <div class="col-xs-12 col-sm-6">
+                    <div class="form-group">
+                        @Html.RequiredLabelFor(r => r.Resource.ResourceDeviceAddresses[deviceAddressIndex].AddressStreet,
             new { @class = "control-label" })
-            <div>
-                @Html.TextBoxFor(r => r.Resource.ResourceDeviceAddresses[deviceAddressIndex].AddressStreet,
+                        <div>
+                            @Html.TextBoxFor(r => r.Resource.ResourceDeviceAddresses[deviceAddressIndex].AddressStreet,
                 new { @class = "form-control", placeholder = "Введите улицу" })
-                @Html.ValidationMessageFor(r => r.Resource.ResourceDeviceAddresses[deviceAddressIndex].AddressStreet)
-            </div>
-        </div>
-    </div>
-    <div class="col-xs-12 col-sm-6">
-        <div class="form-group">
-            @Html.RequiredLabelFor(r => r.Resource.ResourceDeviceAddresses[deviceAddressIndex].AddressHouse,
+                            @Html.ValidationMessageFor(r => r.Resource.ResourceDeviceAddresses[deviceAddressIndex].AddressStreet)
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                    <div class="form-group">
+                        @Html.RequiredLabelFor(r => r.Resource.ResourceDeviceAddresses[deviceAddressIndex].AddressHouse,
                 new { @class = "control-label" })
-            <div>
-                @Html.TextBoxFor(r => r.Resource.ResourceDeviceAddresses[deviceAddressIndex].AddressHouse,
+                        <div>
+                            @Html.TextBoxFor(r => r.Resource.ResourceDeviceAddresses[deviceAddressIndex].AddressHouse,
                     new { @class = "form-control", placeholder = "Введите дом" })
-                @Html.ValidationMessageFor(r => r.Resource.ResourceDeviceAddresses[deviceAddressIndex].AddressHouse)
+                            @Html.ValidationMessageFor(r => r.Resource.ResourceDeviceAddresses[deviceAddressIndex].AddressHouse)
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
     <div class="col-xs-12">
-        <button name="deleteDeviceAddress" class="btn btn-danger pull-right">Удалить адрес</button>
+        <button name="deleteDeviceAddress" class="btn btn-danger pull-right">Удалить сведения</button>
     </div>
 </li>

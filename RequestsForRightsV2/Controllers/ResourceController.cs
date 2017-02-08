@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity.Infrastructure;
+using System.IO;
 using System.Web.Mvc;
 using RequestsForRights.Domain.Entities;
 using RequestsForRights.Infrastructure.Helpers;
 using RequestsForRights.Infrastructure.Security.Interfaces;
 using RequestsForRights.Infrastructure.Services.Interfaces;
 using RequestsForRights.Models.FilterOptions;
+using RequestsForRights.Models.Models;
 using RequestsForRights.Models.ViewModels;
 
 namespace RequestsForRights.Controllers
@@ -58,7 +60,8 @@ namespace RequestsForRights.Controllers
         [HttpGet]
         public ActionResult Update(int id)
         {
-            if (!_securityService.CanUpdate())
+            var resource = _resourceService.GetResourceBy(id);
+            if (!_securityService.CanUpdate(resource))
             {
                 return RedirectToAction("ForbiddenError", "Home");
             }
@@ -67,7 +70,7 @@ namespace RequestsForRights.Controllers
         }
 
         [HttpPut]
-        public ActionResult Update(ResourceViewModel resourceViewModel)
+        public ActionResult Update(ResourceViewModel resourceViewModel, ResourceActFilesModel files)
         {
             if (resourceViewModel == null || resourceViewModel.Resource == null)
             {
@@ -91,12 +94,22 @@ namespace RequestsForRights.Controllers
             }
             try
             {
-                _resourceService.UpdateResource(resourceViewModel.Resource);
+                _resourceService.UpdateResource(resourceViewModel.Resource, files);
                 _resourceService.SaveChanges();
             }
             catch (DbUpdateException e)
             {
                 return RedirectToAction("ConflictError", "Home", 
+                    new { message = ExceptionHelper.RollToInnerException(e).Message });
+            }
+            catch (RetryLimitExceededException e)
+            {
+                return RedirectToAction("ServerError", "Home",
+                    new { message = ExceptionHelper.RollToInnerException(e).Message });
+            }
+            catch (IOException e)
+            {
+                return RedirectToAction("ServerError", "Home",
                     new { message = ExceptionHelper.RollToInnerException(e).Message });
             }
             return Request["returnUri"] != null ? (ActionResult)Redirect(Request["returnUri"]) :
@@ -105,7 +118,8 @@ namespace RequestsForRights.Controllers
 
         public ActionResult Detail(int id)
         {
-            if (!_securityService.CanRead())
+            var resource = _resourceService.GetResourceBy(id);
+            if (!_securityService.CanRead(resource))
             {
                 return RedirectToAction("ForbiddenError", "Home");
             }
@@ -116,8 +130,8 @@ namespace RequestsForRights.Controllers
         [HttpDelete]
         public ActionResult Delete(int id)
         {
-            var resource = _resourceService.GetResourceViewModelBy(id);
-            if (!_securityService.CanDelete(resource.Resource))
+            var resource = _resourceService.GetResourceBy(id);
+            if (!_securityService.CanDelete(resource))
             {
                 return RedirectToAction("ForbiddenError", "Home");
             }
@@ -146,7 +160,7 @@ namespace RequestsForRights.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(ResourceViewModel resourceViewModel)
+        public ActionResult Create(ResourceViewModel resourceViewModel, ResourceActFilesModel files)
         {
             if (resourceViewModel == null || resourceViewModel.Resource == null)
             {
@@ -170,13 +184,23 @@ namespace RequestsForRights.Controllers
             }
             try
             {
-                _resourceService.InsertResource(resourceViewModel.Resource);
+                _resourceService.InsertResource(resourceViewModel.Resource, files);
                 _resourceService.SaveChanges();
             }
             catch (DbUpdateException e)
             {
                 return RedirectToAction("ConflictError", "Home",
+                    new {message = ExceptionHelper.RollToInnerException(e).Message});
+            }
+            catch (RetryLimitExceededException e)
+            {
+                return RedirectToAction("ServerError", "Home",
                     new { message = ExceptionHelper.RollToInnerException(e).Message });
+            }
+            catch (IOException e)
+            {
+                return RedirectToAction("ServerError", "Home",
+                    new {message = ExceptionHelper.RollToInnerException(e).Message});
             }
             return RedirectToAction("Index");
         }
@@ -355,9 +379,23 @@ namespace RequestsForRights.Controllers
             return PartialView("UsingActEditor", emtpyViewModel);
         }
 
-        public FileResult LoadFile(int idFile)
+        public ActionResult LoadFile(int idFile)
         {
-            return null;
+            if (!_securityService.CanRead())
+            {
+                return RedirectToAction("ForbiddenError", "Home");
+            }
+            var file = _resourceService.GetActFile(idFile);
+            return File(file.FileContent, file.FileContentType, file.FileOriginalName);
+        }
+
+        public ActionResult GetDepartmentInfo(int idDepartment)
+        {
+            if (!_securityService.CanRead())
+            {
+                return RedirectToAction("ForbiddenError", "Home");
+            }
+            return Json(_resourceService.GetDepartmentInfo(idDepartment), JsonRequestBehavior.AllowGet);
         }
     }
 }

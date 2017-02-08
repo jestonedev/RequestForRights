@@ -16,6 +16,7 @@ namespace RequestsForRights.Domain.Entities
         [DisplayName("Индекс")]
         [MaxLength(6)]
         [StringLength(6, ErrorMessage = "Максимальная длина почтового индекса 6 символов")]
+        [RegularExpression("^[0-9]{6}$", ErrorMessage = "Некорректно задан почтовый индекс")]
         public string AddressIndex { get; set; }
         [DisplayName("Регион")]
         public string AddressRegion { get; set; }

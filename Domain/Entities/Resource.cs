@@ -34,12 +34,14 @@ namespace RequestsForRights.Domain.Entities
         [DisplayName("Департамент-оператор")]
         [Required(ErrorMessage = "Департамент-оператор является обязательным для заполнения")]
         [DefaultValue(24)]
-        public int? IdOperatorDepartment { get; set; }
+        public int IdOperatorDepartment { get; set; }
         [ForeignKey("IdOperatorDepartment")]
         public virtual Department OperatorDepartment { get; set; }
-        public IList<ResourceOwnerPerson> ResourceOwnerPersons { get; set; }
-        public IList<ResourceOperatorPerson> ResourceOperatorPersons { get; set; }
+        public virtual IList<ResourceOwnerPerson> ResourceOwnerPersons { get; set; }
+        public virtual IList<ResourceOperatorPerson> ResourceOperatorPersons { get; set; }
         [DisplayName("Email администратора")]
+        [RegularExpression(@"^(([^<>()\[\]\\.,;:\s@""]+(\.[^<>()\[\]\\.,;:\s@""]+)*)|("".+""))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$",
+            ErrorMessage = "Некорректно задан почтовый адрес")]
         public string EmailAdministrator { get; set; }
         [DisplayName("ИНН субъекта контроля")]
         public string InnControlSubject { get; set; }
@@ -48,13 +50,13 @@ namespace RequestsForRights.Domain.Entities
         public virtual ResourceInformationType ResourceInformationType { get; set; }
         [DisplayName("Сведения о персональных данных, обрабатываемых информационной системой")]
         public string PersonalInfoDescription { get; set; }
-        public IList<ResourceOperatorAct> ResourceOperatorActs { get; set; }
-        public IList<ResourceUsingAct> ResourceUsingActs { get; set; }
-        public IList<ResourceAuthorityAct> ResourceAuthorityActs { get; set; }
+        public virtual IList<ResourceOperatorAct> ResourceOperatorActs { get; set; }
+        public virtual IList<ResourceUsingAct> ResourceUsingActs { get; set; }
+        public virtual IList<ResourceAuthorityAct> ResourceAuthorityActs { get; set; }
         [DisplayName("Информационная система не имеет доступа к сети Интернет")]
         [DefaultValue(false)]
         public bool HasNotInternetAccess { get; set; }
-        public IList<ResourceInternetAddress> ResourceInternetAddresses { get; set; }
-        public IList<ResourceDeviceAddress> ResourceDeviceAddresses { get; set; }
+        public virtual IList<ResourceInternetAddress> ResourceInternetAddresses { get; set; }
+        public virtual IList<ResourceDeviceAddress> ResourceDeviceAddresses { get; set; }
     }
 }

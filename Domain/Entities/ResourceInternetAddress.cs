@@ -17,17 +17,17 @@ namespace RequestsForRights.Domain.Entities
         public string DeviceNumber { get; set; }
         [DisplayName("IP-адрес оборудования")]
         [MaxLength(15)]
-        [RegularExpression(@"\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b",
+        [RegularExpression(@"^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$",
             ErrorMessage = "Некорректно задан IP-адрес")]
         public string DeviceIpAddress { get; set; }
         [DisplayName("IP-адрес шлюза")]
         [MaxLength(15)]
-        [RegularExpression(@"\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b",
+        [RegularExpression(@"^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$",
             ErrorMessage = "Некорректно задан IP-адрес")]
         public string GateIpAddress { get; set; }
         [DisplayName("IP-адрес DHCP")]
         [MaxLength(15)]
-        [RegularExpression(@"\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b",
+        [RegularExpression(@"^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$",
             ErrorMessage = "Некорректно задан IP-адрес")]
         public string DhcpIpAddress { get; set; }
         [DisplayName("Динамический IP-адрес")]
@@ -37,7 +37,7 @@ namespace RequestsForRights.Domain.Entities
         public string DomainNames { get; set; }
         [DisplayName("IP-адрес домена")]
         [MaxLength(15)]
-        [RegularExpression(@"\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b",
+        [RegularExpression(@"^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$",
             ErrorMessage = "Некорректно задан IP-адрес")]
         public string DomainIpAddress { get; set; }
         [DefaultValue(false)]

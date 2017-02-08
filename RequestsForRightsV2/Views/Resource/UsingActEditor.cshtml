@@ -15,62 +15,66 @@
 
 <li class="list-group-item clearfix rr-using-act rr-col-sm-no-side-padding-always">
     @Html.HiddenFor(r => r.Resource.ResourceUsingActs[usingActIndex].IdResourceUsingAct)
-    <div class="col-xs-12 col-sm-6">
-        <div class="form-group">
-            @Html.RequiredLabelFor(r => r.Resource.
-                ResourceUsingActs[usingActIndex].ActType,
-                new { @class = "control-label" })
-            <div>
-                @Html.TextBoxFor(r => r.Resource.
+    <div>
+        <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+                @Html.RequiredLabelFor(r => r.Resource.
                     ResourceUsingActs[usingActIndex].ActType,
-                    new { @class = "form-control", placeholder = "Введите вид акта" })
-                @Html.ValidationMessageFor(r => r.Resource.
-                    ResourceUsingActs[usingActIndex].ActType)
+                    new {@class = "control-label"})
+                <div>
+                    @Html.TextBoxFor(r => r.Resource.
+                        ResourceUsingActs[usingActIndex].ActType,
+                        new {@class = "form-control", placeholder = "Введите вид акта"})
+                    @Html.ValidationMessageFor(r => r.Resource.
+                        ResourceUsingActs[usingActIndex].ActType)
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="col-xs-12 col-sm-6">
-        <div class="form-group">
-            @Html.RequiredLabelFor(r => r.Resource.
-                ResourceUsingActs[usingActIndex].ActName,
-                new { @class = "control-label" })
-            <div>
-                @Html.TextBoxFor(r => r.Resource.
+        <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+                @Html.RequiredLabelFor(r => r.Resource.
                     ResourceUsingActs[usingActIndex].ActName,
-                    new { @class = "form-control", placeholder = "Введите наименование акта" })
-                @Html.ValidationMessageFor(r => r.Resource.
-                    ResourceUsingActs[usingActIndex].ActName)
+                    new {@class = "control-label"})
+                <div>
+                    @Html.TextBoxFor(r => r.Resource.
+                        ResourceUsingActs[usingActIndex].ActName,
+                        new {@class = "form-control", placeholder = "Введите наименование акта"})
+                    @Html.ValidationMessageFor(r => r.Resource.
+                        ResourceUsingActs[usingActIndex].ActName)
+                </div>
             </div>
         </div>
     </div>
-
-    <div class="col-xs-12 col-sm-6 rr-resource-date">
-        <div class="form-group">
-            @Html.RequiredLabelFor(r => r.Resource.
+    <div class="clearfix"></div>
+    <div>
+        <div class="col-xs-12 col-sm-6 rr-resource-date">
+            <div class="form-group">
+                @Html.RequiredLabelFor(r => r.Resource.
                 ResourceUsingActs[usingActIndex].ActDate,
                 new { @class = "control-label" })
-            <div>
-                @Html.TextBoxFor(r => r.Resource.
+                <div>
+                    @Html.TextBoxFor(r => r.Resource.
                              ResourceUsingActs[usingActIndex].ActDate, "{0:dd.MM.yyyy}",
                     new { @class = "form-control", placeholder = "Введите дату акта" })
-                @Html.ValidationMessageFor(r => r.Resource.
+                    @Html.ValidationMessageFor(r => r.Resource.
                     ResourceUsingActs[usingActIndex].ActDate)
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="col-xs-12 col-sm-6">
-        <div class="form-group">
-            @Html.RequiredLabelFor(r => r.Resource.
+        <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+                @Html.RequiredLabelFor(r => r.Resource.
                 ResourceUsingActs[usingActIndex].ActNumber,
                 new { @class = "control-label" })
-            <div>
-                @Html.TextBoxFor(r => r.Resource.
+                <div>
+                    @Html.TextBoxFor(r => r.Resource.
                     ResourceUsingActs[usingActIndex].ActNumber,
                     new { @class = "form-control", placeholder = "Введите номер акта" })
-                @Html.ValidationMessageFor(r => r.Resource.
+                    @Html.ValidationMessageFor(r => r.Resource.
                     ResourceUsingActs[usingActIndex].ActNumber)
+                </div>
             </div>
         </div>
     </div>
@@ -82,20 +86,21 @@
                     ResourceUsingActs[usingActIndex].IdFile)
             </div>
             <label class="btn btn-default pull-left">
+                <span class="glyphicon glyphicon-link"></span>
                 Загрузить файл
-                <input type="file" name="File.ResourceUsingActs[@(usingActIndex)]"
-                       id="ResourceUsingActs_@(usingActIndex)" />
+                <input type="file" name="Files.ResourceUsingActs[@(usingActIndex)]"
+                       id="ResourceUsingActs_@(usingActIndex)"/>
             </label>
-            <div class="rr-act-file-name pull-left text-info"></div>
+            <div class="rr-act-file-name col-md-8 col-sm-6 col-xs-4 pull-left text-info"></div>
             @if (Model.Resource.
-                ResourceUsingActs[usingActIndex].IdFile != default(int))
+                ResourceUsingActs[usingActIndex].IdFile != null)
             {
                 <div class="rr-act-file-link pull-left text-info">
                     <a href="@Url.Action("LoadFile", "Resource", new
                              {
                                  Model.Resource.
                                      ResourceUsingActs[usingActIndex].IdFile
-                             })"></a>
+                             })">Скачать</a>
                 </div>
             }
         </div>

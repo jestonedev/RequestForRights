@@ -157,7 +157,7 @@ button.rr-ext-filter-button.collapsed:hover {
 }
 
 .rr-add-right-panel {
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
 .tab-content > .rr-tab-pane, .rr-request-user-wrapper .collapse {
@@ -549,6 +549,10 @@ button.rr-ext-filter-button.collapsed:hover {
     padding: 15px 0;
 }
 
+.rr-rights {
+    margin-bottom: 15px;
+}
+
 .rr-add-internet-address-panel, .rr-add-device-address-panel,
 .rr-add-owner-person-panel, .rr-add-operator-person-panel,
 .rr-add-owner-person-act-panel, .rr-add-operator-person-act-panel,
@@ -566,7 +570,7 @@ button.rr-ext-filter-button.collapsed:hover {
 }
 
 .panel .rr-internet-address .checkbox-inline {
-    margin-top: 5px;
+    margin-top: 7px;
 }
 
 .rr-resource-label-stub {
@@ -602,10 +606,6 @@ button.rr-ext-filter-button.collapsed:hover {
     margin-right: 15px;
 }
 
-.rr-resource-equal-address-checkbox {
-    padding-bottom: 5px;
-}
-
 .rr-act-file input[type="file"] {
     position: absolute;
     width: 1px;
@@ -619,8 +619,66 @@ button.rr-ext-filter-button.collapsed:hover {
 
 .rr-act-file-link, .rr-act-file-name {
     padding: 6px;
+    padding-left: 15px;
+}
+
+.rr-act-file-name {
+    display: none;
+    -moz-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 .rr-resource-has-not-internet-access-checkbox {
+    margin-bottom: 10px;
+}
+
+.rr-detail-resource-tab-content dl {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.rr-detail-resource-tab-content dt {
+    margin-top: 10px;
+}
+
+.rr-detail-resource-tab-content dl.dl-horizontal dt {
+    margin-top: 0;
+}
+
+.rr-detail-resource-panel-body {
+    padding-top: 5px;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.rr-detail-resource-list-group-item {
+    padding-top: 5px;
+    padding-left: 0;
+    padding-right: 0;
+    padding-bottom: 15px;
+}
+
+
+.rr-detail-resource-tab-content .rr-resource-address-panel {
+    margin-top: 15px;
+    margin-bottom: 0;
+}
+
+.rr-detail-resource-tab-content .rr-resource-person-panel {
+    margin-top: 15px;
+    margin-bottom: 5px;
+}
+
+.rr-detail-resource-tab-content .rr-owner-persons,
+.rr-detail-resource-tab-content .rr-operator-persons,
+.rr-detail-resource-tab-content .rr-owner-person-acts,
+.rr-detail-resource-tab-content .rr-operator-person-acts {
+    margin-bottom: 0;
+}
+
+.rr-detail-resource-tab-content .rr-act-file-link {
+    padding: 10px 15px 0;
     margin-bottom: 10px;
 }

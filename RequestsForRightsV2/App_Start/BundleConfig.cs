@@ -48,6 +48,12 @@ namespace RequestsForRights
                 .Include("~/Scripts/globalize/number.js")
                 .Include("~/Scripts/globalize/date.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/inputmask").Include(
+                "~/Scripts/jquery.inputmask/inputmask.js",
+                "~/Scripts/jquery.inputmask/inputmask.extensions.js",
+                "~/Scripts/jquery.inputmask/inputmask.regex.extensions.js",
+                "~/Scripts/jquery.inputmask/jquery.inputmask.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/rr-common").Include("~/Scripts/rr-common.js"));
             bundles.Add(new ScriptBundle("~/bundles/rr-index.common").Include("~/Scripts/rr-index.common.js"));
             bundles.Add(new ScriptBundle("~/bundles/rr-request.common").Include("~/Scripts/rr-request.common.js"));

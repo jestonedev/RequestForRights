@@ -15,5 +15,6 @@ namespace RequestsForRights.Database.Repositories.Interfaces
         Resource UpdateResource(Resource resource);
         Resource InsertResource(Resource resource);
         int SaveChanges();
+        ActFile GetActFile(int idFile);
     }
 }

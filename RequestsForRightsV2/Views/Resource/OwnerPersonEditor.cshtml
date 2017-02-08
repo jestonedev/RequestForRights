@@ -16,13 +16,14 @@
 
 <li class="list-group-item clearfix rr-owner-person rr-col-sm-no-side-padding-always">
     @Html.HiddenFor(r => r.Resource.ResourceOwnerPersons[ownerPersonIndex].IdResourceOwnerPerson)
+    @Html.Hidden("Files.ResourceOwnerPersons[" + ownerPersonIndex + "].IdPerson", Model.Resource.ResourceOwnerPersons[ownerPersonIndex].IdResourceOwnerPerson)
     <div class="col-xs-12">
         <div class="form-group">
             @Html.RequiredLabelFor(r => r.Resource.ResourceOwnerPersons[ownerPersonIndex].Post,
-                new { @class = "control-label" })
+                new {@class = "control-label"})
             <div>
                 @Html.TextBoxFor(r => r.Resource.ResourceOwnerPersons[ownerPersonIndex].Post,
-                    new { @class = "form-control", placeholder = "Введите должность" })
+                    new {@class = "form-control", placeholder = "Введите должность"})
                 @Html.ValidationMessageFor(r => r.Resource.ResourceOwnerPersons[ownerPersonIndex].Post)
             </div>
         </div>
@@ -30,10 +31,10 @@
     <div class="col-xs-12 col-sm-4">
         <div class="form-group">
             @Html.RequiredLabelFor(r => r.Resource.ResourceOwnerPersons[ownerPersonIndex].Surname,
-                new { @class = "control-label" })
+                new {@class = "control-label"})
             <div>
                 @Html.TextBoxFor(r => r.Resource.ResourceOwnerPersons[ownerPersonIndex].Surname,
-                    new { @class = "form-control", placeholder = "Введите фамилию" })
+                    new {@class = "form-control", placeholder = "Введите фамилию"})
                 @Html.ValidationMessageFor(r => r.Resource.ResourceOwnerPersons[ownerPersonIndex].Surname)
             </div>
         </div>
@@ -42,10 +43,10 @@
     <div class="col-xs-12 col-sm-4">
         <div class="form-group">
             @Html.RequiredLabelFor(r => r.Resource.ResourceOwnerPersons[ownerPersonIndex].Name,
-                new { @class = "control-label" })
+                new {@class = "control-label"})
             <div>
                 @Html.TextBoxFor(r => r.Resource.ResourceOwnerPersons[ownerPersonIndex].Name,
-                    new { @class = "form-control", placeholder = "Введите имя" })
+                    new {@class = "form-control", placeholder = "Введите имя"})
                 @Html.ValidationMessageFor(r => r.Resource.ResourceOwnerPersons[ownerPersonIndex].Name)
             </div>
         </div>

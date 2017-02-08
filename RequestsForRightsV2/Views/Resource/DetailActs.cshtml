@@ -1,0 +1,269 @@
+﻿@using System.Globalization
+@model RequestsForRights.Domain.Entities.Resource
+
+<div class="panel panel-primary">
+    <div class="panel-heading">Правовые акты, определяющие оператора ИС</div>
+
+    @if (Model.ResourceOperatorActs != null && Model.ResourceOperatorActs.Any(r => !r.Deleted))
+    {
+        <ul class="list-group">
+            @for (var i = 0; i < Model.ResourceOperatorActs.Count; i++)
+            {
+                if (Model.ResourceOperatorActs[i].Deleted)
+                {
+                    continue;
+                }
+                <li class="list-group-item clearfix rr-col-sm-no-side-padding-always">
+                    <div>
+                        <dl class="col-sm-6">
+                            <dt>@Html.DisplayNameFor(r => r.ResourceOperatorActs[i].ActType)</dt>
+                            <dd>
+                                @if (string.IsNullOrEmpty(Model.ResourceOperatorActs[i].ActType))
+                                {
+                                    <i>Отсутствует</i>
+                                }
+                                else
+                                {
+                                    @Model.ResourceOperatorActs[i].ActType
+                                }
+                            </dd>
+                            <dt>@Html.DisplayNameFor(r => r.ResourceOperatorActs[i].ActDate)</dt>
+                            <dd>
+                                @if (Model.ResourceOperatorActs[i].ActDate == null)
+                                {
+                                    <i>Отсутствует</i>
+                                }
+                                else
+                                {
+                                    @Model.ResourceOperatorActs[i].ActDate.Value.ToString("dd.MM.yyyy", CultureInfo.CurrentCulture)
+                                }
+                            </dd>
+                        </dl>
+
+                        <dl class="col-xs-12 col-sm-6">
+                            <dt>@Html.DisplayNameFor(r => r.ResourceOperatorActs[i].ActName)</dt>
+                            <dd>
+                                @if (string.IsNullOrEmpty(Model.ResourceOperatorActs[i].ActName))
+                                {
+                                    <i>Отсутствует</i>
+                                }
+                                else
+                                {
+                                    @Model.ResourceOperatorActs[i].ActName
+                                }
+                            </dd>
+                        </dl>
+                        <dl class="col-xs-12 col-sm-6">
+                            <dt>@Html.DisplayNameFor(r => r.ResourceOperatorActs[i].ActNumber)</dt>
+                            <dd>
+                                @if (string.IsNullOrEmpty(Model.ResourceOperatorActs[i].ActNumber))
+                                {
+                                    <i>Отсутствует</i>
+                                }
+                                else
+                                {
+                                    @Model.ResourceOperatorActs[i].ActNumber
+                                }
+                            </dd>
+                        </dl>
+                    </div>
+                    @if (Model.ResourceOperatorActs[i].IdFile != null)
+                    {
+                        <div class="clearfix"></div>
+                        <div class="col-xs-12 pull-left text-info rr-act-file-link">
+                            <a href="@Url.Action("LoadFile", "Resource", new
+                                     {
+                                         Model.ResourceOperatorActs[i].IdFile
+                                     })">Скачать</a>
+                        </div>
+                    }
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <div class="panel-body">
+            <div class="text-center">
+                <i>Отсутствуют</i>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="panel panel-primary">
+    <div class="panel-heading">Правовые акты, определяющие порядок размещения и использования информации, размещенной в ИС</div>
+    @if (Model.ResourceUsingActs != null && Model.ResourceUsingActs.Any(r => !r.Deleted))
+    {
+        <ul class="list-group">
+            @for (var i = 0; i < Model.ResourceUsingActs.Count; i++)
+            {
+                if (Model.ResourceUsingActs[i].Deleted)
+                {
+                    continue;
+                }
+                <li class="list-group-item clearfix rr-col-sm-no-side-padding-always">
+                    <div>
+                        <dl class="col-sm-6">
+                            <dt>@Html.DisplayNameFor(r => r.ResourceUsingActs[i].ActType)</dt>
+                            <dd>
+                                @if (string.IsNullOrEmpty(Model.ResourceUsingActs[i].ActType))
+                                {
+                                    <i>Отсутствует</i>
+                                }
+                                else
+                                {
+                                    @Model.ResourceUsingActs[i].ActType
+                                }
+                            </dd>
+                            <dt>@Html.DisplayNameFor(r => r.ResourceUsingActs[i].ActDate)</dt>
+                            <dd>
+                                @if (Model.ResourceUsingActs[i].ActDate == null)
+                                {
+                                    <i>Отсутствует</i>
+                                }
+                                else
+                                {
+                                    @Model.ResourceUsingActs[i].ActDate.Value.ToString("dd.MM.yyyy", CultureInfo.CurrentCulture)
+                                }
+                            </dd>
+                        </dl>
+
+                        <dl class="col-xs-12 col-sm-6">
+                            <dt>@Html.DisplayNameFor(r => r.ResourceUsingActs[i].ActName)</dt>
+                            <dd>
+                                @if (string.IsNullOrEmpty(Model.ResourceUsingActs[i].ActName))
+                                {
+                                    <i>Отсутствует</i>
+                                }
+                                else
+                                {
+                                    @Model.ResourceUsingActs[i].ActName
+                                }
+                            </dd>
+                        </dl>
+                        <dl class="col-xs-12 col-sm-6">
+                            <dt>@Html.DisplayNameFor(r => r.ResourceUsingActs[i].ActNumber)</dt>
+                            <dd>
+                                @if (string.IsNullOrEmpty(Model.ResourceUsingActs[i].ActNumber))
+                                {
+                                    <i>Отсутствует</i>
+                                }
+                                else
+                                {
+                                    @Model.ResourceUsingActs[i].ActNumber
+                                }
+                            </dd>
+                        </dl>
+                    </div>
+                    @if (Model.ResourceUsingActs[i].IdFile != null)
+                    {
+                        <div class="clearfix"></div>
+                        <div class="col-xs-12 pull-left text-info rr-act-file-link">
+                            <a href="@Url.Action("LoadFile", "Resource", new
+                                     {
+                                         Model.ResourceUsingActs[i].IdFile
+                                     })">Скачать</a>
+                        </div>
+                    }
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <div class="panel-body">
+            <div class="text-center">
+                <i>Отсутствуют</i>
+            </div>
+        </div>
+    }
+</div>
+<div class="panel panel-primary">
+    <div class="panel-heading">Правовые акты, устанавливающие полномочия размещения субъектами контроля информации в ИС</div>
+    @if (Model.ResourceAuthorityActs != null && Model.ResourceAuthorityActs.Any(r => !r.Deleted))
+    {
+        <ul class="list-group">
+            @for (var i = 0; i < Model.ResourceAuthorityActs.Count; i++)
+            {
+                if (Model.ResourceAuthorityActs[i].Deleted)
+                {
+                    continue;
+                }
+                <li class="list-group-item clearfix rr-col-sm-no-side-padding-always">
+                    <div>
+                        <dl class="col-sm-6">
+                            <dt>@Html.DisplayNameFor(r => r.ResourceAuthorityActs[i].ActType)</dt>
+                            <dd>
+                                @if (string.IsNullOrEmpty(Model.ResourceAuthorityActs[i].ActType))
+                                {
+                                    <i>Отсутствует</i>
+                                }
+                                else
+                                {
+                                    @Model.ResourceAuthorityActs[i].ActType
+                                }
+                            </dd>
+                            <dt>@Html.DisplayNameFor(r => r.ResourceAuthorityActs[i].ActDate)</dt>
+                            <dd>
+                                @if (Model.ResourceAuthorityActs[i].ActDate == null)
+                                {
+                                    <i>Отсутствует</i>
+                                }
+                                else
+                                {
+                                    @Model.ResourceAuthorityActs[i].ActDate.Value.ToString("dd.MM.yyyy", CultureInfo.CurrentCulture)
+                                }
+                            </dd>
+                        </dl>
+
+                        <dl class="col-xs-12 col-sm-6">
+                            <dt>@Html.DisplayNameFor(r => r.ResourceAuthorityActs[i].ActName)</dt>
+                            <dd>
+                                @if (string.IsNullOrEmpty(Model.ResourceAuthorityActs[i].ActName))
+                                {
+                                    <i>Отсутствует</i>
+                                }
+                                else
+                                {
+                                    @Model.ResourceAuthorityActs[i].ActName
+                                }
+                            </dd>
+                        </dl>
+                        <dl class="col-xs-12 col-sm-6">
+                            <dt>@Html.DisplayNameFor(r => r.ResourceAuthorityActs[i].ActNumber)</dt>
+                            <dd>
+                                @if (string.IsNullOrEmpty(Model.ResourceAuthorityActs[i].ActNumber))
+                                {
+                                    <i>Отсутствует</i>
+                                }
+                                else
+                                {
+                                    @Model.ResourceAuthorityActs[i].ActNumber
+                                }
+                            </dd>
+                        </dl>
+                    </div>
+                    @if (Model.ResourceAuthorityActs[i].IdFile != null)
+                    {
+                        <div class="clearfix"></div>
+                        <div class="col-xs-12 pull-left text-info rr-act-file-link">
+                            <a href="@Url.Action("LoadFile", "Resource", new
+                                     {
+                                         Model.ResourceAuthorityActs[i].IdFile
+                                     })">Скачать</a>
+                        </div>
+                    }
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <div class="panel-body">
+            <div class="text-center">
+                <i>Отсутствуют</i>
+            </div>
+        </div>
+    }
+</div>

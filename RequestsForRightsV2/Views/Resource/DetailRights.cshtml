@@ -1,0 +1,32 @@
+﻿@model RequestsForRights.Domain.Entities.Resource
+
+    @if (Model.ResourceRights != null && Model.ResourceRights.Any(r => !r.Deleted))
+    {
+        <ul class="list-group rr-rights">
+            @for (var i = 0; i < Model.ResourceRights.Count; i++)
+            {
+            if (Model.ResourceRights[i].Deleted)
+            {
+            continue;
+            }
+            <li class="list-group-item">
+                <dl class="dl-horizontal">
+                    <dt>@Html.DisplayNameFor(r => r.ResourceRights[i].Name)</dt>
+                    <dd>@Model.ResourceRights[i].Name</dd>
+                    @if (!string.IsNullOrEmpty(Model.ResourceRights[i].Description))
+                    {
+                        <dt>@Html.DisplayNameFor(r => r.ResourceRights[i].Description)</dt>
+                        <dd>@Html.Raw(Model.ResourceRights[i].Description.Replace("\n", "<br>"))</dd>
+                    }
+                </dl>
+            </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <div class="text-center">
+            <i>Отсутствуют</i>
+        </div>
+    }
+

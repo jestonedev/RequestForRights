@@ -28,6 +28,13 @@ namespace RequestsForRights.Controllers
             return Content(message);
         }
 
+        public ActionResult ServerError(string message)
+        {
+            Response.StatusCode = 409;
+            if (!Request.IsAjaxRequest()) return View("ServerError", (object)message);
+            return Content(message);
+        }
+
         public ActionResult BadRequestError(string message)
         {
             Response.StatusCode = 400;

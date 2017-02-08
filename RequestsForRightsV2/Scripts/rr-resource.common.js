@@ -219,10 +219,11 @@
             ".rr-act-file input[type=\"file\"]",
             function() {
                 var actFile = $(this).closest(".rr-act-file");
-                actFile.find(".rr-id-file input").val(0);
+                actFile.find(".rr-id-file input").val("");
                 actFile.find(".rr-act-file-link").remove();
                 var fileNameParts = $(this).val().split("\\");
                 actFile.find(".rr-act-file-name").text(fileNameParts[fileNameParts.length - 1]);
+                actFile.find(".rr-act-file-name").show();
             });
 
     $("form")
@@ -235,6 +236,176 @@
                     $(".rr-internet-addresses-wrapper").show();
                 }
             });
+
+    $("form")
+        .on("change",
+            ".rr-resource-is-dynamic-ip-address input[type=\"checkbox\"]",
+            function () {
+                var dhcpField = $(this).closest(".rr-internet-address").find(".rr-resource-dhcp-ip-address input");
+                if ($(this).is(":checked")) {
+                    dhcpField.removeAttr("disabled");
+                } else {
+                    dhcpField.attr("disabled", "disabled");
+                    dhcpField.val("");
+                    dhcpField.keyup();
+                }
+            });
+
+    $("form")
+        .on("change",
+            ".rr-resource-equal-address-checkbox input[type=\"checkbox\"]",
+            function() {
+                var addressParts = $(this).closest(".rr-resource-address-panel").find(".rr-resource-address-part");
+                if ($(this).is(":checked")) {
+                    addressParts.hide();
+                } else {
+                    addressParts.show();
+                }
+            });
+
+    $("form").on("click", ".rr-transliterate-button", function(e) {
+        var fromId = $(this).data("from-id");
+        var toId = $(this).data("to-id");
+        $("#" + toId).val(transliterate($("#" + fromId).val()));
+        e.preventDefault();
+        return false;
+    });
+
+    $("form")
+        .on("change",
+            "#Resource_IdDepartment",
+            function () {
+                var layout = $(this).closest(".rr-resource-owner");
+                var select = $(this);
+                loadDepartmentInfo(layout, select);
+            });
+
+    $("form")
+        .on("change",
+            "#Resource_IdOperatorDepartment",
+            function () {
+                var layout = $(this).closest(".rr-resource-operator");
+                var select = $(this);
+                loadDepartmentInfo(layout, select);
+            });
+
+    var departmentsInfo = [];
+
+    function loadDepartmentInfo(departmentInfoLayout, departmentSelect) {
+        var depName = departmentSelect.find("option:selected").text();
+        departmentInfoLayout.find(".rr-resource-department-name").val(depName);
+        var depId = departmentSelect.val();
+        if ($.trim(depId) === "") {
+            clearDepartmentFields(departmentInfoLayout);
+            return;
+        }
+        if (departmentsInfo[depId] !== undefined) {
+            setDepartmentInfo(departmentInfoLayout, departmentsInfo[depId]);
+            return;
+        }
+        disableDepartmentFields(departmentInfoLayout);
+        $.getJSON("/Resource/GetDepartmentInfo", {"IdDepartment": depId},
+        function (departmentInfo) {
+            departmentsInfo[depId] = departmentInfo;
+            if (departmentSelect.val() !== depId) {
+                return;
+            }
+            setDepartmentInfo(departmentInfoLayout, departmentInfo);
+            enableDepartmentFields(departmentInfoLayout);
+        }).fail(function() {
+            enableDepartmentFields(departmentInfoLayout);
+        });
+    }
+
+    function setDepartmentInfo(departmentInfoLayout, departmentInfo) {
+        departmentInfoLayout.find(".rr-resource-department-tax-payer-number input").
+            val(departmentInfo.TaxPayerNumber);
+        departmentInfoLayout.find(".rr-resource-department-official-name-long-ru input").
+            val(departmentInfo.OfficialNameLongRu);
+        departmentInfoLayout.find(".rr-resource-department-official-name-long-en input").
+            val(departmentInfo.OfficialNameLongEn);
+        departmentInfoLayout.find(".rr-resource-department-official-name-short-ru input").
+            val(departmentInfo.OfficialNameShortRu);
+        departmentInfoLayout.find(".rr-resource-department-official-name-short-en input").
+            val(departmentInfo.OfficialNameShortEn);
+        departmentInfoLayout.find(".rr-resource-self-address-index input").
+            val(departmentInfo.SelfAddressIndex);
+        departmentInfoLayout.find(".rr-resource-self-address-region input").
+            val(departmentInfo.SelfAddressRegion);
+        departmentInfoLayout.find(".rr-resource-self-address-area input").
+            val(departmentInfo.SelfAddressArea);
+        departmentInfoLayout.find(".rr-resource-self-address-city input").
+            val(departmentInfo.SelfAddressCity);
+        departmentInfoLayout.find(".rr-resource-self-address-street input").
+            val(departmentInfo.SelfAddressStreet);
+        departmentInfoLayout.find(".rr-resource-self-address-house input").
+            val(departmentInfo.SelfAddressHouse);
+        departmentInfoLayout.find(".rr-resource-control-address-index input").
+            val(departmentInfo.ControlOrgAddressIndex);
+        departmentInfoLayout.find(".rr-resource-control-address-region input").
+            val(departmentInfo.ControlOrgAddressRegion);
+        departmentInfoLayout.find(".rr-resource-control-address-area input").
+            val(departmentInfo.ControlOrgAddressArea);
+        departmentInfoLayout.find(".rr-resource-control-address-city input").
+            val(departmentInfo.ControlOrgAddressCity);
+        departmentInfoLayout.find(".rr-resource-control-address-street input").
+            val(departmentInfo.ControlOrgAddressStreet);
+        departmentInfoLayout.find(".rr-resource-control-address-house input").
+            val(departmentInfo.ControlOrgAddressHouse);
+        var equalAddressCheckbox = departmentInfoLayout
+            .find(".rr-resource-equal-address-checkbox input[type=\"checkbox\"]");
+        equalAddressCheckbox.prop("checked", departmentInfo.СontrolOrgAddressesAreEqualSelfAddress);
+        equalAddressCheckbox.change();
+
+    }
+
+    var fieldsSelectors = [
+        ".rr-resource-department-tax-payer-number",
+        ".rr-resource-department-official-name-long-ru",
+        ".rr-resource-department-official-name-long-en",
+        ".rr-resource-department-official-name-short-ru",
+        ".rr-resource-department-official-name-short-en",
+        ".rr-resource-self-address-index",
+        ".rr-resource-self-address-region",
+        ".rr-resource-self-address-area",
+        ".rr-resource-self-address-city",
+        ".rr-resource-self-address-street",
+        ".rr-resource-self-address-house",
+        ".rr-resource-control-address-index",
+        ".rr-resource-control-address-region",
+        ".rr-resource-control-address-area",
+        ".rr-resource-control-address-city",
+        ".rr-resource-control-address-street",
+        ".rr-resource-control-address-house"
+    ];
+
+    function clearDepartmentFields(departmentInfoLayout) {
+        for (var i = 0; i < fieldsSelectors.length; i++) {
+            departmentInfoLayout.find(fieldsSelectors[i]+" input").val("");
+        }
+        var equalAddressCheckbox = departmentInfoLayout
+            .find(".rr-resource-equal-address-checkbox input[type=\"checkbox\"]");
+        equalAddressCheckbox.prop("checked", false);
+        equalAddressCheckbox.change();
+    }
+
+    function disableDepartmentFields(departmentInfoLayout) {
+        for (var i = 0; i < fieldsSelectors.length; i++) {
+            departmentInfoLayout.find(fieldsSelectors[i] + " input").attr("readonly", "readonly");
+        }
+        var equalAddressCheckbox = departmentInfoLayout
+            .find(".rr-resource-equal-address-checkbox input[type=\"checkbox\"]");
+        equalAddressCheckbox.attr("disabled", "disabled");
+    }
+
+    function enableDepartmentFields(departmentInfoLayout) {
+        for (var i = 0; i < fieldsSelectors.length; i++) {
+            departmentInfoLayout.find(fieldsSelectors[i] + " input").removeAttr("readonly");
+        }
+        var equalAddressCheckbox = departmentInfoLayout
+            .find(".rr-resource-equal-address-checkbox input[type=\"checkbox\"]");
+        equalAddressCheckbox.removeAttr("disabled");
+    }
 
     function updateControls() {
         var rightNamePropRegex = /(Rights)\[\d+\]/;
@@ -346,6 +517,11 @@
         updateControls();
         refreshValidation();
         var addedElem = $(internetAddressLayout.find(".rr-internet-address").last());
+
+        addedElem.find(".rr-resource-ip-address input")
+        .each(function () {
+            $(this).inputmask("Regex", { regex: $(this).data("val-regex-pattern") });
+        });
         $(window).scrollTop(addedElem.offset().top - $(".rr-main-menu").height() - 50);
     }
 
@@ -367,6 +543,14 @@
         updateControls();
         refreshValidation();
         var addedElem = $(deviceAddressLayout.find(".rr-device-address").last());
+
+
+        $(addedElem)
+            .find(".rr-resource-address-index input")
+            .each(function() {
+                $(this).inputmask("Regex", { regex: $(this).data("val-regex-pattern") });
+            });
+
         $(window).scrollTop(addedElem.offset().top - $(".rr-main-menu").height() - 50);
     }
 
@@ -574,4 +758,19 @@
     updateDeleteRightButton();
     initalizeDatePickers($(".rr-resource-date input"));
     $("form .rr-resource-has-not-internet-access-checkbox input[type=\"checkbox\"]").change();
+    $("form .rr-resource-equal-address-checkbox input[type=\"checkbox\"]").change();
+    $("form .rr-resource-is-dynamic-ip-address input[type=\"checkbox\"]").change();
+
+    var email = $("#Resource_EmailAdministrator");
+    email.inputmask("Regex", { regex: email.data("val-regex-pattern") });
+
+    $(".rr-resource-ip-address input")
+        .each(function() {
+            $(this).inputmask("Regex", { regex: $(this).data("val-regex-pattern") });
+        });
+
+    $(".rr-resource-address-index input")
+        .each(function () {
+            $(this).inputmask("Regex", { regex: $(this).data("val-regex-pattern") });
+        });
 });

@@ -27,8 +27,11 @@
                         <dd>@Model.RequestModel.OwnerDepartment</dd>
                         <dt>@Html.DisplayNameFor(r => r.RequestModel.Date)</dt>
                         <dd>@Model.RequestModel.Date.ToString("dd.MM.yyyy HH:mm", CultureInfo.CurrentCulture)</dd>
-                        <dt>@Html.DisplayNameFor(r => r.RequestModel.Description)</dt>
-                        <dd>@Html.Raw(Model.RequestModel.Description.Replace("\n", "<br>"))</dd>
+                        @if (!string.IsNullOrEmpty(Model.RequestModel.Description))
+                        {
+                            <dt>@Html.DisplayNameFor(r => r.RequestModel.Description)</dt>
+                            <dd>@Html.Raw(Model.RequestModel.Description.Replace("\n", "<br>"))</dd>
+                        }
                     </dl>
                 </div>
                 <div class="panel-group rr-request-users" id="accordion" role="tablist" aria-multiselectable="true">

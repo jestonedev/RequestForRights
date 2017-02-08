@@ -11,7 +11,7 @@ namespace RequestsForRights.Domain.Entities
         [Key]
         public int IdRequestUserAssoc { get; set; }
         [ForeignKey("IdRequestUserAssoc")]
-        public RequestUserAssoc RequestUserAssoc { get; set; }
+        public virtual RequestUserAssoc RequestUserAssoc { get; set; }
         public int IdDelegateToUser { get; set; }
         [ForeignKey("IdDelegateToUser")]
         public virtual RequestUser DelegateToUser { get; set; }

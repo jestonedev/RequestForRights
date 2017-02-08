@@ -20,7 +20,7 @@ namespace RequestsForRights.Domain.Entities
         public string Patronimic { get; set; }
         public int IdResource { get; set; }
         public virtual Resource Resource { get; set; }
-        public IList<ResourceOwnerPersonAct> Acts { get; set; }
+        public virtual IList<ResourceOwnerPersonAct> Acts { get; set; }
         [DefaultValue(false)]
         public bool Deleted { get; set; }
     }

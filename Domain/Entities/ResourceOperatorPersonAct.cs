@@ -20,7 +20,7 @@ namespace RequestsForRights.Domain.Entities
         public DateTime? ActDate { get; set; }
         [DisplayName("Номер")]
         public string ActNumber { get; set; }
-        public int IdFile { get; set; }
+        public int? IdFile { get; set; }
         public virtual ActFile File { get; set; }
         [DefaultValue(false)]
         public bool Deleted { get; set; }

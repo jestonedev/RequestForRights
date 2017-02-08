@@ -15,93 +15,104 @@
 
 <li class="list-group-item clearfix rr-internet-address rr-col-sm-no-side-padding-always">
     @Html.HiddenFor(r => r.Resource.ResourceInternetAddresses[internetAddressIndex].IdResourceInternetAddress)
-    <div class="col-xs-12 col-sm-6">
-        <div class="form-group">
-            @Html.RequiredLabelFor(r => r.Resource.ResourceInternetAddresses[internetAddressIndex].NetName,
-                new {@class = "control-label"})
-            <div>
-                @Html.TextBoxFor(r => r.Resource.ResourceInternetAddresses[internetAddressIndex].NetName,
-                    new {@class = "form-control", placeholder = "Введите наименование ТС"})
-                @Html.ValidationMessageFor(r => r.Resource.ResourceInternetAddresses[internetAddressIndex].NetName)
+    <div>
+        <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+                @Html.RequiredLabelFor(r => r.Resource.ResourceInternetAddresses[internetAddressIndex].NetName,
+                    new {@class = "control-label"})
+                <div>
+                    @Html.TextBoxFor(r => r.Resource.ResourceInternetAddresses[internetAddressIndex].NetName,
+                        new {@class = "form-control", placeholder = "Введите наименование ТС"})
+                    @Html.ValidationMessageFor(r => r.Resource.ResourceInternetAddresses[internetAddressIndex].NetName)
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+                @Html.RequiredLabelFor(r => r.Resource.ResourceInternetAddresses[internetAddressIndex].DeviceNumber,
+                    new {@class = "control-label"})
+                <div>
+                    @Html.TextBoxFor(r => r.Resource.ResourceInternetAddresses[internetAddressIndex].DeviceNumber,
+                        new {@class = "form-control", placeholder = "Введите идентификатор оборудования"})
+                    @Html.ValidationMessageFor(r => r.Resource.ResourceInternetAddresses[internetAddressIndex].DeviceNumber)
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-xs-12 col-sm-6">
-        <div class="form-group">
-            @Html.RequiredLabelFor(r => r.Resource.ResourceInternetAddresses[internetAddressIndex].DeviceNumber,
+    <div class="clearfix"></div>
+    <div>
+        <div class="col-xs-12 col-sm-6 rr-resource-ip-address">
+            <div class="form-group">
+                @Html.RequiredLabelFor(r => r.Resource.ResourceInternetAddresses[internetAddressIndex].DeviceIpAddress,
+                    new { @class = "control-label" })
+                <div>
+                    @Html.TextBoxFor(r => r.Resource.ResourceInternetAddresses[internetAddressIndex].DeviceIpAddress,
+                        new { @class = "form-control", placeholder = "Введите IP-адрес оборудования" })
+                    @Html.ValidationMessageFor(r => r.Resource.ResourceInternetAddresses[internetAddressIndex].DeviceIpAddress)
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-6 rr-resource-ip-address">
+            <div class="form-group">
+                @Html.RequiredLabelFor(r => r.Resource.ResourceInternetAddresses[internetAddressIndex].GateIpAddress,
+                    new { @class = "control-label" })
+                <div>
+                    @Html.TextBoxFor(r => r.Resource.ResourceInternetAddresses[internetAddressIndex].GateIpAddress,
+                        new { @class = "form-control", placeholder = "Введите IP-адрес шлюза" })
+                    @Html.ValidationMessageFor(r => r.Resource.ResourceInternetAddresses[internetAddressIndex].GateIpAddress)
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div>
+        <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+                @Html.RequiredLabelFor(r => r.Resource.ResourceInternetAddresses[internetAddressIndex].DomainNames,
+                    new {@class = "control-label"})
+                <div>
+                    @Html.TextBoxFor(r => r.Resource.ResourceInternetAddresses[internetAddressIndex].DomainNames,
+                        new {@class = "form-control", placeholder = "Введите доменные имена ресурса"})
+                    @Html.ValidationMessageFor(r => r.Resource.ResourceInternetAddresses[internetAddressIndex].DomainNames)
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-6 rr-resource-ip-address">
+            <div class="form-group">
+                @Html.RequiredLabelFor(r => r.Resource.ResourceInternetAddresses[internetAddressIndex].DomainIpAddress,
+                    new { @class = "control-label" })
+                <div>
+                    @Html.TextBoxFor(r => r.Resource.ResourceInternetAddresses[internetAddressIndex].DomainIpAddress,
+                        new { @class = "form-control", placeholder = "Введите IP-адрес домена" })
+                    @Html.ValidationMessageFor(r => r.Resource.ResourceInternetAddresses[internetAddressIndex].DomainIpAddress)
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div>
+        <div class="col-xs-12 col-sm-6 rr-resource-ip-address rr-resource-dhcp-ip-address">
+            <div class="form-group">
+                @Html.RequiredLabelFor(r => r.Resource.ResourceInternetAddresses[internetAddressIndex].DhcpIpAddress,
                 new { @class = "control-label" })
-            <div>
-                @Html.TextBoxFor(r => r.Resource.ResourceInternetAddresses[internetAddressIndex].DeviceNumber,
-                    new { @class = "form-control", placeholder = "Введите идентификатор оборудования" })
-                @Html.ValidationMessageFor(r => r.Resource.ResourceInternetAddresses[internetAddressIndex].DeviceNumber)
+                <div>
+                    @Html.TextBoxFor(r => r.Resource.ResourceInternetAddresses[internetAddressIndex].DhcpIpAddress,
+                    new { @class = "form-control", placeholder = "Введите IP-адрес сервиса DHCP", disabled="disabled" })
+                    @Html.ValidationMessageFor(r => r.Resource.ResourceInternetAddresses[internetAddressIndex].DhcpIpAddress)
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-xs-12 col-sm-6">
-        <div class="form-group">
-            @Html.RequiredLabelFor(r => r.Resource.ResourceInternetAddresses[internetAddressIndex].DeviceIpAddress,
-                new {@class = "control-label"})
-            <div>
-                @Html.TextBoxFor(r => r.Resource.ResourceInternetAddresses[internetAddressIndex].DeviceIpAddress,
-                    new {@class = "form-control", placeholder = "Введите IP-адрес оборудования"})
-                @Html.ValidationMessageFor(r => r.Resource.ResourceInternetAddresses[internetAddressIndex].DeviceIpAddress)
+        <div class="col-xs-12 col-sm-6">
+            <div class="rr-resource-label-stub">&nbsp;</div>
+            <div class="checkbox-inline col-xs-7 rr-resource-is-dynamic-ip-address">
+                @Html.CheckBoxFor(r => r.Resource.ResourceInternetAddresses[internetAddressIndex].IsDynamicIpAddress)
+                @Html.LabelFor(r => r.Resource.ResourceInternetAddresses[internetAddressIndex].IsDynamicIpAddress,
+                new { @class = "control-label" })
+                @Html.ValidationMessageFor(r => r.Resource.ResourceInternetAddresses[internetAddressIndex].IsDynamicIpAddress)
             </div>
-        </div>
-    </div>
-    <div class="col-xs-12 col-sm-6">
-        <div class="form-group">
-            @Html.RequiredLabelFor(r => r.Resource.ResourceInternetAddresses[internetAddressIndex].GateIpAddress,
-                new {@class = "control-label"})
             <div>
-                @Html.TextBoxFor(r => r.Resource.ResourceInternetAddresses[internetAddressIndex].GateIpAddress,
-                    new {@class = "form-control", placeholder = "Введите IP-адрес шлюза"})
-                @Html.ValidationMessageFor(r => r.Resource.ResourceInternetAddresses[internetAddressIndex].GateIpAddress)
+                <button name="deleteInternetAddress" class="btn btn-danger pull-right">Удалить адрес</button>
             </div>
-        </div>
-    </div>
-    <div class="col-xs-12 col-sm-6">
-        <div class="form-group">
-            @Html.RequiredLabelFor(r => r.Resource.ResourceInternetAddresses[internetAddressIndex].DomainNames,
-                new {@class = "control-label"})
-            <div>
-                @Html.TextBoxFor(r => r.Resource.ResourceInternetAddresses[internetAddressIndex].DomainNames,
-                    new {@class = "form-control", placeholder = "Введите доменные имена ресурса"})
-                @Html.ValidationMessageFor(r => r.Resource.ResourceInternetAddresses[internetAddressIndex].DomainNames)
-            </div>
-        </div>
-    </div>
-    <div class="col-xs-12 col-sm-6">
-        <div class="form-group">
-            @Html.RequiredLabelFor(r => r.Resource.ResourceInternetAddresses[internetAddressIndex].DomainIpAddress,
-            new { @class = "control-label" })
-            <div>
-                @Html.TextBoxFor(r => r.Resource.ResourceInternetAddresses[internetAddressIndex].DomainIpAddress,
-                new { @class = "form-control", placeholder = "Введите IP-адрес домена" })
-                @Html.ValidationMessageFor(r => r.Resource.ResourceInternetAddresses[internetAddressIndex].DomainIpAddress)
-            </div>
-        </div>
-    </div>
-    <div class="col-xs-12 col-sm-6">
-        <div class="form-group">
-            @Html.RequiredLabelFor(r => r.Resource.ResourceInternetAddresses[internetAddressIndex].DhcpIpAddress,
-                new {@class = "control-label"})
-            <div>
-                @Html.TextBoxFor(r => r.Resource.ResourceInternetAddresses[internetAddressIndex].DhcpIpAddress,
-                    new {@class = "form-control", placeholder = "Введите IP-адрес сервиса DHCP"})
-                @Html.ValidationMessageFor(r => r.Resource.ResourceInternetAddresses[internetAddressIndex].DhcpIpAddress)
-            </div>
-        </div>
-    </div>
-    <div class="col-xs-12 col-sm-6">
-        <div class="rr-resource-label-stub">&nbsp;</div>
-        <div class="checkbox-inline col-xs-7">
-            @Html.CheckBoxFor(r => r.Resource.ResourceInternetAddresses[internetAddressIndex].IsDynamicIpAddress)
-            @Html.LabelFor(r => r.Resource.ResourceInternetAddresses[internetAddressIndex].IsDynamicIpAddress,
-                new {@class = "control-label"})
-            @Html.ValidationMessageFor(r => r.Resource.ResourceInternetAddresses[internetAddressIndex].IsDynamicIpAddress)
-        </div>
-        <div>
-            <button name="deleteInternetAddress" class="btn btn-danger pull-right">Удалить адрес</button>
         </div>
     </div>
 </li>

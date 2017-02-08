@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Web.Script.Serialization;
 
 namespace RequestsForRights.Domain.Entities
 {
@@ -9,18 +10,26 @@ namespace RequestsForRights.Domain.Entities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [ScriptIgnore]
         public int IdDepartment { get; set; }
         [Required]
         [MaxLength(512)]
         public string Name { get; set; }
+        [ScriptIgnore]
         public int? IdParentDepartment { get; set; }
         [ForeignKey("IdParentDepartment")]
+        [ScriptIgnore(ApplyToOverrides = true)]
         public virtual Department ParentDepartment { get; set; }
+        [ScriptIgnore(ApplyToOverrides = true)]
         public virtual IList<Department> ChildDepartments { get; set; }
+        [ScriptIgnore(ApplyToOverrides = true)]
         public virtual IList<Resource> Resources { get; set; }
+        [ScriptIgnore(ApplyToOverrides = true)]
         public virtual IList<AclUser> Users { get; set; }
+        [ScriptIgnore(ApplyToOverrides = true)]
         public virtual IList<AclUser> AclUsers { get; set; }
         [DefaultValue(false)]
+        [ScriptIgnore]
         public bool Deleted { get; set; }
         // Federal registry ext fields
         [DisplayName("Идентификационный номер налогоплательщика")]
@@ -36,6 +45,7 @@ namespace RequestsForRights.Domain.Entities
         [DisplayName("Индекс")]
         [MaxLength(6)]
         [StringLength(6, ErrorMessage = "Максимальная длина почтового индекса 6 символов")]
+        [RegularExpression("^[0-9]{6}$", ErrorMessage = "Некорректно задан почтовый индекс")]
         public string SelfAddressIndex { get; set; }
         [DisplayName("Регион")]
         public string SelfAddressRegion { get; set; }
@@ -52,6 +62,7 @@ namespace RequestsForRights.Domain.Entities
         [DisplayName("Индекс")]
         [MaxLength(6)]
         [StringLength(6, ErrorMessage = "Максимальная длина почтового индекса 6 символов")]
+        [RegularExpression("^[0-9]{6}$", ErrorMessage = "Некорректно задан почтовый индекс")]
         public string ControlOrgAddressIndex { get; set; }
         [DisplayName("Регион")]
         public string ControlOrgAddressRegion { get; set; }

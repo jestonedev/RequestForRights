@@ -1,0 +1,321 @@
+﻿@model RequestsForRights.Domain.Entities.Resource
+
+<div class="panel panel-primary">
+    <div class="panel-heading">Общие сведения</div>
+    <div class="panel-body rr-detail-resource-panel-body">
+        <dl class="col-sm-6">
+            <dt>@Html.DisplayNameFor(r => r.Name)</dt>
+            <dd>@Model.Name</dd>
+            <dt>@Html.DisplayNameFor(r => r.IdResourceGroup)</dt>
+            <dd>@Model.ResourceGroup.Name</dd>
+        </dl>
+        <dl class="col-sm-6">
+            <dt>@Html.DisplayNameFor(r => r.InnControlSubject)</dt>
+            <dd>
+                @if (string.IsNullOrEmpty(Model.InnControlSubject))
+                {
+                    <i>Отсутствует</i>
+                }
+                else
+                {
+                    @Model.InnControlSubject
+                }
+            </dd>
+
+            <dt>@Html.DisplayNameFor(r => r.EmailAdministrator)</dt>
+            <dd>
+                @if (string.IsNullOrEmpty(Model.EmailAdministrator))
+                {
+                    <i>Отсутствует</i>
+                }
+                else
+                {
+                    @Model.EmailAdministrator
+                }
+            </dd>
+        </dl>
+        <div class="clearfix"></div>
+        <dl class="col-xs-12">
+            <dt>@Html.DisplayNameFor(r => r.Description)</dt>
+            <dd>
+                @if (string.IsNullOrEmpty(Model.Description))
+                {
+                    <i>Отсутствует</i>
+                }
+                else
+                {
+                    @Model.Description
+                }
+            </dd>
+        </dl>
+    </div>
+</div>
+
+<div class="panel panel-primary">
+    <div class="panel-heading">Краткое описание характера информации, размещенной в информационной системе</div>
+    <div class="panel-body rr-detail-resource-panel-body">
+        <dl class="col-xs-12">
+            <dt>@Html.DisplayNameFor(r => r.IdResourceInformationType)</dt>
+            <dd>
+                @if (Model.ResourceInformationType == null)
+                {
+                    <i>Отсутствуют</i>
+                }
+                else
+                {
+                    @Model.ResourceInformationType.Name
+                }
+            </dd>
+            <dt>@Html.DisplayNameFor(r => r.PersonalInfoDescription)</dt>
+            <dd>
+                @if (string.IsNullOrEmpty(Model.PersonalInfoDescription))
+                {
+                    <i>Отсутствуют</i>
+                }
+                else
+                {
+                    @Model.PersonalInfoDescription
+                }
+            </dd>
+        </dl>
+    </div>
+</div>
+
+<div class="col-xs-12 rr-resource-has-not-internet-access-checkbox">
+    <div class="checkbox-inline">
+        @Html.CheckBoxFor(r => Model.HasNotInternetAccess, new { disabled = "disabled" })
+        @Html.LabelFor(r => Model.HasNotInternetAccess, new { @class = "control-label" })
+    </div>
+</div>
+
+@if (!Model.HasNotInternetAccess)
+{
+    <div class="panel panel-primary">
+        <div class="panel-heading">Сетевые адреса в сети "Интернет"</div>
+
+        @if (Model.ResourceInternetAddresses != null && Model.ResourceInternetAddresses.Any(r => !r.Deleted))
+        {
+            <ul class="list-group">
+                @for (var i = 0; i < Model.ResourceInternetAddresses.Count; i++)
+{
+    if (Model.ResourceInternetAddresses[i].Deleted)
+    {
+        continue;
+    }
+    <li class="list-group-item rr-detail-resource-list-group-item">
+        <dl class="col-sm-6">
+            <dt>@Html.DisplayNameFor(r => r.ResourceInternetAddresses[i].NetName)</dt>
+            <dd>
+                @if (string.IsNullOrEmpty(Model.ResourceInternetAddresses[i].NetName))
+                {
+                    <i>Отсутствует</i>
+                }
+                else
+                {
+                    @Model.ResourceInternetAddresses[i].NetName
+                }
+            </dd>
+            <dt>@Html.DisplayNameFor(r => r.ResourceInternetAddresses[i].DeviceIpAddress)</dt>
+            <dd>
+                @if (string.IsNullOrEmpty(Model.ResourceInternetAddresses[i].DeviceIpAddress))
+                {
+                    <i>Отсутствует</i>
+                }
+                else
+                {
+                    @Model.ResourceInternetAddresses[i].DeviceIpAddress
+                }
+            </dd>
+            <dt>@Html.DisplayNameFor(r => r.ResourceInternetAddresses[i].DomainNames)</dt>
+            <dd>
+                @if (string.IsNullOrEmpty(Model.ResourceInternetAddresses[i].DomainNames))
+                {
+                    <i>Отсутствуют</i>
+                }
+                else
+                {
+                    @Model.ResourceInternetAddresses[i].DomainNames
+                }
+            </dd>
+            <dt>@Html.DisplayNameFor(r => r.ResourceInternetAddresses[i].DhcpIpAddress)</dt>
+            <dd>
+                @if (string.IsNullOrEmpty(Model.ResourceInternetAddresses[i].DhcpIpAddress))
+                {
+                    <i>Отсутствует</i>
+                }
+                else
+                {
+                    @Model.ResourceInternetAddresses[i].DhcpIpAddress
+                }
+            </dd>
+        </dl>
+        <dl class="col-sm-6">
+            <dt>@Html.DisplayNameFor(r => r.ResourceInternetAddresses[i].DeviceNumber)</dt>
+            <dd>
+                @if (string.IsNullOrEmpty(Model.ResourceInternetAddresses[i].DeviceNumber))
+                {
+                    <i>Отсутствует</i>
+                }
+                else
+                {
+                    @Model.ResourceInternetAddresses[i].DeviceNumber
+                }
+            </dd>
+            <dt>@Html.DisplayNameFor(r => r.ResourceInternetAddresses[i].GateIpAddress)</dt>
+            <dd>
+                @if (string.IsNullOrEmpty(Model.ResourceInternetAddresses[i].GateIpAddress))
+                {
+                    <i>Отсутствует</i>
+                }
+                else
+                {
+                    @Model.ResourceInternetAddresses[i].GateIpAddress
+                }
+            </dd>
+            <dt>@Html.DisplayNameFor(r => r.ResourceInternetAddresses[i].DomainIpAddress)</dt>
+            <dd>
+                @if (string.IsNullOrEmpty(Model.ResourceInternetAddresses[i].DomainIpAddress))
+                {
+                    <i>Отсутствует</i>
+                }
+                else
+                {
+                    @Model.ResourceInternetAddresses[i].DomainIpAddress
+                }
+            </dd>
+            <dt>@Html.DisplayNameFor(r => r.ResourceInternetAddresses[i].IsDynamicIpAddress)</dt>
+            <dd>
+                @(Model.ResourceInternetAddresses[i].IsDynamicIpAddress ? "Да" : "Нет")
+            </dd>
+        </dl>
+        <div class="clearfix"></div>
+    </li>
+}
+            </ul>
+        }
+        else
+        {
+            <div class="panel-body">
+                <div class="text-center">
+                    <i>Отсутствуют</i>
+                </div>
+            </div>
+        }
+    </div>
+}
+<div class="panel panel-primary">
+    <div class="panel-heading">Сведения о территориальном размещении</div>
+    @if (Model.ResourceDeviceAddresses != null && Model.ResourceDeviceAddresses.Any(r => !r.Deleted))
+    {
+        <ul class="list-group">
+            @for (var i = 0; i < Model.ResourceDeviceAddresses.Count; i++)
+{
+    if (Model.ResourceDeviceAddresses[i].Deleted)
+    {
+        continue;
+    }
+    <li class="list-group-item rr-detail-resource-list-group-item">
+        <dl class="col-xs-12">
+            <dt>@Html.DisplayNameFor(r => r.ResourceDeviceAddresses[i].Name)</dt>
+            <dd>
+                @if (string.IsNullOrEmpty(Model.ResourceDeviceAddresses[i].Name))
+                {
+                    <i>Отсутствует</i>
+                }
+                else
+                {
+                    @Model.ResourceDeviceAddresses[i].Name
+                }
+            </dd>
+        </dl>
+        <div class="panel panel-primary rr-resource-address-panel">
+            <div class="panel-heading">
+                Адрес
+            </div>
+            <div class="panel-body rr-detail-resource-panel-body">
+                <dl class="col-sm-6">
+                    <dt>@Html.DisplayNameFor(r => r.ResourceDeviceAddresses[i].AddressIndex)</dt>
+                    <dd>
+                        @if (string.IsNullOrEmpty(Model.ResourceDeviceAddresses[i].AddressIndex))
+                        {
+                            <i>Отсутствует</i>
+                        }
+                        else
+                        {
+                            @Model.ResourceDeviceAddresses[i].AddressIndex
+                        }
+                    </dd>
+                    <dt>@Html.DisplayNameFor(r => r.ResourceDeviceAddresses[i].AddressArea)</dt>
+                    <dd>
+                        @if (string.IsNullOrEmpty(Model.ResourceDeviceAddresses[i].AddressArea))
+                        {
+                            <i>Отсутствует</i>
+                        }
+                        else
+                        {
+                            @Model.ResourceDeviceAddresses[i].AddressArea
+                        }
+                    </dd>
+                    <dt>@Html.DisplayNameFor(r => r.ResourceDeviceAddresses[i].AddressStreet)</dt>
+                    <dd>
+                        @if (string.IsNullOrEmpty(Model.ResourceDeviceAddresses[i].AddressStreet))
+                        {
+                            <i>Отсутствует</i>
+                        }
+                        else
+                        {
+                            @Model.ResourceDeviceAddresses[i].AddressStreet
+                        }
+                    </dd>
+                </dl>
+                <dl class="col-sm-6">
+                    <dt>@Html.DisplayNameFor(r => r.ResourceDeviceAddresses[i].AddressRegion)</dt>
+                    <dd>
+                        @if (string.IsNullOrEmpty(Model.ResourceDeviceAddresses[i].AddressRegion))
+                        {
+                            <i>Отсутствует</i>
+                        }
+                        else
+                        {
+                            @Model.ResourceDeviceAddresses[i].AddressRegion
+                        }
+                    </dd>
+                    <dt>@Html.DisplayNameFor(r => r.ResourceDeviceAddresses[i].AddressCity)</dt>
+                    <dd>
+                        @if (string.IsNullOrEmpty(Model.ResourceDeviceAddresses[i].AddressCity))
+                        {
+                            <i>Отсутствует</i>
+                        }
+                        else
+                        {
+                            @Model.ResourceDeviceAddresses[i].AddressCity
+                        }
+                    </dd>
+                    <dt>@Html.DisplayNameFor(r => r.ResourceDeviceAddresses[i].AddressHouse)</dt>
+                    <dd>
+                        @if (string.IsNullOrEmpty(Model.ResourceDeviceAddresses[i].AddressHouse))
+                        {
+                            <i>Отсутствует</i>
+                        }
+                        else
+                        {
+                            @Model.ResourceDeviceAddresses[i].AddressHouse
+                        }
+                    </dd>
+                </dl>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </li>
+}
+        </ul>
+    }
+    else
+    {
+        <div class="panel-body">
+            <div class="text-center">
+                <i>Отсутствуют</i>
+            </div>
+        </div>
+    }
+</div>

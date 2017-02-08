@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using RequestsForRights.Domain.Entities;
 using RequestsForRights.Models.FilterOptions;
+using RequestsForRights.Models.Models;
 using RequestsForRights.Models.ViewModels;
 
 namespace RequestsForRights.Infrastructure.Services.Interfaces
@@ -17,8 +18,10 @@ namespace RequestsForRights.Infrastructure.Services.Interfaces
         ResourceViewModel GetResourceViewModelBy(Resource resource);
         ResourceViewModel GetEmptyResourceViewModel();
         Resource DeleteResource(int idResource);
-        Resource UpdateResource(Resource resource);
-        Resource InsertResource(Resource resource);
+        Resource UpdateResource(Resource resource, ResourceActFilesModel files);
+        Resource InsertResource(Resource resource, ResourceActFilesModel files);
         int SaveChanges();
+        ActFile GetActFile(int idFile);
+        Department GetDepartmentInfo(int idDepartment);
     }
 }

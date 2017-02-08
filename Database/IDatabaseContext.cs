@@ -27,6 +27,15 @@ namespace RequestsForRights.Database
         IDbSet<RequestState> RequestStates { get; set; }
         IDbSet<RequestRightGrantType> RequestRightGrantTypes { get; set; }
         IDbSet<ResourceInformationType> ResourceInformationTypes { get; set; }
+        IDbSet<ResourceDeviceAddress> ResourceDeviceAddresses { get; set; }
+        IDbSet<ResourceInternetAddress> ResourceInternetAddresses { get; set; }
+        IDbSet<ResourceOperatorPerson> ResourceOperatorPersons { get; set; }
+        IDbSet<ResourceOperatorPersonAct> ResourceOperatorPersonActs { get; set; }
+        IDbSet<ResourceOwnerPerson> ResourceOwnerPersons { get; set; }
+        IDbSet<ResourceOwnerPersonAct> ResourceOwnerPersonActs { get; set; }
+        IDbSet<ResourceAuthorityAct> ResourceAuthorityActs { get; set; }
+        IDbSet<ResourceOperatorAct> ResourceOperatorActs { get; set; }
+        IDbSet<ResourceUsingAct> ResourceUsingActs { get; set; }
         IDbSet<ActFile> ActFiles { get; set; }
         int SaveChanges();
         DbEntityEntry<TEntity> Entry<TEntity>(TEntity entity)

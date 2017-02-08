@@ -15,6 +15,7 @@
 
 <li class="list-group-item clearfix rr-operator-person rr-col-sm-no-side-padding-always">
     @Html.HiddenFor(r => r.Resource.ResourceOperatorPersons[operatorPersonIndex].IdResourceOperatorPerson)
+    @Html.Hidden("Files.ResourceOperatorPersons[" + operatorPersonIndex + "].IdPerson", Model.Resource.ResourceOperatorPersons[operatorPersonIndex].IdResourceOperatorPerson)
     <div class="col-xs-12">
         <div class="form-group">
             @Html.RequiredLabelFor(r => r.Resource.ResourceOperatorPersons[operatorPersonIndex].Post,
