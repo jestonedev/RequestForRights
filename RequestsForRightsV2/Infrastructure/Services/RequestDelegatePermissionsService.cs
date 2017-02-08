@@ -36,6 +36,7 @@ namespace RequestsForRights.Infrastructure.Services
                 Description = request.Description,
                 OwnerSnp = request.User.Snp,
                 OwnerDepartment = request.User.Department.Name,
+                RequestStateName = request.RequestStates.OrderBy(r => r.IdRequestState).Last(r => !r.Deleted).RequestStateType.Name,
                 Date = request.RequestStates.First(r => !r.Deleted).Date,
                 IdRequestType = request.IdRequestType,
                 Users = request.RequestUserAssoc.Where(ru => !ru.Deleted).Select(ru =>

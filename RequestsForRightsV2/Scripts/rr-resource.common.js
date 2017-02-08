@@ -205,7 +205,13 @@
         .on("click",
             function (e) {
                 var form = $("form");
-                if (form.valid()) {
+                var isValid = form.valid();
+                form.find("input[type=\"file\"]").each(function (idx, elem) {
+                    if (!fileIsValid(elem)) {
+                        isValid = false;
+                    }
+                });
+                if (isValid) {
                     form.submit();
                 } else {
                     showErrorBadgets();
@@ -213,6 +219,29 @@
                 e.preventDefault();
                 return false;
             });
+
+    function fileIsValid(fileElem) {
+        var validator = $(fileElem).closest("form").validate();
+        var fileParts = $(fileElem).val().split(".");
+        var fileExtenstion = "";
+        if (fileParts.length > 1) {
+            fileExtenstion = fileParts[fileParts.length - 1];
+        }
+        if ($.inArray(fileExtenstion, ["exe", "dll", "js", "bat", "com", "vbs", "sys"]) !== -1) {
+            var error = {};
+            error[$(fileElem).attr("name")] = "Запрещено прикреплять исполняемые файлы";
+            validator.showErrors(error);
+            return false;
+        } else {
+            $(fileElem)
+                .closest(".rr-act-file")
+                .find(".field-validation-error")
+                .removeClass("field-validation-error")
+                .addClass("field-validation-valid")
+                .empty();
+        }
+        return true;
+    }
 
     $("form")
         .on("change",
@@ -224,6 +253,7 @@
                 var fileNameParts = $(this).val().split("\\");
                 actFile.find(".rr-act-file-name").text(fileNameParts[fileNameParts.length - 1]);
                 actFile.find(".rr-act-file-name").show();
+                fileIsValid($(this));
             });
 
     $("form")
@@ -293,7 +323,7 @@
 
     function loadDepartmentInfo(departmentInfoLayout, departmentSelect) {
         var depName = departmentSelect.find("option:selected").text();
-        departmentInfoLayout.find(".rr-resource-department-name").val(depName);
+        departmentInfoLayout.find(".rr-resource-department-name input").val(depName);
         var depId = departmentSelect.val();
         if ($.trim(depId) === "") {
             clearDepartmentFields(departmentInfoLayout);
@@ -517,12 +547,11 @@
         updateControls();
         refreshValidation();
         var addedElem = $(internetAddressLayout.find(".rr-internet-address").last());
-
         addedElem.find(".rr-resource-ip-address input")
         .each(function () {
             $(this).inputmask("Regex", { regex: $(this).data("val-regex-pattern") });
         });
-        $(window).scrollTop(addedElem.offset().top - $(".rr-main-menu").height() - 50);
+        $(window).scrollTop(addedElem.offset().top - $(window).height() / 2 + $(addedElem).height()/2);
     }
 
     var deviceAddressTemplate = undefined;
@@ -543,15 +572,13 @@
         updateControls();
         refreshValidation();
         var addedElem = $(deviceAddressLayout.find(".rr-device-address").last());
-
-
         $(addedElem)
             .find(".rr-resource-address-index input")
             .each(function() {
                 $(this).inputmask("Regex", { regex: $(this).data("val-regex-pattern") });
             });
 
-        $(window).scrollTop(addedElem.offset().top - $(".rr-main-menu").height() - 50);
+        $(window).scrollTop(addedElem.offset().top - $(window).height() / 2 + $(addedElem).height()/2);
     }
 
     var ownerPersonTemplate = undefined;
@@ -572,7 +599,7 @@
         updateControls();
         refreshValidation();
         var addedElem = $(ownerPersonLayout.find(".rr-owner-person").last());
-        $(window).scrollTop(addedElem.offset().top - $(".rr-main-menu").height() - 50);
+        $(window).scrollTop(addedElem.offset().top - $(window).height() / 2 + $(addedElem).height()/2);
     }
 
     var ownerPersonActTemplate = undefined;
@@ -594,7 +621,7 @@
         refreshValidation();
         var addedElem = $(ownerPersonActLayout.find(".rr-owner-person-act").last());
         initalizeDatePickers(addedElem.find(".rr-resource-date input"));
-        $(window).scrollTop(addedElem.offset().top - $(".rr-main-menu").height() - 50);
+        $(window).scrollTop(addedElem.offset().top - $(window).height() / 2 + $(addedElem).height()/2);
     }
 
     var operatorPersonTemplate = undefined;
@@ -615,7 +642,7 @@
         updateControls();
         refreshValidation();
         var addedElem = $(operatorPersonLayout.find(".rr-operator-person").last());
-        $(window).scrollTop(addedElem.offset().top - $(".rr-main-menu").height() - 50);
+        $(window).scrollTop(addedElem.offset().top - $(window).height() / 2 + $(addedElem).height()/2);
     }
 
     var operatorPersonActTemplate = undefined;
@@ -637,7 +664,7 @@
         refreshValidation();
         var addedElem = $(operatorPersonActLayout.find(".rr-operator-person-act").last());
         initalizeDatePickers(addedElem.find(".rr-resource-date input"));
-        $(window).scrollTop(addedElem.offset().top - $(".rr-main-menu").height() - 50);
+        $(window).scrollTop(addedElem.offset().top - $(window).height() / 2 + $(addedElem).height()/2);
     }
 
     var operatorActTemplate = undefined;
@@ -659,7 +686,7 @@
         refreshValidation();
         var addedElem = $(operatorActLayout.find(".rr-operator-act").last());
         initalizeDatePickers(addedElem.find(".rr-resource-date input"));
-        $(window).scrollTop(addedElem.offset().top - $(".rr-main-menu").height() - 50);
+        $(window).scrollTop(addedElem.offset().top - $(window).height() / 2 + $(addedElem).height()/2);
     }
 
     var usingActTemplate = undefined;
@@ -681,7 +708,7 @@
         refreshValidation();
         var addedElem = $(usingActLayout.find(".rr-using-act").last());
         initalizeDatePickers(addedElem.find(".rr-resource-date input"));
-        $(window).scrollTop(addedElem.offset().top - $(".rr-main-menu").height() - 50);
+        $(window).scrollTop(addedElem.offset().top - $(window).height() / 2 + $(addedElem).height()/2);
     }
 
     var authorityActTemplate = undefined;
@@ -703,7 +730,7 @@
         refreshValidation();
         var addedElem = $(authorityActLayout.find(".rr-authority-act").last());
         initalizeDatePickers(addedElem.find(".rr-resource-date input"));
-        $(window).scrollTop(addedElem.offset().top - $(".rr-main-menu").height() - 50);
+        $(window).scrollTop(addedElem.offset().top - $(window).height() / 2 + $(addedElem).height()/2);
     }
 
     function refreshValidation() {

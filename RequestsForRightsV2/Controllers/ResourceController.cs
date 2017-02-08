@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Data.Entity.Infrastructure;
 using System.IO;
+using System.Linq;
+using System.Web;
 using System.Web.Mvc;
 using RequestsForRights.Domain.Entities;
 using RequestsForRights.Infrastructure.Helpers;
@@ -81,12 +83,7 @@ namespace RequestsForRights.Controllers
             {
                 return RedirectToAction("ForbiddenError", "Home");
             }
-            if (resourceViewModel.Resource.ResourceRights == null ||
-                resourceViewModel.Resource.ResourceRights.Count < 1)
-            {
-                ModelState.AddModelError(string.Empty, 
-                    @"Необходимо задать по меньшей мере одно право для ресурса");
-            }
+            Validate(resourceViewModel, files);
             if (!ModelState.IsValid)
             {
                 ViewData["SecurityService"] = _securityService;
@@ -171,12 +168,7 @@ namespace RequestsForRights.Controllers
             {
                 return RedirectToAction("ForbiddenError", "Home");
             }
-            if (resourceViewModel.Resource.ResourceRights == null || 
-                resourceViewModel.Resource.ResourceRights.Count < 1)
-            {
-                ModelState.AddModelError(string.Empty, 
-                    @"Необходимо задать по меньшей мере одно право для ресурса");
-            }
+            Validate(resourceViewModel, files);
             if (!ModelState.IsValid)
             {
                 ViewData["SecurityService"] = _securityService;
@@ -203,6 +195,62 @@ namespace RequestsForRights.Controllers
                     new {message = ExceptionHelper.RollToInnerException(e).Message});
             }
             return RedirectToAction("Index");
+        }
+
+        private void Validate(ResourceViewModel resourceViewModel, ResourceActFilesModel files)
+        {
+            if (resourceViewModel.Resource.ResourceRights == null ||
+                resourceViewModel.Resource.ResourceRights.Count < 1)
+            {
+                ModelState.AddModelError(string.Empty,
+                    @"Необходимо задать по меньшей мере одно право для ресурса");
+            }
+            ValidateFiles(files.ResourceAuthorityActs, "Files.ResourceAuthorityActs[{0}]");
+            ValidateFiles(files.ResourceUsingActs, "Files.ResourceUsingActs[{0}]");
+            ValidateFiles(files.ResourceOperatorActs, "Files.ResourceOperatorActs[{0}]");
+            if (files.ResourceOperatorPersons != null)
+            {
+                for (var i = 0; i < files.ResourceOperatorPersons.Count; i++)
+                {
+                    ValidateFiles(files.ResourceOperatorPersons[i].Acts,
+                        "Files.ResourceOperatorPersons[" + i + "].Acts[{0}]");
+                }
+            }
+            if (files.ResourceOwnerPersons != null)
+            {
+                for (var i = 0; i < files.ResourceOwnerPersons.Count; i++)
+                {
+                    ValidateFiles(files.ResourceOwnerPersons[i].Acts,
+                        "Files.ResourceOwnerPersons[" + i + "].Acts[{0}]");
+                }
+            }
+        }
+
+        private void ValidateFiles(IList<HttpPostedFileBase> files, string fieldTemplate)
+        {
+            var deniedExtensions = new[]
+            {
+                "exe", "dll", "js", "bat", "com", "vbs", "sys"
+            };
+            if (files == null) return;
+            for (var i = 0; i < files.Count; i++)
+            {
+                if (files[i] == null)
+                {
+                    continue;
+                }
+                var fileParts = files[i].FileName.Split('.');
+                var fileExtension = "";
+                if (fileParts.Length > 1)
+                {
+                    fileExtension = fileParts[fileParts.Length - 1];
+                }
+                if (deniedExtensions.Contains(fileExtension))
+                {
+                    ModelState.AddModelError(string.Format(fieldTemplate, i),
+                        @"Запрещено прикреплять исполняемые файлы");
+                }
+            }
         }
 
         public ActionResult GetEmptyRightTemplate()

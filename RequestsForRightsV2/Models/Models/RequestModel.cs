@@ -16,6 +16,7 @@ namespace RequestsForRights.Models.Models
         public string OwnerSnp { get; set; }
         [DisplayName(@"Департамент")]
         public string OwnerDepartment { get; set; }
+        public string RequestStateName { get; set; }
         public int IdRequestType { get; set; }
         public IList<T> Users { get; set; }
     }

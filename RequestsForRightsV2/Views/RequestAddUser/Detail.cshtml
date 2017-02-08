@@ -60,7 +60,8 @@
                                         <dl class="dl-horizontal">
                                             <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].Snp)</dt>
                                             <dd>@Model.RequestModel.Users[i].Snp</dd>
-                                            @if (securityService.CanSeeLogin())
+                                            @if (!string.IsNullOrEmpty(Model.RequestModel.Users[i].Login) &&
+                                                securityService.CanSeeLogin())
                                             {
                                                 <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].Login)</dt>
                                                 <dd>@Model.RequestModel.Users[i].Login</dd>
@@ -69,12 +70,21 @@
                                             <dd>@Model.RequestModel.Users[i].Post</dd>
                                             <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].Department)</dt>
                                             <dd>@Model.RequestModel.Users[i].Department</dd>
-                                            <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].Unit)</dt>
-                                            <dd>@Model.RequestModel.Users[i].Unit</dd>
-                                            <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].Office)</dt>
-                                            <dd>@Model.RequestModel.Users[i].Office</dd>
-                                            <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].Phone)</dt>
-                                            <dd>@Model.RequestModel.Users[i].Phone</dd>
+                                            @if (!string.IsNullOrEmpty(Model.RequestModel.Users[i].Unit))
+                                            {
+                                                <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].Unit)</dt>
+                                                <dd>@Model.RequestModel.Users[i].Unit</dd>
+                                            }
+                                            @if (!string.IsNullOrEmpty(Model.RequestModel.Users[i].Office))
+                                            {
+                                                <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].Office)</dt>
+                                                <dd>@Model.RequestModel.Users[i].Office</dd>
+                                            }
+                                            @if (!string.IsNullOrEmpty(Model.RequestModel.Users[i].Phone))
+                                            {
+                                                <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].Phone)</dt>
+                                                <dd>@Model.RequestModel.Users[i].Phone</dd>
+                                            }
                                             @if (!string.IsNullOrEmpty(Model.RequestModel.Users[i].Description))
                                             {
                                                 <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].Description)</dt>
