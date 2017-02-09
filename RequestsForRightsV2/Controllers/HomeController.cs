@@ -41,5 +41,16 @@ namespace RequestsForRights.Controllers
             if (!Request.IsAjaxRequest()) return View("BadRequestError", (object)message);
             return Content(message);
         }
+
+        public ActionResult NotFoundError()
+        {
+            return View("NotFoundError");
+        }
+
+        public ActionResult UnknownServerError()
+        {
+            Response.StatusCode = 500;
+            return View("UnknownServerError");
+        }
     }
 }

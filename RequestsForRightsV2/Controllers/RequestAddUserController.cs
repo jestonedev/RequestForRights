@@ -184,17 +184,17 @@ namespace RequestsForRights.Controllers
             if (request.Users == null || !request.Users.Any())
             {
                 ModelState.AddModelError(string.Empty,
-                    "Необходимо указать по меньшей мере одного сотрудника");
+                    @"Необходимо указать по меньшей мере одного сотрудника");
             }
             if (request.Users != null && request.Users.Any(r => r.Rights == null || !r.Rights.Any()))
             {
                 ModelState.AddModelError(string.Empty,
-                    "Необходимо указать по меньшей мере по одному праву каждому сотруднику");
+                    @"Необходимо указать по меньшей мере по одному праву каждому сотруднику");
             }
             if (request.Users != null && request.Users.Any(
                 r => r.Rights != null && r.Rights.Any(right => right.IdRequestRightGrantType != 1)))
             {
-                ModelState.AddModelError(string.Empty, "Некорректно задан тип одного из прав доступа");
+                ModelState.AddModelError(string.Empty, @"Некорректно задан тип одного из прав доступа");
             }
         }
 	}

@@ -1,4 +1,9 @@
-﻿$(function() {
+﻿$(function () {
+    var prevLogin = $("#Login").val();
+    var prevDepartment = $("#Department").val();
+    var prevUnit = $("#Unit").val();
+    var prevSnp = $("#Snp").val();
+
     function initializeUsersAutocomplete(userSnp) {
         if (userSnp.length === 0 || $.fn.autocomplete === undefined) return;
         $(userSnp).autocomplete({
@@ -28,7 +33,22 @@
                 return item;
             },
             onSelect: function (suggestion) {
+                var newLogin = suggestion.data.Login || "";
+                var newDepartment = suggestion.data.Department || "";
+                var newUnit = suggestion.data.Unit || "";
                 var form = $(this).closest(".rr-filter-control form");
+                var newSnp = form.find("#Snp").val();
+                if (prevLogin === newLogin &&
+                    prevSnp === newSnp &&
+                    prevDepartment === newDepartment &&
+                    prevUnit === newUnit) {
+                    return;
+                } else {
+                    prevLogin = newLogin;
+                    prevSnp = newSnp;
+                    prevDepartment = newDepartment;
+                    prevUnit = newUnit;
+                }
                 form.find("#Login").val(suggestion.data.Login);
                 form.find("#Department").val(suggestion.data.Department);
                 form.find("#Unit").val(suggestion.data.Unit);
