@@ -90,21 +90,21 @@ $(function () {
         .on("click", "#rr-dropdown-menu-all-requests",
             function () {
                 resetRequestIndexState();
-                setCookie("Request.RequestCategory", "AllRequests");
+                setCookie("Request.RequestCategory", "AllRequests", { "path": "/" });
             });
 
     $(".requests-menu")
         .on("click", "#rr-dropdown-menu-my-requests",
             function () {
                 resetRequestIndexState();
-                setCookie("Request.RequestCategory", "MyRequests");
+                setCookie("Request.RequestCategory", "MyRequests", { "path": "/" });
             });
 
     $(".requests-menu")
         .on("click", "#rr-dropdown-menu-not-seen-requests",
             function () {
                 resetRequestIndexState();
-                setCookie("Request.RequestCategory", "NotSeenRequests");
+                setCookie("Request.RequestCategory", "NotSeenRequests", { "path": "/" });
             });
 
     $(".requests-menu")
@@ -112,7 +112,7 @@ $(function () {
             function () {
                 resetRequestIndexState();
                 var id = $(this).data("id");
-                setCookie("Request.IdRequestStateType", id);
+                setCookie("Request.IdRequestStateType", id, { "path": "/" });
             });
 
     function resetRequestIndexState() {
