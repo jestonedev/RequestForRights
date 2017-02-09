@@ -14,7 +14,15 @@ namespace RequestsForRights.Ldap
 
         public LdapRepository(string userName, string password)
         {
+            if (userName == null)
+            {
+                throw new ArgumentNullException("userName");
+            }
             _userName = userName;
+            if (password == null)
+            {
+                throw new ArgumentNullException("password");
+            }
             _password = password;
         }
         private static IEnumerable<string> GetDomains()
@@ -58,8 +66,8 @@ namespace RequestsForRights.Ldap
                             searcher.Filter = string.Format(CultureInfo.InvariantCulture,
                             "(&(objectClass=user)(objectClass=person){1}{2}(displayName=*{0}*)(!(useraccountcontrol:1.2.840.113556.1.4.803:=2)))",
                             snpPattern,
-                                filter.Company == null ? "" : string.Format("(company={0})", filter.Company),
-                                filter.Department == null ? "" : string.Format("(department={0})", filter.Department));
+                            string.IsNullOrEmpty(filter.Company) ? "" : string.Format("(company={0})", filter.Company),
+                             string.IsNullOrEmpty(filter.Department) ? "" : string.Format("(department={0})", filter.Department));
                             var results = searcher.FindAll();
                             if (results.Count == 0)
                                 continue;
