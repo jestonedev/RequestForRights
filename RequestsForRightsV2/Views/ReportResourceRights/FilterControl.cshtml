@@ -33,7 +33,8 @@
 
             <select class="form-control" name="IdResource" id="IdResource">
                 <option selected>Выберите информационный ресурс</option>
-                @foreach (var resourceGroup in Model.Resources.GroupBy(r => r.ResourceGroup))
+                @foreach (var resourceGroup in Model.Resources.GroupBy(r => r.ResourceGroup).
+                    OrderBy(r => r.Key.IdResourceGroup == 5).ThenBy(r => r.Key.Name))
                 {
                     <optgroup label="@resourceGroup.Key.Name">
                         @Html.Raw(

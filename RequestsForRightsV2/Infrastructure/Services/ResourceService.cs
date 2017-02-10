@@ -78,7 +78,7 @@ namespace RequestsForRights.Infrastructure.Services
             return new ResourceViewModel
             {
                 Resource = _resourceRepository.GetResourceById(id),
-                ResourceGroups = _resourceRepository.GetResourceGroups().OrderBy(r => r.Name),
+                ResourceGroups = _resourceRepository.GetResourceGroups().OrderBy(r => r.IdResourceGroup == 5).ThenBy(r => r.Name),
                 ResourceInformationTypes = _resourceRepository.GetResourceInformationTypes().OrderBy(r => r.Name),
                 Departments = _resourceRepository.GetDepartments().OrderBy(r => r.Name)
             };
@@ -89,7 +89,7 @@ namespace RequestsForRights.Infrastructure.Services
             return new ResourceViewModel
             {
                 Resource = resource,
-                ResourceGroups = _resourceRepository.GetResourceGroups().OrderBy(r => r.Name),
+                ResourceGroups = _resourceRepository.GetResourceGroups().OrderBy(r => r.IdResourceGroup == 5).ThenBy(r => r.Name),
                 ResourceInformationTypes = _resourceRepository.GetResourceInformationTypes().OrderBy(r => r.Name),
                 Departments = _resourceRepository.GetDepartments().OrderBy(r => r.Name)
             };
@@ -109,7 +109,7 @@ namespace RequestsForRights.Infrastructure.Services
                     OperatorDepartment = GetDepartmentInfo(24),
                     IdOperatorDepartment = 24
                 },
-                ResourceGroups = _resourceRepository.GetResourceGroups().OrderBy(r => r.Name),
+                ResourceGroups = _resourceRepository.GetResourceGroups().OrderBy(r => r.IdResourceGroup == 5).ThenBy(r => r.Name),
                 ResourceInformationTypes = _resourceRepository.GetResourceInformationTypes().OrderBy(r => r.Name),
                 Departments = _resourceRepository.GetDepartments().OrderBy(r => r.Name)
             };

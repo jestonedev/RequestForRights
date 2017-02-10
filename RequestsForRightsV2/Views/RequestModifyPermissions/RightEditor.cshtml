@@ -43,7 +43,8 @@
                 data-html="true"
                 data-container="body">
             <option value="" selected>Выберите информационный ресурс</option>
-            @foreach (var resourceGroup in Model.Resources.GroupBy(r => r.ResourceGroup))
+            @foreach (var resourceGroup in Model.Resources.GroupBy(r => r.ResourceGroup).
+                OrderBy(r => r.Key.IdResourceGroup == 5).ThenBy(r => r.Key.Name))
             {
                 var idResourceRight =
                     Model.RequestModel.Users[userIndex].Rights[rightIndex].IdResourceRight;
