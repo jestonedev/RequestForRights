@@ -527,7 +527,7 @@ function getRequestDescriptionPreamble(idRequestType) {
     var isOne = $(".rr-request-user").length === 1;
     switch (parseInt(idRequestType)) {
         case 1:
-            return "Произвести подключение к информационной инфраструктуры " +
+            return "Произвести подключение к информационной инфраструктуре " +
                 (isOne ? "следующего сотрудника" : "следующих сотрудников") +
                 ":\n";
         case 2:
