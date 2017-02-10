@@ -342,7 +342,6 @@ namespace RequestsForRights.Infrastructure.Security
             if (InRole(new[]
             {
                 AclRole.Administrator,
-                AclRole.Coordinator,
                 AclRole.Dispatcher,
                 AclRole.Executor,
                 AclRole.Registrar
@@ -355,6 +354,16 @@ namespace RequestsForRights.Infrastructure.Security
                 var request = _requestRepository.GetRequestById(entity.IdRequest);
                 if (request.IdUser == GetUserInfo().IdUser || GetUserAllowedDepartments().Any(r =>
                     GetUserAllowedDepartments(request.User).Any(req => req.IdDepartment == r.IdDepartment)))
+                {
+                    return true;
+                }
+            }
+            if (InRole(AclRole.Coordinator))
+            {
+                var request = _requestRepository.GetRequestById(entity.IdRequest);
+                if (request.RequestAgreements.Any(r => r.IdUser == GetUserInfo().IdUser 
+                    && r.IdAgreementType == 2 
+                    && r.IdRequest == entity.IdRequest))
                 {
                     return true;
                 }
