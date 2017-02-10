@@ -461,6 +461,8 @@
     <Content Include="Scripts\jquery.inputmask\jquery.inputmask.bundle.js" />
     <Content Include="Scripts\jquery.inputmask\jquery.inputmask.js" />
     <Content Include="Scripts\jquery.inputmask\jquery.inputmask.min.js" />
+    <Content Include="Scripts\jquery.mousewheel.js" />
+    <Content Include="Scripts\jquery.mousewheel.min.js" />
     <Content Include="Scripts\json2.js" />
     <Content Include="Scripts\json2.min.js" />
     <Content Include="Scripts\locales\bootstrap-datepicker.ar.min.js" />
