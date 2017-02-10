@@ -18,7 +18,6 @@
             function () {
                 clearTimeout(updateLocationHrefTimeout);
                 notUpdateLocationHref = true;
-                $("img").off("load");
                 $("body").off("click mousewheel keypress");
             });
 
