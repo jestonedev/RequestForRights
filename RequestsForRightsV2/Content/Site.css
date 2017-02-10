@@ -502,11 +502,24 @@ button.rr-ext-filter-button.collapsed:hover {
 
     .rr-help .rr-contents {
         display: block;
+        width: 240px;
     }
 
     .form-group.rr-request-delegation-from-date, .form-group.rr-request-delegation-to-date {
         margin-right: 0;
         margin-left: 0;
+    }
+}
+
+@media(min-width: 992px) {
+    .rr-help .rr-contents {
+        width: 235px;
+    }
+}
+
+@media(min-width: 1200px) {
+    .rr-help .rr-contents {
+        width: 285px;
     }
 }
 
