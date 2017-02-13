@@ -63,6 +63,10 @@ namespace RequestsForRights.Controllers
         public ActionResult Update(int id)
         {
             var resource = _resourceService.GetResourceBy(id);
+            if (resource == null)
+            {
+                return RedirectToAction("NotFoundError", "Home");
+            }
             if (!_securityService.CanUpdate(resource))
             {
                 return RedirectToAction("ForbiddenError", "Home");
@@ -116,6 +120,10 @@ namespace RequestsForRights.Controllers
         public ActionResult Detail(int id)
         {
             var resource = _resourceService.GetResourceBy(id);
+            if (resource == null)
+            {
+                return RedirectToAction("NotFoundError", "Home");
+            }
             if (!_securityService.CanRead(resource))
             {
                 return RedirectToAction("ForbiddenError", "Home");

@@ -81,6 +81,10 @@ namespace RequestsForRights.Controllers
         public ActionResult Update(int id)
         {
             var request = _requestService.GetRequestById(id);
+            if (request == null)
+            {
+                return RedirectToAction("NotFoundError", "Home");
+            }
             try
             {
                 var userInfo = _securityService.GetUserInfo();
@@ -112,6 +116,10 @@ namespace RequestsForRights.Controllers
         public ActionResult Detail(int id)
         {
             var request = _requestService.GetRequestById(id);
+            if (request == null)
+            {
+                return RedirectToAction("NotFoundError", "Home");
+            }
             try
             {
                 var userInfo = _securityService.GetUserInfo();

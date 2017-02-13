@@ -54,12 +54,17 @@ namespace RequestsForRights.Controllers
         [HttpGet]
         public ActionResult Update(int id)
         {
-            if (!_securityService.CanUpdate())
+            var resourceGroup = _resourceGroupService.GetResourceGroupBy(id);
+            if (resourceGroup == null)
+            {
+                return RedirectToAction("NotFoundError", "Home");
+            }
+            if (!_securityService.CanUpdate(resourceGroup))
             {
                 return RedirectToAction("ForbiddenError", "Home");
             }
             ViewData["SecurityService"] = _securityService;
-            return View(_resourceGroupService.GetResourceGroupBy(id));
+            return View(resourceGroup);
         }
 
         [HttpPut]
@@ -95,12 +100,17 @@ namespace RequestsForRights.Controllers
 
         public ActionResult Detail(int id)
         {
-            if (!_securityService.CanRead())
+            var resourceGroup = _resourceGroupService.GetResourceGroupBy(id);
+            if (resourceGroup == null)
+            {
+                return RedirectToAction("NotFoundError", "Home");
+            }
+            if (!_securityService.CanRead(resourceGroup))
             {
                 return RedirectToAction("ForbiddenError", "Home");
             }
             ViewData["SecurityService"] = _securityService;
-            return View(_resourceGroupService.GetResourceGroupBy(id));
+            return View(resourceGroup);
         }
 
         [HttpDelete]
