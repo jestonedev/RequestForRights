@@ -59,21 +59,150 @@ namespace RequestsForRights.UnitTests.Database
             LoadResourceGroups();
             LoadResources();
             LoadResourceRights();
+            LoadRequestUserRightsAssocs();
+        }
+
+        private void LoadRequestUserRightsAssocs()
+        {
+            // TODO
         }
 
         private void LoadResourceRights()
         {
-            throw new NotImplementedException();
+            var right1 = new ResourceRight
+            {
+                IdResourceRight = 1,
+                IdResource = 1,
+                Resource = Resources.First(r => r.IdResource == 1)
+            };
+            ResourceRights.Add(right1);
+            Resources.First(r => r.IdResource == 1).ResourceRights.Add(right1);
+            var right2 = new ResourceRight
+            {
+                IdResourceRight = 2,
+                IdResource = 2,
+                Resource = Resources.First(r => r.IdResource == 2)
+            };
+            ResourceRights.Add(right2);
+            Resources.First(r => r.IdResource == 2).ResourceRights.Add(right2);
+            var right3 = new ResourceRight
+            {
+                IdResourceRight = 3,
+                IdResource = 3,
+                Resource = Resources.First(r => r.IdResource == 3)
+            };
+            ResourceRights.Add(right3);
+            Resources.First(r => r.IdResource == 3).ResourceRights.Add(right3);
+            var right4 = new ResourceRight
+            {
+                IdResourceRight = 4,
+                IdResource = 3,
+                Resource = Resources.First(r => r.IdResource == 3),
+                Deleted = true
+            };
+            ResourceRights.Add(right4);
+            Resources.First(r => r.IdResource == 3).ResourceRights.Add(right4);
+            var right5 = new ResourceRight
+            {
+                IdResourceRight = 5,
+                IdResource = 4,
+                Resource = Resources.First(r => r.IdResource == 4)
+            };
+            ResourceRights.Add(right5);
+            Resources.First(r => r.IdResource == 4).ResourceRights.Add(right5);
+            var right6 = new ResourceRight
+            {
+                IdResourceRight = 6,
+                IdResource = 5,
+                Resource = Resources.First(r => r.IdResource == 5)
+            };
+            ResourceRights.Add(right6);
+            Resources.First(r => r.IdResource == 5).ResourceRights.Add(right6);
+            var right7 = new ResourceRight
+            {
+                IdResourceRight = 7,
+                IdResource = 5,
+                Resource = Resources.First(r => r.IdResource == 5)
+            };
+            ResourceRights.Add(right7);
+            Resources.First(r => r.IdResource == 5).ResourceRights.Add(right7);
         }
 
         private void LoadResources()
         {
-            throw new NotImplementedException();
+            var resource1 = new Resource
+            {
+                IdResource = 1,
+                IdResourceGroup = 1,
+                ResourceGroup = ResourceGroups.First(r => r.IdResourceGroup == 1),
+                IdDepartment = 24,
+                Department = Departments.First(r => r.IdDepartment == 24)
+            };
+            Resources.Add(resource1);
+            ResourceGroups.First(r => r.IdResourceGroup == 1).Resources.Add(resource1);
+            Departments.First(r => r.IdDepartment == 24).Resources.Add(resource1);
+            var resource2 = new Resource
+            {
+                IdResource = 2,
+                IdResourceGroup = 1,
+                ResourceGroup = ResourceGroups.First(r => r.IdResourceGroup == 1),
+                IdDepartment = 2,
+                Department = Departments.First(r => r.IdDepartment == 2)
+            };
+            Resources.Add(resource2);
+            ResourceGroups.First(r => r.IdResourceGroup == 1).Resources.Add(resource2);
+            Departments.First(r => r.IdDepartment == 2).Resources.Add(resource2);
+            var resource3 = new Resource
+            {
+                IdResource = 3,
+                IdResourceGroup = 2,
+                ResourceGroup = ResourceGroups.First(r => r.IdResourceGroup == 2),
+                IdDepartment = 3,
+                Department = Departments.First(r => r.IdDepartment == 3)
+            };
+            Resources.Add(resource3);
+            ResourceGroups.First(r => r.IdResourceGroup == 2).Resources.Add(resource3);
+            Departments.First(r => r.IdDepartment == 3).Resources.Add(resource3);
+            var resource4 = new Resource
+            {
+                IdResource = 4,
+                IdResourceGroup = 2,
+                ResourceGroup = ResourceGroups.First(r => r.IdResourceGroup == 2),
+                IdDepartment = 3,
+                Department = Departments.First(r => r.IdDepartment == 3),
+                Deleted = true
+            };
+            Resources.Add(resource4);
+            ResourceGroups.First(r => r.IdResourceGroup == 2).Resources.Add(resource4);
+            Departments.First(r => r.IdDepartment == 3).Resources.Add(resource4);
+            var resource5 = new Resource
+            {
+                IdResource = 5,
+                IdResourceGroup = 2,
+                ResourceGroup = ResourceGroups.First(r => r.IdResourceGroup == 2),
+                IdDepartment = 4,
+                Department = Departments.First(r => r.IdDepartment == 4)
+            };
+            Resources.Add(resource5);
+            ResourceGroups.First(r => r.IdResourceGroup == 2).Resources.Add(resource5);
+            Departments.First(r => r.IdDepartment == 4).Resources.Add(resource5);
         }
 
         private void LoadResourceGroups()
         {
-            throw new NotImplementedException();
+            ResourceGroups.Add(new ResourceGroup
+            {
+                IdResourceGroup = 1
+            });
+            ResourceGroups.Add(new ResourceGroup
+            {
+                IdResourceGroup = 21
+            });
+            ResourceGroups.Add(new ResourceGroup
+            {
+                IdResourceGroup = 3,
+                Deleted = true
+            });
         }
 
         private void LoadAclRoles()

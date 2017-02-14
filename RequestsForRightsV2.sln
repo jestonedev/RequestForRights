@@ -5,9 +5,9 @@ VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RequestsForRights.Web", "RequestsForRightsV2\RequestsForRights.Web.csproj", "{F681AC1D-0629-4021-8FF6-EC5FB119FA6B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RequestsForRights.Domain", "Domain\RequestsForRights.Domain.csproj", "{F4CCA6B9-9648-47F4-A750-4ECCBA53F5FB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RequestsForRights.Domain", "RequestsForRights.Domain\RequestsForRights.Domain.csproj", "{F4CCA6B9-9648-47F4-A750-4ECCBA53F5FB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RequestsForRights.Database", "Database\RequestsForRights.Database.csproj", "{1CE3AA34-A68D-4364-B5B0-128AC8771D3F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RequestsForRights.Database", "RequestsForRights.Database\RequestsForRights.Database.csproj", "{1CE3AA34-A68D-4364-B5B0-128AC8771D3F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RequestsForRights.Ldap", "RequestsForRights.Ldap\RequestsForRights.Ldap.csproj", "{45B2F648-AA9A-4FCE-BD87-99C184A6FA29}"
 EndProject

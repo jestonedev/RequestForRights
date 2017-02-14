@@ -66,11 +66,11 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Database\RequestsForRights.Database.csproj">
+    <ProjectReference Include="..\RequestsForRights.Database\RequestsForRights.Database.csproj">
       <Project>{1ce3aa34-a68d-4364-b5b0-128ac8771d3f}</Project>
       <Name>RequestsForRights.Database</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Domain\RequestsForRights.Domain.csproj">
+    <ProjectReference Include="..\RequestsForRights.Domain\RequestsForRights.Domain.csproj">
       <Project>{f4cca6b9-9648-47f4-a750-4eccba53f5fb}</Project>
       <Name>RequestsForRights.Domain</Name>
     </ProjectReference>

@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>RequestsForRights.Database</RootNamespace>
-    <AssemblyName>Database</AssemblyName>
+    <AssemblyName>RequestsForRights.Database</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -220,7 +220,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Domain\RequestsForRights.Domain.csproj">
+    <ProjectReference Include="..\RequestsForRights.Domain\RequestsForRights.Domain.csproj">
       <Project>{f4cca6b9-9648-47f4-a750-4eccba53f5fb}</Project>
       <Name>RequestsForRights.Domain</Name>
     </ProjectReference>
