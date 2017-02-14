@@ -70,7 +70,8 @@
                         @Html.TextBoxFor(r => r.RequestModel.Users[userIndex].Post,
                         new
                         {
-                            @class = "form-control"
+                            @class = "form-control",
+                            placeholder = "Введите должность сотрудника"
                         })
                         @Html.ValidationMessageFor(r => r.RequestModel.Users[userIndex].Post)
                     </div>
@@ -124,7 +125,8 @@
                         @Html.TextBoxFor(r => r.RequestModel.Users[userIndex].Office,
                         new
                         {
-                            @class = "form-control"
+                            @class = "form-control",
+                            placeholder = "Введите кабинет сотрудника"
                         })
                         @Html.ValidationMessageFor(r => r.RequestModel.Users[userIndex].Office)
                     </div>
@@ -136,7 +138,8 @@
                         @Html.TextBoxFor(r => r.RequestModel.Users[userIndex].Phone,
                         new
                         {
-                            @class = "form-control"
+                            @class = "form-control",
+                            placeholder = "Введите телефон сотрудника"
                         })
                         @Html.ValidationMessageFor(r => r.RequestModel.Users[userIndex].Phone)
                     </div>
