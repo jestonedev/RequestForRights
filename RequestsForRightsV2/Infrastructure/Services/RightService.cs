@@ -4,6 +4,7 @@ using System.Linq;
 using RequestsForRights.Database.Repositories.Interfaces;
 using RequestsForRights.Web.Infrastructure.Services.Interfaces;
 using RequestsForRights.Web.Models.Models;
+using WebGrease.Css.Extensions;
 
 namespace RequestsForRights.Web.Infrastructure.Services
 {
@@ -262,8 +263,8 @@ namespace RequestsForRights.Web.Infrastructure.Services
                     DelegateFromUserSnp = delegateUserFrom.Snp,
                     DelegateFromUserDepartment = delegateUserFrom.Department,
                     DelegateFromUserUnit = delegateUserFrom.Unit,
-                    DateFrom = delegateRight.DelegateFromDate,
-                    DateTo = delegateRight.DelegateToDate
+                    DateDelegateFrom = delegateRight.DelegateFromDate,
+                    DateDelegateTo = delegateRight.DelegateToDate
                 };
         }
 
@@ -271,7 +272,15 @@ namespace RequestsForRights.Web.Infrastructure.Services
             int? idRequestUser, int? idResource)
         {
             var permanentRights = GetPermanentRightsOnDate(date, idRequestUser, idResource);
-            var delegateRights = GetDelegatedRightsOnDate(date, idRequestUser, idResource);
+            var delegateRights = GetDelegatedRightsOnDate(date, idRequestUser, idResource).ToList();
+            delegateRights.ForEach(r =>
+            {
+                var permanentRight = permanentRights.FirstOrDefault(pr => pr.IdResourceRight == r.IdResourceRight);
+                if (permanentRight != null)
+                {
+                    r.DateFrom = permanentRight.DateFrom;
+                }
+            });
             permanentRights = permanentRights.Where(pr =>
                 !delegateRights.Any(
                     dr => pr.IdRequestUser == dr.IdDelegateFromUser &&

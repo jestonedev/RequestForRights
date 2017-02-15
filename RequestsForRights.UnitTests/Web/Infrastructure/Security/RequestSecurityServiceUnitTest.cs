@@ -539,6 +539,27 @@ namespace RequestsForRights.UnitTests.Web.Infrastructure.Security
             Assert.IsFalse(can);
         }
 
+        [TestMethod]
+        public void CanSetRequest1State1Requester1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 3);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanSetRequestState(
+                requestsData.Requests.First(r => r.IdRequest == 1), 1);
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanSetNullRequestStateTest()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 3);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanSetRequestState((Request)null, 1);
+            Assert.IsFalse(can);
+        }
+
         private static RequestSecurityService<RequestUserModel> GetRequestSecurityService(AclUser user, DatabaseContext dbContext)
         {
             var securityRepositoryMock = new Mock<ISecurityRepository>();

@@ -220,6 +220,10 @@ namespace RequestsForRights.Web.Infrastructure.Security
 
         public bool CanSetRequestState(Request request, int idRequestStateType)
         {
+            if (request == null)
+            {
+                return false;
+            }
             if (request.RequestStates.OrderBy(rs => rs.IdRequestState).Last(r => !r.Deleted).IdRequestStateType == idRequestStateType)
             {
                 return false;

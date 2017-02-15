@@ -38,17 +38,25 @@
                         <dl class="dl-horizontal">
                             <dt>Право</dt>
                             <dd>@right.ResourceRightName</dd>
+                            @if (right.DateFrom != null)
+                            {
+                                <dt>Дата и время выдачи</dt>
+                                <dd>@right.DateFrom</dd>
+                            }
+                            <dt>Категория</dt>
+                            <dd>@right.RightCategory</dd>
                             @if (right.IdDelegateFromUser != null)
                             {
-                                <dt>Дата начала действия</dt>
-                                <dd>@right.DateFrom.ToString("dd.MM.yyyy", CultureInfo.CurrentCulture)</dd>
-                                if (right.DateTo != null)
+                                if (right.DateDelegateFrom != null)
+                                {
+                                    <dt>Дата начала действия</dt>
+                                    <dd>@right.DateDelegateFrom.Value.ToString("dd.MM.yyyy", CultureInfo.CurrentCulture)</dd>
+                                }
+                                if (right.DateDelegateTo != null)
                                 {
                                     <dt>Дата окончания</dt>
-                                    <dd>@right.DateTo.Value.ToString("dd.MM.yyyy", CultureInfo.CurrentCulture)</dd>
+                                    <dd>@right.DateDelegateTo.Value.ToString("dd.MM.yyyy", CultureInfo.CurrentCulture)</dd>
                                 }
-                                <dt>Категория</dt>
-                                <dd>@right.RightCategory</dd>
                                 if (right.IdRequestUser == Model.RequestUser.IdRequestUser)
                                 {
                                     <dt>Делегировано от</dt>
@@ -73,13 +81,6 @@
                                         <dd>@right.RequestUserUnit</dd>
                                     }
                                 }
-                            }
-                            else
-                            {
-                                <dt>Дата и время выдачи</dt>
-                                <dd>@right.DateFrom</dd>
-                                <dt>Категория</dt>
-                                <dd>@right.RightCategory</dd>
                             }
                         </dl>
                     </li>
@@ -152,20 +153,17 @@ else
                             @right.ResourceName
                         </td>
                         <td class="rr-column">@right.ResourceRightName</td>
-                        @if (right.IdDelegateFromUser != null)
-                        {
-                            <td class="rr-column">@right.DateFrom.ToString("dd.MM.yyyy", CultureInfo.CurrentCulture)</td>
-                            <td class="rr-column">@right.RightCategory</td>
-                        }
-                        else
-                        {
-                            <td class="rr-column">@right.DateFrom</td>
-                            <td class="rr-column">@right.RightCategory</td>
-                        }
+                        <td class="rr-column">@(right.DateFrom != null ? 
+                        right.DateFrom.Value.ToString("dd.MM.yyyy hh:mm:ss", CultureInfo.CurrentCulture) : "н/д")</td>
+                        <td class="rr-column">@right.RightCategory</td>
                         <td>
-                            @if (right.DateTo != null)
+                            @if (right.DateDelegateFrom != null)
                             {
-                                <p><b>Дата окончания действия:</b> @right.DateTo.Value.ToString("dd.MM.yyyy", CultureInfo.CurrentCulture)</p>
+                                 <p><b>Дата начала действия:</b> @right.DateDelegateFrom.Value.ToString("dd.MM.yyyy", CultureInfo.CurrentCulture)</p>
+                            }
+                            @if (right.DateDelegateTo != null)
+                            {
+                                <p><b>Дата окончания действия:</b> @right.DateDelegateTo.Value.ToString("dd.MM.yyyy", CultureInfo.CurrentCulture)</p>
                             }
                             @if (right.IdRequestUser == Model.RequestUser.IdRequestUser)
                             {
