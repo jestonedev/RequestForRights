@@ -1,4 +1,4 @@
-﻿namespace RequestsForRights.Infrastructure.Enums
+﻿namespace RequestsForRights.Web.Infrastructure.Enums
 {
     public enum RequestCategory
     {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Net.Mail;
 
-namespace RequestsForRights.Infrastructure.Utilities.EmailNotify
+namespace RequestsForRights.Web.Infrastructure.Utilities.EmailNotify
 {
     public interface IEmailSender
     {

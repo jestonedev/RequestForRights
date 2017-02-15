@@ -1,6 +1,6 @@
 ﻿using System.Web.Mvc;
 
-namespace RequestsForRights.Controllers
+namespace RequestsForRights.Web.Controllers
 {
     public class HomeController : Controller
     {

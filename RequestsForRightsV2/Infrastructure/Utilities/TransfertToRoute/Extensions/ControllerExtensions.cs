@@ -1,7 +1,7 @@
 ﻿using System.Web.Mvc;
 using System.Web.Routing;
 
-namespace RequestsForRights.Infrastructure.Utilities.TransfertToRoute.Extensions
+namespace RequestsForRights.Web.Infrastructure.Utilities.TransfertToRoute.Extensions
 {
     public static class ControllerExtensions
     {

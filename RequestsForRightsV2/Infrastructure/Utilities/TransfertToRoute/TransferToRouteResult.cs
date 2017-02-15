@@ -2,7 +2,7 @@
 using System.Web.Mvc;
 using System.Web.Routing;
 
-namespace RequestsForRights.Infrastructure.Utilities.TransfertToRoute
+namespace RequestsForRights.Web.Infrastructure.Utilities.TransfertToRoute
 {
     public class TransferToRouteResult : ActionResult
     {

@@ -1,14 +1,14 @@
 ﻿using System;
-using RequestsForRights.Database.Repositories.Interfaces;
-using RequestsForRights.Domain.Entities;
-using RequestsForRights.Infrastructure.Services.Interfaces;
-using RequestsForRights.Ldap;
 using System.Collections.Generic;
 using System.Linq;
-using RequestsForRights.Infrastructure.Security.Interfaces;
-using AclRole = RequestsForRights.Infrastructure.Enums.AclRole;
+using RequestsForRights.Database.Repositories.Interfaces;
+using RequestsForRights.Domain.Entities;
+using RequestsForRights.Ldap;
+using RequestsForRights.Web.Infrastructure.Security.Interfaces;
+using RequestsForRights.Web.Infrastructure.Services.Interfaces;
+using AclRole = RequestsForRights.Web.Infrastructure.Enums.AclRole;
 
-namespace RequestsForRights.Infrastructure.Services
+namespace RequestsForRights.Web.Infrastructure.Services
 {
     public class UserService: IUserService
     {

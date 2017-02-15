@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using RequestsForRights.Domain.Entities;
-using AclRole = RequestsForRights.Infrastructure.Enums.AclRole;
+using AclRole = RequestsForRights.Web.Infrastructure.Enums.AclRole;
 
-namespace RequestsForRights.Infrastructure.Security.Interfaces
+namespace RequestsForRights.Web.Infrastructure.Security.Interfaces
 {
     public interface ISecurityService<in T>
         where T: class

@@ -1,6 +1,6 @@
 ﻿using System.Web.Optimization;
 
-namespace RequestsForRights
+namespace RequestsForRights.Web
 {
     public class BundleConfig
     {

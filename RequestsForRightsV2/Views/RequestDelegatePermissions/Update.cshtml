@@ -1,6 +1,6 @@
-﻿@using RequestsForRights.Infrastructure.Security.Interfaces
-@using RequestsForRights.Models.Models
-@model RequestsForRights.Models.ViewModels.Request.RequestDelegatePermissionsViewModel
+﻿@using RequestsForRights.Web.Infrastructure.Security.Interfaces
+@using RequestsForRights.Web.Models.Models
+@model RequestsForRights.Web.Models.ViewModels.Request.RequestDelegatePermissionsViewModel
 
 @{
     var securityService = (IRequestSecurityService<RequestDelegatePermissionsUserModel>)ViewData["SecurityService"];
@@ -47,7 +47,7 @@
                         @if (securityService.CanDelete(Model.RequestModel))
                         {
                             <a href="@Url.Action("Delete", "Request",
-                                new { id = Model.RequestModel.IdRequest })" id="delete-button"
+                                         new { id = Model.RequestModel.IdRequest })" id="delete-button"
                                data-success-redirect-to="@Url.Action("Index", "Request")"
                                class="btn btn-danger"
                                title="Вернуться к перечню"

@@ -5,10 +5,10 @@ using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 using Newtonsoft.Json;
-using RequestsForRights.Infrastructure.Helpers;
-using RequestsForRights.Models.ReportOptions;
+using RequestsForRights.Web.Infrastructure.Helpers;
+using RequestsForRights.Web.Models.ReportOptions;
 
-namespace RequestsForRights.Infrastructure.ValueProviders
+namespace RequestsForRights.Web.Infrastructure.ValueProviders
 {
     public class ReportResourceRightsOptionsValueProvider : 
         ReportOptionsValueProvider<ReportResourceRightsOptions>, IValueProvider

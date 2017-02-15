@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RequestsForRights.Models.ReportOptions
+namespace RequestsForRights.Web.Models.ReportOptions
 {
     public class ReportResourceRightsOptions : ReportOptions
     {

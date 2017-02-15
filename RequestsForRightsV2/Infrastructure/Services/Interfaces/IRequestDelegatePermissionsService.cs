@@ -1,7 +1,7 @@
-﻿using RequestsForRights.Models.Models;
-using RequestsForRights.Models.ViewModels.Request;
+﻿using RequestsForRights.Web.Models.Models;
+using RequestsForRights.Web.Models.ViewModels.Request;
 
-namespace RequestsForRights.Infrastructure.Services.Interfaces
+namespace RequestsForRights.Web.Infrastructure.Services.Interfaces
 {
     public interface IRequestDelegatePermissionsService : 
         IRequestService<RequestDelegatePermissionsUserModel,

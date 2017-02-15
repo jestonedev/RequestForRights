@@ -1,8 +1,8 @@
 ﻿using System.Linq;
-using RequestsForRights.Infrastructure.Enums;
-using RequestsForRights.Infrastructure.Utilities.EntitySorter;
+using RequestsForRights.Web.Infrastructure.Enums;
+using RequestsForRights.Web.Infrastructure.Utilities.EntitySorter;
 
-namespace RequestsForRights.Infrastructure.Extensions
+namespace RequestsForRights.Web.Infrastructure.Extensions
 {
     public static class LinqExtensions
     {

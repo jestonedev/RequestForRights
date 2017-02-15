@@ -1,6 +1,6 @@
 ﻿@using System.Globalization
-@using RequestsForRights.Infrastructure.Enums
-@model RequestsForRights.Models.ViewModels.ReportUserRightsViewModel
+@using RequestsForRights.Web.Infrastructure.Enums
+@model RequestsForRights.Web.Models.ViewModels.ReportUserRightsViewModel
 
 @{
     Layout = null;
@@ -123,15 +123,15 @@ else
                     @foreach (var header in headers)
                     {
                         var iconClass = "glyphicon-sort";
-                        var sortDirection = RequestsForRights.Infrastructure.Enums.SortDirection.Asc;
+                        var sortDirection = RequestsForRights.Web.Infrastructure.Enums.SortDirection.Asc;
                         if (header.Field == Model.Options.SortField)
                         {
-                            iconClass = Model.Options.SortDirection == RequestsForRights.Infrastructure.Enums.SortDirection.Asc ?
+                            iconClass = Model.Options.SortDirection == RequestsForRights.Web.Infrastructure.Enums.SortDirection.Asc ?
                                 "glyphicon-sort-by-attributes" :
                                 "glyphicon-sort-by-attributes-alt";
                             sortDirection = Model.Options.SortDirection ==
-                                            RequestsForRights.Infrastructure.Enums.SortDirection.Asc ?
-                                RequestsForRights.Infrastructure.Enums.SortDirection.Desc : RequestsForRights.Infrastructure.Enums.SortDirection.Asc;
+                                            RequestsForRights.Web.Infrastructure.Enums.SortDirection.Asc ?
+                                RequestsForRights.Web.Infrastructure.Enums.SortDirection.Desc : RequestsForRights.Web.Infrastructure.Enums.SortDirection.Asc;
                         }
                         <th class="rr-column rr-column-header"
                             style="min-width: @(header.MinWidth)px">

@@ -1,6 +1,6 @@
-﻿using RequestsForRights.Models.Models;
+﻿using RequestsForRights.Web.Models.Models;
 
-namespace RequestsForRights.Models.ViewModels.Request
+namespace RequestsForRights.Web.Models.ViewModels.Request
 {
     public class RequestRemoveUserViewModel : RequestViewModel<RequestUserModel>
     {

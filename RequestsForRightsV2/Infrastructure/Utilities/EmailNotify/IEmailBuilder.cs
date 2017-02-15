@@ -2,7 +2,7 @@
 using System.Net.Mail;
 using RequestsForRights.Domain.Entities;
 
-namespace RequestsForRights.Infrastructure.Utilities.EmailNotify
+namespace RequestsForRights.Web.Infrastructure.Utilities.EmailNotify
 {
     public interface IEmailBuilder
     {

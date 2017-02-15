@@ -1,10 +1,10 @@
 ﻿@using System.Globalization
-@using RequestsForRights.Infrastructure.Security.Interfaces
-@using RequestsForRights.Infrastructure.Services.Interfaces
-@using RequestsForRights.Models.Models
-@using RequestsForRights.Models.ViewModels.Request
-@using SortDirection = RequestsForRights.Infrastructure.Enums.SortDirection
-@model RequestsForRights.Models.ViewModels.RequestIndexViewModel
+@using RequestsForRights.Web.Infrastructure.Security.Interfaces
+@using RequestsForRights.Web.Infrastructure.Services.Interfaces
+@using RequestsForRights.Web.Models.Models
+@using RequestsForRights.Web.Models.ViewModels.Request
+@using SortDirection = RequestsForRights.Web.Infrastructure.Enums.SortDirection
+@model RequestsForRights.Web.Models.ViewModels.RequestIndexViewModel
 
 @{
     var securityService = (IRequestSecurityService<RequestUserModel>)ViewData["SecurityService"];

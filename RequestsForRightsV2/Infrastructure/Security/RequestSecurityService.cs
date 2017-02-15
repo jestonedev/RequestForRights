@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using RequestsForRights.Database.Repositories.Interfaces;
 using RequestsForRights.Domain.Entities;
-using RequestsForRights.Infrastructure.Security.Interfaces;
-using RequestsForRights.Models.Models;
-using AclRole = RequestsForRights.Infrastructure.Enums.AclRole;
+using RequestsForRights.Web.Infrastructure.Security.Interfaces;
+using RequestsForRights.Web.Models.Models;
+using AclRole = RequestsForRights.Web.Infrastructure.Enums.AclRole;
 
-namespace RequestsForRights.Infrastructure.Security
+namespace RequestsForRights.Web.Infrastructure.Security
 {
     public class RequestSecurityService<T> : SecurityService<RequestModel<T>>, IRequestSecurityService<T>
         where T: RequestUserModel
@@ -109,7 +109,8 @@ namespace RequestsForRights.Infrastructure.Security
             {
                 filteredRequests = filteredRequests.Concat(
                     requests.Where(r => r.IdUser == userInfo.IdUser ||
-                                   allowedDepartments.Any(d => d == r.User.Department.IdDepartment)));
+                                        GetUserAllowedDepartments(r.User).Any(d =>
+                                            GetUserAllowedDepartments(null).Any(ad => d == ad))));
             }
             if (InRole(AclRole.ResourceOwner))
             {
@@ -255,19 +256,17 @@ namespace RequestsForRights.Infrastructure.Security
         public bool CanSetRequestStateGlobal(Request request, int idRequestStateType)
         {
             if (idRequestStateType != 1) return true;
-            var resourceRights = request.RequestUserAssoc.Where(r => r.RequestUserRightAssocs != null)
-                .Select(r => r.RequestUserRightAssocs).ToList();
-            if (!resourceRights.Any())
+            var idResourceRights = request.RequestUserAssoc.Where(r => r.RequestUserRightAssocs != null)
+                .SelectMany(r => r.RequestUserRightAssocs).Select(r => r.IdResourceRight).ToList();
+            if (!idResourceRights.Any())
             {
                 return false;
             }
-            var idResourceRights = resourceRights.Aggregate((acc, v) => acc.Concat(v).ToList())
-                .Select(r => r.IdResourceRight);
-            var resourceDepartments = _resourceRepository.GetResourceRights().Where(r => !r.Deleted &&
+           var resourceDepartments = _resourceRepository.GetResourceRights().Where(r => !r.Deleted &&
                 idResourceRights.Any(idResourceRight => idResourceRight == r.IdResourceRight)).
-                Select(r => r.Resource.IdDepartment);
+                Select(r => r.Resource.IdDepartment).Where(r => r != 24);
             var allowedDepartments = GetUserAllowedDepartments(request.User).Select(r => r.IdDepartment);
-            return resourceDepartments.Any(dep => dep != 24 && !allowedDepartments.Contains(dep));
+            return resourceDepartments.Any(dep => !allowedDepartments.Contains(dep));
         }
 
         public bool CanSetRequestState(RequestModel<T> entity, int idRequestStateType)

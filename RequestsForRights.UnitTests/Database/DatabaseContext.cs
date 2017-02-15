@@ -59,1630 +59,679 @@ namespace RequestsForRights.UnitTests.Database
             LoadResourceGroups();
             LoadResources();
             LoadResourceRights();
+            LoadRequestRightGrantType();
             LoadRequestUserRightsAssocs();
+            LoadRequestAgreementStates();
+            LoadRequestAgreementTypes();
+            LoadRequestAgreements();
+        }
+
+        private void LoadRequestAgreementTypes()
+        {
+            var requestAgreementTypes = new[]
+            {
+                new { IdAgreementType = 1 },
+                new { IdAgreementType = 2 }
+            };
+            foreach (var requestAgreementTypeParams in requestAgreementTypes)
+            {
+                RequestAgreementTypes.Add(new RequestAgreementType
+                {
+                    IdAgreementType = requestAgreementTypeParams.IdAgreementType,
+                    RequestAgreements = new List<RequestAgreement>()
+                });
+            }
+        }
+
+        private void LoadRequestAgreementStates()
+        {
+            var requestAgreementStates = new[]
+            {
+                new { IdAgreementState = 1 },
+                new { IdAgreementState = 2 },
+                new { IdAgreementState = 3 }
+            };
+            foreach (var requestAgreementStateParams in requestAgreementStates)
+            {
+                RequestAgreementStates.Add(new RequestAgreementState
+                {
+                    IdAgreementState = requestAgreementStateParams.IdAgreementState,
+                    RequestAgreements = new List<RequestAgreement>()
+                });
+            }
+        }
+
+        private void LoadRequestAgreements()
+        {
+            var agreements = new[]
+            {
+                new { IdRequestAgreement = 1, IdRequest = 1, IdAgreementState = 1, IdAgreementType = 2, IdUser = 9 },
+                new { IdRequestAgreement = 2, IdRequest = 11, IdAgreementState = 3, IdAgreementType = 2, IdUser = 9 },
+                new { IdRequestAgreement = 3, IdRequest = 11, IdAgreementState = 1, IdAgreementType = 2, IdUser = 10 },
+                new { IdRequestAgreement = 4, IdRequest = 9, IdAgreementState = 2, IdAgreementType = 2, IdUser = 10 },
+                new { IdRequestAgreement = 5, IdRequest = 8, IdAgreementState = 1, IdAgreementType = 2, IdUser = 9 },
+                new { IdRequestAgreement = 6, IdRequest = 10, IdAgreementState = 2, IdAgreementType = 2, IdUser = 9 },
+                new { IdRequestAgreement = 7, IdRequest = 10, IdAgreementState = 2, IdAgreementType = 2, IdUser = 10 },
+                new { IdRequestAgreement = 8, IdRequest = 15, IdAgreementState = 2, IdAgreementType = 1, IdUser = 6 },
+            };
+            foreach (var agreementParams in agreements)
+            {
+                var agreement = new RequestAgreement
+                {
+                    IdRequestAgreement = agreementParams.IdRequestAgreement,
+                    IdRequest = agreementParams.IdRequest,
+                    Request = Requests.First(r => r.IdRequest == agreementParams.IdRequest),
+                    IdAgreementState = agreementParams.IdAgreementState,
+                    AgreementState = RequestAgreementStates.First(r => r.IdAgreementState == agreementParams.IdAgreementState),
+                    IdAgreementType = agreementParams.IdAgreementType,
+                    AgreementType = RequestAgreementTypes.First(r => r.IdAgreementType == agreementParams.IdAgreementType),
+                    IdUser = agreementParams.IdUser,
+                    User = AclUsers.First(r => r.IdUser == agreementParams.IdUser)
+                };
+                RequestAgreements.Add(agreement);
+                Requests.First(r => r.IdRequest == agreementParams.IdRequest).RequestAgreements.Add(agreement);
+                RequestAgreementStates.First(r => r.IdAgreementState == agreementParams.IdAgreementState).RequestAgreements.Add(agreement);
+                RequestAgreementTypes.First(r => r.IdAgreementType == agreementParams.IdAgreementType).RequestAgreements.Add(agreement);
+                AclUsers.First(r => r.IdUser == agreementParams.IdUser).RequestAgreements.Add(agreement);
+            }
+        }
+
+        private void LoadRequestRightGrantType()
+        {
+            var rightGrantTypes = new[]
+            {
+                new { IdRequestRightGrantType = 1 },
+                new { IdRequestRightGrantType = 2 },
+                new { IdRequestRightGrantType = 3 },
+            };
+            foreach (var rightGrantTypeParams in rightGrantTypes)
+            {
+                RequestRightGrantTypes.Add(new RequestRightGrantType
+                {
+                    IdRequestRightGrantType = rightGrantTypeParams.IdRequestRightGrantType,
+                    RequestUserRightAssoc = new List<RequestUserRightAssoc>()
+                });
+            }
         }
 
         private void LoadRequestUserRightsAssocs()
         {
-            // TODO
+            var ruars = new[]
+            {
+                new { IdAssoc = 1, IdRequestUserAssoc = 1, IdResourceRight = 3, IdRequestRightGrantType = 1 },
+                new { IdAssoc = 2, IdRequestUserAssoc = 2, IdResourceRight = 3, IdRequestRightGrantType = 1 },
+                new { IdAssoc = 3, IdRequestUserAssoc = 2, IdResourceRight = 4, IdRequestRightGrantType = 2 },
+                new { IdAssoc = 4, IdRequestUserAssoc = 3, IdResourceRight = 1, IdRequestRightGrantType = 1 },
+                new { IdAssoc = 5, IdRequestUserAssoc = 3, IdResourceRight = 3, IdRequestRightGrantType = 1 },
+                new { IdAssoc = 6, IdRequestUserAssoc = 4, IdResourceRight = 2, IdRequestRightGrantType = 1 },
+                new { IdAssoc = 7, IdRequestUserAssoc = 5, IdResourceRight = 1, IdRequestRightGrantType = 1 },
+                new { IdAssoc = 8, IdRequestUserAssoc = 5, IdResourceRight = 2, IdRequestRightGrantType = 1 },
+                new { IdAssoc = 9, IdRequestUserAssoc = 6, IdResourceRight = 4, IdRequestRightGrantType = 1 },
+                new { IdAssoc = 10, IdRequestUserAssoc = 6, IdResourceRight = 6, IdRequestRightGrantType = 1 },
+                new { IdAssoc = 11, IdRequestUserAssoc = 8, IdResourceRight = 2, IdRequestRightGrantType = 1 },
+                new { IdAssoc = 12, IdRequestUserAssoc = 9, IdResourceRight = 1, IdRequestRightGrantType = 1 },
+                new { IdAssoc = 13, IdRequestUserAssoc = 9, IdResourceRight = 2, IdRequestRightGrantType = 1 },
+                new { IdAssoc = 14, IdRequestUserAssoc = 10, IdResourceRight = 2, IdRequestRightGrantType = 1 },
+                new { IdAssoc = 15, IdRequestUserAssoc = 10, IdResourceRight = 4, IdRequestRightGrantType = 1 },
+                new { IdAssoc = 16, IdRequestUserAssoc = 11, IdResourceRight = 3, IdRequestRightGrantType = 1 },
+                new { IdAssoc = 17, IdRequestUserAssoc = 11, IdResourceRight = 6, IdRequestRightGrantType = 1 },
+                new { IdAssoc = 18, IdRequestUserAssoc = 12, IdResourceRight = 2, IdRequestRightGrantType = 1 },
+                new { IdAssoc = 19, IdRequestUserAssoc = 12, IdResourceRight = 6, IdRequestRightGrantType = 1 },
+                new { IdAssoc = 20, IdRequestUserAssoc = 12, IdResourceRight = 7, IdRequestRightGrantType = 1 },
+                new { IdAssoc = 21, IdRequestUserAssoc = 13, IdResourceRight = 2, IdRequestRightGrantType = 1 },
+                new { IdAssoc = 22, IdRequestUserAssoc = 14, IdResourceRight = 5, IdRequestRightGrantType = 1 },
+                new { IdAssoc = 23, IdRequestUserAssoc = 16, IdResourceRight = 1, IdRequestRightGrantType = 1 },
+                new { IdAssoc = 24, IdRequestUserAssoc = 16, IdResourceRight = 2, IdRequestRightGrantType = 1 },
+                new { IdAssoc = 25, IdRequestUserAssoc = 16, IdResourceRight = 3, IdRequestRightGrantType = 1 },
+                new { IdAssoc = 26, IdRequestUserAssoc = 17, IdResourceRight = 4, IdRequestRightGrantType = 1 },
+                new { IdAssoc = 27, IdRequestUserAssoc = 18, IdResourceRight = 3, IdRequestRightGrantType = 1 },
+                new { IdAssoc = 28, IdRequestUserAssoc = 19, IdResourceRight = 3, IdRequestRightGrantType = 1 },
+                new { IdAssoc = 29, IdRequestUserAssoc = 19, IdResourceRight = 7, IdRequestRightGrantType = 1 },
+                new { IdAssoc = 30, IdRequestUserAssoc = 20, IdResourceRight = 1, IdRequestRightGrantType = 1 },
+                new { IdAssoc = 31, IdRequestUserAssoc = 20, IdResourceRight = 4, IdRequestRightGrantType = 1 },
+                new { IdAssoc = 32, IdRequestUserAssoc = 21, IdResourceRight = 2, IdRequestRightGrantType = 1 },
+                new { IdAssoc = 33, IdRequestUserAssoc = 22, IdResourceRight = 3, IdRequestRightGrantType = 1 },
+                new { IdAssoc = 34, IdRequestUserAssoc = 23, IdResourceRight = 4, IdRequestRightGrantType = 1 },
+                new { IdAssoc = 35, IdRequestUserAssoc = 24, IdResourceRight = 2, IdRequestRightGrantType = 1 },
+                new { IdAssoc = 36, IdRequestUserAssoc = 25, IdResourceRight = 1, IdRequestRightGrantType = 1 },
+                new { IdAssoc = 37, IdRequestUserAssoc = 25, IdResourceRight = 2, IdRequestRightGrantType = 1 },
+                new { IdAssoc = 38, IdRequestUserAssoc = 26, IdResourceRight = 8, IdRequestRightGrantType = 1 },
+                new { IdAssoc = 39, IdRequestUserAssoc = 27, IdResourceRight = 6, IdRequestRightGrantType = 1 },
+                new { IdAssoc = 40, IdRequestUserAssoc = 27, IdResourceRight = 7, IdRequestRightGrantType = 1 },
+                new { IdAssoc = 41, IdRequestUserAssoc = 28, IdResourceRight = 1, IdRequestRightGrantType = 1 },
+                new { IdAssoc = 42, IdRequestUserAssoc = 29, IdResourceRight = 2, IdRequestRightGrantType = 1 },
+                new { IdAssoc = 43, IdRequestUserAssoc = 30, IdResourceRight = 2, IdRequestRightGrantType = 1 },
+                new { IdAssoc = 44, IdRequestUserAssoc = 30, IdResourceRight = 4, IdRequestRightGrantType = 1 },
+                new { IdAssoc = 45, IdRequestUserAssoc = 31, IdResourceRight = 2, IdRequestRightGrantType = 1 },
+                new { IdAssoc = 46, IdRequestUserAssoc = 31, IdResourceRight = 3, IdRequestRightGrantType = 1 },
+            };
+            foreach (var ruarParams in ruars)
+            {
+                var ruar = new RequestUserRightAssoc
+                {
+                    IdAssoc = ruarParams.IdAssoc,
+                    IdRequestUserAssoc = ruarParams.IdRequestUserAssoc,
+                    RequestUserAssoc = RequestUserAssocs.First(r => r.IdRequestUserAssoc == ruarParams.IdRequestUserAssoc),
+                    IdResourceRight = ruarParams.IdResourceRight,
+                    ResourceRight = ResourceRights.First(r => r.IdResourceRight == ruarParams.IdResourceRight),
+                    IdRequestRightGrantType = ruarParams.IdRequestRightGrantType,
+                    RequestRightGrantType = RequestRightGrantTypes.First(r => r.IdRequestRightGrantType == ruarParams.IdRequestRightGrantType)
+                };
+                ResourceRights.First(r => r.IdResourceRight == ruarParams.IdResourceRight).RequestUserRightAssoc.Add(ruar);
+                RequestUserAssocs.First(r => r.IdRequestUserAssoc == ruarParams.IdRequestUserAssoc).RequestUserRightAssocs.Add(ruar);
+                RequestRightGrantTypes.First(r => r.IdRequestRightGrantType == ruarParams.IdRequestRightGrantType).RequestUserRightAssoc.Add(ruar);
+            }
         }
 
         private void LoadResourceRights()
         {
-            var right1 = new ResourceRight
+            var rights = new[]
             {
-                IdResourceRight = 1,
-                IdResource = 1,
-                Resource = Resources.First(r => r.IdResource == 1)
+                new { IdResourceRight = 1, IdResource = 1, Deleted = false },
+                new { IdResourceRight = 2, IdResource = 2, Deleted = false },
+                new { IdResourceRight = 8, IdResource = 2, Deleted = false },
+                new { IdResourceRight = 9, IdResource = 2, Deleted = true },
+                new { IdResourceRight = 3, IdResource = 3, Deleted = false },
+                new { IdResourceRight = 4, IdResource = 4, Deleted = false },
+                new { IdResourceRight = 5, IdResource = 5, Deleted = true },
+                new { IdResourceRight = 6, IdResource = 5, Deleted = false },
+                new { IdResourceRight = 7, IdResource = 5, Deleted = false },
+                new { IdResourceRight = 8, IdResource = 6, Deleted = false },
             };
-            ResourceRights.Add(right1);
-            Resources.First(r => r.IdResource == 1).ResourceRights.Add(right1);
-            var right2 = new ResourceRight
+
+            foreach (var rightParams in rights)
             {
-                IdResourceRight = 2,
-                IdResource = 2,
-                Resource = Resources.First(r => r.IdResource == 2)
-            };
-            ResourceRights.Add(right2);
-            Resources.First(r => r.IdResource == 2).ResourceRights.Add(right2);
-            var right3 = new ResourceRight
-            {
-                IdResourceRight = 3,
-                IdResource = 3,
-                Resource = Resources.First(r => r.IdResource == 3)
-            };
-            ResourceRights.Add(right3);
-            Resources.First(r => r.IdResource == 3).ResourceRights.Add(right3);
-            var right4 = new ResourceRight
-            {
-                IdResourceRight = 4,
-                IdResource = 3,
-                Resource = Resources.First(r => r.IdResource == 3),
-                Deleted = true
-            };
-            ResourceRights.Add(right4);
-            Resources.First(r => r.IdResource == 3).ResourceRights.Add(right4);
-            var right5 = new ResourceRight
-            {
-                IdResourceRight = 5,
-                IdResource = 4,
-                Resource = Resources.First(r => r.IdResource == 4)
-            };
-            ResourceRights.Add(right5);
-            Resources.First(r => r.IdResource == 4).ResourceRights.Add(right5);
-            var right6 = new ResourceRight
-            {
-                IdResourceRight = 6,
-                IdResource = 5,
-                Resource = Resources.First(r => r.IdResource == 5)
-            };
-            ResourceRights.Add(right6);
-            Resources.First(r => r.IdResource == 5).ResourceRights.Add(right6);
-            var right7 = new ResourceRight
-            {
-                IdResourceRight = 7,
-                IdResource = 5,
-                Resource = Resources.First(r => r.IdResource == 5)
-            };
-            ResourceRights.Add(right7);
-            Resources.First(r => r.IdResource == 5).ResourceRights.Add(right7);
+                var right = new ResourceRight
+                {
+                    IdResourceRight = rightParams.IdResourceRight,
+                    IdResource = rightParams.IdResource,
+                    Resource = Resources.First(r => r.IdResource == rightParams.IdResource),
+                    Deleted = rightParams.Deleted,
+                    RequestUserRightAssoc = new List<RequestUserRightAssoc>()
+                };
+                ResourceRights.Add(right);
+                Resources.First(r => r.IdResource == rightParams.IdResource).ResourceRights.Add(right);
+            }
         }
 
         private void LoadResources()
         {
-            var resource1 = new Resource
+            var resources = new[]
             {
-                IdResource = 1,
-                IdResourceGroup = 1,
-                ResourceGroup = ResourceGroups.First(r => r.IdResourceGroup == 1),
-                IdDepartment = 24,
-                Department = Departments.First(r => r.IdDepartment == 24)
+                new { IdResource = 1, IdResourceGroup = 1, IdDepartment = 24, Deleted = false },
+                new { IdResource = 2, IdResourceGroup = 1, IdDepartment = 2, Deleted = false },
+                new { IdResource = 3, IdResourceGroup = 2, IdDepartment = 3, Deleted = false },
+                new { IdResource = 4, IdResourceGroup = 2, IdDepartment = 3, Deleted = true },
+                new { IdResource = 5, IdResourceGroup = 2, IdDepartment = 24, Deleted = false },
+                new { IdResource = 6, IdResourceGroup = 2, IdDepartment = 1, Deleted = false },
             };
-            Resources.Add(resource1);
-            ResourceGroups.First(r => r.IdResourceGroup == 1).Resources.Add(resource1);
-            Departments.First(r => r.IdDepartment == 24).Resources.Add(resource1);
-            var resource2 = new Resource
+
+            foreach (var resourceParams in resources)
             {
-                IdResource = 2,
-                IdResourceGroup = 1,
-                ResourceGroup = ResourceGroups.First(r => r.IdResourceGroup == 1),
-                IdDepartment = 2,
-                Department = Departments.First(r => r.IdDepartment == 2)
-            };
-            Resources.Add(resource2);
-            ResourceGroups.First(r => r.IdResourceGroup == 1).Resources.Add(resource2);
-            Departments.First(r => r.IdDepartment == 2).Resources.Add(resource2);
-            var resource3 = new Resource
-            {
-                IdResource = 3,
-                IdResourceGroup = 2,
-                ResourceGroup = ResourceGroups.First(r => r.IdResourceGroup == 2),
-                IdDepartment = 3,
-                Department = Departments.First(r => r.IdDepartment == 3)
-            };
-            Resources.Add(resource3);
-            ResourceGroups.First(r => r.IdResourceGroup == 2).Resources.Add(resource3);
-            Departments.First(r => r.IdDepartment == 3).Resources.Add(resource3);
-            var resource4 = new Resource
-            {
-                IdResource = 4,
-                IdResourceGroup = 2,
-                ResourceGroup = ResourceGroups.First(r => r.IdResourceGroup == 2),
-                IdDepartment = 3,
-                Department = Departments.First(r => r.IdDepartment == 3),
-                Deleted = true
-            };
-            Resources.Add(resource4);
-            ResourceGroups.First(r => r.IdResourceGroup == 2).Resources.Add(resource4);
-            Departments.First(r => r.IdDepartment == 3).Resources.Add(resource4);
-            var resource5 = new Resource
-            {
-                IdResource = 5,
-                IdResourceGroup = 2,
-                ResourceGroup = ResourceGroups.First(r => r.IdResourceGroup == 2),
-                IdDepartment = 4,
-                Department = Departments.First(r => r.IdDepartment == 4)
-            };
-            Resources.Add(resource5);
-            ResourceGroups.First(r => r.IdResourceGroup == 2).Resources.Add(resource5);
-            Departments.First(r => r.IdDepartment == 4).Resources.Add(resource5);
+                var resource = new Resource
+                {
+                    IdResource = resourceParams.IdResource,
+                    IdResourceGroup = resourceParams.IdResourceGroup,
+                    ResourceGroup = ResourceGroups.First(r => r.IdResourceGroup == resourceParams.IdResourceGroup),
+                    IdDepartment = resourceParams.IdDepartment,
+                    Department = Departments.First(r => r.IdDepartment == resourceParams.IdDepartment),
+                    ResourceRights = new List<ResourceRight>(),
+                    Deleted = resourceParams.Deleted
+                };
+                Resources.Add(resource);
+                ResourceGroups.First(r => r.IdResourceGroup == resourceParams.IdResourceGroup).Resources.Add(resource);
+                Departments.First(r => r.IdDepartment == resourceParams.IdDepartment).Resources.Add(resource);
+            }
         }
 
         private void LoadResourceGroups()
         {
-            ResourceGroups.Add(new ResourceGroup
+            var resourceGroups = new[]
             {
-                IdResourceGroup = 1
-            });
-            ResourceGroups.Add(new ResourceGroup
+                new { IdResourceGroup = 1, Deleted = false },
+                new { IdResourceGroup = 2, Deleted = false },
+                new { IdResourceGroup = 3, Deleted = true },
+            };
+            foreach (var resourceGroupParams in resourceGroups)
             {
-                IdResourceGroup = 21
-            });
-            ResourceGroups.Add(new ResourceGroup
-            {
-                IdResourceGroup = 3,
-                Deleted = true
-            });
+                ResourceGroups.Add(new ResourceGroup
+                {
+                    IdResourceGroup = resourceGroupParams.IdResourceGroup,
+                    Resources = new List<Resource>(),
+                    Deleted = resourceGroupParams.Deleted
+                });
+            }
         }
 
         private void LoadAclRoles()
         {
-            AclRoles.Add(new AclRole { IdRole = 1, Users = new List<AclUser>() });
-            AclRoles.Add(new AclRole { IdRole = 2, Users = new List<AclUser>() });
-            AclRoles.Add(new AclRole { IdRole = 3, Users = new List<AclUser>() });
-            AclRoles.Add(new AclRole { IdRole = 4, Users = new List<AclUser>() });
-            AclRoles.Add(new AclRole { IdRole = 5, Users = new List<AclUser>() });
-            AclRoles.Add(new AclRole { IdRole = 6, Users = new List<AclUser>() });
-            AclRoles.Add(new AclRole { IdRole = 7, Users = new List<AclUser>() });
-            AclRoles.Add(new AclRole { IdRole = 8, Users = new List<AclUser>() });
+            var roles = new[]
+            {
+                new { IdRole = 1 },
+                new { IdRole = 2 },
+                new { IdRole = 3 },
+                new { IdRole = 4 },
+                new { IdRole = 5 },
+                new { IdRole = 6 },
+                new { IdRole = 7 },
+                new { IdRole = 8 },
+            };
+            foreach (var roleParams in roles)
+            {
+                AclRoles.Add(new AclRole { IdRole = roleParams.IdRole, Users = new List<AclUser>() });
+            }
         }
 
         private void LoadDepartments()
         {
-            var department1 = new Department
+            var departments = new[]
             {
-                IdDepartment = 1,
-                AclUsers = new List<AclUser>(),
-                ChildDepartments = new List<Department>(),
-                Users = new List<AclUser>()
+                new { IdDepartment = 1, IdParentDepartment = (int?)null },
+                new { IdDepartment = 11, IdParentDepartment = (int?)1 },
+                new { IdDepartment = 12, IdParentDepartment = (int?)1 },
+                new { IdDepartment = 2, IdParentDepartment = (int?)null },
+                new { IdDepartment = 21, IdParentDepartment = (int?)2 },
+                new { IdDepartment = 22, IdParentDepartment = (int?)2 },
+                new { IdDepartment = 3, IdParentDepartment = (int?)null },
+                new { IdDepartment = 31, IdParentDepartment = (int?)3 },
+                new { IdDepartment = 4, IdParentDepartment = (int?)null },
+                new { IdDepartment = 24, IdParentDepartment = (int?)null } // CIT
             };
-            Departments.Add(department1);
-            var department11 = new Department
+            foreach (var departmentParams in departments)
             {
-                IdDepartment = 11,
-                IdParentDepartment = 1,
-                ParentDepartment = department1,
-                AclUsers = new List<AclUser>(),
-                ChildDepartments = new List<Department>(),
-                Users = new List<AclUser>()
-            };
-            Departments.Add(department11);
-            department1.ChildDepartments.Add(department11);
-            var department12 = new Department
-            {
-                IdDepartment = 12,
-                IdParentDepartment = 1,
-                ParentDepartment = department1,
-                AclUsers = new List<AclUser>(),
-                ChildDepartments = new List<Department>(),
-                Users = new List<AclUser>()
-            };
-            Departments.Add(department12);
-            department1.ChildDepartments.Add(department12);
-            var department2 = new Department
-            {
-                IdDepartment = 2,
-                AclUsers = new List<AclUser>(),
-                ChildDepartments = new List<Department>(),
-                Users = new List<AclUser>()
-            };
-            Departments.Add(department2);
-            var department21 = new Department
-            {
-                IdDepartment = 21,
-                IdParentDepartment = 2,
-                ParentDepartment = department2,
-                AclUsers = new List<AclUser>(),
-                ChildDepartments = new List<Department>(),
-                Users = new List<AclUser>()
-            };
-            Departments.Add(department21);
-            department2.ChildDepartments.Add(department21);
-            var department22 = new Department
-            {
-                IdDepartment = 22,
-                IdParentDepartment = 2,
-                ParentDepartment = department2,
-                AclUsers = new List<AclUser>(),
-                ChildDepartments = new List<Department>(),
-                Users = new List<AclUser>()
-            };
-            Departments.Add(department22);
-            department2.ChildDepartments.Add(department22);
-            var department3 = new Department
-            {
-                IdDepartment = 3,
-                AclUsers = new List<AclUser>(),
-                ChildDepartments = new List<Department>(),
-                Users = new List<AclUser>()
-            };
-            Departments.Add(department3);
-            var department31 = new Department
-            {
-                IdDepartment = 31,
-                IdParentDepartment = 3,
-                ParentDepartment = department3,
-                AclUsers = new List<AclUser>(),
-                ChildDepartments = new List<Department>(),
-                Users = new List<AclUser>()
-            };
-            Departments.Add(department31);
-            department3.ChildDepartments.Add(department31);
-            var department4 = new Department
-            {
-                IdDepartment = 24, // CIT
-                AclUsers = new List<AclUser>(),
-                ChildDepartments = new List<Department>(),
-                Users = new List<AclUser>()
-            };
-            Departments.Add(department4);
+                var department = new Department
+                {
+                    IdDepartment = departmentParams.IdDepartment,
+                    IdParentDepartment = departmentParams.IdParentDepartment,
+                    AclUsers = new List<AclUser>(),
+                    ChildDepartments = new List<Department>(),
+                    Users = new List<AclUser>(),
+                    Resources = new List<Resource>()
+                };
+                Departments.Add(department);
+                if (departmentParams.IdParentDepartment == null) continue;
+                department.ParentDepartment =
+                    Departments.First(r => r.IdDepartment == departmentParams.IdParentDepartment.Value);
+                department.ParentDepartment.ChildDepartments.Add(department);
+            }
         }
 
         private void LoadUsers()
         {
-            // Administrators
-            var userAdministrator1 = new AclUser
+            var users = new[]
             {
-                IdUser = 1,
-                Login = "admin1",
-                Roles = new List<AclRole> { AclRoles.First(r => r.IdRole == 1) },
-                IdDepartment = 24,
-                Department = Departments.First(r => r.IdDepartment == 24),
-                AclDepartments = new List<Department>(),
-                Requests = new List<Request>(),
-                RequestUserLastSeens = new List<RequestUserLastSeen>(),
-                RequestAgreements = new List<RequestAgreement>(),
-                RequestsExtComments = new List<RequestExtComment>()
-            };
-            Departments.First(r => r.IdDepartment == 24).Users.Add(userAdministrator1);
-            AclRoles.First(r => r.IdRole == 1).Users.Add(userAdministrator1);
-            AclUsers.Add(userAdministrator1);
-            var userAdministrator2 = new AclUser
-            {
-                IdUser = 2,
-                Login = "admin2",
-                Roles = new List<AclRole> { AclRoles.First(r => r.IdRole == 1) },
-                IdDepartment = 2,
-                Department = Departments.First(r => r.IdDepartment == 2),
-                AclDepartments = new List<Department>(),
-                Requests = new List<Request>(),
-                RequestUserLastSeens = new List<RequestUserLastSeen>(),
-                RequestAgreements = new List<RequestAgreement>(),
-                RequestsExtComments = new List<RequestExtComment>()
-            };
-            Departments.First(r => r.IdDepartment == 2).Users.Add(userAdministrator2);
-            AclRoles.First(r => r.IdRole == 1).Users.Add(userAdministrator2);
-            AclUsers.Add(userAdministrator2);
-
-            // Requesters
-            var userRequester1 = new AclUser
-            {
-                IdUser = 3,
-                Login = "requester1",
-                Roles = new List<AclRole> { AclRoles.First(r => r.IdRole == 3) },
-                IdDepartment = 2,
-                Department = Departments.First(r => r.IdDepartment == 2),
-                AclDepartments = new List<Department>(),
-                Requests = new List<Request>(),
-                RequestUserLastSeens = new List<RequestUserLastSeen>(),
-                RequestAgreements = new List<RequestAgreement>(),
-                RequestsExtComments = new List<RequestExtComment>()
-            };
-            Departments.First(r => r.IdDepartment == 2).Users.Add(userRequester1);
-            AclRoles.First(r => r.IdRole == 3).Users.Add(userRequester1);
-            AclUsers.Add(userRequester1);
-            var userRequester2 = new AclUser
-            {
-                IdUser = 4,
-                Login = "requester2",
-                Roles = new List<AclRole>
-                {
-                    AclRoles.First(r => r.IdRole == 3), 
-                    AclRoles.First(r => r.IdRole == 2)
+                new { 
+                    IdUser = 1,
+                    Login = "admin1", 
+                    Roles = new List<int> { 1 },
+                    IdDepartment = 24,
+                    AclDepartments = new List<int>(),
+                    Deleted = false
                 },
-                IdDepartment = 3,
-                Department = Departments.First(r => r.IdDepartment == 3),
-                AclDepartments = new List<Department>
-                {
-                    Departments.First(r => r.IdDepartment == 1),
-                    Departments.First(r => r.IdDepartment == 2)
+                new { 
+                    IdUser = 2,
+                    Login = "admin2", 
+                    Roles = new List<int> { 1 },
+                    IdDepartment = 2,
+                    AclDepartments = new List<int>(),
+                    Deleted = false
                 },
-                Requests = new List<Request>(),
-                RequestUserLastSeens = new List<RequestUserLastSeen>(),
-                RequestAgreements = new List<RequestAgreement>(),
-                RequestsExtComments = new List<RequestExtComment>()
-            };
-            Departments.First(r => r.IdDepartment == 3).Users.Add(userRequester2);
-            AclRoles.First(r => r.IdRole == 3).Users.Add(userRequester2);
-            AclRoles.First(r => r.IdRole == 2).Users.Add(userRequester2);
-            AclUsers.Add(userRequester2);
-            var userRequester3 = new AclUser
-            {
-                IdUser = 5,
-                Login = "requester3",
-                Roles = new List<AclRole>
-                {
-                    AclRoles.First(r => r.IdRole == 3), 
-                    AclRoles.First(r => r.IdRole == 2), 
-                    AclRoles.First(r => r.IdRole == 8)
+                new { 
+                    IdUser = 3,
+                    Login = "requester1", 
+                    Roles = new List<int> { 3 },
+                    IdDepartment = 2,
+                    AclDepartments = new List<int>(),
+                    Deleted = false
                 },
-                IdDepartment = 1,
-                Department = Departments.First(r => r.IdDepartment == 1),
-                AclDepartments = new List<Department>(),
-                Requests = new List<Request>(),
-                RequestUserLastSeens = new List<RequestUserLastSeen>(),
-                RequestAgreements = new List<RequestAgreement>(),
-                RequestsExtComments = new List<RequestExtComment>()
-            };
-            Departments.First(r => r.IdDepartment == 1).Users.Add(userRequester3);
-            AclRoles.First(r => r.IdRole == 3).Users.Add(userRequester3);
-            AclRoles.First(r => r.IdRole == 2).Users.Add(userRequester3);
-            AclRoles.First(r => r.IdRole == 8).Users.Add(userRequester3);
-            AclUsers.Add(userRequester3);
-
-            // Resource Owners
-            var userResourceOwner1 = new AclUser
-            {
-                IdUser = 6,
-                Login = "resourceOwner1",
-                Roles = new List<AclRole> { AclRoles.First(r => r.IdRole == 2) },
-                IdDepartment = 2,
-                Department = Departments.First(r => r.IdDepartment == 2),
-                AclDepartments = new List<Department>(),
-                Requests = new List<Request>(),
-                RequestUserLastSeens = new List<RequestUserLastSeen>(),
-                RequestAgreements = new List<RequestAgreement>(),
-                RequestsExtComments = new List<RequestExtComment>()
-            };
-            Departments.First(r => r.IdDepartment == 2).Users.Add(userResourceOwner1);
-            AclRoles.First(r => r.IdRole == 2).Users.Add(userResourceOwner1);
-            AclUsers.Add(userResourceOwner1);
-            var userResourceOwner2 = new AclUser
-            {
-                IdUser = 7,
-                Login = "resourceOwner2",
-                Roles = new List<AclRole>
-                {
-                    AclRoles.First(r => r.IdRole == 2), 
-                    AclRoles.First(r => r.IdRole == 8)
+                new { 
+                    IdUser = 4,
+                    Login = "requester2", 
+                    Roles = new List<int> { 2, 3 },
+                    IdDepartment = 3,
+                    AclDepartments = new List<int> { 1, 2 },
+                    Deleted = false
                 },
-                IdDepartment = 3,
-                Department = Departments.First(r => r.IdDepartment == 3),
-                AclDepartments = new List<Department>(),
-                Requests = new List<Request>(),
-                RequestUserLastSeens = new List<RequestUserLastSeen>(),
-                RequestAgreements = new List<RequestAgreement>(),
-                RequestsExtComments = new List<RequestExtComment>()
-            };
-            Departments.First(r => r.IdDepartment == 3).Users.Add(userResourceOwner2);
-            AclRoles.First(r => r.IdRole == 2).Users.Add(userResourceOwner2);
-            AclRoles.First(r => r.IdRole == 8).Users.Add(userResourceOwner2);
-            AclUsers.Add(userResourceOwner2);
-            var userResourceOwner3 = new AclUser
-            {
-                IdUser = 8,
-                Login = "resourceOwner3",
-                Roles = new List<AclRole>
-                {
-                    AclRoles.First(r => r.IdRole == 2)
+                new { 
+                    IdUser = 5,
+                    Login = "requester3", 
+                    Roles = new List<int> { 2, 3, 8 },
+                    IdDepartment = 1,
+                    AclDepartments = new List<int>(),
+                    Deleted = false
                 },
-                IdDepartment = 3,
-                Department = Departments.First(r => r.IdDepartment == 3),
-                AclDepartments = new List<Department>
-                {
-                    Departments.First(r => r.IdDepartment == 2),
-                    Departments.First(r => r.IdDepartment == 1)
+                new { 
+                    IdUser = 15,
+                    Login = "requester4", 
+                    Roles = new List<int> { 3 },
+                    IdDepartment = 4,
+                    AclDepartments = new List<int>(),
+                    Deleted = false
                 },
-                Requests = new List<Request>(),
-                RequestUserLastSeens = new List<RequestUserLastSeen>(),
-                RequestAgreements = new List<RequestAgreement>(),
-                RequestsExtComments = new List<RequestExtComment>()
+                new { 
+                    IdUser = 6,
+                    Login = "resourceOwner1", 
+                    Roles = new List<int> { 2 },
+                    IdDepartment = 2,
+                    AclDepartments = new List<int>(),
+                    Deleted = false
+                },
+                new { 
+                    IdUser = 7,
+                    Login = "resourceOwner2", 
+                    Roles = new List<int> { 2, 8 },
+                    IdDepartment = 3,
+                    AclDepartments = new List<int>(),
+                    Deleted = false
+                },
+                new { 
+                    IdUser = 8,
+                    Login = "resourceOwner3", 
+                    Roles = new List<int> { 2 },
+                    IdDepartment = 3,
+                    AclDepartments = new List<int> { 1, 2 },
+                    Deleted = false
+                },
+                new { 
+                    IdUser = 9,
+                    Login = "coordinator1", 
+                    Roles = new List<int> { 8 },
+                    IdDepartment = 1,
+                    AclDepartments = new List<int>(),
+                    Deleted = false
+                },
+                new { 
+                    IdUser = 10,
+                    Login = "coordinator2", 
+                    Roles = new List<int> { 8 },
+                    IdDepartment = 24,
+                    AclDepartments = new List<int>(),
+                    Deleted = true
+                },
+                new { 
+                    IdUser = 11,
+                    Login = "dispatcher1", 
+                    Roles = new List<int> { 4 },
+                    IdDepartment = 24,
+                    AclDepartments = new List<int>(),
+                    Deleted = false
+                },
+                new { 
+                    IdUser = 12,
+                    Login = "registrar1", 
+                    Roles = new List<int> { 5 },
+                    IdDepartment = 24,
+                    AclDepartments = new List<int>(),
+                    Deleted = false
+                },
+                new { 
+                    IdUser = 13,
+                    Login = "executor1", 
+                    Roles = new List<int> { 6 },
+                    IdDepartment = 24,
+                    AclDepartments = new List<int>(),
+                    Deleted = false
+                },
+                new { 
+                    IdUser = 14,
+                    Login = "resourceManager1", 
+                    Roles = new List<int> { 7 },
+                    IdDepartment = 24,
+                    AclDepartments = new List<int>(),
+                    Deleted = false
+                }
             };
-            Departments.First(r => r.IdDepartment == 3).Users.Add(userResourceOwner3);
-            Departments.First(r => r.IdDepartment == 2).AclUsers.Add(userResourceOwner3);
-            Departments.First(r => r.IdDepartment == 1).AclUsers.Add(userResourceOwner3);
-            AclRoles.First(r => r.IdRole == 2).Users.Add(userResourceOwner3);
-            AclRoles.First(r => r.IdRole == 8).Users.Add(userResourceOwner3);
-            AclUsers.Add(userResourceOwner2);
-
-            // Coordinators
-            var userCoordinator1 = new AclUser
+            foreach (var userParams in users)
             {
-                IdUser = 8,
-                Login = "coordinator1",
-                Roles = new List<AclRole> { AclRoles.First(r => r.IdRole == 8) },
-                IdDepartment = 1,
-                Department = Departments.First(r => r.IdDepartment == 1),
-                AclDepartments = new List<Department>(),
-                Requests = new List<Request>(),
-                RequestUserLastSeens = new List<RequestUserLastSeen>(),
-                RequestAgreements = new List<RequestAgreement>(),
-                RequestsExtComments = new List<RequestExtComment>()
-            };
-            Departments.First(r => r.IdDepartment == 1).Users.Add(userCoordinator1);
-            AclRoles.First(r => r.IdRole == 8).Users.Add(userCoordinator1);
-            AclUsers.Add(userCoordinator1);
-            var userCoordinator2 = new AclUser
-            {
-                IdUser = 9,
-                Login = "coordinator2",
-                Roles = new List<AclRole> { AclRoles.First(r => r.IdRole == 8) },
-                IdDepartment = 24,
-                Department = Departments.First(r => r.IdDepartment == 24),
-                AclDepartments = new List<Department>(),
-                Requests = new List<Request>(),
-                RequestUserLastSeens = new List<RequestUserLastSeen>(),
-                RequestAgreements = new List<RequestAgreement>(),
-                RequestsExtComments = new List<RequestExtComment>(),
-                Deleted = true
-            };
-            Departments.First(r => r.IdDepartment == 24).Users.Add(userCoordinator2);
-            AclRoles.First(r => r.IdRole == 8).Users.Add(userCoordinator2);
-            AclUsers.Add(userCoordinator2);
-
-            // Other users
-            var userDispatcher1 = new AclUser
-            {
-                IdUser = 10,
-                Login = "dispatcher1",
-                Roles = new List<AclRole> { AclRoles.First(r => r.IdRole == 4) },
-                IdDepartment = 24,
-                Department = Departments.First(r => r.IdDepartment == 24),
-                AclDepartments = new List<Department>(),
-                Requests = new List<Request>(),
-                RequestUserLastSeens = new List<RequestUserLastSeen>(),
-                RequestAgreements = new List<RequestAgreement>(),
-                RequestsExtComments = new List<RequestExtComment>()
-            };
-            Departments.First(r => r.IdDepartment == 24).Users.Add(userDispatcher1);
-            AclRoles.First(r => r.IdRole == 4).Users.Add(userDispatcher1);
-            AclUsers.Add(userDispatcher1);
-            var userRegistrar1 = new AclUser
-            {
-                IdUser = 11,
-                Login = "registrar1",
-                Roles = new List<AclRole> { AclRoles.First(r => r.IdRole == 5) },
-                IdDepartment = 24,
-                Department = Departments.First(r => r.IdDepartment == 24),
-                AclDepartments = new List<Department>(),
-                Requests = new List<Request>(),
-                RequestUserLastSeens = new List<RequestUserLastSeen>(),
-                RequestAgreements = new List<RequestAgreement>(),
-                RequestsExtComments = new List<RequestExtComment>()
-            };
-            Departments.First(r => r.IdDepartment == 24).Users.Add(userRegistrar1);
-            AclRoles.First(r => r.IdRole == 5).Users.Add(userRegistrar1);
-            AclUsers.Add(userRegistrar1);
-            var userExecutor1 = new AclUser
-            {
-                IdUser = 12,
-                Login = "executor1",
-                Roles = new List<AclRole> { AclRoles.First(r => r.IdRole == 6) },
-                IdDepartment = 24,
-                Department = Departments.First(r => r.IdDepartment == 24),
-                AclDepartments = new List<Department>(),
-                Requests = new List<Request>(),
-                RequestUserLastSeens = new List<RequestUserLastSeen>(),
-                RequestAgreements = new List<RequestAgreement>(),
-                RequestsExtComments = new List<RequestExtComment>()
-            };
-            Departments.First(r => r.IdDepartment == 24).Users.Add(userExecutor1);
-            AclRoles.First(r => r.IdRole == 6).Users.Add(userExecutor1);
-            AclUsers.Add(userExecutor1);
-            var userResourceManager1 = new AclUser
-            {
-                IdUser = 13,
-                Login = "resourceManager1",
-                Roles = new List<AclRole> { AclRoles.First(r => r.IdRole == 7) },
-                IdDepartment = 24,
-                Department = Departments.First(r => r.IdDepartment == 24),
-                AclDepartments = new List<Department>(),
-                Requests = new List<Request>(),
-                RequestUserLastSeens = new List<RequestUserLastSeen>(),
-                RequestAgreements = new List<RequestAgreement>(),
-                RequestsExtComments = new List<RequestExtComment>()
-            };
-            Departments.First(r => r.IdDepartment == 24).Users.Add(userResourceManager1);
-            AclRoles.First(r => r.IdRole == 7).Users.Add(userResourceManager1);
-            AclUsers.Add(userResourceManager1);
+                var user = new AclUser
+                {
+                    IdUser = userParams.IdUser,
+                    Login = userParams.Login,
+                    IdDepartment = userParams.IdDepartment,
+                    Department = Departments.First(r => r.IdDepartment == userParams.IdDepartment),
+                    Roles = new List<AclRole>(),
+                    AclDepartments = new List<Department>(),
+                    Requests = new List<Request>(),
+                    RequestUserLastSeens = new List<RequestUserLastSeen>(),
+                    RequestAgreements = new List<RequestAgreement>(),
+                    RequestsExtComments = new List<RequestExtComment>()
+                };
+                Departments.First(r => r.IdDepartment == userParams.IdDepartment).Users.Add(user);
+                foreach (var roleId in userParams.Roles)
+                {
+                    var role = AclRoles.First(r => r.IdRole == roleId);
+                    user.Roles.Add(role);
+                    role.Users.Add(user);
+                }
+                foreach (var depId in userParams.AclDepartments)
+                {
+                    var department = Departments.First(r => r.IdDepartment == depId);
+                    user.AclDepartments.Add(department);
+                    department.AclUsers.Add(user);
+                }
+                AclUsers.Add(user);
+            }
         }
 
         private void LoadRequestStateTypes()
         {
-            var requestStateType1 = new RequestStateType { IdRequestStateType = 1, RequestStates = new List<RequestState>() };
-            RequestStateTypes.Add(requestStateType1);
-            var requestStateType2 = new RequestStateType { IdRequestStateType = 2, RequestStates = new List<RequestState>() };
-            RequestStateTypes.Add(requestStateType2);
-            var requestStateType3 = new RequestStateType { IdRequestStateType = 3, RequestStates = new List<RequestState>() };
-            RequestStateTypes.Add(requestStateType3);
-            var requestStateType4 = new RequestStateType { IdRequestStateType = 4, RequestStates = new List<RequestState>() };
-            RequestStateTypes.Add(requestStateType4);
-            var requestStateType5 = new RequestStateType { IdRequestStateType = 5, RequestStates = new List<RequestState>() };
-            RequestStateTypes.Add(requestStateType5);
+            var requestStateTypes = new[]
+            {
+                new { IdRequestStateType = 1 },
+                new { IdRequestStateType = 2 },
+                new { IdRequestStateType = 3 },
+                new { IdRequestStateType = 4 },
+                new { IdRequestStateType = 5 }
+            };
+            foreach (var requestStateTypeParams in requestStateTypes)
+            {
+                RequestStateTypes.Add(new RequestStateType
+                {
+                    IdRequestStateType = requestStateTypeParams.IdRequestStateType,
+                    RequestStates = new List<RequestState>()
+                });
+            }
         }
 
         private void LoadRequestTypes()
         {
-            var requestType1 = new RequestType { IdRequestType = 1, Requests = new List<Request>() };
-            RequestTypes.Add(requestType1);
-            var requestType2 = new RequestType { IdRequestType = 2, Requests = new List<Request>() };
-            RequestTypes.Add(requestType2);
-            var requestType3 = new RequestType { IdRequestType = 3, Requests = new List<Request>() };
-            RequestTypes.Add(requestType3);
-            var requestType4 = new RequestType { IdRequestType = 4, Requests = new List<Request>() };
-            RequestTypes.Add(requestType4);
+            var requestTypes = new[]
+            {
+                new { IdRequestType = 1 },
+                new { IdRequestType = 2 },
+                new { IdRequestType = 3 },
+                new { IdRequestType = 4 }
+            };
+            foreach (var requestTypeParams in requestTypes)
+            {
+                RequestTypes.Add(new RequestType
+                {
+                    IdRequestType = requestTypeParams.IdRequestType,
+                    Requests = new List<Request>()
+                });
+            }
         }
 
         private void LoadRequests()
         {
-            var request1 = new Request
+            var requests = new[]
             {
-                IdRequest = 1,
-                User = AclUsers.First(r => r.IdUser == 3),
-                IdRequestType = 1,
-                RequestType = RequestTypes.First(r => r.IdRequestType == 1),
-                RequestStates = new List<RequestState>(),
-                RequestUserAssoc = new List<RequestUserAssoc>(),
-                RequestAgreements = new List<RequestAgreement>(),
-                RequestUserLastSeens = new List<RequestUserLastSeen>()
+                new { IdRequest = 1, IdUser = 3, IdRequestType = 1, Deleted = false },
+                new { IdRequest = 2, IdUser = 3, IdRequestType = 2, Deleted = false },
+                new { IdRequest = 3, IdUser = 4, IdRequestType = 4, Deleted = false },
+                new { IdRequest = 4, IdUser = 4, IdRequestType = 3, Deleted = true },
+                new { IdRequest = 5, IdUser = 5, IdRequestType = 1, Deleted = false },
+                new { IdRequest = 6, IdUser = 3, IdRequestType = 2, Deleted = false },
+                new { IdRequest = 7, IdUser = 3, IdRequestType = 4, Deleted = false },
+                new { IdRequest = 8, IdUser = 4, IdRequestType = 3, Deleted = false },
+                new { IdRequest = 9, IdUser = 4, IdRequestType = 1, Deleted = false },
+                new { IdRequest = 10, IdUser = 5, IdRequestType = 2, Deleted = false },
+                new { IdRequest = 11, IdUser = 5, IdRequestType = 4, Deleted = false },
+                new { IdRequest = 12, IdUser = 5, IdRequestType = 3, Deleted = false },
+                new { IdRequest = 13, IdUser = 4, IdRequestType = 1, Deleted = false },
+                new { IdRequest = 14, IdUser = 4, IdRequestType = 2, Deleted = false },
+                new { IdRequest = 15, IdUser = 15, IdRequestType = 2, Deleted = false }
             };
-            AclUsers.First(r => r.IdUser == 3).Requests.Add(request1);
-            Requests.Add(request1);
-            var request2 = new Request
+            foreach (var requestParams in requests)
             {
-                IdRequest = 2,
-                User = AclUsers.First(r => r.IdUser == 3),
-                IdRequestType = 2,
-                RequestType = RequestTypes.First(r => r.IdRequestType == 2),
-                RequestStates = new List<RequestState>(),
-                RequestUserAssoc = new List<RequestUserAssoc>(),
-                RequestAgreements = new List<RequestAgreement>(),
-                RequestUserLastSeens = new List<RequestUserLastSeen>()
-            };
-            AclUsers.First(r => r.IdUser == 3).Requests.Add(request2);
-            Requests.Add(request2);
-            var request3 = new Request
-            {
-                IdRequest = 3,
-                User = AclUsers.First(r => r.IdUser == 4),
-                IdRequestType = 3,
-                RequestType = RequestTypes.First(r => r.IdRequestType == 4),
-                RequestStates = new List<RequestState>(),
-                RequestUserAssoc = new List<RequestUserAssoc>(),
-                RequestAgreements = new List<RequestAgreement>(),
-                RequestUserLastSeens = new List<RequestUserLastSeen>()
-            };
-            AclUsers.First(r => r.IdUser == 4).Requests.Add(request3);
-            Requests.Add(request3);
-            var request4 = new Request
-            {
-                IdRequest = 4,
-                User = AclUsers.First(r => r.IdUser == 4),
-                IdRequestType = 4,
-                RequestType = RequestTypes.First(r => r.IdRequestType == 3),
-                RequestStates = new List<RequestState>(),
-                RequestUserAssoc = new List<RequestUserAssoc>(),
-                RequestAgreements = new List<RequestAgreement>(),
-                RequestUserLastSeens = new List<RequestUserLastSeen>(),
-                Deleted = true
-            };
-            AclUsers.First(r => r.IdUser == 4).Requests.Add(request4);
-            Requests.Add(request4);
-            var request5 = new Request
-            {
-                IdRequest = 5,
-                User = AclUsers.First(r => r.IdUser == 5),
-                IdRequestType = 1,
-                RequestType = RequestTypes.First(r => r.IdRequestType == 1),
-                RequestStates = new List<RequestState>(),
-                RequestUserAssoc = new List<RequestUserAssoc>(),
-                RequestAgreements = new List<RequestAgreement>(),
-                RequestUserLastSeens = new List<RequestUserLastSeen>()
-            };
-            AclUsers.First(r => r.IdUser == 5).Requests.Add(request5);
-            Requests.Add(request5);
-            var request6 = new Request
-            {
-                IdRequest = 6,
-                User = AclUsers.First(r => r.IdUser == 3),
-                IdRequestType = 2,
-                RequestType = RequestTypes.First(r => r.IdRequestType == 2),
-                RequestStates = new List<RequestState>(),
-                RequestUserAssoc = new List<RequestUserAssoc>(),
-                RequestAgreements = new List<RequestAgreement>(),
-                RequestUserLastSeens = new List<RequestUserLastSeen>()
-            };
-            AclUsers.First(r => r.IdUser == 3).Requests.Add(request6);
-            Requests.Add(request6);
-            var request7 = new Request
-            {
-                IdRequest = 7,
-                User = AclUsers.First(r => r.IdUser == 3),
-                IdRequestType = 3,
-                RequestType = RequestTypes.First(r => r.IdRequestType == 4),
-                RequestStates = new List<RequestState>(),
-                RequestUserAssoc = new List<RequestUserAssoc>(),
-                RequestAgreements = new List<RequestAgreement>(),
-                RequestUserLastSeens = new List<RequestUserLastSeen>()
-            };
-            AclUsers.First(r => r.IdUser == 3).Requests.Add(request7);
-            Requests.Add(request7);
-            var request8 = new Request
-            {
-                IdRequest = 8,
-                User = AclUsers.First(r => r.IdUser == 4),
-                IdRequestType = 4,
-                RequestType = RequestTypes.First(r => r.IdRequestType == 3),
-                RequestStates = new List<RequestState>(),
-                RequestUserAssoc = new List<RequestUserAssoc>(),
-                RequestAgreements = new List<RequestAgreement>(),
-                RequestUserLastSeens = new List<RequestUserLastSeen>()
-            };
-            AclUsers.First(r => r.IdUser == 4).Requests.Add(request8);
-            Requests.Add(request8);
-            var request9 = new Request
-            {
-                IdRequest = 9,
-                User = AclUsers.First(r => r.IdUser == 4),
-                IdRequestType = 1,
-                RequestType = RequestTypes.First(r => r.IdRequestType == 1),
-                RequestStates = new List<RequestState>(),
-                RequestUserAssoc = new List<RequestUserAssoc>(),
-                RequestAgreements = new List<RequestAgreement>(),
-                RequestUserLastSeens = new List<RequestUserLastSeen>()
-            };
-            AclUsers.First(r => r.IdUser == 4).Requests.Add(request9);
-            Requests.Add(request9);
-            var request10 = new Request
-            {
-                IdRequest = 10,
-                User = AclUsers.First(r => r.IdUser == 5),
-                IdRequestType = 2,
-                RequestType = RequestTypes.First(r => r.IdRequestType == 2),
-                RequestStates = new List<RequestState>(),
-                RequestUserAssoc = new List<RequestUserAssoc>(),
-                RequestAgreements = new List<RequestAgreement>(),
-                RequestUserLastSeens = new List<RequestUserLastSeen>()
-            };
-            AclUsers.First(r => r.IdUser == 5).Requests.Add(request10);
-            Requests.Add(request10);
-            var request11 = new Request
-            {
-                IdRequest = 11,
-                User = AclUsers.First(r => r.IdUser == 5),
-                IdRequestType = 3,
-                RequestType = RequestTypes.First(r => r.IdRequestType == 4),
-                RequestStates = new List<RequestState>(),
-                RequestUserAssoc = new List<RequestUserAssoc>(),
-                RequestAgreements = new List<RequestAgreement>(),
-                RequestUserLastSeens = new List<RequestUserLastSeen>()
-            };
-            AclUsers.First(r => r.IdUser == 5).Requests.Add(request11);
-            Requests.Add(request11);
-            var request12 = new Request
-            {
-                IdRequest = 12,
-                User = AclUsers.First(r => r.IdUser == 5),
-                IdRequestType = 4,
-                RequestType = RequestTypes.First(r => r.IdRequestType == 3),
-                RequestStates = new List<RequestState>(),
-                RequestUserAssoc = new List<RequestUserAssoc>(),
-                RequestAgreements = new List<RequestAgreement>(),
-                RequestUserLastSeens = new List<RequestUserLastSeen>()
-            };
-            AclUsers.First(r => r.IdUser == 5).Requests.Add(request12);
-            Requests.Add(request12);
-            var request13 = new Request
-            {
-                IdRequest = 13,
-                User = AclUsers.First(r => r.IdUser == 4),
-                IdRequestType = 1,
-                RequestType = RequestTypes.First(r => r.IdRequestType == 1),
-                RequestStates = new List<RequestState>(),
-                RequestUserAssoc = new List<RequestUserAssoc>(),
-                RequestAgreements = new List<RequestAgreement>(),
-                RequestUserLastSeens = new List<RequestUserLastSeen>()
-            };
-            AclUsers.First(r => r.IdUser == 4).Requests.Add(request13);
-            Requests.Add(request13);
-            var request14 = new Request
-            {
-                IdRequest = 14,
-                User = AclUsers.First(r => r.IdUser == 4),
-                IdRequestType = 2,
-                RequestType = RequestTypes.First(r => r.IdRequestType == 2),
-                RequestStates = new List<RequestState>(),
-                RequestUserAssoc = new List<RequestUserAssoc>(),
-                RequestAgreements = new List<RequestAgreement>(),
-                RequestUserLastSeens = new List<RequestUserLastSeen>()
-            };
-            AclUsers.First(r => r.IdUser == 4).Requests.Add(request14);
-            Requests.Add(request14);
+                var request = new Request
+                {
+                    IdRequest = requestParams.IdRequest,
+                    IdUser = requestParams.IdUser,
+                    User = AclUsers.First(r => r.IdUser == requestParams.IdUser),
+                    IdRequestType = requestParams.IdRequestType,
+                    RequestType = RequestTypes.First(r => r.IdRequestType == requestParams.IdRequestType),
+                    RequestStates = new List<RequestState>(),
+                    RequestUserAssoc = new List<RequestUserAssoc>(),
+                    RequestAgreements = new List<RequestAgreement>(),
+                    RequestUserLastSeens = new List<RequestUserLastSeen>(),
+                    Deleted = requestParams.Deleted
+                };
+                AclUsers.First(r => r.IdUser == requestParams.IdUser).Requests.Add(request);
+                RequestTypes.First(r => r.IdRequestType == requestParams.IdRequestType).Requests.Add(request);
+                Requests.Add(request);
+            }
         }
 
         private void LoadRequestStates()
         {
-            // Request 1
-            var request1State1 = new RequestState
+            var requestStates = new[]
             {
-                IdRequestState = 1,
-                IdRequestStateType = 1,
-                RequestStateType = RequestStateTypes.First(r => r.IdRequestStateType == 1),
-                IdRequest = 1,
-                Request = Requests.First(r => r.IdRequest == 1),
-                Date = DateTime.Now
+                new { IdRequestState = 1, IdRequestStateType = 1, IdRequest = 1, Date = DateTime.Now, Deleted = false },
+                new { IdRequestState = 2, IdRequestStateType = 2, IdRequest = 1, Date = DateTime.Now, Deleted = true },
+                new { IdRequestState = 3, IdRequestStateType = 2, IdRequest = 2, Date = DateTime.Now, Deleted = false },
+                new { IdRequestState = 4, IdRequestStateType = 3, IdRequest = 2, Date = DateTime.Now, Deleted = false },
+                new { IdRequestState = 5, IdRequestStateType = 1, IdRequest = 3, Date = DateTime.Now, Deleted = false },
+                new { IdRequestState = 6, IdRequestStateType = 2, IdRequest = 3, Date = DateTime.Now, Deleted = false },
+                new { IdRequestState = 7, IdRequestStateType = 3, IdRequest = 3, Date = DateTime.Now, Deleted = false },
+                new { IdRequestState = 34, IdRequestStateType = 4, IdRequest = 3, Date = DateTime.Now, Deleted = false },
+                new { IdRequestState = 8, IdRequestStateType = 2, IdRequest = 4, Date = DateTime.Now, Deleted = false },
+                new { IdRequestState = 9, IdRequestStateType = 1, IdRequest = 5, Date = DateTime.Now, Deleted = false },
+                new { IdRequestState = 10, IdRequestStateType = 5, IdRequest = 5, Date = DateTime.Now, Deleted = false },
+                new { IdRequestState = 11, IdRequestStateType = 1, IdRequest = 6, Date = DateTime.Now, Deleted = false },
+                new { IdRequestState = 12, IdRequestStateType = 5, IdRequest = 6, Date = DateTime.Now, Deleted = false },
+                new { IdRequestState = 13, IdRequestStateType = 2, IdRequest = 7, Date = DateTime.Now, Deleted = false },
+                new { IdRequestState = 14, IdRequestStateType = 5, IdRequest = 7, Date = DateTime.Now, Deleted = false },
+                new { IdRequestState = 15, IdRequestStateType = 2, IdRequest = 8, Date = DateTime.Now, Deleted = false },
+                new { IdRequestState = 16, IdRequestStateType = 1, IdRequest = 8, Date = DateTime.Now, Deleted = false },
+                new { IdRequestState = 17, IdRequestStateType = 1, IdRequest = 9, Date = DateTime.Now, Deleted = false },
+                new { IdRequestState = 18, IdRequestStateType = 2, IdRequest = 9, Date = DateTime.Now, Deleted = false },
+                new { IdRequestState = 19, IdRequestStateType = 1, IdRequest = 9, Date = DateTime.Now, Deleted = false },
+                new { IdRequestState = 20, IdRequestStateType = 2, IdRequest = 9, Date = DateTime.Now, Deleted = false },
+                new { IdRequestState = 21, IdRequestStateType = 1, IdRequest = 10, Date = DateTime.Now, Deleted = false },
+                new { IdRequestState = 22, IdRequestStateType = 2, IdRequest = 10, Date = DateTime.Now, Deleted = false },
+                new { IdRequestState = 23, IdRequestStateType = 1, IdRequest = 10, Date = DateTime.Now, Deleted = false },
+                new { IdRequestState = 24, IdRequestStateType = 2, IdRequest = 10, Date = DateTime.Now, Deleted = false },
+                new { IdRequestState = 25, IdRequestStateType = 3, IdRequest = 10, Date = DateTime.Now, Deleted = false },
+                new { IdRequestState = 26, IdRequestStateType = 1, IdRequest = 11, Date = DateTime.Now, Deleted = false },
+                new { IdRequestState = 27, IdRequestStateType = 2, IdRequest = 11, Date = DateTime.Now, Deleted = false },
+                new { IdRequestState = 28, IdRequestStateType = 1, IdRequest = 11, Date = DateTime.Now, Deleted = false },
+                new { IdRequestState = 29, IdRequestStateType = 5, IdRequest = 11, Date = DateTime.Now, Deleted = false },
+                new { IdRequestState = 30, IdRequestStateType = 2, IdRequest = 12, Date = DateTime.Now, Deleted = false },
+                new { IdRequestState = 31, IdRequestStateType = 2, IdRequest = 13, Date = DateTime.Now, Deleted = false },
+                new { IdRequestState = 32, IdRequestStateType = 3, IdRequest = 13, Date = DateTime.Now, Deleted = false },
+                new { IdRequestState = 33, IdRequestStateType = 4, IdRequest = 13, Date = DateTime.Now, Deleted = false },
+                new { IdRequestState = 35, IdRequestStateType = 5, IdRequest = 13, Date = DateTime.Now, Deleted = false },
+                new { IdRequestState = 36, IdRequestStateType = 1, IdRequest = 14, Date = DateTime.Now, Deleted = false },
+                new { IdRequestState = 37, IdRequestStateType = 2, IdRequest = 14, Date = DateTime.Now, Deleted = false },
+                new { IdRequestState = 38, IdRequestStateType = 1, IdRequest = 15, Date = DateTime.Now, Deleted = false }
             };
-            RequestStates.Add(request1State1);
-            Requests.First(r => r.IdRequest == 1).RequestStates.Add(request1State1);
-            RequestStateTypes.First(r => r.IdRequestStateType == 1).RequestStates.Add(request1State1);
-            var request1State2 = new RequestState
-            {
-                IdRequestState = 2,
-                IdRequestStateType = 2,
-                RequestStateType = RequestStateTypes.First(r => r.IdRequestStateType == 2),
-                IdRequest = 1,
-                Request = Requests.First(r => r.IdRequest == 1),
-                Date = DateTime.Now,
-                Deleted = true
-            };
-            RequestStates.Add(request1State2);
-            Requests.First(r => r.IdRequest == 1).RequestStates.Add(request1State2);
-            RequestStateTypes.First(r => r.IdRequestStateType == 2).RequestStates.Add(request1State2);
 
-            // Request 2
-            var request2State1 = new RequestState
+            foreach (var requestStateParams in requestStates)
             {
-                IdRequestState = 3,
-                IdRequestStateType = 2,
-                RequestStateType = RequestStateTypes.First(r => r.IdRequestStateType == 2),
-                IdRequest = 2,
-                Request = Requests.First(r => r.IdRequest == 2),
-                Date = DateTime.Now
-            };
-            RequestStates.Add(request2State1);
-            Requests.First(r => r.IdRequest == 2).RequestStates.Add(request2State1);
-            RequestStateTypes.First(r => r.IdRequestStateType == 2).RequestStates.Add(request2State1);
-            var request2State2 = new RequestState
-            {
-                IdRequestState = 4,
-                IdRequestStateType = 3,
-                RequestStateType = RequestStateTypes.First(r => r.IdRequestStateType == 3),
-                IdRequest = 2,
-                Request = Requests.First(r => r.IdRequest == 2),
-                Date = DateTime.Now
-            };
-            RequestStates.Add(request2State2);
-            Requests.First(r => r.IdRequest == 1).RequestStates.Add(request2State2);
-            RequestStateTypes.First(r => r.IdRequestStateType == 3).RequestStates.Add(request2State2);
-
-            // Request 3
-            var request3State1 = new RequestState
-            {
-                IdRequestState = 5,
-                IdRequestStateType = 1,
-                RequestStateType = RequestStateTypes.First(r => r.IdRequestStateType == 1),
-                IdRequest = 3,
-                Request = Requests.First(r => r.IdRequest == 3),
-                Date = DateTime.Now
-            };
-            RequestStates.Add(request3State1);
-            Requests.First(r => r.IdRequest == 3).RequestStates.Add(request3State1);
-            RequestStateTypes.First(r => r.IdRequestStateType == 1).RequestStates.Add(request3State1);
-            var request3State2 = new RequestState
-            {
-                IdRequestState = 6,
-                IdRequestStateType = 2,
-                RequestStateType = RequestStateTypes.First(r => r.IdRequestStateType == 2),
-                IdRequest = 3,
-                Request = Requests.First(r => r.IdRequest == 3),
-                Date = DateTime.Now
-            };
-            RequestStates.Add(request3State2);
-            Requests.First(r => r.IdRequest == 3).RequestStates.Add(request3State2);
-            RequestStateTypes.First(r => r.IdRequestStateType == 2).RequestStates.Add(request3State2);
-            var request3State3 = new RequestState
-            {
-                IdRequestState = 7,
-                IdRequestStateType = 3,
-                RequestStateType = RequestStateTypes.First(r => r.IdRequestStateType == 3),
-                IdRequest = 3,
-                Request = Requests.First(r => r.IdRequest == 3),
-                Date = DateTime.Now
-            };
-            RequestStates.Add(request3State3);
-            Requests.First(r => r.IdRequest == 3).RequestStates.Add(request3State3);
-            RequestStateTypes.First(r => r.IdRequestStateType == 3).RequestStates.Add(request3State3);
-            var request3State4 = new RequestState
-            {
-                IdRequestState = 34,
-                IdRequestStateType = 4,
-                RequestStateType = RequestStateTypes.First(r => r.IdRequestStateType == 4),
-                IdRequest = 3,
-                Request = Requests.First(r => r.IdRequest == 3),
-                Date = DateTime.Now
-            };
-            RequestStates.Add(request3State4);
-            Requests.First(r => r.IdRequest == 3).RequestStates.Add(request3State4);
-            RequestStateTypes.First(r => r.IdRequestStateType == 4).RequestStates.Add(request3State4);
-
-            // Request 4
-            var request4State1 = new RequestState
-            {
-                IdRequestState = 8,
-                IdRequestStateType = 2,
-                RequestStateType = RequestStateTypes.First(r => r.IdRequestStateType == 2),
-                IdRequest = 4,
-                Request = Requests.First(r => r.IdRequest == 4),
-                Date = DateTime.Now
-            };
-            RequestStates.Add(request4State1);
-            Requests.First(r => r.IdRequest == 4).RequestStates.Add(request4State1);
-            RequestStateTypes.First(r => r.IdRequestStateType == 2).RequestStates.Add(request4State1);
-
-            // Request 5
-            var request5State1 = new RequestState
-            {
-                IdRequestState = 9,
-                IdRequestStateType = 1,
-                RequestStateType = RequestStateTypes.First(r => r.IdRequestStateType == 1),
-                IdRequest = 5,
-                Request = Requests.First(r => r.IdRequest == 5),
-                Date = DateTime.Now
-            };
-            RequestStates.Add(request5State1);
-            Requests.First(r => r.IdRequest == 5).RequestStates.Add(request5State1);
-            RequestStateTypes.First(r => r.IdRequestStateType == 1).RequestStates.Add(request5State1);
-            var request5State2 = new RequestState
-            {
-                IdRequestState = 10,
-                IdRequestStateType = 5,
-                RequestStateType = RequestStateTypes.First(r => r.IdRequestStateType == 5),
-                IdRequest = 5,
-                Request = Requests.First(r => r.IdRequest == 5),
-                Date = DateTime.Now
-            };
-            RequestStates.Add(request5State2);
-            Requests.First(r => r.IdRequest == 5).RequestStates.Add(request5State2);
-            RequestStateTypes.First(r => r.IdRequestStateType == 5).RequestStates.Add(request5State2);
-
-            // Request 6
-            var request6State1 = new RequestState
-            {
-                IdRequestState = 11,
-                IdRequestStateType = 1,
-                RequestStateType = RequestStateTypes.First(r => r.IdRequestStateType == 1),
-                IdRequest = 6,
-                Request = Requests.First(r => r.IdRequest == 6),
-                Date = DateTime.Now
-            };
-            RequestStates.Add(request6State1);
-            Requests.First(r => r.IdRequest == 6).RequestStates.Add(request6State1);
-            RequestStateTypes.First(r => r.IdRequestStateType == 1).RequestStates.Add(request6State1);
-            var request6State2 = new RequestState
-            {
-                IdRequestState = 12,
-                IdRequestStateType = 5,
-                RequestStateType = RequestStateTypes.First(r => r.IdRequestStateType == 5),
-                IdRequest = 6,
-                Request = Requests.First(r => r.IdRequest == 6),
-                Date = DateTime.Now
-            };
-            RequestStates.Add(request6State2);
-            Requests.First(r => r.IdRequest == 6).RequestStates.Add(request6State2);
-            RequestStateTypes.First(r => r.IdRequestStateType == 5).RequestStates.Add(request6State2);
-
-            // Request 7
-            var request7State1 = new RequestState
-            {
-                IdRequestState = 13,
-                IdRequestStateType = 2,
-                RequestStateType = RequestStateTypes.First(r => r.IdRequestStateType == 2),
-                IdRequest = 7,
-                Request = Requests.First(r => r.IdRequest == 7),
-                Date = DateTime.Now
-            };
-            RequestStates.Add(request7State1);
-            Requests.First(r => r.IdRequest == 7).RequestStates.Add(request7State1);
-            RequestStateTypes.First(r => r.IdRequestStateType == 2).RequestStates.Add(request7State1);
-            var request7State2 = new RequestState
-            {
-                IdRequestState = 14,
-                IdRequestStateType = 5,
-                RequestStateType = RequestStateTypes.First(r => r.IdRequestStateType == 5),
-                IdRequest = 7,
-                Request = Requests.First(r => r.IdRequest == 7),
-                Date = DateTime.Now
-            };
-            RequestStates.Add(request7State2);
-            Requests.First(r => r.IdRequest == 7).RequestStates.Add(request7State2);
-            RequestStateTypes.First(r => r.IdRequestStateType == 5).RequestStates.Add(request7State2);
-
-            // Request 8
-            var request8State1 = new RequestState
-            {
-                IdRequestState = 15,
-                IdRequestStateType = 2,
-                RequestStateType = RequestStateTypes.First(r => r.IdRequestStateType == 2),
-                IdRequest = 8,
-                Request = Requests.First(r => r.IdRequest == 8),
-                Date = DateTime.Now
-            };
-            RequestStates.Add(request8State1);
-            Requests.First(r => r.IdRequest == 8).RequestStates.Add(request8State1);
-            RequestStateTypes.First(r => r.IdRequestStateType == 2).RequestStates.Add(request8State1);
-            var request8State2 = new RequestState
-            {
-                IdRequestState = 16,
-                IdRequestStateType = 1,
-                RequestStateType = RequestStateTypes.First(r => r.IdRequestStateType == 1),
-                IdRequest = 8,
-                Request = Requests.First(r => r.IdRequest == 8),
-                Date = DateTime.Now
-            };
-            RequestStates.Add(request8State2);
-            Requests.First(r => r.IdRequest == 8).RequestStates.Add(request8State2);
-            RequestStateTypes.First(r => r.IdRequestStateType == 1).RequestStates.Add(request8State2);
-
-            // Request 9
-            var request9State1 = new RequestState
-            {
-                IdRequestState = 17,
-                IdRequestStateType = 1,
-                RequestStateType = RequestStateTypes.First(r => r.IdRequestStateType == 1),
-                IdRequest = 9,
-                Request = Requests.First(r => r.IdRequest == 9),
-                Date = DateTime.Now
-            };
-            RequestStates.Add(request9State1);
-            Requests.First(r => r.IdRequest == 9).RequestStates.Add(request9State1);
-            RequestStateTypes.First(r => r.IdRequestStateType == 1).RequestStates.Add(request9State1);
-            var request9State2 = new RequestState
-            {
-                IdRequestState = 18,
-                IdRequestStateType = 2,
-                RequestStateType = RequestStateTypes.First(r => r.IdRequestStateType == 2),
-                IdRequest = 9,
-                Request = Requests.First(r => r.IdRequest == 9),
-                Date = DateTime.Now
-            };
-            RequestStates.Add(request9State2);
-            Requests.First(r => r.IdRequest == 9).RequestStates.Add(request9State2);
-            RequestStateTypes.First(r => r.IdRequestStateType == 2).RequestStates.Add(request9State2);
-            var request9State3 = new RequestState
-            {
-                IdRequestState = 19,
-                IdRequestStateType = 1,
-                RequestStateType = RequestStateTypes.First(r => r.IdRequestStateType == 1),
-                IdRequest = 9,
-                Request = Requests.First(r => r.IdRequest == 9),
-                Date = DateTime.Now
-            };
-            RequestStates.Add(request9State3);
-            Requests.First(r => r.IdRequest == 9).RequestStates.Add(request9State3);
-            RequestStateTypes.First(r => r.IdRequestStateType == 1).RequestStates.Add(request9State3);
-            var request9State4 = new RequestState
-            {
-                IdRequestState = 20,
-                IdRequestStateType = 2,
-                RequestStateType = RequestStateTypes.First(r => r.IdRequestStateType == 2),
-                IdRequest = 9,
-                Request = Requests.First(r => r.IdRequest == 9),
-                Date = DateTime.Now
-            };
-            RequestStates.Add(request9State4);
-            Requests.First(r => r.IdRequest == 9).RequestStates.Add(request9State4);
-            RequestStateTypes.First(r => r.IdRequestStateType == 2).RequestStates.Add(request9State4);
-
-            // Request 10
-            var request10State1 = new RequestState
-            {
-                IdRequestState = 21,
-                IdRequestStateType = 1,
-                RequestStateType = RequestStateTypes.First(r => r.IdRequestStateType == 1),
-                IdRequest = 10,
-                Request = Requests.First(r => r.IdRequest == 10),
-                Date = DateTime.Now
-            };
-            RequestStates.Add(request10State1);
-            Requests.First(r => r.IdRequest == 10).RequestStates.Add(request10State1);
-            RequestStateTypes.First(r => r.IdRequestStateType == 1).RequestStates.Add(request10State1);
-            var request10State2 = new RequestState
-            {
-                IdRequestState = 22,
-                IdRequestStateType = 2,
-                RequestStateType = RequestStateTypes.First(r => r.IdRequestStateType == 2),
-                IdRequest = 10,
-                Request = Requests.First(r => r.IdRequest == 10),
-                Date = DateTime.Now
-            };
-            RequestStates.Add(request10State2);
-            Requests.First(r => r.IdRequest == 10).RequestStates.Add(request10State2);
-            RequestStateTypes.First(r => r.IdRequestStateType == 2).RequestStates.Add(request10State2);
-            var request10State3 = new RequestState
-            {
-                IdRequestState = 23,
-                IdRequestStateType = 1,
-                RequestStateType = RequestStateTypes.First(r => r.IdRequestStateType == 1),
-                IdRequest = 10,
-                Request = Requests.First(r => r.IdRequest == 10),
-                Date = DateTime.Now
-            };
-            RequestStates.Add(request10State3);
-            Requests.First(r => r.IdRequest == 10).RequestStates.Add(request10State3);
-            RequestStateTypes.First(r => r.IdRequestStateType == 1).RequestStates.Add(request10State3);
-            var request10State4 = new RequestState
-            {
-                IdRequestState = 24,
-                IdRequestStateType = 2,
-                RequestStateType = RequestStateTypes.First(r => r.IdRequestStateType == 2),
-                IdRequest = 10,
-                Request = Requests.First(r => r.IdRequest == 10),
-                Date = DateTime.Now
-            };
-            RequestStates.Add(request10State4);
-            Requests.First(r => r.IdRequest == 10).RequestStates.Add(request10State4);
-            RequestStateTypes.First(r => r.IdRequestStateType == 2).RequestStates.Add(request10State4);
-            var request10State5 = new RequestState
-            {
-                IdRequestState = 25,
-                IdRequestStateType = 3,
-                RequestStateType = RequestStateTypes.First(r => r.IdRequestStateType == 3),
-                IdRequest = 10,
-                Request = Requests.First(r => r.IdRequest == 10),
-                Date = DateTime.Now
-            };
-            RequestStates.Add(request10State5);
-            Requests.First(r => r.IdRequest == 10).RequestStates.Add(request10State5);
-            RequestStateTypes.First(r => r.IdRequestStateType == 3).RequestStates.Add(request10State5);
-
-            // Request 11
-            var request11State1 = new RequestState
-            {
-                IdRequestState = 26,
-                IdRequestStateType = 1,
-                RequestStateType = RequestStateTypes.First(r => r.IdRequestStateType == 1),
-                IdRequest = 11,
-                Request = Requests.First(r => r.IdRequest == 11),
-                Date = DateTime.Now
-            };
-            RequestStates.Add(request11State1);
-            Requests.First(r => r.IdRequest == 11).RequestStates.Add(request11State1);
-            RequestStateTypes.First(r => r.IdRequestStateType == 1).RequestStates.Add(request11State1);
-            var request11State2 = new RequestState
-            {
-                IdRequestState = 27,
-                IdRequestStateType = 2,
-                RequestStateType = RequestStateTypes.First(r => r.IdRequestStateType == 2),
-                IdRequest = 11,
-                Request = Requests.First(r => r.IdRequest == 11),
-                Date = DateTime.Now
-            };
-            RequestStates.Add(request11State2);
-            Requests.First(r => r.IdRequest == 11).RequestStates.Add(request11State2);
-            RequestStateTypes.First(r => r.IdRequestStateType == 2).RequestStates.Add(request11State2);
-            var request11State3 = new RequestState
-            {
-                IdRequestState = 28,
-                IdRequestStateType = 1,
-                RequestStateType = RequestStateTypes.First(r => r.IdRequestStateType == 1),
-                IdRequest = 11,
-                Request = Requests.First(r => r.IdRequest == 11),
-                Date = DateTime.Now
-            };
-            RequestStates.Add(request11State3);
-            Requests.First(r => r.IdRequest == 11).RequestStates.Add(request11State3);
-            RequestStateTypes.First(r => r.IdRequestStateType == 1).RequestStates.Add(request11State3);
-            var request11State4 = new RequestState
-            {
-                IdRequestState = 29,
-                IdRequestStateType = 5,
-                RequestStateType = RequestStateTypes.First(r => r.IdRequestStateType == 5),
-                IdRequest = 11,
-                Request = Requests.First(r => r.IdRequest == 11),
-                Date = DateTime.Now
-            };
-            RequestStates.Add(request11State4);
-            Requests.First(r => r.IdRequest == 11).RequestStates.Add(request11State4);
-            RequestStateTypes.First(r => r.IdRequestStateType == 5).RequestStates.Add(request11State4);
-
-            // Request 12
-            var request12State1 = new RequestState
-            {
-                IdRequestState = 30,
-                IdRequestStateType = 2,
-                RequestStateType = RequestStateTypes.First(r => r.IdRequestStateType == 2),
-                IdRequest = 12,
-                Request = Requests.First(r => r.IdRequest == 12),
-                Date = DateTime.Now
-            };
-            RequestStates.Add(request12State1);
-            Requests.First(r => r.IdRequest == 12).RequestStates.Add(request12State1);
-            RequestStateTypes.First(r => r.IdRequestStateType == 2).RequestStates.Add(request12State1);
-
-            // Request 13
-            var request13State1 = new RequestState
-            {
-                IdRequestState = 31,
-                IdRequestStateType = 2,
-                RequestStateType = RequestStateTypes.First(r => r.IdRequestStateType == 2),
-                IdRequest = 13,
-                Request = Requests.First(r => r.IdRequest == 13),
-                Date = DateTime.Now
-            };
-            RequestStates.Add(request13State1);
-            Requests.First(r => r.IdRequest == 13).RequestStates.Add(request13State1);
-            RequestStateTypes.First(r => r.IdRequestStateType == 2).RequestStates.Add(request13State1);
-            var request13State2 = new RequestState
-            {
-                IdRequestState = 32,
-                IdRequestStateType = 3,
-                RequestStateType = RequestStateTypes.First(r => r.IdRequestStateType == 3),
-                IdRequest = 13,
-                Request = Requests.First(r => r.IdRequest == 13),
-                Date = DateTime.Now
-            };
-            RequestStates.Add(request13State2);
-            Requests.First(r => r.IdRequest == 13).RequestStates.Add(request13State2);
-            RequestStateTypes.First(r => r.IdRequestStateType == 3).RequestStates.Add(request13State2);
-            var request13State3 = new RequestState
-            {
-                IdRequestState = 33,
-                IdRequestStateType = 4,
-                RequestStateType = RequestStateTypes.First(r => r.IdRequestStateType == 4),
-                IdRequest = 13,
-                Request = Requests.First(r => r.IdRequest == 13),
-                Date = DateTime.Now
-            };
-            RequestStates.Add(request13State3);
-            Requests.First(r => r.IdRequest == 13).RequestStates.Add(request13State3);
-            RequestStateTypes.First(r => r.IdRequestStateType == 4).RequestStates.Add(request13State3);
-            var request13State4 = new RequestState
-            {
-                IdRequestState = 35,
-                IdRequestStateType = 5,
-                RequestStateType = RequestStateTypes.First(r => r.IdRequestStateType == 5),
-                IdRequest = 13,
-                Request = Requests.First(r => r.IdRequest == 13),
-                Date = DateTime.Now
-            };
-            RequestStates.Add(request13State4);
-            Requests.First(r => r.IdRequest == 13).RequestStates.Add(request13State4);
-            RequestStateTypes.First(r => r.IdRequestStateType == 5).RequestStates.Add(request13State4);
-
-            // Request 14
-            var request14State1 = new RequestState
-            {
-                IdRequestState = 36,
-                IdRequestStateType = 1,
-                RequestStateType = RequestStateTypes.First(r => r.IdRequestStateType == 1),
-                IdRequest = 14,
-                Request = Requests.First(r => r.IdRequest == 14),
-                Date = DateTime.Now
-            };
-            RequestStates.Add(request14State1);
-            Requests.First(r => r.IdRequest == 14).RequestStates.Add(request14State1);
-            RequestStateTypes.First(r => r.IdRequestStateType == 1).RequestStates.Add(request14State1);
-            var request14State2 = new RequestState
-            {
-                IdRequestState = 37,
-                IdRequestStateType = 2,
-                RequestStateType = RequestStateTypes.First(r => r.IdRequestStateType == 2),
-                IdRequest = 14,
-                Request = Requests.First(r => r.IdRequest == 14),
-                Date = DateTime.Now
-            };
-            RequestStates.Add(request14State2);
-            Requests.First(r => r.IdRequest == 14).RequestStates.Add(request14State2);
-            RequestStateTypes.First(r => r.IdRequestStateType == 2).RequestStates.Add(request14State2);
+                var requestState = new RequestState
+                {
+                    IdRequestState = requestStateParams.IdRequestState,
+                    IdRequestStateType = requestStateParams.IdRequestStateType,
+                    RequestStateType = RequestStateTypes.First(r => r.IdRequestStateType == requestStateParams.IdRequestStateType),
+                    IdRequest = requestStateParams.IdRequest,
+                    Request = Requests.First(r => r.IdRequest == requestStateParams.IdRequest),
+                    Date = requestStateParams.Date,
+                    Deleted = requestStateParams.Deleted
+                };
+                RequestStates.Add(requestState);
+                Requests.First(r => r.IdRequest == requestStateParams.IdRequest).RequestStates.Add(requestState);
+                RequestStateTypes.First(r => r.IdRequestStateType == requestStateParams.IdRequestStateType).RequestStates.Add(requestState);
+            }
         }
 
         private void LoadRequestUsers()
         {
-            var requestUser1 = new RequestUser
+            var users = new[]
             {
-                IdRequestUser = 1,
-                Login = "user1",
-                RequestUserAssoc = new List<RequestUserAssoc>()
+                new { IdRequestUser = 1, Login = "user1", Deleted = false },
+                new { IdRequestUser = 2, Login = "user2", Deleted = false },
+                new { IdRequestUser = 3, Login = "user3", Deleted = false },
+                new { IdRequestUser = 4, Login = "user4", Deleted = false },
+                new { IdRequestUser = 5, Login = "user5", Deleted = false },
+                new { IdRequestUser = 6, Login = "user6", Deleted = true },
+                new { IdRequestUser = 7, Login = "user6", Deleted = false },
             };
-            Users.Add(requestUser1);
-            var requestUser2 = new RequestUser
+            foreach (var userParams in users)
             {
-                IdRequestUser = 2,
-                Login = "user2",
-                RequestUserAssoc = new List<RequestUserAssoc>()
-            };
-            Users.Add(requestUser2);
-            var requestUser3 = new RequestUser
-            {
-                IdRequestUser = 3,
-                Login = "user3",
-                RequestUserAssoc = new List<RequestUserAssoc>()
-            };
-            Users.Add(requestUser3);
-            var requestUser4 = new RequestUser
-            {
-                IdRequestUser = 4,
-                Login = "user4",
-                RequestUserAssoc = new List<RequestUserAssoc>()
-            };
-            Users.Add(requestUser4);
-            var requestUser5 = new RequestUser
-            {
-                IdRequestUser = 5,
-                Login = "user5",
-                RequestUserAssoc = new List<RequestUserAssoc>()
-            };
-            Users.Add(requestUser5);
-            var requestUser6 = new RequestUser
-            {
-                IdRequestUser = 6,
-                Login = "user6",
-                RequestUserAssoc = new List<RequestUserAssoc>(),
-                Deleted = true
-            };
-            Users.Add(requestUser6);
-            var requestUser7 = new RequestUser
-            {
-                IdRequestUser = 7,
-                Login = "user6",    // same login
-                RequestUserAssoc = new List<RequestUserAssoc>()
-            };
-            Users.Add(requestUser7);
+                var requestUser = new RequestUser
+                {
+                    IdRequestUser = userParams.IdRequestUser,
+                    Login = userParams.Login,
+                    Deleted = userParams.Deleted,
+                    RequestUserAssoc = new List<RequestUserAssoc>()
+                };
+                Users.Add(requestUser);
+            }
         }
 
         private void LoadRequestUserAssocs()
         {
-            var assoc1 = new RequestUserAssoc
+            var ruas = new[]
             {
-                IdRequestUserAssoc = 1,
-                IdRequest = 1,
-                Request = Requests.First(r => r.IdRequest == 1),
-                IdRequestUser = 1,
-                RequestUser = Users.First(r => r.IdRequestUser == 1),
-                RequestUserRightAssocs = new List<RequestUserRightAssoc>()
+                new { IdRequestUserAssoc = 1, IdRequest = 1, IdRequestUser = 1, Deleted = false },
+                new { IdRequestUserAssoc = 2, IdRequest = 1, IdRequestUser = 2, Deleted = false },
+                new { IdRequestUserAssoc = 3, IdRequest = 1, IdRequestUser = 3, Deleted = true },
+                new { IdRequestUserAssoc = 4, IdRequest = 2, IdRequestUser = 2, Deleted = false },
+                new { IdRequestUserAssoc = 5, IdRequest = 2, IdRequestUser = 3, Deleted = false },
+                new { IdRequestUserAssoc = 6, IdRequest = 3, IdRequestUser = 4, Deleted = false },
+                new { IdRequestUserAssoc = 7, IdRequest = 4, IdRequestUser = 5, Deleted = false },
+                new { IdRequestUserAssoc = 8, IdRequest = 5, IdRequestUser = 5, Deleted = false },
+                new { IdRequestUserAssoc = 9, IdRequest = 5, IdRequestUser = 7, Deleted = false },
+                new { IdRequestUserAssoc = 10, IdRequest = 6, IdRequestUser = 5, Deleted = false },
+                new { IdRequestUserAssoc = 11, IdRequest = 6, IdRequestUser = 6, Deleted = false },
+                new { IdRequestUserAssoc = 12, IdRequest = 7, IdRequestUser = 1, Deleted = false },
+                new { IdRequestUserAssoc = 13, IdRequest = 7, IdRequestUser = 2, Deleted = false },
+                new { IdRequestUserAssoc = 14, IdRequest = 7, IdRequestUser = 4, Deleted = false },
+                new { IdRequestUserAssoc = 15, IdRequest = 8, IdRequestUser = 6, Deleted = false },
+                new { IdRequestUserAssoc = 16, IdRequest = 9, IdRequestUser = 1, Deleted = false },
+                new { IdRequestUserAssoc = 17, IdRequest = 9, IdRequestUser = 2, Deleted = false },
+                new { IdRequestUserAssoc = 18, IdRequest = 9, IdRequestUser = 3, Deleted = false },
+                new { IdRequestUserAssoc = 19, IdRequest = 9, IdRequestUser = 4, Deleted = false },
+                new { IdRequestUserAssoc = 20, IdRequest = 9, IdRequestUser = 5, Deleted = false },
+                new { IdRequestUserAssoc = 21, IdRequest = 10, IdRequestUser = 4, Deleted = false },
+                new { IdRequestUserAssoc = 22, IdRequest = 10, IdRequestUser = 7, Deleted = false },
+                new { IdRequestUserAssoc = 23, IdRequest = 11, IdRequestUser = 3, Deleted = false },
+                new { IdRequestUserAssoc = 24, IdRequest = 11, IdRequestUser = 4, Deleted = false },
+                new { IdRequestUserAssoc = 25, IdRequest = 11, IdRequestUser = 7, Deleted = false },
+                new { IdRequestUserAssoc = 26, IdRequest = 11, IdRequestUser = 4, Deleted = false },
+                new { IdRequestUserAssoc = 27, IdRequest = 12, IdRequestUser = 5, Deleted = false },
+                new { IdRequestUserAssoc = 28, IdRequest = 13, IdRequestUser = 2, Deleted = false },
+                new { IdRequestUserAssoc = 29, IdRequest = 13, IdRequestUser = 4, Deleted = false },
+                new { IdRequestUserAssoc = 30, IdRequest = 14, IdRequestUser = 1, Deleted = false },
+                new { IdRequestUserAssoc = 31, IdRequest = 15, IdRequestUser = 1, Deleted = false },
             };
-            RequestUserAssocs.Add(assoc1);
-            Users.First(r => r.IdRequestUser == 1).RequestUserAssoc.Add(assoc1);
-            Requests.First(r => r.IdRequest == 1).RequestUserAssoc.Add(assoc1);
-            var assoc2 = new RequestUserAssoc
+            foreach (var ruaParams in ruas)
             {
-                IdRequestUserAssoc = 2,
-                IdRequest = 1,
-                Request = Requests.First(r => r.IdRequest == 1),
-                IdRequestUser = 2,
-                RequestUser = Users.First(r => r.IdRequestUser == 2),
-                RequestUserRightAssocs = new List<RequestUserRightAssoc>()
-            };
-            RequestUserAssocs.Add(assoc2);
-            Users.First(r => r.IdRequestUser == 2).RequestUserAssoc.Add(assoc2);
-            Requests.First(r => r.IdRequest == 1).RequestUserAssoc.Add(assoc2);
-            var assoc3 = new RequestUserAssoc
-            {
-                IdRequestUserAssoc = 3,
-                IdRequest = 1,
-                Request = Requests.First(r => r.IdRequest == 1),
-                IdRequestUser = 3,
-                RequestUser = Users.First(r => r.IdRequestUser == 3),
-                RequestUserRightAssocs = new List<RequestUserRightAssoc>(),
-                Deleted = true
-            };
-            RequestUserAssocs.Add(assoc3);
-            Users.First(r => r.IdRequestUser == 3).RequestUserAssoc.Add(assoc3);
-            Requests.First(r => r.IdRequest == 1).RequestUserAssoc.Add(assoc3);
-            var assoc4 = new RequestUserAssoc
-            {
-                IdRequestUserAssoc = 4,
-                IdRequest = 2,
-                Request = Requests.First(r => r.IdRequest == 2),
-                IdRequestUser = 2,
-                RequestUser = Users.First(r => r.IdRequestUser == 2),
-                RequestUserRightAssocs = new List<RequestUserRightAssoc>()
-            };
-            RequestUserAssocs.Add(assoc4);
-            Users.First(r => r.IdRequestUser == 2).RequestUserAssoc.Add(assoc4);
-            Requests.First(r => r.IdRequest == 2).RequestUserAssoc.Add(assoc4);
-            var assoc5 = new RequestUserAssoc
-            {
-                IdRequestUserAssoc = 5,
-                IdRequest = 2,
-                Request = Requests.First(r => r.IdRequest == 2),
-                IdRequestUser = 3,
-                RequestUser = Users.First(r => r.IdRequestUser == 3),
-                RequestUserRightAssocs = new List<RequestUserRightAssoc>()
-            };
-            RequestUserAssocs.Add(assoc5);
-            Users.First(r => r.IdRequestUser == 3).RequestUserAssoc.Add(assoc5);
-            Requests.First(r => r.IdRequest == 2).RequestUserAssoc.Add(assoc5);
-            var assoc6 = new RequestUserAssoc
-            {
-                IdRequestUserAssoc = 6,
-                IdRequest = 3,
-                Request = Requests.First(r => r.IdRequest == 3),
-                IdRequestUser = 4,
-                RequestUser = Users.First(r => r.IdRequestUser == 4),
-                RequestUserRightAssocs = new List<RequestUserRightAssoc>()
-            };
-            RequestUserAssocs.Add(assoc6);
-            Users.First(r => r.IdRequestUser == 4).RequestUserAssoc.Add(assoc6);
-            Requests.First(r => r.IdRequest == 3).RequestUserAssoc.Add(assoc6);
-            var assoc7 = new RequestUserAssoc
-            {
-                IdRequestUserAssoc = 7,
-                IdRequest = 4,
-                Request = Requests.First(r => r.IdRequest == 4),
-                IdRequestUser = 5,
-                RequestUser = Users.First(r => r.IdRequestUser == 5),
-                RequestUserRightAssocs = new List<RequestUserRightAssoc>()
-            };
-            RequestUserAssocs.Add(assoc7);
-            Users.First(r => r.IdRequestUser == 5).RequestUserAssoc.Add(assoc7);
-            Requests.First(r => r.IdRequest == 4).RequestUserAssoc.Add(assoc7);
-            var assoc8 = new RequestUserAssoc
-            {
-                IdRequestUserAssoc = 8,
-                IdRequest = 5,
-                Request = Requests.First(r => r.IdRequest == 5),
-                IdRequestUser = 5,
-                RequestUser = Users.First(r => r.IdRequestUser == 5),
-                RequestUserRightAssocs = new List<RequestUserRightAssoc>()
-            };
-            RequestUserAssocs.Add(assoc8);
-            Users.First(r => r.IdRequestUser == 5).RequestUserAssoc.Add(assoc8);
-            Requests.First(r => r.IdRequest == 5).RequestUserAssoc.Add(assoc8);
-            var assoc9 = new RequestUserAssoc
-            {
-                IdRequestUserAssoc = 9,
-                IdRequest = 5,
-                Request = Requests.First(r => r.IdRequest == 5),
-                IdRequestUser = 7,
-                RequestUser = Users.First(r => r.IdRequestUser == 7),
-                RequestUserRightAssocs = new List<RequestUserRightAssoc>()
-            };
-            RequestUserAssocs.Add(assoc9);
-            Users.First(r => r.IdRequestUser == 7).RequestUserAssoc.Add(assoc9);
-            Requests.First(r => r.IdRequest == 5).RequestUserAssoc.Add(assoc9);
-            var assoc10 = new RequestUserAssoc
-            {
-                IdRequestUserAssoc = 10,
-                IdRequest = 6,
-                Request = Requests.First(r => r.IdRequest == 6),
-                IdRequestUser = 5,
-                RequestUser = Users.First(r => r.IdRequestUser == 5),
-                RequestUserRightAssocs = new List<RequestUserRightAssoc>()
-            };
-            RequestUserAssocs.Add(assoc10);
-            Users.First(r => r.IdRequestUser == 5).RequestUserAssoc.Add(assoc10);
-            Requests.First(r => r.IdRequest == 6).RequestUserAssoc.Add(assoc10);
-            var assoc11 = new RequestUserAssoc
-            {
-                IdRequestUserAssoc = 11,
-                IdRequest = 6,
-                Request = Requests.First(r => r.IdRequest == 6),
-                IdRequestUser = 6,
-                RequestUser = Users.First(r => r.IdRequestUser == 6),
-                RequestUserRightAssocs = new List<RequestUserRightAssoc>()
-            };
-            RequestUserAssocs.Add(assoc11);
-            Users.First(r => r.IdRequestUser == 6).RequestUserAssoc.Add(assoc11);
-            Requests.First(r => r.IdRequest == 6).RequestUserAssoc.Add(assoc11);
-            var assoc12 = new RequestUserAssoc
-            {
-                IdRequestUserAssoc = 12,
-                IdRequest = 7,
-                Request = Requests.First(r => r.IdRequest == 7),
-                IdRequestUser = 1,
-                RequestUser = Users.First(r => r.IdRequestUser == 1),
-                RequestUserRightAssocs = new List<RequestUserRightAssoc>()
-            };
-            RequestUserAssocs.Add(assoc12);
-            Users.First(r => r.IdRequestUser == 1).RequestUserAssoc.Add(assoc12);
-            Requests.First(r => r.IdRequest == 7).RequestUserAssoc.Add(assoc12);
-            var assoc13 = new RequestUserAssoc
-            {
-                IdRequestUserAssoc = 13,
-                IdRequest = 7,
-                Request = Requests.First(r => r.IdRequest == 7),
-                IdRequestUser = 2,
-                RequestUser = Users.First(r => r.IdRequestUser == 2),
-                RequestUserRightAssocs = new List<RequestUserRightAssoc>()
-            };
-            RequestUserAssocs.Add(assoc13);
-            Users.First(r => r.IdRequestUser == 2).RequestUserAssoc.Add(assoc13);
-            Requests.First(r => r.IdRequest == 7).RequestUserAssoc.Add(assoc13);
-            var assoc14 = new RequestUserAssoc
-            {
-                IdRequestUserAssoc = 14,
-                IdRequest = 7,
-                Request = Requests.First(r => r.IdRequest == 7),
-                IdRequestUser = 4,
-                RequestUser = Users.First(r => r.IdRequestUser == 4),
-                RequestUserRightAssocs = new List<RequestUserRightAssoc>()
-            };
-            RequestUserAssocs.Add(assoc14);
-            Users.First(r => r.IdRequestUser == 4).RequestUserAssoc.Add(assoc14);
-            Requests.First(r => r.IdRequest == 7).RequestUserAssoc.Add(assoc14);
-            var assoc15 = new RequestUserAssoc
-            {
-                IdRequestUserAssoc = 15,
-                IdRequest = 8,
-                Request = Requests.First(r => r.IdRequest == 8),
-                IdRequestUser = 6,
-                RequestUser = Users.First(r => r.IdRequestUser == 6),
-                RequestUserRightAssocs = new List<RequestUserRightAssoc>()
-            };
-            RequestUserAssocs.Add(assoc15);
-            Users.First(r => r.IdRequestUser == 6).RequestUserAssoc.Add(assoc15);
-            Requests.First(r => r.IdRequest == 8).RequestUserAssoc.Add(assoc15);
-            var assoc16 = new RequestUserAssoc
-            {
-                IdRequestUserAssoc = 16,
-                IdRequest = 9,
-                Request = Requests.First(r => r.IdRequest == 9),
-                IdRequestUser = 1,
-                RequestUser = Users.First(r => r.IdRequestUser == 1),
-                RequestUserRightAssocs = new List<RequestUserRightAssoc>()
-            };
-            RequestUserAssocs.Add(assoc16);
-            Users.First(r => r.IdRequestUser == 1).RequestUserAssoc.Add(assoc16);
-            Requests.First(r => r.IdRequest == 9).RequestUserAssoc.Add(assoc16);
-            var assoc17 = new RequestUserAssoc
-            {
-                IdRequestUserAssoc = 17,
-                IdRequest = 9,
-                Request = Requests.First(r => r.IdRequest == 9),
-                IdRequestUser = 2,
-                RequestUser = Users.First(r => r.IdRequestUser == 2),
-                RequestUserRightAssocs = new List<RequestUserRightAssoc>()
-            };
-            RequestUserAssocs.Add(assoc17);
-            Users.First(r => r.IdRequestUser == 2).RequestUserAssoc.Add(assoc17);
-            Requests.First(r => r.IdRequest == 9).RequestUserAssoc.Add(assoc17);
-            var assoc18 = new RequestUserAssoc
-            {
-                IdRequestUserAssoc = 18,
-                IdRequest = 9,
-                Request = Requests.First(r => r.IdRequest == 9),
-                IdRequestUser = 3,
-                RequestUser = Users.First(r => r.IdRequestUser == 3),
-                RequestUserRightAssocs = new List<RequestUserRightAssoc>()
-            };
-            RequestUserAssocs.Add(assoc18);
-            Users.First(r => r.IdRequestUser == 3).RequestUserAssoc.Add(assoc18);
-            Requests.First(r => r.IdRequest == 9).RequestUserAssoc.Add(assoc18);
-            var assoc19 = new RequestUserAssoc
-            {
-                IdRequestUserAssoc = 19,
-                IdRequest = 9,
-                Request = Requests.First(r => r.IdRequest == 9),
-                IdRequestUser = 4,
-                RequestUser = Users.First(r => r.IdRequestUser == 4),
-                RequestUserRightAssocs = new List<RequestUserRightAssoc>()
-            };
-            RequestUserAssocs.Add(assoc19);
-            Users.First(r => r.IdRequestUser == 4).RequestUserAssoc.Add(assoc19);
-            Requests.First(r => r.IdRequest == 9).RequestUserAssoc.Add(assoc19);
-            var assoc20 = new RequestUserAssoc
-            {
-                IdRequestUserAssoc = 20,
-                IdRequest = 9,
-                Request = Requests.First(r => r.IdRequest == 9),
-                IdRequestUser = 5,
-                RequestUser = Users.First(r => r.IdRequestUser == 5),
-                RequestUserRightAssocs = new List<RequestUserRightAssoc>()
-            };
-            RequestUserAssocs.Add(assoc20);
-            Users.First(r => r.IdRequestUser == 5).RequestUserAssoc.Add(assoc20);
-            Requests.First(r => r.IdRequest == 9).RequestUserAssoc.Add(assoc20);
-            var assoc21 = new RequestUserAssoc
-            {
-                IdRequestUserAssoc = 21,
-                IdRequest = 10,
-                Request = Requests.First(r => r.IdRequest == 10),
-                IdRequestUser = 4,
-                RequestUser = Users.First(r => r.IdRequestUser == 4),
-                RequestUserRightAssocs = new List<RequestUserRightAssoc>()
-            };
-            RequestUserAssocs.Add(assoc21);
-            Users.First(r => r.IdRequestUser == 4).RequestUserAssoc.Add(assoc21);
-            Requests.First(r => r.IdRequest == 10).RequestUserAssoc.Add(assoc21);
-            var assoc22 = new RequestUserAssoc
-            {
-                IdRequestUserAssoc = 22,
-                IdRequest = 10,
-                Request = Requests.First(r => r.IdRequest == 10),
-                IdRequestUser = 7,
-                RequestUser = Users.First(r => r.IdRequestUser == 7),
-                RequestUserRightAssocs = new List<RequestUserRightAssoc>()
-            };
-            RequestUserAssocs.Add(assoc22);
-            Users.First(r => r.IdRequestUser == 7).RequestUserAssoc.Add(assoc22);
-            Requests.First(r => r.IdRequest == 10).RequestUserAssoc.Add(assoc22);
-            var assoc23 = new RequestUserAssoc
-            {
-                IdRequestUserAssoc = 23,
-                IdRequest = 11,
-                Request = Requests.First(r => r.IdRequest == 11),
-                IdRequestUser = 3,
-                RequestUser = Users.First(r => r.IdRequestUser == 3),
-                RequestUserRightAssocs = new List<RequestUserRightAssoc>()
-            };
-            RequestUserAssocs.Add(assoc23);
-            Users.First(r => r.IdRequestUser == 3).RequestUserAssoc.Add(assoc23);
-            Requests.First(r => r.IdRequest == 11).RequestUserAssoc.Add(assoc23);
-            var assoc24 = new RequestUserAssoc
-            {
-                IdRequestUserAssoc = 24,
-                IdRequest = 11,
-                Request = Requests.First(r => r.IdRequest == 11),
-                IdRequestUser = 4,
-                RequestUser = Users.First(r => r.IdRequestUser == 4),
-                RequestUserRightAssocs = new List<RequestUserRightAssoc>()
-            };
-            RequestUserAssocs.Add(assoc24);
-            Users.First(r => r.IdRequestUser == 4).RequestUserAssoc.Add(assoc24);
-            Requests.First(r => r.IdRequest == 11).RequestUserAssoc.Add(assoc24);
-            var assoc25 = new RequestUserAssoc
-            {
-                IdRequestUserAssoc = 25,
-                IdRequest = 11,
-                Request = Requests.First(r => r.IdRequest == 11),
-                IdRequestUser = 7,
-                RequestUser = Users.First(r => r.IdRequestUser == 7),
-                RequestUserRightAssocs = new List<RequestUserRightAssoc>()
-            };
-            RequestUserAssocs.Add(assoc25);
-            Users.First(r => r.IdRequestUser == 7).RequestUserAssoc.Add(assoc25);
-            Requests.First(r => r.IdRequest == 11).RequestUserAssoc.Add(assoc25);
-            var assoc26 = new RequestUserAssoc
-            {
-                IdRequestUserAssoc = 26,
-                IdRequest = 12,
-                Request = Requests.First(r => r.IdRequest == 12),
-                IdRequestUser = 4,
-                RequestUser = Users.First(r => r.IdRequestUser == 4),
-                RequestUserRightAssocs = new List<RequestUserRightAssoc>()
-            };
-            RequestUserAssocs.Add(assoc26);
-            Users.First(r => r.IdRequestUser == 4).RequestUserAssoc.Add(assoc26);
-            Requests.First(r => r.IdRequest == 12).RequestUserAssoc.Add(assoc26);
-            var assoc27 = new RequestUserAssoc
-            {
-                IdRequestUserAssoc = 27,
-                IdRequest = 12,
-                Request = Requests.First(r => r.IdRequest == 12),
-                IdRequestUser = 5,
-                RequestUser = Users.First(r => r.IdRequestUser == 5),
-                RequestUserRightAssocs = new List<RequestUserRightAssoc>()
-            };
-            RequestUserAssocs.Add(assoc27);
-            Users.First(r => r.IdRequestUser == 5).RequestUserAssoc.Add(assoc27);
-            Requests.First(r => r.IdRequest == 12).RequestUserAssoc.Add(assoc27);
-            var assoc28 = new RequestUserAssoc
-            {
-                IdRequestUserAssoc = 28,
-                IdRequest = 13,
-                Request = Requests.First(r => r.IdRequest == 13),
-                IdRequestUser = 2,
-                RequestUser = Users.First(r => r.IdRequestUser == 2),
-                RequestUserRightAssocs = new List<RequestUserRightAssoc>()
-            };
-            RequestUserAssocs.Add(assoc28);
-            Users.First(r => r.IdRequestUser == 2).RequestUserAssoc.Add(assoc28);
-            Requests.First(r => r.IdRequest == 13).RequestUserAssoc.Add(assoc28);
-            var assoc29 = new RequestUserAssoc
-            {
-                IdRequestUserAssoc = 29,
-                IdRequest = 13,
-                Request = Requests.First(r => r.IdRequest == 13),
-                IdRequestUser = 4,
-                RequestUser = Users.First(r => r.IdRequestUser == 4),
-                RequestUserRightAssocs = new List<RequestUserRightAssoc>()
-            };
-            RequestUserAssocs.Add(assoc28);
-            Users.First(r => r.IdRequestUser == 4).RequestUserAssoc.Add(assoc29);
-            Requests.First(r => r.IdRequest == 13).RequestUserAssoc.Add(assoc29);
-            var assoc30 = new RequestUserAssoc
-            {
-                IdRequestUserAssoc = 30,
-                IdRequest = 14,
-                Request = Requests.First(r => r.IdRequest == 14),
-                IdRequestUser = 1,
-                RequestUser = Users.First(r => r.IdRequestUser == 1),
-                RequestUserRightAssocs = new List<RequestUserRightAssoc>()
-            };
-            RequestUserAssocs.Add(assoc30);
-            Users.First(r => r.IdRequestUser == 1).RequestUserAssoc.Add(assoc30);
-            Requests.First(r => r.IdRequest == 14).RequestUserAssoc.Add(assoc30);
+                var assoc = new RequestUserAssoc
+                {
+                    IdRequestUserAssoc = ruaParams.IdRequestUserAssoc,
+                    IdRequest = ruaParams.IdRequest,
+                    Request = Requests.First(r => r.IdRequest == ruaParams.IdRequest),
+                    IdRequestUser = ruaParams.IdRequestUser,
+                    RequestUser = Users.First(r => r.IdRequestUser == ruaParams.IdRequestUser),
+                    RequestUserRightAssocs = new List<RequestUserRightAssoc>(),
+                    Deleted = ruaParams.Deleted
+                };
+                RequestUserAssocs.Add(assoc);
+                Users.First(r => r.IdRequestUser == ruaParams.IdRequestUser).RequestUserAssoc.Add(assoc);
+                Requests.First(r => r.IdRequest == ruaParams.IdRequest).RequestUserAssoc.Add(assoc);
+            }
         }
 
         private void InitializeCollections()

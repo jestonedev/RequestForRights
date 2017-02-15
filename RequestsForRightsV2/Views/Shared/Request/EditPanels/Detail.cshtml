@@ -18,10 +18,10 @@
         @if (securityService.CanUpdate(Model.RequestModel))
         {
             <a href="@Url.Action("Update", "Request", new
-                                 {
-                                     id = Model.RequestModel.IdRequest,
-                                     returnUri = Url.Action("Detail", "Request", new { id = Model.RequestModel.IdRequest })
-                                 })"
+                     {
+                         id = Model.RequestModel.IdRequest,
+                         returnUri = Url.Action("Detail", "Request", new { id = Model.RequestModel.IdRequest })
+                     })"
                class="btn btn-default"
                title="Изменить заявку"
                aria-label="Изменить">

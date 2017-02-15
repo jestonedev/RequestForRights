@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using RequestsForRights.Domain.Entities;
 
-namespace RequestsForRights.Models.ViewModels
+namespace RequestsForRights.Web.Models.ViewModels
 {
     public class ResourceViewModel
     {

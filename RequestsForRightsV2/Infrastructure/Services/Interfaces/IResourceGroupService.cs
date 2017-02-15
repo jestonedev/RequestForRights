@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 using RequestsForRights.Domain.Entities;
-using RequestsForRights.Models.FilterOptions;
-using RequestsForRights.Models.ViewModels;
+using RequestsForRights.Web.Models.FilterOptions;
+using RequestsForRights.Web.Models.ViewModels;
 
-namespace RequestsForRights.Infrastructure.Services.Interfaces
+namespace RequestsForRights.Web.Infrastructure.Services.Interfaces
 {
     public interface IResourceGroupService
     {

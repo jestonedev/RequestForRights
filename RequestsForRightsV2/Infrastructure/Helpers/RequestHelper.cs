@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace RequestsForRights.Infrastructure.Helpers
+namespace RequestsForRights.Web.Infrastructure.Helpers
 {
     public static class RequestHelper
     {

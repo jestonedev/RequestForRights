@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq.Expressions;
-using RequestsForRights.Infrastructure.Enums;
-using RequestsForRights.Infrastructure.Utilities.EntitySorter.Interfaces;
+using RequestsForRights.Web.Infrastructure.Enums;
+using RequestsForRights.Web.Infrastructure.Utilities.EntitySorter.Interfaces;
 
-namespace RequestsForRights.Infrastructure.Utilities.EntitySorter.Extensions
+namespace RequestsForRights.Web.Infrastructure.Utilities.EntitySorter.Extensions
 {
     public static class EntitySorterExtensions
     {

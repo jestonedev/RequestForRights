@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 
-namespace RequestsForRights.Models.Models
+namespace RequestsForRights.Web.Models.Models
 {
     public class RequestModel<T>
         where T: RequestUserModel

@@ -5,13 +5,13 @@ using System.Linq;
 using System.Web;
 using RequestsForRights.Database.Repositories.Interfaces;
 using RequestsForRights.Domain.Entities;
-using RequestsForRights.Infrastructure.Extensions;
-using RequestsForRights.Infrastructure.Services.Interfaces;
-using RequestsForRights.Models.FilterOptions;
-using RequestsForRights.Models.Models;
-using RequestsForRights.Models.ViewModels;
+using RequestsForRights.Web.Infrastructure.Extensions;
+using RequestsForRights.Web.Infrastructure.Services.Interfaces;
+using RequestsForRights.Web.Models.FilterOptions;
+using RequestsForRights.Web.Models.Models;
+using RequestsForRights.Web.Models.ViewModels;
 
-namespace RequestsForRights.Infrastructure.Services
+namespace RequestsForRights.Web.Infrastructure.Services
 {
     public class ResourceService : IResourceService
     {

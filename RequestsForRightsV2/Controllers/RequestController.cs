@@ -2,18 +2,18 @@
 using System.Data.Entity.Infrastructure;
 using System.Web.Mvc;
 using RequestsForRights.Domain.Entities;
-using RequestsForRights.Infrastructure.Helpers;
-using RequestsForRights.Infrastructure.Security.Interfaces;
-using RequestsForRights.Infrastructure.Services.Interfaces;
-using RequestsForRights.Infrastructure.Utilities.EmailNotify;
-using RequestsForRights.Infrastructure.Utilities.TransfertToRoute;
-using RequestsForRights.Infrastructure.Utilities.TransfertToRoute.Extensions;
-using RequestsForRights.Models.FilterOptions;
-using RequestsForRights.Models.Models;
-using RequestsForRights.Models.ViewModels.Request;
+using RequestsForRights.Web.Infrastructure.Helpers;
+using RequestsForRights.Web.Infrastructure.Security.Interfaces;
+using RequestsForRights.Web.Infrastructure.Services.Interfaces;
+using RequestsForRights.Web.Infrastructure.Utilities.EmailNotify;
+using RequestsForRights.Web.Infrastructure.Utilities.TransfertToRoute;
+using RequestsForRights.Web.Infrastructure.Utilities.TransfertToRoute.Extensions;
+using RequestsForRights.Web.Models.FilterOptions;
+using RequestsForRights.Web.Models.Models;
+using RequestsForRights.Web.Models.ViewModels.Request;
 using WebGrease.Css.Extensions;
 
-namespace RequestsForRights.Controllers
+namespace RequestsForRights.Web.Controllers
 {
     public class RequestController : Controller
     {

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
-using RequestsForRights.Infrastructure.Enums;
-using RequestsForRights.Infrastructure.Utilities.EntitySorter.Interfaces;
+using RequestsForRights.Web.Infrastructure.Enums;
+using RequestsForRights.Web.Infrastructure.Utilities.EntitySorter.Interfaces;
 
-namespace RequestsForRights.Infrastructure.Utilities.EntitySorter
+namespace RequestsForRights.Web.Infrastructure.Utilities.EntitySorter
 {
     public static class EntitySorter<T>
     {

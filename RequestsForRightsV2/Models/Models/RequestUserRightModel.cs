@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace RequestsForRights.Models.Models
+namespace RequestsForRights.Web.Models.Models
 {
     public class RequestUserRightModel
     {

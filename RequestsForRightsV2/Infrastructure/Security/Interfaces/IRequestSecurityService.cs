@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using RequestsForRights.Domain.Entities;
-using RequestsForRights.Models.Models;
+using RequestsForRights.Web.Models.Models;
 
-namespace RequestsForRights.Infrastructure.Security.Interfaces
+namespace RequestsForRights.Web.Infrastructure.Security.Interfaces
 {
     public interface IRequestSecurityService<T> : ISecurityService<RequestModel<T>>
         where T: RequestUserModel

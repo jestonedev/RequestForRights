@@ -1,7 +1,7 @@
 ﻿@using System.Globalization
-@using RequestsForRights.Infrastructure.Security.Interfaces
-@using RequestsForRights.Models.Models
-@model RequestsForRights.Models.ViewModels.Request.RequestRemoveUserViewModel
+@using RequestsForRights.Web.Infrastructure.Security.Interfaces
+@using RequestsForRights.Web.Models.Models
+@model RequestsForRights.Web.Models.ViewModels.Request.RequestRemoveUserViewModel
 
 @{
     var securityService = (IRequestSecurityService<RequestUserModel>)ViewData["SecurityService"];

@@ -1,6 +1,6 @@
-﻿using RequestsForRights.Infrastructure.Enums;
+﻿using RequestsForRights.Web.Infrastructure.Enums;
 
-namespace RequestsForRights.Models.Models
+namespace RequestsForRights.Web.Models.Models
 {
     public class RequestCategoryModel
     {

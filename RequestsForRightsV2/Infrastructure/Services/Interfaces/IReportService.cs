@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using RequestsForRights.Domain.Entities;
-using RequestsForRights.Models.Models;
-using RequestsForRights.Models.ReportOptions;
+using RequestsForRights.Web.Models.Models;
+using RequestsForRights.Web.Models.ReportOptions;
 
-namespace RequestsForRights.Infrastructure.Services.Interfaces
+namespace RequestsForRights.Web.Infrastructure.Services.Interfaces
 {
     public interface IReportService
     {

@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace RequestsForRights.Infrastructure.Utilities.EntitySorter.Interfaces
+namespace RequestsForRights.Web.Infrastructure.Utilities.EntitySorter.Interfaces
 {
     public interface IEntitySorter<TEntity>
     {

@@ -2,15 +2,15 @@
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Web.Mvc;
-using RequestsForRights.Infrastructure.Helpers;
-using RequestsForRights.Infrastructure.Security.Interfaces;
-using RequestsForRights.Infrastructure.Services.Interfaces;
-using RequestsForRights.Infrastructure.Utilities.EmailNotify;
-using RequestsForRights.Infrastructure.Utilities.TransfertToRoute;
-using RequestsForRights.Models.Models;
-using RequestsForRights.Models.ViewModels.Request;
+using RequestsForRights.Web.Infrastructure.Helpers;
+using RequestsForRights.Web.Infrastructure.Security.Interfaces;
+using RequestsForRights.Web.Infrastructure.Services.Interfaces;
+using RequestsForRights.Web.Infrastructure.Utilities.EmailNotify;
+using RequestsForRights.Web.Infrastructure.Utilities.TransfertToRoute;
+using RequestsForRights.Web.Models.Models;
+using RequestsForRights.Web.Models.ViewModels.Request;
 
-namespace RequestsForRights.Controllers
+namespace RequestsForRights.Web.Controllers
 {
     public class RequestDelegatePermissionsController : Controller
     {

@@ -1,6 +1,6 @@
 ﻿using System.Web.Mvc;
 
-namespace RequestsForRights.Infrastructure.Utilities.TransfertToRoute.Extensions
+namespace RequestsForRights.Web.Infrastructure.Utilities.TransfertToRoute.Extensions
 {
     public static class ControllerContextExtensions
     {

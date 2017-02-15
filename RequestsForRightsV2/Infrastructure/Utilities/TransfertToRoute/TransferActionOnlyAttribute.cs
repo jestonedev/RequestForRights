@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Web.Mvc;
-using RequestsForRights.Infrastructure.Utilities.TransfertToRoute.Extensions;
+using RequestsForRights.Web.Infrastructure.Utilities.TransfertToRoute.Extensions;
 
-namespace RequestsForRights.Infrastructure.Utilities.TransfertToRoute
+namespace RequestsForRights.Web.Infrastructure.Utilities.TransfertToRoute
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public sealed class TransferActionOnlyAttribute : FilterAttribute, IAuthorizationFilter

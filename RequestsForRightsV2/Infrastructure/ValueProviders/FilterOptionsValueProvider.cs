@@ -4,11 +4,11 @@ using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 using Newtonsoft.Json;
-using RequestsForRights.Infrastructure.Enums;
-using RequestsForRights.Infrastructure.Helpers;
-using RequestsForRights.Models.FilterOptions;
+using RequestsForRights.Web.Infrastructure.Enums;
+using RequestsForRights.Web.Infrastructure.Helpers;
+using RequestsForRights.Web.Models.FilterOptions;
 
-namespace RequestsForRights.Infrastructure.ValueProviders
+namespace RequestsForRights.Web.Infrastructure.ValueProviders
 {
     public class FilterOptionsValueProvider<T>: IValueProvider
         where T: FilterOptions, new()

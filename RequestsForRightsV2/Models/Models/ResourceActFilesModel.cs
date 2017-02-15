@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Web;
 
-namespace RequestsForRights.Models.Models
+namespace RequestsForRights.Web.Models.Models
 {
     public class ResourceActFilesModel
     {

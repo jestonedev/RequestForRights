@@ -1,6 +1,6 @@
 ﻿using System.Web.Mvc;
 
-namespace RequestsForRights
+namespace RequestsForRights.Web
 {
     public class FilterConfig
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Web.Mvc;
 
-namespace RequestsForRights.Infrastructure.Extensions
+namespace RequestsForRights.Web.Infrastructure.Extensions
 {
     public static class HtmlHelperExtensions
     {

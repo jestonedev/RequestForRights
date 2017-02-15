@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Web.Mvc;
-using RequestsForRights.Infrastructure.Security.Interfaces;
-using RequestsForRights.Infrastructure.Services.Interfaces;
-using RequestsForRights.Models.ReportOptions;
-using RequestsForRights.Models.ViewModels;
+using RequestsForRights.Web.Infrastructure.Security.Interfaces;
+using RequestsForRights.Web.Infrastructure.Services.Interfaces;
+using RequestsForRights.Web.Models.ReportOptions;
+using RequestsForRights.Web.Models.ViewModels;
 
-namespace RequestsForRights.Controllers
+namespace RequestsForRights.Web.Controllers
 {
     public class ReportUserRightsController : Controller
     {

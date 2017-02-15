@@ -1,8 +1,8 @@
-﻿using RequestsForRights.Domain.Entities;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using RequestsForRights.Domain.Entities;
 using RequestsForRights.Ldap;
 
-namespace RequestsForRights.Infrastructure.Services.Interfaces
+namespace RequestsForRights.Web.Infrastructure.Services.Interfaces
 {
     public interface IUserService
     {

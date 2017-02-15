@@ -5,17 +5,17 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using RequestsForRights.Database.Repositories.Interfaces;
 using RequestsForRights.Domain.Entities;
-using RequestsForRights.Infrastructure.Enums;
-using RequestsForRights.Infrastructure.Extensions;
-using RequestsForRights.Infrastructure.Security.Interfaces;
-using RequestsForRights.Infrastructure.Services.Interfaces;
-using RequestsForRights.Models.FilterOptions;
-using RequestsForRights.Models.Models;
-using RequestsForRights.Models.ViewModels;
-using RequestsForRights.Models.ViewModels.Request;
-using AclRole = RequestsForRights.Infrastructure.Enums.AclRole;
+using RequestsForRights.Web.Infrastructure.Enums;
+using RequestsForRights.Web.Infrastructure.Extensions;
+using RequestsForRights.Web.Infrastructure.Security.Interfaces;
+using RequestsForRights.Web.Infrastructure.Services.Interfaces;
+using RequestsForRights.Web.Models.FilterOptions;
+using RequestsForRights.Web.Models.Models;
+using RequestsForRights.Web.Models.ViewModels;
+using RequestsForRights.Web.Models.ViewModels.Request;
+using AclRole = RequestsForRights.Web.Infrastructure.Enums.AclRole;
 
-namespace RequestsForRights.Infrastructure.Services
+namespace RequestsForRights.Web.Infrastructure.Services
 {
     public class RequestService<TUserModel, TViewModel> : IRequestService<TUserModel, TViewModel>
         where TUserModel: RequestUserModel, new()

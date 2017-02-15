@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Net.Mail;
 using System.Text;
 
-namespace RequestsForRights.Infrastructure.Utilities.EmailNotify
+namespace RequestsForRights.Web.Infrastructure.Utilities.EmailNotify
 {
     public class EmailSender : IEmailSender
     {

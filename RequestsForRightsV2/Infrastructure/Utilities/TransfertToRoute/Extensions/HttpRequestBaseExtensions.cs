@@ -2,7 +2,7 @@
 using System.Web.Routing;
 using WebGrease.Css.Extensions;
 
-namespace RequestsForRights.Infrastructure.Utilities.TransfertToRoute.Extensions
+namespace RequestsForRights.Web.Infrastructure.Utilities.TransfertToRoute.Extensions
 {
     public static class HttpRequestBaseExtensions
     {

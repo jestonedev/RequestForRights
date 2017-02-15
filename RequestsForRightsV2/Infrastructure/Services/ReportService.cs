@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using RequestsForRights.Database.Repositories.Interfaces;
 using RequestsForRights.Domain.Entities;
-using RequestsForRights.Infrastructure.Enums;
-using RequestsForRights.Infrastructure.Services.Interfaces;
-using RequestsForRights.Models.Models;
-using RequestsForRights.Models.ReportOptions;
-using RequestsForRights.Infrastructure.Extensions;
-using RequestsForRights.Infrastructure.Security.Interfaces;
+using RequestsForRights.Web.Infrastructure.Enums;
+using RequestsForRights.Web.Infrastructure.Extensions;
+using RequestsForRights.Web.Infrastructure.Security.Interfaces;
+using RequestsForRights.Web.Infrastructure.Services.Interfaces;
+using RequestsForRights.Web.Models.Models;
+using RequestsForRights.Web.Models.ReportOptions;
 
-namespace RequestsForRights.Infrastructure.Services
+namespace RequestsForRights.Web.Infrastructure.Services
 {
     public class ReportService: IReportService
     {

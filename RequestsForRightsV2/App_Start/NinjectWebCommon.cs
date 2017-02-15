@@ -5,24 +5,24 @@ using System.Web;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Ninject;
 using Ninject.Web.Common;
-using RequestsForRights;
 using RequestsForRights.CachePool;
 using RequestsForRights.Database;
 using RequestsForRights.Database.Repositories;
 using RequestsForRights.Database.Repositories.Interfaces;
-using RequestsForRights.Infrastructure.Security;
-using RequestsForRights.Infrastructure.Security.Interfaces;
-using RequestsForRights.Infrastructure.Services;
-using RequestsForRights.Infrastructure.Services.Interfaces;
-using RequestsForRights.Infrastructure.Utilities.EmailNotify;
 using RequestsForRights.Ldap;
-using RequestsForRights.Models.Models;
-using RequestsForRights.Models.ViewModels.Request;
+using RequestsForRights.Web;
+using RequestsForRights.Web.Infrastructure.Security;
+using RequestsForRights.Web.Infrastructure.Security.Interfaces;
+using RequestsForRights.Web.Infrastructure.Services;
+using RequestsForRights.Web.Infrastructure.Services.Interfaces;
+using RequestsForRights.Web.Infrastructure.Utilities.EmailNotify;
+using RequestsForRights.Web.Models.Models;
+using RequestsForRights.Web.Models.ViewModels.Request;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
 [assembly: WebActivatorEx.ApplicationShutdownMethodAttribute(typeof(NinjectWebCommon), "Stop")]
 
-namespace RequestsForRights
+namespace RequestsForRights.Web
 {
     public static class NinjectWebCommon 
     {

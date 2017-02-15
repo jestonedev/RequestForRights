@@ -1,6 +1,6 @@
-﻿using RequestsForRights.Infrastructure.Enums;
+﻿using RequestsForRights.Web.Infrastructure.Enums;
 
-namespace RequestsForRights.Models.ReportOptions
+namespace RequestsForRights.Web.Models.ReportOptions
 {
     public class ReportOptions
     {
