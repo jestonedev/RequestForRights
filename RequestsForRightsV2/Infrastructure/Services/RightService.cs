@@ -4,7 +4,6 @@ using System.Linq;
 using RequestsForRights.Database.Repositories.Interfaces;
 using RequestsForRights.Web.Infrastructure.Services.Interfaces;
 using RequestsForRights.Web.Models.Models;
-using WebGrease.Css.Extensions;
 
 namespace RequestsForRights.Web.Infrastructure.Services
 {

@@ -213,7 +213,8 @@ namespace RequestsForRights.Web.Infrastructure.Security
 
         public bool CanAddCoordinator(Request request)
         {
-            var idRequestStateType = request.RequestStates.OrderBy(rs => rs.IdRequestState).Last(r => !r.Deleted).IdRequestStateType;
+            var idRequestStateType = request.RequestStates.OrderBy(rs => rs.IdRequestState).
+                Last(r => !r.Deleted).IdRequestStateType;
             return InRole(new[] { AclRole.Dispatcher, AclRole.Administrator }) && 
                 new[] { 1, 2 }.Contains(idRequestStateType);
         }
@@ -224,7 +225,8 @@ namespace RequestsForRights.Web.Infrastructure.Security
             {
                 return false;
             }
-            if (request.RequestStates.OrderBy(rs => rs.IdRequestState).Last(r => !r.Deleted).IdRequestStateType == idRequestStateType)
+            if (request.RequestStates.OrderBy(rs => rs.IdRequestState).
+                Last(r => !r.Deleted).IdRequestStateType == idRequestStateType)
             {
                 return false;
             }
@@ -260,8 +262,10 @@ namespace RequestsForRights.Web.Infrastructure.Security
         public bool CanSetRequestStateGlobal(Request request, int idRequestStateType)
         {
             if (idRequestStateType != 1) return true;
-            var idResourceRights = request.RequestUserAssoc.Where(r => r.RequestUserRightAssocs != null)
-                .SelectMany(r => r.RequestUserRightAssocs).Select(r => r.IdResourceRight).ToList();
+            var idResourceRights = request.RequestUserAssoc.Where(r => !r.Deleted && 
+                    r.RequestUserRightAssocs != null)
+                .SelectMany(r => r.RequestUserRightAssocs.Where(rur => !rur.Deleted))
+                .Select(r => r.IdResourceRight).ToList();
             if (!idResourceRights.Any())
             {
                 return false;
@@ -295,10 +299,11 @@ namespace RequestsForRights.Web.Infrastructure.Security
             }
             var allowedDepartments = GetUserAllowedDepartments().Select(r => r.IdDepartment);
             var resourceDepartments = request.RequestUserAssoc.
-                Where(ru => ru.RequestUserRightAssocs != null).
-                SelectMany(ru => ru.RequestUserRightAssocs.Select(
-                    r => r.ResourceRight.Resource.IdDepartment)).Except(new[] { 24 }).Distinct();
-            resourceDepartments = resourceDepartments.Except(new[] {request.User.IdDepartment});
+                Where(ru => !ru.Deleted && ru.RequestUserRightAssocs != null).
+                SelectMany(ru => ru.RequestUserRightAssocs.Where(r => !r.Deleted).Select(
+                    r => r.ResourceRight.Resource.IdDepartment)).Distinct();
+            resourceDepartments = resourceDepartments.Except(new[] { 24 }).Except(
+                GetUserAllowedDepartments(request.User).Select(r => r.IdDepartment));
             var agreementDepartments = request.RequestAgreements
                 .Where(r => r.IdAgreementType == 1 && new[] {2, 3}.Contains(r.IdAgreementState))
                 .SelectMany(r =>
@@ -323,6 +328,10 @@ namespace RequestsForRights.Web.Infrastructure.Security
         public bool CanAgreement(RequestModel<T> entity)
         {
             var request = _requestRepository.GetRequestById(entity.IdRequest);
+            if (request.Deleted)
+            {
+                return false;
+            }
             foreach (var idRequestStateType in 
                 _requestRepository.GetRequestStateTypes().Select(r => r.IdRequestStateType))
             {

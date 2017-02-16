@@ -560,6 +560,1294 @@ namespace RequestsForRights.UnitTests.Web.Infrastructure.Security
             Assert.IsFalse(can);
         }
 
+        [TestMethod]
+        public void CanSetRequestModelState1Requester1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 3);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanSetRequestState(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 1).IdRequest
+                }, 1);
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanAddCoordinatorRequest1Admin1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 1);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAddCoordinator(
+                requestsData.Requests.First(r => r.IdRequest == 1));
+            Assert.IsTrue(can);
+        }
+
+        [TestMethod]
+        public void CanAddCoordinatorRequest2Admin1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 1);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAddCoordinator(
+                requestsData.Requests.First(r => r.IdRequest == 2));
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanAddCoordinatorRequest9Admin1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 1);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAddCoordinator(
+                requestsData.Requests.First(r => r.IdRequest == 9));
+            Assert.IsTrue(can);
+        }
+
+        [TestMethod]
+        public void CanAddCoordinatorRequest14Admin1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 1);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAddCoordinator(
+                requestsData.Requests.First(r => r.IdRequest == 14));
+            Assert.IsTrue(can);
+        }
+
+        [TestMethod]
+        public void CanAddCoordinatorRequest1Dispatcher1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 11);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAddCoordinator(
+                requestsData.Requests.First(r => r.IdRequest == 1));
+            Assert.IsTrue(can);
+        }
+
+        [TestMethod]
+        public void CanAddCoordinatorRequest2Dispatcher1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 11);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAddCoordinator(
+                requestsData.Requests.First(r => r.IdRequest == 2));
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanAddCoordinatorRequest9Dispatcher1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 11);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAddCoordinator(
+                requestsData.Requests.First(r => r.IdRequest == 9));
+            Assert.IsTrue(can);
+        }
+
+        [TestMethod]
+        public void CanAddCoordinatorRequest14Dispatcher1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 11);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAddCoordinator(
+                requestsData.Requests.First(r => r.IdRequest == 14));
+            Assert.IsTrue(can);
+        }
+
+        [TestMethod]
+        public void CanAddCoordinatorRequest1Registrar1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 12);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAddCoordinator(
+                requestsData.Requests.First(r => r.IdRequest == 1));
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanAddCoordinatorRequest2Registrar1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 12);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAddCoordinator(
+                requestsData.Requests.First(r => r.IdRequest == 2));
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanAddCoordinatorRequest9Registrar1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 12);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAddCoordinator(
+                requestsData.Requests.First(r => r.IdRequest == 9));
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanAddCoordinatorRequest14Registrar1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 12);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAddCoordinator(
+                requestsData.Requests.First(r => r.IdRequest == 14));
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanAddCoordinatorRequestModelTest()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 11);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAddCoordinator(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 1).IdRequest
+                });
+            Assert.IsTrue(can);
+        }
+
+        [TestMethod]
+        public void CanAddCoordinatorCoordinator1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 9);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAddCoordinator();
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanAddCoordinatorAdmin1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 1);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAddCoordinator();
+            Assert.IsTrue(can);
+        }
+
+        [TestMethod]
+        public void CanAddCoordinatorDispatcher1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 11);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAddCoordinator();
+            Assert.IsTrue(can);
+        }
+
+        [TestMethod]
+        public void CanAgreementRequest1Admin1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 1);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAgreement(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 1).IdRequest
+                });
+            Assert.IsTrue(can);
+        }
+
+        [TestMethod]
+        public void CanAgreementRequest2Admin1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 1);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAgreement(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 2).IdRequest
+                });
+            Assert.IsTrue(can);
+        }
+
+        [TestMethod]
+        public void CanAgreementRequest3Admin1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 1);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAgreement(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 3).IdRequest
+                });
+            Assert.IsTrue(can);
+        }
+
+        [TestMethod]
+        public void CanAgreementRequest4Admin1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 1);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAgreement(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 4).IdRequest
+                });
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanAgreementRequest5Admin1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 1);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAgreement(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 5).IdRequest
+                });
+            Assert.IsTrue(can);
+        }
+
+        [TestMethod]
+        public void CanAgreementRequest8Admin1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 1);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAgreement(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 8).IdRequest
+                });
+            Assert.IsTrue(can);
+        }
+
+        [TestMethod]
+        public void CanAgreementRequest9Admin1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 1);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAgreement(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 9).IdRequest
+                });
+            Assert.IsTrue(can);
+        }
+
+        [TestMethod]
+        public void CanAgreementRequest1Requester1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 3);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAgreement(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 1).IdRequest
+                });
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanAgreementRequest2Requester1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 3);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAgreement(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 2).IdRequest
+                });
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanAgreementRequest3Requester1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 3);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAgreement(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 3).IdRequest
+                });
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanAgreementRequest4Requester1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 3);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAgreement(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 4).IdRequest
+                });
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanAgreementRequest5Requester1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 3);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAgreement(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 5).IdRequest
+                });
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanAgreementRequest8Requester1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 3);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAgreement(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 8).IdRequest
+                });
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanAgreementRequest9Requester1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 3);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAgreement(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 9).IdRequest
+                });
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanAgreementRequest1ResourceOwner1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 4);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAgreement(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 1).IdRequest
+                });
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanAgreementRequest2ResourceOwner1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 4);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAgreement(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 2).IdRequest
+                });
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanAgreementRequest3ResourceOwner1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 4);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAgreement(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 3).IdRequest
+                });
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanAgreementRequest4ResourceOwner1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 4);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAgreement(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 4).IdRequest
+                });
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanAgreementRequest5ResourceOwner1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 4);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAgreement(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 5).IdRequest
+                });
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanAgreementRequest8ResourceOwner1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 4);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAgreement(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 8).IdRequest
+                });
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanAgreementRequest9ResourceOwner1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 4);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAgreement(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 9).IdRequest
+                });
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanAgreementRequest15ResourceOwner1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 4);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAgreement(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 15).IdRequest
+                });
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanAgreementRequest1ResourceOwner2Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 5);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAgreement(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 1).IdRequest
+                });
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanAgreementRequest15ResourceOwner2Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 5);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAgreement(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 15).IdRequest
+                });
+            Assert.IsFalse(can);
+        }
+
+
+        [TestMethod]
+        public void CanAgreementRequest1ResourceOwner3Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 6);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAgreement(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 1).IdRequest
+                });
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanAgreementRequest15ResourceOwner3Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 6);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAgreement(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 15).IdRequest
+                });
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanAgreementRequest1ResourceOwner4Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 7);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAgreement(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 1).IdRequest
+                });
+            Assert.IsTrue(can);
+        }
+
+        [TestMethod]
+        public void CanAgreementRequest15ResourceOwner4Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 7);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAgreement(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 15).IdRequest
+                });
+            Assert.IsTrue(can);
+        }
+
+        [TestMethod]
+        public void CanAgreementRequest1ResourceOwner5Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 8);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAgreement(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 1).IdRequest
+                });
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanAgreementRequest15ResourceOwner5Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 8);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAgreement(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 15).IdRequest
+                });
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanAgreementRequest1Coordinator1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 9);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAgreement(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 1).IdRequest
+                });
+            Assert.IsTrue(can);
+        }
+
+        [TestMethod]
+        public void CanAgreementRequest2Coordinator1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 9);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAgreement(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 2).IdRequest
+                });
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanAgreementRequest3Coordinator1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 9);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAgreement(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 3).IdRequest
+                });
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanAgreementRequest4Coordinator1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 9);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAgreement(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 4).IdRequest
+                });
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanAgreementRequest5Coordinator1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 9);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAgreement(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 5).IdRequest
+                });
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanAgreementRequest8Coordinator1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 9);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAgreement(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 8).IdRequest
+                });
+            Assert.IsTrue(can);
+        }
+
+        [TestMethod]
+        public void CanAgreementRequest9Coordinator1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 9);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAgreement(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 9).IdRequest
+                });
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanAgreementRequest10Coordinator1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 9);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAgreement(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 10).IdRequest
+                });
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanAgreementRequest11Coordinator1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 9);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAgreement(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 11).IdRequest
+                });
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanAgreementRequest1Coordinator2Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 10);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAgreement(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 1).IdRequest
+                });
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanAgreementRequest2Coordinator2Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 10);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAgreement(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 2).IdRequest
+                });
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanAgreementRequest3Coordinator2Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 10);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAgreement(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 3).IdRequest
+                });
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanAgreementRequest4Coordinator2Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 10);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAgreement(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 4).IdRequest
+                });
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanAgreementRequest5Coordinator2Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 10);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAgreement(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 5).IdRequest
+                });
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanAgreementRequest8Coordinator2Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 10);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAgreement(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 8).IdRequest
+                });
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanAgreementRequest9Coordinator2Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 10);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAgreement(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 9).IdRequest
+                });
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanAgreementRequest10Coordinator2Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 10);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAgreement(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 10).IdRequest
+                });
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanAgreementRequest11Coordinator2Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 10);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanAgreement(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 11).IdRequest
+                });
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanVisibleRightResource1Admin1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 1);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanVisibleRight(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 11).IdRequest
+                }, new RequestUserRightModel
+                {
+                    IdResource = 1
+                });
+            Assert.IsTrue(can);
+        }
+
+        [TestMethod]
+        public void CanVisibleRightResource1ResourceOwner1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 4);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanVisibleRight(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 11).IdRequest
+                }, new RequestUserRightModel
+                {
+                    IdResource = 1
+                });
+            Assert.IsTrue(can);
+        }
+
+        [TestMethod]
+        public void CanVisibleRightResource2ResourceOwner1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 4);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanVisibleRight(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 11).IdRequest
+                }, new RequestUserRightModel
+                {
+                    IdResource = 2
+                });
+            Assert.IsTrue(can);
+        }
+
+        [TestMethod]
+        public void CanVisibleRightResource2ResourceOwner1SelfRequestTest()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 4);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanVisibleRight(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 9).IdRequest
+                }, new RequestUserRightModel
+                {
+                    IdResource = 3
+                });
+            Assert.IsTrue(can);
+        }
+
+        [TestMethod]
+        public void CanVisibleRightResource3ResourceOwner1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 4);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanVisibleRight(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 13).IdRequest
+                }, new RequestUserRightModel
+                {
+                    IdResource = 3
+                });
+            Assert.IsTrue(can);
+        }
+
+        [TestMethod]
+        public void CanVisibleRightResource6ResourceOwner1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 4);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanVisibleRight(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 11).IdRequest
+                }, new RequestUserRightModel
+                {
+                    IdResource = 6
+                });
+            Assert.IsTrue(can);
+        }
+
+        [TestMethod]
+        public void CanVisibleRightResource1ResourceOwner2Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 5);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanVisibleRight(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 1).IdRequest
+                }, new RequestUserRightModel
+                {
+                    IdResource = 1
+                });
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanVisibleRightResource2ResourceOwner2Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 5);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanVisibleRight(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 1).IdRequest
+                }, new RequestUserRightModel
+                {
+                    IdResource = 2
+                });
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanVisibleRightResource3ResourceOwner2Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 5);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanVisibleRight(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 1).IdRequest
+                }, new RequestUserRightModel
+                {
+                    IdResource = 3
+                });
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanVisibleRightResource6ResourceOwner2Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 5);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanVisibleRight(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 1).IdRequest
+                }, new RequestUserRightModel
+                {
+                    IdResource = 6
+                });
+            Assert.IsTrue(can);
+        }
+
+        [TestMethod]
+        public void CanVisibleRightResource1ResourceOwner3Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 6);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanVisibleRight(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 1).IdRequest
+                }, new RequestUserRightModel
+                {
+                    IdResource = 1
+                });
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanVisibleRightResource2ResourceOwner3Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 6);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanVisibleRight(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 1).IdRequest
+                }, new RequestUserRightModel
+                {
+                    IdResource = 2
+                });
+            Assert.IsTrue(can);
+        }
+
+        [TestMethod]
+        public void CanVisibleRightResource3ResourceOwner3Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 6);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanVisibleRight(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 1).IdRequest
+                }, new RequestUserRightModel
+                {
+                    IdResource = 3
+                });
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanVisibleRightResource6ResourceOwner3Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 6);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanVisibleRight(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 1).IdRequest
+                }, new RequestUserRightModel
+                {
+                    IdResource = 6
+                });
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanVisibleRightResource1ResourceOwner4Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 7);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanVisibleRight(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 1).IdRequest
+                }, new RequestUserRightModel
+                {
+                    IdResource = 1
+                });
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanVisibleRightResource2ResourceOwner4Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 7);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanVisibleRight(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 1).IdRequest
+                }, new RequestUserRightModel
+                {
+                    IdResource = 2
+                });
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanVisibleRightResource3ResourceOwner4Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 7);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanVisibleRight(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 1).IdRequest
+                }, new RequestUserRightModel
+                {
+                    IdResource = 3
+                });
+            Assert.IsTrue(can);
+        }
+
+        [TestMethod]
+        public void CanVisibleRightResource6ResourceOwner4Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 7);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanVisibleRight(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 1).IdRequest
+                }, new RequestUserRightModel
+                {
+                    IdResource = 6
+                });
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanVisibleRightRequest8Resource2Coordinator1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 9);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanVisibleRight(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 8).IdRequest
+                }, new RequestUserRightModel
+                {
+                    IdResource = 2
+                });
+            Assert.IsTrue(can);
+        }
+
+        [TestMethod]
+        public void CanVisibleRightRequest9Resource2Coordinator1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 9);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanVisibleRight(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 9).IdRequest
+                }, new RequestUserRightModel
+                {
+                    IdResource = 2
+                });
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanVisibleRightRequest10Resource2Coordinator1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 9);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanVisibleRight(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 10).IdRequest
+                }, new RequestUserRightModel
+                {
+                    IdResource = 2
+                });
+            Assert.IsTrue(can);
+        }
+
+        [TestMethod]
+        public void CanVisibleRightRequest8Resource2Coordinator2Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 10);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanVisibleRight(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 8).IdRequest
+                }, new RequestUserRightModel
+                {
+                    IdResource = 2
+                });
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanVisibleRightRequest9Resource2Coordinator2Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 10);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanVisibleRight(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 9).IdRequest
+                }, new RequestUserRightModel
+                {
+                    IdResource = 2
+                });
+            Assert.IsTrue(can);
+        }
+
+        [TestMethod]
+        public void CanVisibleRightRequest10Resource2Coordinator2Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 10);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanVisibleRight(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 10).IdRequest
+                }, new RequestUserRightModel
+                {
+                    IdResource = 2
+                });
+            Assert.IsTrue(can);
+        }
+
+        [TestMethod]
+        public void CanVisibleRightRequest1ResourceManager1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 14);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanVisibleRight(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 1).IdRequest
+                }, new RequestUserRightModel
+                {
+                    IdResource = 2
+                });
+            Assert.IsFalse(can);
+        }
+
         private static RequestSecurityService<RequestUserModel> GetRequestSecurityService(AclUser user, DatabaseContext dbContext)
         {
             var securityRepositoryMock = new Mock<ISecurityRepository>();
@@ -581,9 +1869,17 @@ namespace RequestsForRights.UnitTests.Web.Infrastructure.Security
                 requestRepositoryMock.Setup(r => r.GetRequestById(rq.IdRequest, false))
                     .Returns(dbContext.Requests.First(r => r.IdRequest == rq.IdRequest));
             }
+            requestRepositoryMock.Setup(r => r.GetRequestStateTypes())
+                .Returns(dbContext.RequestStateTypes.AsQueryable());
             var resourceRepositoryMock = new Mock<IResourceRepository>();
             resourceRepositoryMock.Setup(r => r.GetResourceRights()).Returns(
                 () => dbContext.ResourceRights.AsQueryable());
+            foreach (var resource in dbContext.Resources)
+            {
+                var res = resource;
+                resourceRepositoryMock.Setup(r => r.GetResourceById(res.IdResource)).Returns(
+                    () => res);
+            }
             return new RequestSecurityService<RequestUserModel>(securityRepositoryMock.Object,
                 requestRepositoryMock.Object, resourceRepositoryMock.Object);
         }
