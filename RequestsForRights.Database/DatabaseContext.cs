@@ -40,6 +40,12 @@ namespace RequestsForRights.Database
         public IDbSet<ResourceUsingAct> ResourceUsingActs { get; set; }
         public IDbSet<ActFile> ActFiles { get; set; }
 
+        public DatabaseContext()
+            : base("DatabaseContext")
+        {
+
+        }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<AclUser>()

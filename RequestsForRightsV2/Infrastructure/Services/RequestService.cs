@@ -586,7 +586,7 @@ namespace RequestsForRights.Web.Infrastructure.Services
                     return aclUsers.Concat(users).Where(u => u.Roles.Any(role => role.IdRole == 2));
                 });
             var excludeDepartments = agreements.Where(r => r.IdAgreementType == 1 &&
-                                                           new[] {2, 3}.Contains(r.IdAgreementState)).
+                                                           new[] {2, 3}.Contains(r.IdAgreementState)).ToList().
                 SelectMany(r => 
                     RequestSecurityService.GetUserAllowedDepartments(r.User).Select(u => u.IdDepartment)).
                     Concat(RequestSecurityService.GetUserAllowedDepartments(request.User).Select(u => u.IdDepartment)).

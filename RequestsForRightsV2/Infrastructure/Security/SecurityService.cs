@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using RequestsForRights.Database.Repositories.Interfaces;
@@ -42,7 +43,7 @@ namespace RequestsForRights.Web.Infrastructure.Security
             }
             if (user == null)
             {
-                throw new ApplicationException("Неизвестный пользователь");
+                return new List<Department>().AsQueryable();
             }
             var allowedDepartments = _securityRepository.GetUserAllowedDepartments(user.Login);
             if (allowedDepartments.Any()) return allowedDepartments;

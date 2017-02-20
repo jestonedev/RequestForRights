@@ -99,7 +99,7 @@ namespace RequestsForRights.Web.Infrastructure.Security
             {
                 return requests;
             }
-            var allowedDepartments = GetUserAllowedDepartments().Select(r => r.IdDepartment);
+            var allowedDepartments = GetUserAllowedDepartments().Select(r => r.IdDepartment).ToList();
             var userInfo = GetUserInfo();
             if (userInfo == null)
             {
@@ -107,10 +107,16 @@ namespace RequestsForRights.Web.Infrastructure.Security
             }
             if (InRole(AclRole.Requester))
             {
+                var requestDepartments = requests
+                    .Where(r => r.User.AclDepartments.Any())
+                    .SelectMany(r => r.User.AclDepartments.Select(d =>
+                        new {d.IdDepartment, r.IdRequest})).Concat(
+                            requests.Where(r => !r.User.AclDepartments.Any()).Select(r =>
+                                new {r.User.IdDepartment, r.IdRequest}));
                 filteredRequests = filteredRequests.Concat(
                     requests.Where(r => r.IdUser == userInfo.IdUser ||
-                                        GetUserAllowedDepartments(r.User).Any(d =>
-                                            GetUserAllowedDepartments(null).Any(ad => d == ad))));
+                        requestDepartments.Any(rd => rd.IdRequest == r.IdRequest &&
+                            allowedDepartments.Any(ad => rd.IdDepartment == ad))));
             }
             if (InRole(AclRole.ResourceOwner))
             {
@@ -361,11 +367,18 @@ namespace RequestsForRights.Web.Infrastructure.Security
             {
                 return true;
             }
+            var allowedDepartments = GetUserAllowedDepartments().Select(r => r.IdDepartment).ToList();
             if (InRole(AclRole.Requester))
             {
                 var request = _requestRepository.GetRequestById(entity.IdRequest);
-                if (request.IdUser == GetUserInfo().IdUser || GetUserAllowedDepartments().Any(r =>
-                    GetUserAllowedDepartments(request.User).Any(req => req.IdDepartment == r.IdDepartment)))
+                if (request.IdUser == GetUserInfo().IdUser ||
+                    allowedDepartments.Any(r =>
+                    (request.User.AclDepartments.Any() ?
+                            request.User.AclDepartments :
+                            new[] { request.User.Department }).Select(d => d.IdDepartment).
+                            Any(req => req == r)
+                   
+                    ))
                 {
                     return true;
                 }
@@ -382,7 +395,6 @@ namespace RequestsForRights.Web.Infrastructure.Security
             }
             if (!InRole(AclRole.ResourceOwner)) return false;
             var resource = _resourceRepository.GetResourceById(right.IdResource);
-            var allowedDepartments = GetUserAllowedDepartments().Select(r => r.IdDepartment).ToList();
             return allowedDepartments.Contains(resource.IdDepartment);
         }
     }

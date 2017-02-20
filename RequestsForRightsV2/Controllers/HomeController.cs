@@ -17,6 +17,7 @@ namespace RequestsForRights.Web.Controllers
         public ActionResult ForbiddenError()
         {
             Response.StatusCode = 403;
+            Response.TrySkipIisCustomErrors = true; 
             if (!Request.IsAjaxRequest()) return View("ForbiddenError");
             return Content("Доступ запрещен");
         }
@@ -24,6 +25,7 @@ namespace RequestsForRights.Web.Controllers
         public ActionResult ConflictError(string message)
         {
             Response.StatusCode = 409;
+            Response.TrySkipIisCustomErrors = true; 
             if (!Request.IsAjaxRequest()) return View("ConflictError", (object)message);
             return Content(message);
         }
@@ -31,6 +33,7 @@ namespace RequestsForRights.Web.Controllers
         public ActionResult ServerError(string message)
         {
             Response.StatusCode = 409;
+            Response.TrySkipIisCustomErrors = true; 
             if (!Request.IsAjaxRequest()) return View("ServerError", (object)message);
             return Content(message);
         }
@@ -38,6 +41,7 @@ namespace RequestsForRights.Web.Controllers
         public ActionResult BadRequestError(string message)
         {
             Response.StatusCode = 400;
+            Response.TrySkipIisCustomErrors = true; 
             if (!Request.IsAjaxRequest()) return View("BadRequestError", (object)message);
             return Content(message);
         }
@@ -49,7 +53,6 @@ namespace RequestsForRights.Web.Controllers
 
         public ActionResult UnknownServerError()
         {
-            Response.StatusCode = 500;
             return View("UnknownServerError");
         }
     }
