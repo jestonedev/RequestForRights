@@ -114,9 +114,12 @@ namespace RequestsForRights.Web.Infrastructure.Security
                             requests.Where(r => !r.User.AclDepartments.Any()).Select(r =>
                                 new {r.User.IdDepartment, r.IdRequest}));
                 filteredRequests = filteredRequests.Concat(
-                    requests.Where(r => r.IdUser == userInfo.IdUser ||
-                        requestDepartments.Any(rd => rd.IdRequest == r.IdRequest &&
-                            allowedDepartments.Any(ad => rd.IdDepartment == ad))));
+                    from row in requests
+                    join depRow in requestDepartments
+                    on row.IdRequest equals  depRow.IdRequest
+                    where row.IdUser == userInfo.IdUser ||
+                    allowedDepartments.Any(ad => ad == depRow.IdDepartment)
+                    select row);
             }
             if (InRole(AclRole.ResourceOwner))
             {
