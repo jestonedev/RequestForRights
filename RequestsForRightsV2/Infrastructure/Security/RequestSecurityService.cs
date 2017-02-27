@@ -47,8 +47,10 @@ namespace RequestsForRights.Web.Infrastructure.Security
         {
             return InRole(AclRole.Administrator) ||
                    (InRole(AclRole.Requester) &&
-                    request.RequestStates.OrderBy(rs => rs.IdRequestState).Last().IdRequestStateType == 1 &&
-                    request.RequestStates.All(r => r.IdRequestStateType != 2) &&
+                    request.RequestStates.Where(r => !r.Deleted)
+                        .OrderBy(rs => rs.IdRequestState).Last().IdRequestStateType == 1 &&
+                    request.RequestStates.Where(r => !r.Deleted)
+                        .All(r => r.IdRequestStateType != 2) &&
                     GetUserAllowedDepartments(request.User)
                         .Any(r => GetUserAllowedDepartments(GetUserInfo())
                             .Any(cu => r.IdDepartment == cu.IdDepartment)));
@@ -78,8 +80,10 @@ namespace RequestsForRights.Web.Infrastructure.Security
         {
             return InRole(AclRole.Administrator) ||
                    (InRole(AclRole.Requester) &&
-                    request.RequestStates.OrderBy(rs => rs.IdRequestState).Last().IdRequestStateType == 1 &&
-                    request.RequestStates.All(r => r.IdRequestStateType != 2) &&
+                    request.RequestStates.Where(r => !r.Deleted)
+                        .OrderBy(rs => rs.IdRequestState).Last().IdRequestStateType == 1 &&
+                    request.RequestStates.Where(r => !r.Deleted)
+                        .All(r => r.IdRequestStateType != 2) &&
                     GetUserAllowedDepartments(request.User)
                         .Any(r => GetUserAllowedDepartments(GetUserInfo())
                             .Any(cu => r.IdDepartment == cu.IdDepartment)));

@@ -20,7 +20,15 @@ namespace RequestsForRights.Web.Infrastructure.ValueProviders
             filterOptions.IdRequestStateType = ValueProviderHelper.GetValue<int?>("IdRequestStateType", context, null);
             filterOptions.IdRequestType = ValueProviderHelper.GetValue<int?>("IdRequestType", context, null);
             filterOptions.DateOfFillingFrom = ValueProviderHelper.GetValue<DateTime?>("DateOfFillingFrom", context, null);
+            if (filterOptions.DateOfFillingFrom != null)
+            {
+                filterOptions.DateOfFillingFrom = filterOptions.DateOfFillingFrom.Value.Date;
+            }
             filterOptions.DateOfFillingTo = ValueProviderHelper.GetValue<DateTime?>("DateOfFillingTo", context, null);
+            if (filterOptions.DateOfFillingTo != null)
+            {
+                filterOptions.DateOfFillingTo = filterOptions.DateOfFillingTo.Value.Date.AddDays(1).AddSeconds(-1);
+            }
             return new ValueProviderResult(filterOptions,
                 JsonConvert.SerializeObject(filterOptions), 
                 CultureInfo.InvariantCulture);

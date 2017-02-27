@@ -1848,6 +1848,146 @@ namespace RequestsForRights.UnitTests.Web.Infrastructure.Security
             Assert.IsFalse(can);
         }
 
+        [TestMethod]
+        public void CanDeleteRequest1Admin1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 1);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanDelete(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 1).IdRequest
+                });
+            Assert.IsTrue(can);
+        }
+
+        [TestMethod]
+        public void CanDeleteRequest1Requester1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 3);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanDelete(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 1).IdRequest
+                });
+            Assert.IsTrue(can);
+        }
+
+        [TestMethod]
+        public void CanDeleteRequest1Requester2Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 4);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanDelete(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 1).IdRequest
+                });
+            Assert.IsTrue(can);
+        }
+
+        [TestMethod]
+        public void CanDeleteRequest1Requester3Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 5);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanDelete(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 1).IdRequest
+                });
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanDeleteRequest2Requester1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 3);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanDelete(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 2).IdRequest
+                });
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanUpdateRequest1Admin1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 1);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanUpdate(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 1).IdRequest
+                });
+            Assert.IsTrue(can);
+        }
+
+        [TestMethod]
+        public void CanUpdateRequest1Requester1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 3);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanUpdate(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 1).IdRequest
+                });
+            Assert.IsTrue(can);
+        }
+
+        [TestMethod]
+        public void CanUpdateRequest1Requester2Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 4);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanUpdate(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 1).IdRequest
+                });
+            Assert.IsTrue(can);
+        }
+
+        [TestMethod]
+        public void CanUpdateRequest1Requester3Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 5);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanUpdate(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 1).IdRequest
+                });
+            Assert.IsFalse(can);
+        }
+
+        [TestMethod]
+        public void CanUpdateRequest2Requester1Test()
+        {
+            var requestsData = new DatabaseContext();
+            var user = requestsData.AclUsers.First(r => r.IdUser == 3);
+            var requestSecurityService = GetRequestSecurityService(user, requestsData);
+            var can = requestSecurityService.CanUpdate(
+                new RequestModel<RequestUserModel>
+                {
+                    IdRequest = requestsData.Requests.First(r => r.IdRequest == 2).IdRequest
+                });
+            Assert.IsFalse(can);
+        }       
+
         private static RequestSecurityService<RequestUserModel> GetRequestSecurityService(AclUser user, DatabaseContext dbContext)
         {
             var securityRepositoryMock = new Mock<ISecurityRepository>();

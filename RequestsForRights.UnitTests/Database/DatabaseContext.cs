@@ -64,6 +64,34 @@ namespace RequestsForRights.UnitTests.Database
             LoadRequestAgreementStates();
             LoadRequestAgreementTypes();
             LoadRequestAgreements();
+            LoadRequestUserLastSeens();
+        }
+
+        private void LoadRequestUserLastSeens()
+        {
+            var requestUserLastSeens = new[]
+            {
+                new { IdRequestUserLastSeen = 1, IdRequest = 1, IdUser = 1 },
+                new { IdRequestUserLastSeen = 2, IdRequest = 3, IdUser = 1 },
+                new { IdRequestUserLastSeen = 3, IdRequest = 2, IdUser = 2 },
+                new { IdRequestUserLastSeen = 4, IdRequest = 4, IdUser = 1 }
+            };
+            foreach (var requestUserLastSeenProperties in requestUserLastSeens)
+            {
+                var requestUserLastSeen = new RequestUserLastSeen
+                {
+                    IdRequestUserLastSeen = requestUserLastSeenProperties.IdRequestUserLastSeen,
+                    IdUser = requestUserLastSeenProperties.IdUser,
+                    User = AclUsers.First(r => r.IdUser == requestUserLastSeenProperties.IdUser),
+                    IdRequest = requestUserLastSeenProperties.IdRequest,
+                    Request = Requests.First(r => r.IdRequest == requestUserLastSeenProperties.IdRequest)
+                };
+                RequestUserLastSeens.Add(requestUserLastSeen);
+                AclUsers.First(r => r.IdUser == requestUserLastSeenProperties.IdUser)
+                    .RequestUserLastSeens.Add(requestUserLastSeen);
+                Requests.First(r => r.IdRequest == requestUserLastSeenProperties.IdRequest)
+                    .RequestUserLastSeens.Add(requestUserLastSeen);
+            }
         }
 
         private void LoadRequestAgreementTypes()
@@ -112,7 +140,7 @@ namespace RequestsForRights.UnitTests.Database
                 new { IdRequestAgreement = 5, IdRequest = 8, IdAgreementState = 1, IdAgreementType = 2, IdUser = 9 },
                 new { IdRequestAgreement = 6, IdRequest = 10, IdAgreementState = 2, IdAgreementType = 2, IdUser = 9 },
                 new { IdRequestAgreement = 7, IdRequest = 10, IdAgreementState = 2, IdAgreementType = 2, IdUser = 10 },
-                new { IdRequestAgreement = 8, IdRequest = 15, IdAgreementState = 2, IdAgreementType = 1, IdUser = 6 },
+                new { IdRequestAgreement = 8, IdRequest = 15, IdAgreementState = 2, IdAgreementType = 1, IdUser = 6 }
             };
             foreach (var agreementParams in agreements)
             {
@@ -363,6 +391,7 @@ namespace RequestsForRights.UnitTests.Database
                 new { 
                     IdUser = 1,
                     Login = "admin1", 
+                    Snp = "admin1",
                     Roles = new List<int> { 1 },
                     IdDepartment = 24,
                     AclDepartments = new List<int>(),
@@ -371,6 +400,7 @@ namespace RequestsForRights.UnitTests.Database
                 new { 
                     IdUser = 2,
                     Login = "admin2", 
+                    Snp = "admin2",
                     Roles = new List<int> { 1 },
                     IdDepartment = 2,
                     AclDepartments = new List<int>(),
@@ -379,6 +409,7 @@ namespace RequestsForRights.UnitTests.Database
                 new { 
                     IdUser = 3,
                     Login = "requester1", 
+                    Snp = "requester1",
                     Roles = new List<int> { 3 },
                     IdDepartment = 2,
                     AclDepartments = new List<int>(),
@@ -387,6 +418,7 @@ namespace RequestsForRights.UnitTests.Database
                 new { 
                     IdUser = 4,
                     Login = "requester2", 
+                    Snp = "requester2", 
                     Roles = new List<int> { 2, 3 },
                     IdDepartment = 3,
                     AclDepartments = new List<int> { 1, 2 },
@@ -395,6 +427,7 @@ namespace RequestsForRights.UnitTests.Database
                 new { 
                     IdUser = 5,
                     Login = "requester3", 
+                    Snp = "requester3", 
                     Roles = new List<int> { 2, 3, 8 },
                     IdDepartment = 1,
                     AclDepartments = new List<int>(),
@@ -403,6 +436,7 @@ namespace RequestsForRights.UnitTests.Database
                 new { 
                     IdUser = 15,
                     Login = "requester4", 
+                    Snp = "requester4", 
                     Roles = new List<int> { 3 },
                     IdDepartment = 4,
                     AclDepartments = new List<int>(),
@@ -411,6 +445,7 @@ namespace RequestsForRights.UnitTests.Database
                 new { 
                     IdUser = 6,
                     Login = "resourceOwner1", 
+                    Snp = "resourceOwner1", 
                     Roles = new List<int> { 2 },
                     IdDepartment = 2,
                     AclDepartments = new List<int>(),
@@ -419,6 +454,7 @@ namespace RequestsForRights.UnitTests.Database
                 new { 
                     IdUser = 7,
                     Login = "resourceOwner2", 
+                    Snp = "resourceOwner2", 
                     Roles = new List<int> { 2, 8 },
                     IdDepartment = 3,
                     AclDepartments = new List<int>(),
@@ -427,6 +463,7 @@ namespace RequestsForRights.UnitTests.Database
                 new { 
                     IdUser = 8,
                     Login = "resourceOwner3", 
+                    Snp = "resourceOwner3", 
                     Roles = new List<int> { 2 },
                     IdDepartment = 3,
                     AclDepartments = new List<int> { 1, 2 },
@@ -435,6 +472,7 @@ namespace RequestsForRights.UnitTests.Database
                 new { 
                     IdUser = 9,
                     Login = "coordinator1", 
+                    Snp = "coordinator1", 
                     Roles = new List<int> { 8 },
                     IdDepartment = 1,
                     AclDepartments = new List<int>(),
@@ -443,6 +481,7 @@ namespace RequestsForRights.UnitTests.Database
                 new { 
                     IdUser = 10,
                     Login = "coordinator2", 
+                    Snp = "coordinator2", 
                     Roles = new List<int> { 8 },
                     IdDepartment = 24,
                     AclDepartments = new List<int>(),
@@ -451,6 +490,7 @@ namespace RequestsForRights.UnitTests.Database
                 new { 
                     IdUser = 11,
                     Login = "dispatcher1", 
+                    Snp = "dispatcher1", 
                     Roles = new List<int> { 4 },
                     IdDepartment = 24,
                     AclDepartments = new List<int>(),
@@ -459,6 +499,7 @@ namespace RequestsForRights.UnitTests.Database
                 new { 
                     IdUser = 12,
                     Login = "registrar1", 
+                    Snp = "registrar1", 
                     Roles = new List<int> { 5 },
                     IdDepartment = 24,
                     AclDepartments = new List<int>(),
@@ -467,6 +508,7 @@ namespace RequestsForRights.UnitTests.Database
                 new { 
                     IdUser = 13,
                     Login = "executor1", 
+                    Snp = "executor1", 
                     Roles = new List<int> { 6 },
                     IdDepartment = 24,
                     AclDepartments = new List<int>(),
@@ -475,6 +517,7 @@ namespace RequestsForRights.UnitTests.Database
                 new { 
                     IdUser = 14,
                     Login = "resourceManager1", 
+                    Snp = "resourceManager1", 
                     Roles = new List<int> { 7 },
                     IdDepartment = 24,
                     AclDepartments = new List<int>(),
@@ -487,6 +530,7 @@ namespace RequestsForRights.UnitTests.Database
                 {
                     IdUser = userParams.IdUser,
                     Login = userParams.Login,
+                    Snp = userParams.Snp,
                     IdDepartment = userParams.IdDepartment,
                     Department = Departments.First(r => r.IdDepartment == userParams.IdDepartment),
                     Roles = new List<AclRole>(),
@@ -517,17 +561,18 @@ namespace RequestsForRights.UnitTests.Database
         {
             var requestStateTypes = new[]
             {
-                new { IdRequestStateType = 1 },
-                new { IdRequestStateType = 2 },
-                new { IdRequestStateType = 3 },
-                new { IdRequestStateType = 4 },
-                new { IdRequestStateType = 5 }
+                new { IdRequestStateType = 1, Name = "На согласовании" },
+                new { IdRequestStateType = 2, Name = "Утвержденная" },
+                new { IdRequestStateType = 3, Name = "На исполнении" },
+                new { IdRequestStateType = 4, Name = "Выполненная" },
+                new { IdRequestStateType = 5, Name = "Отклоненная" }
             };
             foreach (var requestStateTypeParams in requestStateTypes)
             {
                 RequestStateTypes.Add(new RequestStateType
                 {
                     IdRequestStateType = requestStateTypeParams.IdRequestStateType,
+                    Name = requestStateTypeParams.Name,
                     RequestStates = new List<RequestState>()
                 });
             }
@@ -537,16 +582,17 @@ namespace RequestsForRights.UnitTests.Database
         {
             var requestTypes = new[]
             {
-                new { IdRequestType = 1 },
-                new { IdRequestType = 2 },
-                new { IdRequestType = 3 },
-                new { IdRequestType = 4 }
+                new { IdRequestType = 1, Name = "На подключение нового сотрудника" },
+                new { IdRequestType = 2, Name = "На изменение прав доступа" },
+                new { IdRequestType = 3, Name = "На отключение сотрудника" },
+                new { IdRequestType = 4, Name = "На временное делегирование прав" }
             };
             foreach (var requestTypeParams in requestTypes)
             {
                 RequestTypes.Add(new RequestType
                 {
                     IdRequestType = requestTypeParams.IdRequestType,
+                    Name = requestTypeParams.Name,
                     Requests = new List<Request>()
                 });
             }
@@ -597,44 +643,82 @@ namespace RequestsForRights.UnitTests.Database
         {
             var requestStates = new[]
             {
-                new { IdRequestState = 1, IdRequestStateType = 1, IdRequest = 1, Date = DateTime.Now, Deleted = false },
-                new { IdRequestState = 2, IdRequestStateType = 2, IdRequest = 1, Date = DateTime.Now, Deleted = true },
-                new { IdRequestState = 3, IdRequestStateType = 2, IdRequest = 2, Date = DateTime.Now, Deleted = false },
-                new { IdRequestState = 4, IdRequestStateType = 3, IdRequest = 2, Date = DateTime.Now, Deleted = false },
-                new { IdRequestState = 5, IdRequestStateType = 1, IdRequest = 3, Date = DateTime.Now, Deleted = false },
-                new { IdRequestState = 6, IdRequestStateType = 2, IdRequest = 3, Date = DateTime.Now, Deleted = false },
-                new { IdRequestState = 7, IdRequestStateType = 3, IdRequest = 3, Date = DateTime.Now, Deleted = false },
-                new { IdRequestState = 34, IdRequestStateType = 4, IdRequest = 3, Date = DateTime.Now, Deleted = false },
-                new { IdRequestState = 8, IdRequestStateType = 2, IdRequest = 4, Date = DateTime.Now, Deleted = false },
-                new { IdRequestState = 9, IdRequestStateType = 1, IdRequest = 5, Date = DateTime.Now, Deleted = false },
-                new { IdRequestState = 10, IdRequestStateType = 5, IdRequest = 5, Date = DateTime.Now, Deleted = false },
-                new { IdRequestState = 11, IdRequestStateType = 1, IdRequest = 6, Date = DateTime.Now, Deleted = false },
-                new { IdRequestState = 12, IdRequestStateType = 5, IdRequest = 6, Date = DateTime.Now, Deleted = false },
-                new { IdRequestState = 13, IdRequestStateType = 2, IdRequest = 7, Date = DateTime.Now, Deleted = false },
-                new { IdRequestState = 14, IdRequestStateType = 5, IdRequest = 7, Date = DateTime.Now, Deleted = false },
-                new { IdRequestState = 15, IdRequestStateType = 2, IdRequest = 8, Date = DateTime.Now, Deleted = false },
-                new { IdRequestState = 16, IdRequestStateType = 1, IdRequest = 8, Date = DateTime.Now, Deleted = false },
-                new { IdRequestState = 17, IdRequestStateType = 1, IdRequest = 9, Date = DateTime.Now, Deleted = false },
-                new { IdRequestState = 18, IdRequestStateType = 2, IdRequest = 9, Date = DateTime.Now, Deleted = false },
-                new { IdRequestState = 19, IdRequestStateType = 1, IdRequest = 9, Date = DateTime.Now, Deleted = false },
-                new { IdRequestState = 20, IdRequestStateType = 2, IdRequest = 9, Date = DateTime.Now, Deleted = false },
-                new { IdRequestState = 21, IdRequestStateType = 1, IdRequest = 10, Date = DateTime.Now, Deleted = false },
-                new { IdRequestState = 22, IdRequestStateType = 2, IdRequest = 10, Date = DateTime.Now, Deleted = false },
-                new { IdRequestState = 23, IdRequestStateType = 1, IdRequest = 10, Date = DateTime.Now, Deleted = false },
-                new { IdRequestState = 24, IdRequestStateType = 2, IdRequest = 10, Date = DateTime.Now, Deleted = false },
-                new { IdRequestState = 25, IdRequestStateType = 3, IdRequest = 10, Date = DateTime.Now, Deleted = false },
-                new { IdRequestState = 26, IdRequestStateType = 1, IdRequest = 11, Date = DateTime.Now, Deleted = false },
-                new { IdRequestState = 27, IdRequestStateType = 2, IdRequest = 11, Date = DateTime.Now, Deleted = false },
-                new { IdRequestState = 28, IdRequestStateType = 1, IdRequest = 11, Date = DateTime.Now, Deleted = false },
-                new { IdRequestState = 29, IdRequestStateType = 5, IdRequest = 11, Date = DateTime.Now, Deleted = false },
-                new { IdRequestState = 30, IdRequestStateType = 2, IdRequest = 12, Date = DateTime.Now, Deleted = false },
-                new { IdRequestState = 31, IdRequestStateType = 2, IdRequest = 13, Date = DateTime.Now, Deleted = false },
-                new { IdRequestState = 32, IdRequestStateType = 3, IdRequest = 13, Date = DateTime.Now, Deleted = false },
-                new { IdRequestState = 33, IdRequestStateType = 4, IdRequest = 13, Date = DateTime.Now, Deleted = false },
-                new { IdRequestState = 35, IdRequestStateType = 5, IdRequest = 13, Date = DateTime.Now, Deleted = false },
-                new { IdRequestState = 36, IdRequestStateType = 1, IdRequest = 14, Date = DateTime.Now, Deleted = false },
-                new { IdRequestState = 37, IdRequestStateType = 2, IdRequest = 14, Date = DateTime.Now, Deleted = false },
-                new { IdRequestState = 38, IdRequestStateType = 1, IdRequest = 15, Date = DateTime.Now, Deleted = false }
+                new { IdRequestState = 1, IdRequestStateType = 1, IdRequest = 1, 
+                    Date = new DateTime(2017, 1, 1, 10, 0, 0), Deleted = false },
+                new { IdRequestState = 2, IdRequestStateType = 2, IdRequest = 1, 
+                    Date = new DateTime(2017, 1, 1, 10, 0, 1), Deleted = true },
+                new { IdRequestState = 3, IdRequestStateType = 2, IdRequest = 2, 
+                    Date = new DateTime(2017, 1, 2, 10, 0, 0), Deleted = false },
+                new { IdRequestState = 4, IdRequestStateType = 3, IdRequest = 2, 
+                    Date = new DateTime(2017, 1, 2, 10, 0, 1), Deleted = false },
+                new { IdRequestState = 5, IdRequestStateType = 1, IdRequest = 3, 
+                    Date = new DateTime(2017, 1, 5, 11, 0, 0), Deleted = false },
+                new { IdRequestState = 6, IdRequestStateType = 2, IdRequest = 3, 
+                    Date = new DateTime(2017, 1, 5, 11, 0, 0), Deleted = false },
+                new { IdRequestState = 7, IdRequestStateType = 3, IdRequest = 3, 
+                    Date = new DateTime(2017, 1, 7, 11, 0, 0), Deleted = false },
+                new { IdRequestState = 34, IdRequestStateType = 4, IdRequest = 3, 
+                    Date = new DateTime(2017, 1, 7, 11, 0, 0), Deleted = false },
+                new { IdRequestState = 8, IdRequestStateType = 2, IdRequest = 4, 
+                    Date = new DateTime(2017, 1, 8, 11, 0, 0), Deleted = false },
+                new { IdRequestState = 9, IdRequestStateType = 1, IdRequest = 5, 
+                    Date = new DateTime(2017, 1, 5, 11, 0, 0), Deleted = false },
+                new { IdRequestState = 10, IdRequestStateType = 5, IdRequest = 5, 
+                    Date = new DateTime(2017, 1, 6, 11, 0, 0), Deleted = false },
+                new { IdRequestState = 11, IdRequestStateType = 1, IdRequest = 6, 
+                    Date = new DateTime(2017, 1, 6, 11, 0, 0), Deleted = false },
+                new { IdRequestState = 12, IdRequestStateType = 5, IdRequest = 6, 
+                    Date = new DateTime(2017, 1, 7, 11, 0, 0), Deleted = false },
+                new { IdRequestState = 13, IdRequestStateType = 2, IdRequest = 7, 
+                    Date = new DateTime(2017, 1, 8, 11, 0, 0), Deleted = false },
+                new { IdRequestState = 14, IdRequestStateType = 5, IdRequest = 7, 
+                    Date = new DateTime(2017, 1, 9, 11, 0, 0), Deleted = false },
+                new { IdRequestState = 15, IdRequestStateType = 2, IdRequest = 8, 
+                    Date = new DateTime(2017, 1, 10, 11, 0, 0), Deleted = false },
+                new { IdRequestState = 16, IdRequestStateType = 1, IdRequest = 8, 
+                    Date = new DateTime(2017, 1, 11, 11, 0, 0), Deleted = false },
+                new { IdRequestState = 17, IdRequestStateType = 1, IdRequest = 9, 
+                    Date = new DateTime(2017, 1, 12, 11, 0, 0), Deleted = false },
+                new { IdRequestState = 18, IdRequestStateType = 2, IdRequest = 9, 
+                    Date = new DateTime(2017, 1, 13, 11, 0, 0), Deleted = false },
+                new { IdRequestState = 19, IdRequestStateType = 1, IdRequest = 9, 
+                    Date = new DateTime(2017, 1, 14, 11, 0, 0), Deleted = false },
+                new { IdRequestState = 20, IdRequestStateType = 2, IdRequest = 9, 
+                    Date = new DateTime(2017, 1, 5, 11, 0, 0), Deleted = false },
+                new { IdRequestState = 21, IdRequestStateType = 1, IdRequest = 10, 
+                    Date = new DateTime(2017, 1, 5, 11, 0, 0), Deleted = false },
+                new { IdRequestState = 22, IdRequestStateType = 2, IdRequest = 10, 
+                    Date = new DateTime(2017, 1, 5, 11, 0, 0), Deleted = false },
+                new { IdRequestState = 23, IdRequestStateType = 1, IdRequest = 10, 
+                    Date = new DateTime(2017, 1, 5, 11, 0, 0), Deleted = false },
+                new { IdRequestState = 24, IdRequestStateType = 2, IdRequest = 10, 
+                    Date = new DateTime(2017, 1, 5, 11, 0, 0), Deleted = false },
+                new { IdRequestState = 25, IdRequestStateType = 3, IdRequest = 10, 
+                    Date = new DateTime(2017, 1, 5, 11, 0, 0), Deleted = false },
+                new { IdRequestState = 26, IdRequestStateType = 1, IdRequest = 11, 
+                    Date = new DateTime(2017, 1, 5, 11, 0, 0), Deleted = false },
+                new { IdRequestState = 27, IdRequestStateType = 2, IdRequest = 11, 
+                    Date = new DateTime(2017, 1, 5, 11, 0, 0), Deleted = false },
+                new { IdRequestState = 28, IdRequestStateType = 1, IdRequest = 11, 
+                    Date = new DateTime(2017, 1, 5, 11, 0, 0), Deleted = false },
+                new { IdRequestState = 29, IdRequestStateType = 5, IdRequest = 11, 
+                    Date = new DateTime(2017, 1, 5, 11, 0, 0), Deleted = false },
+                new { IdRequestState = 30, IdRequestStateType = 2, IdRequest = 12, 
+                    Date = new DateTime(2017, 1, 5, 11, 0, 0), Deleted = false },
+                new { IdRequestState = 31, IdRequestStateType = 2, IdRequest = 13, 
+                    Date = new DateTime(2017, 1, 5, 11, 0, 0), Deleted = false },
+                new { IdRequestState = 32, IdRequestStateType = 3, IdRequest = 13, 
+                    Date = new DateTime(2017, 1, 5, 11, 0, 0), Deleted = false },
+                new { IdRequestState = 33, IdRequestStateType = 4, IdRequest = 13, 
+                    Date = new DateTime(2017, 1, 5, 11, 0, 0), Deleted = false },
+                new { IdRequestState = 35, IdRequestStateType = 5, IdRequest = 13, 
+                    Date = new DateTime(2017, 1, 5, 11, 0, 0), Deleted = false },
+                new { IdRequestState = 36, IdRequestStateType = 1, IdRequest = 14, 
+                    Date = new DateTime(2017, 1, 5, 11, 0, 0), Deleted = false },
+                new { IdRequestState = 37, IdRequestStateType = 2, IdRequest = 14, 
+                    Date = new DateTime(2017, 1, 5, 11, 0, 0), Deleted = false },
+                new { IdRequestState = 38, IdRequestStateType = 1, IdRequest = 15, 
+                    Date = new DateTime(2016, 1, 5, 11, 0, 0), Deleted = false }
             };
 
             foreach (var requestStateParams in requestStates)

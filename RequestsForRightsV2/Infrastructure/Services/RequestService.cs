@@ -124,14 +124,14 @@ namespace RequestsForRights.Web.Infrastructure.Services
             if (filterOptions.DateOfFillingFrom != null)
             {
                 requests = requests.Where(r =>
-                    r.RequestStates.OrderBy(rs => rs.IdRequestState).FirstOrDefault(rs => !rs.Deleted).Date >= 
-                    DbFunctions.TruncateTime(filterOptions.DateOfFillingFrom.Value));
+                    r.RequestStates.OrderBy(rs => rs.IdRequestState).FirstOrDefault(rs => !rs.Deleted).Date >=
+                    filterOptions.DateOfFillingFrom);
             }
             if (filterOptions.DateOfFillingTo != null)
             {
                 requests = requests.Where(r =>
-                    r.RequestStates.OrderBy(rs => rs.IdRequestState).FirstOrDefault(rs => !rs.Deleted).Date <= 
-                    DbFunctions.AddSeconds(DbFunctions.AddDays(DbFunctions.TruncateTime(filterOptions.DateOfFillingTo.Value), 1), -1));
+                    r.RequestStates.OrderBy(rs => rs.IdRequestState).FirstOrDefault(rs => !rs.Deleted).Date <=
+                    filterOptions.DateOfFillingTo);
             }
             if (filterOptions.RequestCategory == RequestCategory.NotSeenRequests)
             {
@@ -145,7 +145,8 @@ namespace RequestsForRights.Web.Infrastructure.Services
             return requests.Where(r => r.IdRequest.ToString().ToLower().Contains(filter) || 
                 r.User.Snp.ToLower().Contains(filter) ||
                 r.RequestStates.Where(rs => !rs.Deleted).OrderByDescending(rs => rs.IdRequestState).FirstOrDefault().RequestStateType.Name.ToLower().Contains(filter) || 
-                r.RequestType.Name.ToLower().Contains(filter) || r.Description.ToLower().Contains(filter));
+                r.RequestType.Name.ToLower().Contains(filter) || 
+                (r.Description != null && r.Description.ToLower().Contains(filter)));
         }
 
         public RequestIndexViewModel GetRequestIndexModelView(RequestsFilterOptions filterOptions, IQueryable<Request> filteredRequests)
@@ -605,8 +606,9 @@ namespace RequestsForRights.Web.Infrastructure.Services
         public IEnumerable<RequestsCountByStateTypesViewModel> GetRequestsCountByStateTypes()
         {
             var notSeenRequests = from row in GetNotSeenRequests()
-                group row.IdRequest by row.RequestStates.OrderByDescending(rs => rs.IdRequestState).
-                    FirstOrDefault().IdRequestStateType
+                group row.IdRequest by row.RequestStates.Where(r => !r.Deleted)
+                    .OrderByDescending(rs => rs.IdRequestState)
+                    .FirstOrDefault().IdRequestStateType
                 into gs
                 select new
                 {
