@@ -289,6 +289,10 @@
     <Content Include="Content\Favicon\ms-icon-310x310.png" />
     <Content Include="Content\Favicon\ms-icon-70x70.png" />
     <Content Include="Content\Images\Help\1_1.PNG" />
+    <Content Include="Content\Images\Help\1_2.PNG" />
+    <Content Include="Content\Images\Help\1_3.PNG" />
+    <Content Include="Content\Images\Help\1_4.PNG" />
+    <Content Include="Content\Images\Help\1_5.PNG" />
     <Content Include="Content\Images\Help\2_1.PNG" />
     <Content Include="Content\Images\Help\Add_akt_button.PNG" />
     <Content Include="Content\Images\Help\Add_akt_form.PNG" />
@@ -321,7 +325,6 @@
     <Content Include="Content\Images\Help\filter_button.PNG" />
     <Content Include="Content\Images\Help\filter_type.png" />
     <Content Include="Content\Images\Help\Ha_soglas.PNG" />
-    <Content Include="Content\Images\Help\image089_3.jpg" />
     <Content Include="Content\Images\Help\inform_res_5.png" />
     <Content Include="Content\Images\Help\IR_3.png" />
     <Content Include="Content\Images\Help\IR_dob_cved_territor.PNG" />

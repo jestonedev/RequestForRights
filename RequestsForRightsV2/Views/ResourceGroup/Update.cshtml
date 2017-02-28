@@ -23,15 +23,15 @@
     @Html.HiddenFor(r => r.IdResourceGroup)
     @Html.Hidden("returnUri", returnUri)
     <div class="form-group">
-        @Html.RequiredLabelFor(r => r.Name, new { @class = "col-sm-2 control-label" })
-        <div class="col-sm-10">
+        @Html.RequiredLabelFor(r => r.Name, new { @class = "col-sm-3 col-md-2 control-label" })
+        <div class="col-sm-9 col-md-10">
             @Html.TextBoxFor(r => r.Name, new { @class = "form-control", placeholder = "Введите наименование категории ресурсов" })
             @Html.ValidationMessageFor(r => r.Name)
         </div>
     </div>
     <div class="form-group">
-        @Html.RequiredLabelFor(r => r.Description, new { @class = "col-sm-2 control-label" })
-        <div class="col-sm-10">
+        @Html.RequiredLabelFor(r => r.Description, new { @class = "col-sm-3 col-md-2 control-label" })
+        <div class="col-sm-9 col-md-10">
             @Html.TextAreaFor(r => r.Description,
              new { @class = "form-control", placeholder = "Введите описание категории ресурсов", rows = "4" })
             @Html.ValidationMessageFor(r => r.Description)

@@ -30,8 +30,8 @@
             <div class="rr-request-user">
                 <div class="form-group rr-request-user-snp rr-no-autocomplete">
                     @Html.RequiredLabelFor(r => r.RequestModel.Users[userIndex].Snp,
-                    new {@class = "col-sm-2 control-label"})
-                    <div class="col-sm-10">
+                    new {@class = "col-sm-3 col-md-2 control-label"})
+                    <div class="col-sm-9 col-md-10">
                         @Html.TextBoxFor(r => r.RequestModel.Users[userIndex].Snp,
                         new
                         {
@@ -45,8 +45,8 @@
                 {
                     <div class="form-group rr-request-user-login">
                         @Html.RequiredLabelFor(r => r.RequestModel.Users[userIndex].Login,
-                        new {@class = "col-sm-2 control-label"})
-                        <div class="col-sm-10">
+                        new {@class = "col-sm-3 col-md-2 control-label"})
+                        <div class="col-sm-9 col-md-10">
                             @Html.TextBoxFor(r => r.RequestModel.Users[userIndex].Login,
                             new
                             {
@@ -65,8 +65,8 @@
                 }
                 <div class="form-group rr-request-user-post">
                     @Html.RequiredLabelFor(r => r.RequestModel.Users[userIndex].Post,
-                    new {@class = "col-sm-2 control-label"})
-                    <div class="col-sm-10">
+                    new {@class = "col-sm-3 col-md-2 control-label"})
+                    <div class="col-sm-9 col-md-10">
                         @Html.TextBoxFor(r => r.RequestModel.Users[userIndex].Post,
                         new
                         {
@@ -78,8 +78,8 @@
                 </div>
                 <div class="form-group rr-request-user-department">
                     @Html.RequiredLabelFor(r => r.RequestModel.Users[userIndex].Department,
-                    new {@class = "col-sm-2 control-label"})
-                    <div class="col-sm-10">
+                    new {@class = "col-sm-3 col-md-2 control-label"})
+                    <div class="col-sm-9 col-md-10">
                         <select class="form-control"
                                 name="@Html.NameFor(r => r.RequestModel.Users[userIndex].Department)"
                                 id="@Html.IdFor(r => r.RequestModel.Users[userIndex].Department)"
@@ -100,8 +100,8 @@
                 </div>
                 <div class="form-group rr-request-user-unit">
                     @Html.RequiredLabelFor(r => r.RequestModel.Users[userIndex].Unit,
-                    new {@class = "col-sm-2 control-label"})
-                    <div class="col-sm-10">
+                    new {@class = "col-sm-3 col-md-2 control-label"})
+                    <div class="col-sm-9 col-md-10">
                         <select class="form-control"
                                 name="@Html.NameFor(r => r.RequestModel.Users[userIndex].Unit)">
                             <option value="" selected></option>
@@ -120,8 +120,8 @@
                 </div>
                 <div class="form-group rr-request-user-office">
                     @Html.RequiredLabelFor(r => r.RequestModel.Users[userIndex].Office,
-                    new { @class = "col-sm-2 control-label" })
-                    <div class="col-sm-10">
+                    new { @class = "col-sm-3 col-md-2 control-label" })
+                    <div class="col-sm-9 col-md-10">
                         @Html.TextBoxFor(r => r.RequestModel.Users[userIndex].Office,
                         new
                         {
@@ -133,8 +133,8 @@
                 </div>
                 <div class="form-group rr-request-user-phone">
                     @Html.RequiredLabelFor(r => r.RequestModel.Users[userIndex].Phone,
-                    new { @class = "col-sm-2 control-label" })
-                    <div class="col-sm-10">
+                    new { @class = "col-sm-3 col-md-2 control-label" })
+                    <div class="col-sm-9 col-md-10">
                         @Html.TextBoxFor(r => r.RequestModel.Users[userIndex].Phone,
                         new
                         {
@@ -146,8 +146,8 @@
                 </div>
                 <div class="form-group rr-request-user-description">
                     @Html.RequiredLabelFor(r => r.RequestModel.Users[userIndex].Description,
-                        new { @class = "col-sm-2 control-label" })
-                    <div class="col-sm-10">
+                        new { @class = "col-sm-3 col-md-2 control-label" })
+                    <div class="col-sm-9 col-md-10">
                         @Html.TextAreaFor(r => r.RequestModel.Users[userIndex].Description,
                             new
                             {
