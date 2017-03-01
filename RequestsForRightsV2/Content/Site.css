@@ -409,6 +409,26 @@ button.rr-ext-filter-button.collapsed:hover {
     text-align: center;
 }
 
+.rr-help .primer { font-style: italic; }
+
+.rr-help p { text-indent: 30pt; }
+
+.rr-help p.rr-img-wrapper {
+    text-indent: 0;
+}
+
+.rr-help .rr-img-wrapper img {
+    max-width: 100%;
+}
+
+.rr-help .rr-img-title {
+    text-align: center;
+}
+
+.rr-help .rr-content ul {
+    padding-left: 44pt;
+}
+
 .rr-table-wrapper td p {
     margin-bottom: 0;
 }
