@@ -265,6 +265,11 @@
     <Content Include="Content\Images\Help\request_agreement_cancel_2.png" />
     <Content Include="Content\Images\Help\request_agreement_success.png" />
     <Content Include="Content\Images\Help\request_cancel.png" />
+    <Content Include="Content\Images\Help\request_comment.png" />
+    <Content Include="Content\Images\Help\request_comment_2.png" />
+    <Content Include="Content\Images\Help\request_comment_3.png" />
+    <Content Include="Content\Images\Help\request_comment_button.png" />
+    <Content Include="Content\Images\Help\request_comment_button_2.png" />
     <Content Include="Content\Images\Help\request_on_execution_button.png" />
     <Content Include="Content\Images\Help\Z_snp_autocomplete.png" />
     <Content Include="Content\bootstrap-datepicker.css" />
