@@ -253,6 +253,20 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Images\Help\Add_delegate_button.png" />
+    <Content Include="Content\Images\Help\Delete_delegate_button.png" />
+    <Content Include="Content\Images\Help\Ha_soglas_2.png" />
+    <Content Include="Content\Images\Help\request_add_agreement.png" />
+    <Content Include="Content\Images\Help\request_add_agreement_2.png" />
+    <Content Include="Content\Images\Help\request_add_agreement_after.png" />
+    <Content Include="Content\Images\Help\request_add_agreement_form.png" />
+    <Content Include="Content\Images\Help\request_agreemented.png" />
+    <Content Include="Content\Images\Help\request_agreement_cancel.png" />
+    <Content Include="Content\Images\Help\request_agreement_cancel_2.png" />
+    <Content Include="Content\Images\Help\request_agreement_success.png" />
+    <Content Include="Content\Images\Help\request_cancel.png" />
+    <Content Include="Content\Images\Help\request_on_execution_button.png" />
+    <Content Include="Content\Images\Help\Z_snp_autocomplete.png" />
     <Content Include="Content\bootstrap-datepicker.css" />
     <Content Include="Content\bootstrap-datepicker.min.css" />
     <Content Include="Content\bootstrap-datepicker.standalone.css" />

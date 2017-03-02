@@ -151,9 +151,13 @@ button.rr-ext-filter-button.collapsed:hover {
 .rr-agreement-panel > .btn-group button, .rr-agreement-panel > .btn-group a,
 .rr-edit-user-panel > .btn-group button, .rr-edit-user-panel > .btn-group a,
 .rr-add-coordinator-panel > .btn-group button, .rr-add-coordinator-panel > .btn-group a,
-.rr-remove-right-button
- {
+.rr-remove-right-button {
     width: 12em;
+}
+
+.rr-add-request-user-delegate-panel > button,
+.rr-edit-user-delegate-panel > .btn-group button, .rr-edit-user-delegate-panel > .btn-group a {
+    width: 14em;
 }
 
 .rr-add-right-panel {
