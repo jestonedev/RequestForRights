@@ -9,6 +9,7 @@ using RequestsForRights.Web.Infrastructure.Utilities.EmailNotify;
 using RequestsForRights.Web.Infrastructure.Utilities.TransfertToRoute;
 using RequestsForRights.Web.Models.Models;
 using RequestsForRights.Web.Models.ViewModels.Request;
+using RequestsForRights.Web.Infrastructure.Logging;
 
 namespace RequestsForRights.Web.Controllers
 {
@@ -18,11 +19,13 @@ namespace RequestsForRights.Web.Controllers
         private readonly IRequestSecurityService<RequestDelegatePermissionsUserModel> _securityService;
         private readonly IEmailBuilder _emailBuilder;
         private readonly IEmailSender _emailSender;
+        private readonly ILogger _logger;
 
         public RequestDelegatePermissionsController(
             IRequestDelegatePermissionsService requestService,
             IRequestSecurityService<RequestDelegatePermissionsUserModel> securityService,
-            IEmailBuilder emailBuilder, IEmailSender emailSender)
+            IEmailBuilder emailBuilder, IEmailSender emailSender,
+            ILogger logger)
         {
             if (requestService == null)
             {
@@ -44,6 +47,17 @@ namespace RequestsForRights.Web.Controllers
                 throw new ArgumentNullException("emailSender");
             }
             _emailSender = emailSender;
+
+            if (logger == null)
+            {
+                throw new ArgumentNullException("logger");
+            }
+            _logger = logger;
+        }
+
+        protected override void OnException(ExceptionContext filterContext)
+        {
+            _logger.Error(filterContext.Exception);
         }
 
         [TransferActionOnly]

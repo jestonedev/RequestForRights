@@ -11,6 +11,7 @@ using RequestsForRights.Database.Repositories;
 using RequestsForRights.Database.Repositories.Interfaces;
 using RequestsForRights.Ldap;
 using RequestsForRights.Web;
+using RequestsForRights.Web.Infrastructure.Logging;
 using RequestsForRights.Web.Infrastructure.Security;
 using RequestsForRights.Web.Infrastructure.Security.Interfaces;
 using RequestsForRights.Web.Infrastructure.Services;
@@ -18,6 +19,7 @@ using RequestsForRights.Web.Infrastructure.Services.Interfaces;
 using RequestsForRights.Web.Infrastructure.Utilities.EmailNotify;
 using RequestsForRights.Web.Models.Models;
 using RequestsForRights.Web.Models.ViewModels.Request;
+using ILogger = NLog.ILogger;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
 [assembly: WebActivatorEx.ApplicationShutdownMethodAttribute(typeof(NinjectWebCommon), "Stop")]
@@ -76,6 +78,7 @@ namespace RequestsForRights.Web
         {
             kernel.Bind<IDatabaseContext>().To<DatabaseContext>().InRequestScope();
             kernel.Bind<ICachePool>().To<CachePool.CachePool>();
+            kernel.Bind<Infrastructure.Logging.ILogger>().To<NLogLogger>();
             // Repositories
             kernel.Bind<IRightRepository>().To<RightRepository>().InRequestScope();
             kernel.Bind<IReportRepository>().To<ReportRepository>().InRequestScope();

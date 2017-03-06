@@ -17,9 +17,6 @@ namespace RequestsForRights.Web.Infrastructure.Logging
             strErrorMsg += Environment.NewLine + "Source : " + logException.Source;
             strErrorMsg += Environment.NewLine + "Stack Trace : " + logException.StackTrace;
             strErrorMsg += Environment.NewLine + "TargetSite : " + logException.TargetSite;
-            strErrorMsg += Environment.NewLine;
-            strErrorMsg += Environment.NewLine + "################################################";
-            strErrorMsg += Environment.NewLine;
             return strErrorMsg;
         }
     }

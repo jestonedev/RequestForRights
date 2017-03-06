@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using RequestsForRights.Domain.Entities;
 using RequestsForRights.Web.Infrastructure.Helpers;
+using RequestsForRights.Web.Infrastructure.Logging;
 using RequestsForRights.Web.Infrastructure.Security.Interfaces;
 using RequestsForRights.Web.Infrastructure.Services.Interfaces;
 using RequestsForRights.Web.Models.FilterOptions;
@@ -19,9 +20,10 @@ namespace RequestsForRights.Web.Controllers
     {
         private readonly IResourceService _resourceService;
         private readonly IResourceSecurityService _securityService;
+        private readonly ILogger _logger;
 
         public ResourceController(IResourceService resourceService,
-            IResourceSecurityService securityService)
+            IResourceSecurityService securityService, ILogger logger)
         {
             if (resourceService == null)
             {
@@ -33,6 +35,16 @@ namespace RequestsForRights.Web.Controllers
                 throw new ArgumentNullException("securityService");
             }
             _securityService = securityService;
+            if (logger == null)
+            {
+                throw new ArgumentNullException("logger");
+            }
+            _logger = logger;
+        }
+
+        protected override void OnException(ExceptionContext filterContext)
+        {
+            _logger.Error(filterContext.Exception);
         }
 
         //

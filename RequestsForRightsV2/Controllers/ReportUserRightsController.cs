@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web.Mvc;
+using RequestsForRights.Web.Infrastructure.Logging;
 using RequestsForRights.Web.Infrastructure.Security.Interfaces;
 using RequestsForRights.Web.Infrastructure.Services.Interfaces;
 using RequestsForRights.Web.Models.ReportOptions;
@@ -11,10 +12,12 @@ namespace RequestsForRights.Web.Controllers
     {
         private readonly IReportService _reportService;
         private readonly IReportSecurityService _reportSecurityService;
+        private readonly ILogger _logger;
 
         public ReportUserRightsController(
             IReportService reportService, 
-            IReportSecurityService reportSecurityService
+            IReportSecurityService reportSecurityService,
+            ILogger logger
         )
         {
             if (reportSecurityService == null)
@@ -27,6 +30,17 @@ namespace RequestsForRights.Web.Controllers
                 throw new ArgumentNullException("reportService");
             }
             _reportService = reportService;
+
+            if (logger == null)
+            {
+                throw new ArgumentNullException("logger");
+            }
+            _logger = logger;
+        }
+
+        protected override void OnException(ExceptionContext filterContext)
+        {
+            _logger.Error(filterContext.Exception);
         }
 
         public ActionResult Index(ReportUserRightsOptions options)

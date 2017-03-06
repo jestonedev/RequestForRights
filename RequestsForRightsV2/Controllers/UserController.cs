@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Web.Mvc;
 using RequestsForRights.Domain.Entities;
+using RequestsForRights.Web.Infrastructure.Logging;
 using RequestsForRights.Web.Infrastructure.Security.Interfaces;
 using RequestsForRights.Web.Infrastructure.Services.Interfaces;
 using RequestsForRights.Web.Models.Models;
@@ -13,11 +14,12 @@ namespace RequestsForRights.Web.Controllers
         private readonly IUserService _userService;
         private readonly IRightService _rightService;
         private readonly IUserSecurityService _userSecurityService;
+        private readonly ILogger _logger;
 
         public UserController(
             IUserService userService, 
             IRightService rightService,
-            IUserSecurityService userSecurityService)
+            IUserSecurityService userSecurityService, ILogger logger)
         {
             if (userService == null)
             {
@@ -34,6 +36,16 @@ namespace RequestsForRights.Web.Controllers
                 throw new ArgumentNullException("userSecurityService");
             }
             _userSecurityService = userSecurityService;
+            if (logger == null)
+            {
+                throw new ArgumentNullException("logger");
+            }
+            _logger = logger;
+        }
+
+        protected override void OnException(ExceptionContext filterContext)
+        {
+            _logger.Error(filterContext.Exception);
         }
 
         public JsonResult GetUsers(string snpPattern)

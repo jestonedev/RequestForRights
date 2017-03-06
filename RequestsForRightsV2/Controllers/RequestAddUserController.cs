@@ -3,6 +3,7 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Web.Mvc;
 using RequestsForRights.Web.Infrastructure.Helpers;
+using RequestsForRights.Web.Infrastructure.Logging;
 using RequestsForRights.Web.Infrastructure.Security.Interfaces;
 using RequestsForRights.Web.Infrastructure.Services.Interfaces;
 using RequestsForRights.Web.Infrastructure.Utilities.EmailNotify;
@@ -18,10 +19,12 @@ namespace RequestsForRights.Web.Controllers
         private readonly IRequestSecurityService<RequestUserModel> _securityService;
         private readonly IEmailBuilder _emailBuilder;
         private readonly IEmailSender _emailSender;
+        private readonly ILogger _logger;
 
         public RequestAddUserController(IRequestAddUserService requestService,
             IRequestSecurityService<RequestUserModel> securityService,
-            IEmailBuilder emailBuilder, IEmailSender emailSender)
+            IEmailBuilder emailBuilder, IEmailSender emailSender,
+            ILogger logger)
         {
             if (requestService == null)
             {
@@ -43,6 +46,16 @@ namespace RequestsForRights.Web.Controllers
                 throw new ArgumentNullException("emailSender");
             }
             _emailSender = emailSender;
+            if (logger == null)
+            {
+                throw new ArgumentNullException("logger");
+            }
+            _logger = logger;
+        }
+
+        protected override void OnException(ExceptionContext filterContext)
+        {
+            _logger.Error(filterContext.Exception);
         }
 
         [TransferActionOnly]

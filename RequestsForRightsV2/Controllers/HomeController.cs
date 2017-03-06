@@ -1,9 +1,28 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
+using RequestsForRights.Web.Infrastructure.Logging;
 
 namespace RequestsForRights.Web.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly ILogger _logger;
+
+        public HomeController(ILogger logger)
+        {
+
+            if (logger == null)
+            {
+                throw new ArgumentNullException("logger");
+            }
+            _logger = logger;
+        }
+
+        protected override void OnException(ExceptionContext filterContext)
+        {
+            _logger.Error(filterContext.Exception);
+        }
+
         public ActionResult Index()
         {
             return View();
@@ -24,6 +43,7 @@ namespace RequestsForRights.Web.Controllers
 
         public ActionResult ConflictError(string message)
         {
+            _logger.Error(message);
             Response.StatusCode = 409;
             Response.TrySkipIisCustomErrors = true; 
             if (!Request.IsAjaxRequest()) return View("ConflictError", (object)message);
@@ -32,6 +52,7 @@ namespace RequestsForRights.Web.Controllers
 
         public ActionResult ServerError(string message)
         {
+            _logger.Error(message);
             Response.StatusCode = 409;
             Response.TrySkipIisCustomErrors = true; 
             if (!Request.IsAjaxRequest()) return View("ServerError", (object)message);
@@ -40,6 +61,7 @@ namespace RequestsForRights.Web.Controllers
 
         public ActionResult BadRequestError(string message)
         {
+            _logger.Error(message);
             Response.StatusCode = 400;
             Response.TrySkipIisCustomErrors = true; 
             if (!Request.IsAjaxRequest()) return View("BadRequestError", (object)message);
@@ -49,11 +71,6 @@ namespace RequestsForRights.Web.Controllers
         public ActionResult NotFoundError()
         {
             return View("NotFoundError");
-        }
-
-        public ActionResult UnknownServerError()
-        {
-            return View("UnknownServerError");
         }
     }
 }

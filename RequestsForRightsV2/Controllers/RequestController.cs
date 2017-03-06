@@ -15,19 +15,22 @@ using WebGrease.Css.Extensions;
 
 namespace RequestsForRights.Web.Controllers
 {
+    [HandleError]
     public class RequestController : Controller
     {
+
         private readonly IRequestService<RequestUserModel, 
             RequestViewModel<RequestUserModel>> _requestService;
         private readonly IRequestSecurityService<RequestUserModel> _securityService;
         private readonly IEmailBuilder _emailBuilder;
         private readonly IEmailSender _emailSender;
+        private readonly Infrastructure.Logging.ILogger _logger;
 
         public RequestController(IRequestService<RequestUserModel, 
             RequestViewModel<RequestUserModel>> requestService,
             IRequestSecurityService<RequestUserModel> securityService,
             IEmailBuilder emailBuilder,
-            IEmailSender emailSender)
+            IEmailSender emailSender, Infrastructure.Logging.ILogger logger)
         {
             if (requestService == null)
             {
@@ -49,6 +52,16 @@ namespace RequestsForRights.Web.Controllers
                 throw new ArgumentNullException("emailSender");
             }
             _emailSender = emailSender;
+            if (logger == null)
+            {
+                throw new ArgumentNullException("logger");
+            }
+            _logger = logger;
+        }
+
+        protected override void OnException(ExceptionContext filterContext)
+        {
+            _logger.Error(filterContext.Exception);
         }
 
         public ActionResult Index(RequestsFilterOptions filterOptions)
