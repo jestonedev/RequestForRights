@@ -300,6 +300,7 @@
     <Content Include="Content\Images\Help\add_act_button.PNG" />
     <Content Include="Content\Images\Help\Add_delegate_button.png" />
     <Content Include="Content\Images\Help\add_right_button.png" />
+    <Content Include="Content\Images\Help\block_button.png" />
     <Content Include="Content\Images\Help\cards_button.PNG" />
     <Content Include="Content\Images\Help\convert_button.PNG" />
     <Content Include="Content\Images\Help\Delete_delegate_button.png" />

@@ -62,21 +62,21 @@
                     <div class="btn-group btn-group-xs" role="group" aria-label="Панель редактирования записи">
                         <a href="@Url.Action("Detail", new {id = resource.IdResource})"
                            class="btn btn-default glyphicon glyphicon-eye-open"
-                           title="Просмотреть запись"
-                           aria-label="Просмотреть запись"></a>
+                           title="Просмотреть ресурс"
+                           aria-label="Просмотреть ресурс"></a>
                         @if (securityService.CanUpdate(resource))
                         {
                             <a href="@Url.Action("Update", new {id = resource.IdResource})"
                                class="btn btn-default glyphicon glyphicon-pencil"
-                               title="Изменить запись"
-                               aria-label="Изменить запись"></a>
+                               title="Изменить ресурс"
+                               aria-label="Изменить ресурс"></a>
                         }
                         @if (securityService.CanDelete(resource))
                         {
                             <a href="@Url.Action("Delete", new {id = resource.IdResource})"
                                class="btn btn-danger glyphicon glyphicon-remove rr-delete-item-button"
-                               title="Удалить запись"
-                               aria-label="Удалить запись"></a>
+                               title="Блокировать ресурс"
+                               aria-label="Блокировать ресурс"></a>
                         }
                     </div>
 

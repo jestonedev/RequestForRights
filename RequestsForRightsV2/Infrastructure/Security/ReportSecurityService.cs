@@ -29,8 +29,8 @@ namespace RequestsForRights.Web.Infrastructure.Security
             if (InRole(new[]
             {
                 AclRole.Administrator, AclRole.Dispatcher,
-                AclRole.Executor, AclRole.Registrar, 
-                AclRole.ResourceManager, 
+                AclRole.Executor, 
+                AclRole.ResourceManager
             }))
             {
                 return resources;
@@ -49,7 +49,7 @@ namespace RequestsForRights.Web.Infrastructure.Security
             {
                 AclRole.Administrator, AclRole.Dispatcher,
                 AclRole.ResourceOwner, AclRole.Executor,
-                AclRole.Registrar, AclRole.ResourceManager, 
+                AclRole.ResourceManager
             });
         }
 
@@ -58,7 +58,7 @@ namespace RequestsForRights.Web.Infrastructure.Security
             return InRole(new[]
             {
                 AclRole.Administrator, AclRole.Dispatcher,
-                AclRole.Executor, AclRole.Registrar, 
+                AclRole.Executor,
                 AclRole.Requester, AclRole.ResourceManager, 
             });
         }
