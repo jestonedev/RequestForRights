@@ -93,27 +93,26 @@
                 <td class="rr-column col-sm-4">@request.Description</td>
                 <td class="rr-column col-sm-1">@request.RequestStates.OrderBy(rs => rs.IdRequestState).First(r => !r.Deleted).Date.ToString("dd.MM.yyyy", CultureInfo.CurrentCulture)</td>
                 <td class="rr-edit-column text-center">
-                    <div class="btn-group btn-group-xs" role="group" aria-label="Панель редактирования записи">
+                    <div class="btn-group btn-group-xs" role="group" aria-label="Панель редактирования заявки">
                         <a href="@Url.Action("Detail", new {id = request.IdRequest})"
                            class="btn btn-default glyphicon glyphicon-eye-open"
-                           title="Просмотреть запись"
-                           aria-label="Просмотреть запись"></a>
+                           title="Просмотреть заявку"
+                           aria-label="Просмотреть заявку"></a>
                         @if (securityService.CanUpdate(request))
                         {
                             <a href="@Url.Action("Update", new {id = request.IdRequest})"
                                class="btn btn-default glyphicon glyphicon-pencil"
-                               title="Изменить запись"
-                               aria-label="Изменить запись"></a>
+                               title="Изменить заявку"
+                               aria-label="Изменить заявку"></a>
                         }
                         @if (securityService.CanDelete(request))
                         {
                             <a href="@Url.Action("Delete", new {id = request.IdRequest})"
                                class="btn btn-danger glyphicon glyphicon-remove rr-delete-item-button"
-                               title="Удалить запись"
-                               aria-label="Удалить запись"></a>
+                               title="Удалить заявку"
+                               aria-label="Удалить заявку"></a>
                         }
                     </div>
-
                 </td>
             </tr>
         }

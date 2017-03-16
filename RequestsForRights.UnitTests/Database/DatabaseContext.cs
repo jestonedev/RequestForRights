@@ -301,8 +301,8 @@ namespace RequestsForRights.UnitTests.Database
                     IdResource = resourceParams.IdResource,
                     IdResourceGroup = resourceParams.IdResourceGroup,
                     ResourceGroup = ResourceGroups.First(r => r.IdResourceGroup == resourceParams.IdResourceGroup),
-                    IdDepartment = resourceParams.IdDepartment,
-                    Department = Departments.First(r => r.IdDepartment == resourceParams.IdDepartment),
+                    IdOperatorDepartment = resourceParams.IdDepartment,
+                    OperatorDepartment = Departments.First(r => r.IdDepartment == resourceParams.IdDepartment),
                     ResourceRights = new List<ResourceRight>(),
                     Deleted = resourceParams.Deleted
                 };

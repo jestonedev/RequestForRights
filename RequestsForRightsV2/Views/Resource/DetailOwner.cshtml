@@ -5,65 +5,65 @@
 <div class="panel-heading">Общие сведения</div>
 <div class="panel-body rr-detail-resource-panel-body">
 <dl class="col-xs-12">
-    <dt>@Html.DisplayNameFor(r => r.IdDepartment)</dt>
-    <dd>@Model.Department.Name</dd>
-    <dt>@Html.DisplayNameFor(r => r.Department.TaxPayerNumber)</dt>
+    <dt>@Html.DisplayNameFor(r => r.IdOwnerDepartment)</dt>
+    <dd>@Model.OwnerDepartment.Name</dd>
+    <dt>@Html.DisplayNameFor(r => r.OwnerDepartment.TaxPayerNumber)</dt>
     <dd>
-        @if (string.IsNullOrEmpty(Model.Department.TaxPayerNumber))
+        @if (string.IsNullOrEmpty(Model.OwnerDepartment.TaxPayerNumber))
         {
             <i>Отсутствует</i>
         }
         else
         {
-            @Model.Department.TaxPayerNumber
+            @Model.OwnerDepartment.TaxPayerNumber
         }
     </dd>
-    <dt>@Html.DisplayNameFor(r => r.Department.OfficialNameLongRu)</dt>
+    <dt>@Html.DisplayNameFor(r => r.OwnerDepartment.OfficialNameLongRu)</dt>
     <dd>
-        @if (string.IsNullOrEmpty(Model.Department.OfficialNameLongRu))
+        @if (string.IsNullOrEmpty(Model.OwnerDepartment.OfficialNameLongRu))
         {
             <i>Отсутствует</i>
         }
         else
         {
-            @Model.Department.OfficialNameLongRu
+            @Model.OwnerDepartment.OfficialNameLongRu
         }
     </dd>
-    <dt>@Html.DisplayNameFor(r => r.Department.OfficialNameLongEn)</dt>
+    <dt>@Html.DisplayNameFor(r => r.OwnerDepartment.OfficialNameLongEn)</dt>
     <dd>
-        @if (string.IsNullOrEmpty(Model.Department.OfficialNameLongEn))
+        @if (string.IsNullOrEmpty(Model.OwnerDepartment.OfficialNameLongEn))
         {
             <i>Отсутствует</i>
         }
         else
         {
-            @Model.Department.OfficialNameLongEn
-        }
-    </dd>
-</dl>
-<dl class="col-sm-6">
-    <dt>@Html.DisplayNameFor(r => r.Department.OfficialNameShortRu)</dt>
-    <dd>
-        @if (string.IsNullOrEmpty(Model.Department.OfficialNameShortRu))
-        {
-            <i>Отсутствует</i>
-        }
-        else
-        {
-            @Model.Department.OfficialNameShortRu
+            @Model.OwnerDepartment.OfficialNameLongEn
         }
     </dd>
 </dl>
 <dl class="col-sm-6">
-    <dt>@Html.DisplayNameFor(r => r.Department.OfficialNameShortEn)</dt>
+    <dt>@Html.DisplayNameFor(r => r.OwnerDepartment.OfficialNameShortRu)</dt>
     <dd>
-        @if (string.IsNullOrEmpty(Model.Department.OfficialNameShortEn))
+        @if (string.IsNullOrEmpty(Model.OwnerDepartment.OfficialNameShortRu))
         {
             <i>Отсутствует</i>
         }
         else
         {
-            @Model.Department.OfficialNameShortEn
+            @Model.OwnerDepartment.OfficialNameShortRu
+        }
+    </dd>
+</dl>
+<dl class="col-sm-6">
+    <dt>@Html.DisplayNameFor(r => r.OwnerDepartment.OfficialNameShortEn)</dt>
+    <dd>
+        @if (string.IsNullOrEmpty(Model.OwnerDepartment.OfficialNameShortEn))
+        {
+            <i>Отсутствует</i>
+        }
+        else
+        {
+            @Model.OwnerDepartment.OfficialNameShortEn
         }
     </dd>
 </dl>
@@ -73,72 +73,72 @@
     <div class="panel-heading">Адрес постоянно действующего исполнительного органа владельца ИС</div>
     <div class="panel-body rr-detail-resource-panel-body">
         <dl class="col-sm-6">
-            <dt>@Html.DisplayNameFor(r => r.Department.SelfAddressIndex)</dt>
+            <dt>@Html.DisplayNameFor(r => r.OwnerDepartment.SelfAddressIndex)</dt>
             <dd>
-                @if (string.IsNullOrEmpty(Model.Department.SelfAddressIndex))
+                @if (string.IsNullOrEmpty(Model.OwnerDepartment.SelfAddressIndex))
                 {
                     <i>Отсутствует</i>
                 }
                 else
                 {
-                    @Model.Department.SelfAddressIndex
+                    @Model.OwnerDepartment.SelfAddressIndex
                 }
             </dd>
-            <dt>@Html.DisplayNameFor(r => r.Department.SelfAddressArea)</dt>
+            <dt>@Html.DisplayNameFor(r => r.OwnerDepartment.SelfAddressArea)</dt>
             <dd>
-                @if (string.IsNullOrEmpty(Model.Department.SelfAddressArea))
+                @if (string.IsNullOrEmpty(Model.OwnerDepartment.SelfAddressArea))
                 {
                     <i>Отсутствует</i>
                 }
                 else
                 {
-                    @Model.Department.SelfAddressArea
+                    @Model.OwnerDepartment.SelfAddressArea
                 }
             </dd>
-            <dt>@Html.DisplayNameFor(r => r.Department.SelfAddressStreet)</dt>
+            <dt>@Html.DisplayNameFor(r => r.OwnerDepartment.SelfAddressStreet)</dt>
             <dd>
-                @if (string.IsNullOrEmpty(Model.Department.SelfAddressStreet))
+                @if (string.IsNullOrEmpty(Model.OwnerDepartment.SelfAddressStreet))
                 {
                     <i>Отсутствует</i>
                 }
                 else
                 {
-                    @Model.Department.SelfAddressStreet
+                    @Model.OwnerDepartment.SelfAddressStreet
                 }
             </dd>
         </dl>
         <dl class="col-sm-6">
-            <dt>@Html.DisplayNameFor(r => r.Department.SelfAddressRegion)</dt>
+            <dt>@Html.DisplayNameFor(r => r.OwnerDepartment.SelfAddressRegion)</dt>
             <dd>
-                @if (string.IsNullOrEmpty(Model.Department.SelfAddressRegion))
+                @if (string.IsNullOrEmpty(Model.OwnerDepartment.SelfAddressRegion))
                 {
                     <i>Отсутствует</i>
                 }
                 else
                 {
-                    @Model.Department.SelfAddressRegion
+                    @Model.OwnerDepartment.SelfAddressRegion
                 }
             </dd>
-            <dt>@Html.DisplayNameFor(r => r.Department.SelfAddressCity)</dt>
+            <dt>@Html.DisplayNameFor(r => r.OwnerDepartment.SelfAddressCity)</dt>
             <dd>
-                @if (string.IsNullOrEmpty(Model.Department.SelfAddressCity))
+                @if (string.IsNullOrEmpty(Model.OwnerDepartment.SelfAddressCity))
                 {
                     <i>Отсутствует</i>
                 }
                 else
                 {
-                    @Model.Department.SelfAddressCity
+                    @Model.OwnerDepartment.SelfAddressCity
                 }
             </dd>
-            <dt>@Html.DisplayNameFor(r => r.Department.SelfAddressHouse)</dt>
+            <dt>@Html.DisplayNameFor(r => r.OwnerDepartment.SelfAddressHouse)</dt>
             <dd>
-                @if (string.IsNullOrEmpty(Model.Department.SelfAddressHouse))
+                @if (string.IsNullOrEmpty(Model.OwnerDepartment.SelfAddressHouse))
                 {
                     <i>Отсутствует</i>
                 }
                 else
                 {
-                    @Model.Department.SelfAddressHouse
+                    @Model.OwnerDepartment.SelfAddressHouse
                 }
             </dd>
         </dl>
@@ -148,11 +148,11 @@
 <div class="panel panel-primary rr-resource-address-panel">
     <div class="panel-heading">Адрес управляющего или адрес управляющей организации-владельца</div>
 
-    @if (Model.Department.СontrolOrgAddressesAreEqualSelfAddress)
+    @if (Model.OwnerDepartment.СontrolOrgAddressesAreEqualSelfAddress)
     {
         <div class="panel-body">
             <div class="text-center">
-                @Html.DisplayNameFor(r => r.Department.СontrolOrgAddressesAreEqualSelfAddress)
+                @Html.DisplayNameFor(r => r.OwnerDepartment.СontrolOrgAddressesAreEqualSelfAddress)
             </div>
         </div>
     }
@@ -160,72 +160,72 @@
     {
         <div class="panel-body rr-detail-resource-panel-body">
             <dl class="col-sm-6">
-                <dt>@Html.DisplayNameFor(r => r.Department.ControlOrgAddressIndex)</dt>
+                <dt>@Html.DisplayNameFor(r => r.OwnerDepartment.ControlOrgAddressIndex)</dt>
                 <dd>
-                    @if (string.IsNullOrEmpty(Model.Department.ControlOrgAddressIndex))
+                    @if (string.IsNullOrEmpty(Model.OwnerDepartment.ControlOrgAddressIndex))
                     {
                         <i>Отсутствует</i>
                     }
                     else
                     {
-                        @Model.Department.ControlOrgAddressIndex
+                        @Model.OwnerDepartment.ControlOrgAddressIndex
                     }
                 </dd>
-                <dt>@Html.DisplayNameFor(r => r.Department.ControlOrgAddressArea)</dt>
+                <dt>@Html.DisplayNameFor(r => r.OwnerDepartment.ControlOrgAddressArea)</dt>
                 <dd>
-                    @if (string.IsNullOrEmpty(Model.Department.ControlOrgAddressArea))
+                    @if (string.IsNullOrEmpty(Model.OwnerDepartment.ControlOrgAddressArea))
                     {
                         <i>Отсутствует</i>
                     }
                     else
                     {
-                        @Model.Department.ControlOrgAddressArea
+                        @Model.OwnerDepartment.ControlOrgAddressArea
                     }
                 </dd>
-                <dt>@Html.DisplayNameFor(r => r.Department.ControlOrgAddressStreet)</dt>
+                <dt>@Html.DisplayNameFor(r => r.OwnerDepartment.ControlOrgAddressStreet)</dt>
                 <dd>
-                    @if (string.IsNullOrEmpty(Model.Department.ControlOrgAddressStreet))
+                    @if (string.IsNullOrEmpty(Model.OwnerDepartment.ControlOrgAddressStreet))
                     {
                         <i>Отсутствует</i>
                     }
                     else
                     {
-                        @Model.Department.ControlOrgAddressStreet
+                        @Model.OwnerDepartment.ControlOrgAddressStreet
                     }
                 </dd>
             </dl>
             <dl class="col-sm-6">
-                <dt>@Html.DisplayNameFor(r => r.Department.ControlOrgAddressRegion)</dt>
+                <dt>@Html.DisplayNameFor(r => r.OwnerDepartment.ControlOrgAddressRegion)</dt>
                 <dd>
-                    @if (string.IsNullOrEmpty(Model.Department.ControlOrgAddressRegion))
+                    @if (string.IsNullOrEmpty(Model.OwnerDepartment.ControlOrgAddressRegion))
                     {
                         <i>Отсутствует</i>
                     }
                     else
                     {
-                        @Model.Department.ControlOrgAddressRegion
+                        @Model.OwnerDepartment.ControlOrgAddressRegion
                     }
                 </dd>
-                <dt>@Html.DisplayNameFor(r => r.Department.ControlOrgAddressCity)</dt>
+                <dt>@Html.DisplayNameFor(r => r.OwnerDepartment.ControlOrgAddressCity)</dt>
                 <dd>
-                    @if (string.IsNullOrEmpty(Model.Department.ControlOrgAddressCity))
+                    @if (string.IsNullOrEmpty(Model.OwnerDepartment.ControlOrgAddressCity))
                     {
                         <i>Отсутствует</i>
                     }
                     else
                     {
-                        @Model.Department.ControlOrgAddressCity
+                        @Model.OwnerDepartment.ControlOrgAddressCity
                     }
                 </dd>
-                <dt>@Html.DisplayNameFor(r => r.Department.ControlOrgAddressHouse)</dt>
+                <dt>@Html.DisplayNameFor(r => r.OwnerDepartment.ControlOrgAddressHouse)</dt>
                 <dd>
-                    @if (string.IsNullOrEmpty(Model.Department.ControlOrgAddressHouse))
+                    @if (string.IsNullOrEmpty(Model.OwnerDepartment.ControlOrgAddressHouse))
                     {
                         <i>Отсутствует</i>
                     }
                     else
                     {
-                        @Model.Department.ControlOrgAddressHouse
+                        @Model.OwnerDepartment.ControlOrgAddressHouse
                     }
                 </dd>
             </dl>

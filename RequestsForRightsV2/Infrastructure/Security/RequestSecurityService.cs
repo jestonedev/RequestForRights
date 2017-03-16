@@ -125,13 +125,13 @@ namespace RequestsForRights.Web.Infrastructure.Security
                     allowedDepartments.Any(ad => ad == depRow.IdDepartment)
                     select row);
             }
-            if (InRole(AclRole.ResourceOwner))
+            if (InRole(AclRole.ResourceOperator))
             {
                 filteredRequests = filteredRequests.Concat(
                     requests.Where(r => r.RequestUserAssoc.Any(ru => 
                          !ru.Deleted && ru.RequestUserRightAssocs.Any(rur => 
                          !rur.Deleted && 
-                         allowedDepartments.Any(d => d == rur.ResourceRight.Resource.IdDepartment)))));
+                         allowedDepartments.Any(d => d == rur.ResourceRight.Resource.IdOperatorDepartment)))));
             }
             if (InRole(new[] {AclRole.Dispatcher, AclRole.Registrar}))
             {
@@ -164,7 +164,7 @@ namespace RequestsForRights.Web.Infrastructure.Security
                 AclRole.Executor, 
                 AclRole.Registrar, 
                 AclRole.Requester, 
-                AclRole.ResourceOwner
+                AclRole.ResourceOperator
             });
         }
 
@@ -250,8 +250,8 @@ namespace RequestsForRights.Web.Infrastructure.Security
                            CanSetRequestStateGlobal(request, idRequestStateType);
                 case 2:
                     return InRole(AclRole.Administrator) ||
-                           (InRole(AclRole.ResourceOwner) &&
-                            ResourceOwnerCanSetRequestState(request)) ||
+                           (InRole(AclRole.ResourceOperator) &&
+                            ResourceOperatorCanSetRequestState(request)) ||
                            (InRole(AclRole.Coordinator) &&
                             CoordinatorCanSetRequestState(request));
                 case 3:
@@ -262,8 +262,8 @@ namespace RequestsForRights.Web.Infrastructure.Security
                     return InRole(AclRole.Administrator);
                 case 5:
                     return InRole(AclRole.Administrator) ||
-                           (InRole(AclRole.ResourceOwner) &&
-                            ResourceOwnerCanSetRequestState(request)) ||
+                           (InRole(AclRole.ResourceOperator) &&
+                            ResourceOperatorCanSetRequestState(request)) ||
                            (InRole(AclRole.Coordinator) &&
                             CoordinatorCanSetRequestState(request)) ||
                            (InRole(AclRole.Dispatcher) &&
@@ -285,7 +285,7 @@ namespace RequestsForRights.Web.Infrastructure.Security
             }
            var resourceDepartments = _resourceRepository.GetResourceRights().Where(r => !r.Deleted &&
                 idResourceRights.Any(idResourceRight => idResourceRight == r.IdResourceRight)).
-                Select(r => r.Resource.IdDepartment).Where(r => r != 24);
+                Select(r => r.Resource.IdOperatorDepartment).Where(r => r != 24);
             var allowedDepartments = GetUserAllowedDepartments(request.User).Select(r => r.IdDepartment);
             return resourceDepartments.Any(dep => !allowedDepartments.Contains(dep));
         }
@@ -302,7 +302,7 @@ namespace RequestsForRights.Web.Infrastructure.Security
                 Last(r => !r.Deleted).IdRequestStateType == 2;
         }
 
-        private bool ResourceOwnerCanSetRequestState(Request request)
+        private bool ResourceOperatorCanSetRequestState(Request request)
         {
             var isFirstState = request.RequestStates.OrderBy(rs => rs.IdRequestState).
                 Last(r => !r.Deleted).IdRequestStateType == 1;
@@ -314,7 +314,7 @@ namespace RequestsForRights.Web.Infrastructure.Security
             var resourceDepartments = request.RequestUserAssoc.
                 Where(ru => !ru.Deleted && ru.RequestUserRightAssocs != null).
                 SelectMany(ru => ru.RequestUserRightAssocs.Where(r => !r.Deleted).Select(
-                    r => r.ResourceRight.Resource.IdDepartment)).Distinct();
+                    r => r.ResourceRight.Resource.IdOperatorDepartment)).Distinct();
             resourceDepartments = resourceDepartments.Except(new[] { 24 }).Except(
                 GetUserAllowedDepartments(request.User).Select(r => r.IdDepartment));
             var agreementDepartments = request.RequestAgreements
@@ -400,9 +400,9 @@ namespace RequestsForRights.Web.Infrastructure.Security
                     return true;
                 }
             }
-            if (!InRole(AclRole.ResourceOwner)) return false;
+            if (!InRole(AclRole.ResourceOperator)) return false;
             var resource = _resourceRepository.GetResourceById(right.IdResource);
-            return allowedDepartments.Contains(resource.IdDepartment);
+            return allowedDepartments.Contains(resource.IdOperatorDepartment);
         }
     }
 }

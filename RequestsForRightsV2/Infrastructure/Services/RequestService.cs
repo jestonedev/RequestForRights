@@ -579,8 +579,8 @@ namespace RequestsForRights.Web.Infrastructure.Services
                 SelectMany(r => r.RequestUserRightAssocs).Where(r => !r.Deleted).
                 SelectMany(r =>
                 {
-                    var aclUsers = r.ResourceRight.Resource.Department.AclUsers;
-                    var users = r.ResourceRight.Resource.Department.Users.Where(u => 
+                    var aclUsers = r.ResourceRight.Resource.OperatorDepartment.AclUsers;
+                    var users = r.ResourceRight.Resource.OperatorDepartment.Users.Where(u => 
                         u.AclDepartments == null || 
                         !u.AclDepartments.Any());
                     return aclUsers.Concat(users).Where(u => u.Roles.Any(role => role.IdRole == 2));

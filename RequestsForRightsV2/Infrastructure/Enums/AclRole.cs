@@ -3,7 +3,7 @@
     public enum AclRole
     {
         Administrator = 1,
-        ResourceOwner,
+        ResourceOperator,
         Requester,
         Dispatcher,
         Registrar,

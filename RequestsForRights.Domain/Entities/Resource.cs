@@ -19,9 +19,9 @@ namespace RequestsForRights.Domain.Entities
         public string Description { get; set; }
         [DisplayName("Департамент-владелец")]
         [Required(ErrorMessage = "Департамент-владелец является обязательным для заполнения")]
-        public int IdDepartment { get; set; }
-        [ForeignKey("IdDepartment")]
-        public virtual Department Department { get; set; }
+        public int IdOwnerDepartment { get; set; }
+        [ForeignKey("IdOwnerDepartment")]
+        public virtual Department OwnerDepartment { get; set; }
         [Required(ErrorMessage = "Категория ресурсов является обязательной для заполнения")]
         [DisplayName("Категория")]
         public int IdResourceGroup { get; set; }

@@ -53,7 +53,7 @@ namespace RequestsForRights.Database.Repositories
 
         public Resource GetResourceById(int id)
         {
-            return _databaseContext.Resources.Include(r => r.Department)
+            return _databaseContext.Resources.Include(r => r.OwnerDepartment)
                 .Include(r => r.OperatorDepartment)
                 .Include(r => r.ResourceAuthorityActs)
                 .Include(r => r.ResourceOperatorActs)
@@ -70,11 +70,11 @@ namespace RequestsForRights.Database.Repositories
 
         public Resource UpdateResource(Resource resource)
         {
-            if (resource.Department != null)
+            if (resource.OwnerDepartment != null)
             {
-                resource.Department.IdDepartment = resource.IdDepartment;
-                UpdateDepartmentExtInfo(resource.Department);
-                resource.Department = null;
+                resource.OwnerDepartment.IdDepartment = resource.IdOwnerDepartment;
+                UpdateDepartmentExtInfo(resource.OwnerDepartment);
+                resource.OwnerDepartment = null;
             }
             if (resource.OperatorDepartment != null)
             {
@@ -416,11 +416,11 @@ namespace RequestsForRights.Database.Repositories
 
         public Resource InsertResource(Resource resource)
         {
-            if (resource.Department != null)
+            if (resource.OwnerDepartment != null)
             {
-                resource.Department.IdDepartment = resource.IdDepartment;
-                UpdateDepartmentExtInfo(resource.Department);
-                resource.Department = null;
+                resource.OwnerDepartment.IdDepartment = resource.IdOwnerDepartment;
+                UpdateDepartmentExtInfo(resource.OwnerDepartment);
+                resource.OwnerDepartment = null;
             }
             if (resource.OperatorDepartment != null)
             {

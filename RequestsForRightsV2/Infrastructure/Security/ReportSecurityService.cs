@@ -35,10 +35,10 @@ namespace RequestsForRights.Web.Infrastructure.Security
             {
                 return resources;
             }
-            if (InRole(AclRole.ResourceOwner))
+            if (InRole(AclRole.ResourceOperator))
             {
                 var allowedDepartments = GetUserAllowedDepartments().Select(r => r.IdDepartment);
-                return resources.Where(r => allowedDepartments.Contains(r.IdDepartment));
+                return resources.Where(r => allowedDepartments.Contains(r.IdOperatorDepartment));
             }
             return new List<Resource>().AsQueryable();
         }
@@ -48,7 +48,7 @@ namespace RequestsForRights.Web.Infrastructure.Security
             return InRole(new[]
             {
                 AclRole.Administrator, AclRole.Dispatcher,
-                AclRole.ResourceOwner, AclRole.Executor,
+                AclRole.ResourceOperator, AclRole.Executor,
                 AclRole.ResourceManager
             });
         }

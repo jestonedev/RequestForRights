@@ -94,7 +94,7 @@ namespace RequestsForRights.Database
                 .WithRequired(f => f.ResourceRight)
                 .WillCascadeOnDelete(false);
             modelBuilder.Entity<Resource>()
-                .HasRequired(f => f.Department)
+                .HasRequired(f => f.OwnerDepartment)
                 .WithMany(f => f.Resources)
                 .WillCascadeOnDelete(false);
             modelBuilder.Entity<RequestStateType>()

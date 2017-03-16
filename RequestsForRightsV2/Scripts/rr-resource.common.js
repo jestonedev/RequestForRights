@@ -303,7 +303,7 @@
 
     $("form")
         .on("change",
-            "#Resource_IdDepartment",
+            "#Resource_IdOwnerDepartment",
             function () {
                 var layout = $(this).closest(".rr-resource-owner");
                 var select = $(this);

@@ -107,7 +107,9 @@ namespace RequestsForRights.Web.Infrastructure.Services
                     },
                     HasNotInternetAccess = true,
                     OperatorDepartment = GetDepartmentInfo(24),
-                    IdOperatorDepartment = 24
+                    IdOperatorDepartment = 24,
+                    OwnerDepartment = GetDepartmentInfo(1),
+                    IdOwnerDepartment = 1
                 },
                 ResourceGroups = _resourceRepository.GetResourceGroups().OrderBy(r => r.IdResourceGroup == 5).ThenBy(r => r.Name),
                 ResourceInformationTypes = _resourceRepository.GetResourceInformationTypes().OrderBy(r => r.Name),

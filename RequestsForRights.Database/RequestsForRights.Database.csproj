@@ -198,6 +198,10 @@
     <Compile Include="Migrations\201702070625552_NotRequiredIdFile.Designer.cs">
       <DependentUpon>201702070625552_NotRequiredIdFile.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201703160126237_RenamedOwnerDepartment.cs" />
+    <Compile Include="Migrations\201703160126237_RenamedOwnerDepartment.Designer.cs">
+      <DependentUpon>201703160126237_RenamedOwnerDepartment.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\Interfaces\IReportRepository.cs" />
@@ -340,6 +344,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201702070625552_NotRequiredIdFile.resx">
       <DependentUpon>201702070625552_NotRequiredIdFile.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703160126237_RenamedOwnerDepartment.resx">
+      <DependentUpon>201703160126237_RenamedOwnerDepartment.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
