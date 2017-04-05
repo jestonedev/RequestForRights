@@ -352,7 +352,6 @@ namespace RequestsForRights.Web.Infrastructure.Utilities.EmailNotify
             RequestStateType requestStateType,
             string agreementReason, AclUser user)
         {
-            var requester = request.User;
             var subject = string.Format("Изменен статус заявки №{0} {1}",
                     request.IdRequest, request.RequestType.Name.ToLower());
             var body = string.Format("Здравствуйте, {0}!<br>{1} на <b>«{2}»</b>.", user.Snp, subject,
@@ -376,7 +375,7 @@ namespace RequestsForRights.Web.Infrastructure.Utilities.EmailNotify
                 Subject = subject,
                 Body = body
             };
-            message.To.Add(new MailAddress(requester.Email));
+            message.To.Add(new MailAddress(user.Email));
             return message;
         }
 
