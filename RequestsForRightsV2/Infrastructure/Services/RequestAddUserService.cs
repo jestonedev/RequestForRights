@@ -52,8 +52,17 @@ namespace RequestsForRights.Web.Infrastructure.Services
         private RequestAddUserViewModel LoadAdditionalInfoToViewModel(
             RequestAddUserViewModel viewModel)
         {
-            viewModel.Departments = _userService.GetDepartments().OrderBy(r => r.Name).ToList();
-            viewModel.Units = _userService.GetUnits().OrderBy(r => r.Name).ToList();
+            var departments = _userService.GetDepartments().ToList();
+            var units = _userService.GetUnits().ToList();
+            viewModel.Units = departments.Select(r => new Department
+            {
+                IdParentDepartment = r.IdDepartment,
+                ParentDepartment = r
+            }).Concat(units).OrderBy(r => r.Name).ToList();
+            viewModel.Departments = departments
+                .Concat(units.Select(r => r.ParentDepartment))
+                .Distinct()
+                .OrderBy(r => r.Name).ToList();
             viewModel.Resources = _resourceRepository.GetResources().OrderBy(r => r.Name).ToList();
             viewModel.ResourceRights = _resourceRepository.GetResourceRights().OrderBy(r => r.Name).ToList();
             return viewModel;

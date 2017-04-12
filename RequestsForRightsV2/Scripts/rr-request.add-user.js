@@ -20,7 +20,7 @@
                 });
                 unitSelect.val(unit);
                 if (unitSelect.val() === null) {
-                    unitSelect.val("");
+                    unitSelect.val(unitSelect.find("option:first").val());
                 }
             });
 

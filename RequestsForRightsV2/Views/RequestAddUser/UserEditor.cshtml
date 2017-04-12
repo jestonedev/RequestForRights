@@ -88,12 +88,12 @@
                                 aria-required="true">
                             <option value="" selected>Выберите департамент</option>
                             @foreach (var department in Model.Departments)
-                        {
-                            var selected = department.Name == Model.RequestModel.Users[userIndex].Department;
-                        <option @(selected ? "selected" : "") data-id-department="@department.IdDepartment">
-                            @department.Name
-                        </option>
-                        }
+                            {
+                                var selected = department.Name == Model.RequestModel.Users[userIndex].Department;
+                                <option @(selected ? "selected" : "") data-id-department="@department.IdDepartment">
+                                    @department.Name
+                                </option>
+                            }
                         </select>
                         @Html.ValidationMessageFor(r => r.RequestModel.Users[userIndex].Department)
                     </div>
@@ -104,16 +104,15 @@
                     <div class="col-sm-9 col-md-10">
                         <select class="form-control"
                                 name="@Html.NameFor(r => r.RequestModel.Users[userIndex].Unit)">
-                            <option value="" selected></option>
                             @foreach (var unit in Model.Units)
-                        {
-                            var selected = unit.ParentDepartment.Name == Model.RequestModel.Users[userIndex].Department &&
-                                           unit.Name == Model.RequestModel.Users[userIndex].Unit;
-                        <option @(selected ? "selected" : "")
-                                data-id-department="@unit.IdParentDepartment">
-                            @unit.Name
-                        </option>
-                        }
+                            {
+                                var selected = unit.ParentDepartment.Name == Model.RequestModel.Users[userIndex].Department &&
+                                               unit.Name == Model.RequestModel.Users[userIndex].Unit;
+                                <option @(selected ? "selected" : "")
+                                    data-id-department="@unit.IdParentDepartment">
+                                    @unit.Name
+                                </option>
+                            }
                         </select>
                         @Html.ValidationMessageFor(r => r.RequestModel.Users[userIndex].Unit)
                     </div>
