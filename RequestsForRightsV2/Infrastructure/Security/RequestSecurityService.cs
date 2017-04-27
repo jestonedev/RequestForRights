@@ -308,7 +308,10 @@ namespace RequestsForRights.Web.Infrastructure.Security
                 idResourceRights.Any(idResourceRight => idResourceRight == r.IdResourceRight)).
                 Select(r => r.Resource.IdOperatorDepartment).Where(r => r != 24);
             var allowedDepartments = GetUserAllowedDepartments(request.User).Select(r => r.IdDepartment);
-            return resourceDepartments.Any(dep => !allowedDepartments.Contains(dep));
+            var ownerDepartments = GetUsersBy(AclRole.ResourceOperator).ToList().
+                SelectMany(GetUserAllowedDepartments).Select(r => r.IdDepartment).ToList();
+            return resourceDepartments.Any(dep => !allowedDepartments.Contains(dep)) &&
+                resourceDepartments.Any(dep => ownerDepartments.Contains(dep));
         }
 
         public bool CanSetRequestState(RequestModel<T> entity, int idRequestStateType)
