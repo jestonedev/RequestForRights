@@ -8,6 +8,7 @@ namespace RequestsForRights.Web.Infrastructure.Security.Interfaces
         where T: RequestUserModel
     {
         IQueryable<Request> FilterRequests(IQueryable<Request> requests);
+        IQueryable<Resource> FilterResources(IQueryable<Resource> resources);
         bool CanDelete(Request request);
         bool CanUpdate(Request request);
         bool CanCreate(Request request);

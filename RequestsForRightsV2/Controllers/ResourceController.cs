@@ -88,7 +88,8 @@ namespace RequestsForRights.Web.Controllers
         }
 
         [HttpPut]
-        public ActionResult Update(ResourceViewModel resourceViewModel, ResourceActFilesModel files)
+        public ActionResult Update(ResourceViewModel resourceViewModel, ResourceActFilesModel files, 
+            IList<RequestPermissionsDepartmentsModel> requestPermissionsDepartments)
         {
             if (resourceViewModel == null || resourceViewModel.Resource == null)
             {
@@ -103,11 +104,11 @@ namespace RequestsForRights.Web.Controllers
             if (!ModelState.IsValid)
             {
                 ViewData["SecurityService"] = _securityService;
-                return View(_resourceService.GetResourceViewModelBy(resourceViewModel.Resource));
+                return View(_resourceService.GetResourceViewModelBy(resourceViewModel.Resource, requestPermissionsDepartments));
             }
             try
             {
-                _resourceService.UpdateResource(resourceViewModel.Resource, files);
+                _resourceService.UpdateResource(resourceViewModel.Resource, files, requestPermissionsDepartments);
                 _resourceService.SaveChanges();
             }
             catch (DbUpdateException e)
@@ -177,7 +178,8 @@ namespace RequestsForRights.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(ResourceViewModel resourceViewModel, ResourceActFilesModel files)
+        public ActionResult Create(ResourceViewModel resourceViewModel, ResourceActFilesModel files,
+            IList<RequestPermissionsDepartmentsModel> requestPermissionsDepartments)
         {
             if (resourceViewModel == null || resourceViewModel.Resource == null)
             {
@@ -192,11 +194,11 @@ namespace RequestsForRights.Web.Controllers
             if (!ModelState.IsValid)
             {
                 ViewData["SecurityService"] = _securityService;
-                return View(_resourceService.GetResourceViewModelBy(resourceViewModel.Resource));
+                return View(_resourceService.GetResourceViewModelBy(resourceViewModel.Resource, requestPermissionsDepartments));
             }
             try
             {
-                _resourceService.InsertResource(resourceViewModel.Resource, files);
+                _resourceService.InsertResource(resourceViewModel.Resource, files, requestPermissionsDepartments);
                 _resourceService.SaveChanges();
             }
             catch (DbUpdateException e)

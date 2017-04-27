@@ -46,7 +46,10 @@ namespace RequestsForRights.Web.Infrastructure.Services
         private RequestModifyPermissionsViewModel LoadAdditionalInfoToViewModel(
             RequestModifyPermissionsViewModel viewModel)
         {
-            viewModel.Resources = _resourceRepository.GetResources().OrderBy(r => r.Name).ToList();
+            viewModel.Resources =
+                RequestSecurityService.FilterResources(_resourceRepository.GetResources())
+                    .OrderBy(r => r.Name)
+                    .ToList();
             viewModel.ResourceRights = _resourceRepository.GetResourceRights().OrderBy(r => r.Name).ToList();
             viewModel.RequestRightGrantTypes = RequestsRepository.GetRequestRightGrantTypes()
                 .Where(r => r.IdRequestRightGrantType != 3)

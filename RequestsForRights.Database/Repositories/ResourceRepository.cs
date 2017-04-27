@@ -23,8 +23,11 @@ namespace RequestsForRights.Database.Repositories
 
         public IQueryable<Resource> GetResources()
         {
-            return _databaseContext.Resources.Include(r => r.ResourceGroup)
-                .Include(r => r.ResourceRights).Where(r => !r.Deleted);
+            return _databaseContext.Resources
+                .Include(r => r.ResourceGroup)
+                .Include(r => r.ResourceRights)
+                .Include(r => r.RequestAllowedDepartments)
+                .Where(r => !r.Deleted);
         }
 
         public IQueryable<ResourceRight> GetResourceRights()
@@ -108,7 +111,27 @@ namespace RequestsForRights.Database.Repositories
             UpdateResourceOperatorPersons(
                 res.ResourceOperatorPersons.Where(r => !r.Deleted),
                 resource.ResourceOperatorPersons, resource.IdResource);
+            UpdateRequestAllowedDepartments(res.RequestAllowedDepartments, resource.RequestAllowedDepartments);
             return res;
+        }
+
+        private void UpdateRequestAllowedDepartments(IList<Department> actualAllowedDepartments, IList<Department> newAllowedDepartments)
+        {
+            var newAllowedDepartmentIds =
+                newAllowedDepartments.Select(r => r.IdDepartment).ToList();
+            foreach (var actualAllowedDepartment in actualAllowedDepartments.ToList())
+            {
+                if (newAllowedDepartmentIds.Contains(actualAllowedDepartment.IdDepartment))
+                {
+                    newAllowedDepartmentIds.Remove(actualAllowedDepartment.IdDepartment);
+                    continue;
+                }
+                actualAllowedDepartments.Remove(actualAllowedDepartment);
+            }
+            foreach (var newAllowedDepartmentId in newAllowedDepartmentIds)
+            {
+                actualAllowedDepartments.Add(_databaseContext.Departments.Find(newAllowedDepartmentId));
+            }
         }
 
         private void UpdateResourceOperatorPersons(IEnumerable<ResourceOperatorPerson> oldPersons,
@@ -428,6 +451,8 @@ namespace RequestsForRights.Database.Repositories
                 UpdateDepartmentExtInfo(resource.OperatorDepartment);
                 resource.OperatorDepartment = null;
             }
+            resource.RequestAllowedDepartments = resource.RequestAllowedDepartments.Select(r => 
+                _databaseContext.Departments.Find(r.IdDepartment)).ToList();
             return _databaseContext.Resources.Add(resource);
         }
 

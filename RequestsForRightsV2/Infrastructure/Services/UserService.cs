@@ -54,7 +54,7 @@ namespace RequestsForRights.Web.Infrastructure.Services
         {
             var users = _userRepository.FindUsers(snpPattern);
 
-            var lastStatesByRequest = from stateRow in _userRepository.GetRequestStates()
+            /*var lastStatesByRequest = from stateRow in _userRepository.GetRequestStates()
                                       group stateRow.IdRequestState by stateRow.IdRequest
                                           into gs
                                           select new
@@ -105,7 +105,7 @@ namespace RequestsForRights.Web.Infrastructure.Services
                     on request.IdRequest equals userAssoc.IdRequest
                 select userAssoc.RequestUser;
 
-            users = users.Except(excludeUsers);
+            users = users.Except(excludeUsers);*/
 
             return _securityRepository.FilterUsers(users).Take(maxCount);
         }

@@ -38,7 +38,10 @@ namespace RequestsForRights.Web.Infrastructure.Security
             if (InRole(AclRole.ResourceOperator))
             {
                 var allowedDepartments = GetUserAllowedDepartments().Select(r => r.IdDepartment);
-                return resources.Where(r => allowedDepartments.Contains(r.IdOperatorDepartment));
+                return resources.Where(r => 
+                    (!r.RequestAllowedDepartments.Any() ||
+                    r.RequestAllowedDepartments.Select(rd => rd.IdDepartment).Intersect(allowedDepartments).Any()) &&
+                    allowedDepartments.Contains(r.IdOperatorDepartment));
             }
             return new List<Resource>().AsQueryable();
         }

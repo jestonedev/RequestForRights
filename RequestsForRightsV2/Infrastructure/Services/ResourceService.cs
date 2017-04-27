@@ -75,28 +75,41 @@ namespace RequestsForRights.Web.Infrastructure.Services
 
         public ResourceViewModel GetResourceViewModelBy(int id)
         {
+            var departments = _resourceRepository.GetDepartments().OrderBy(r => r.Name).ToList();
+            var resource = _resourceRepository.GetResourceById(id);
             return new ResourceViewModel
             {
-                Resource = _resourceRepository.GetResourceById(id),
-                ResourceGroups = _resourceRepository.GetResourceGroups().OrderBy(r => r.IdResourceGroup == 5).ThenBy(r => r.Name),
+                Resource = resource,
+                ResourceGroups =
+                    _resourceRepository.GetResourceGroups().OrderBy(r => r.IdResourceGroup == 5).ThenBy(r => r.Name),
                 ResourceInformationTypes = _resourceRepository.GetResourceInformationTypes().OrderBy(r => r.Name),
-                Departments = _resourceRepository.GetDepartments().OrderBy(r => r.Name)
+                Departments = departments,
+                RequestPermissionsDepartments = departments.Select(r =>
+                    new RequestPermissionsDepartmentsModel
+                    {
+                        IdDepartment = r.IdDepartment,
+                        DepartmentName = r.Name,
+                        RequestsAllowed = resource.RequestAllowedDepartments.Select(rd => rd.IdDepartment).Contains(r.IdDepartment)
+                    }).ToList()
             };
         }
 
-        public ResourceViewModel GetResourceViewModelBy(Resource resource)
+        public ResourceViewModel GetResourceViewModelBy(Resource resource, IList<RequestPermissionsDepartmentsModel> requestPermissionsDepartments)
         {
             return new ResourceViewModel
             {
                 Resource = resource,
                 ResourceGroups = _resourceRepository.GetResourceGroups().OrderBy(r => r.IdResourceGroup == 5).ThenBy(r => r.Name),
                 ResourceInformationTypes = _resourceRepository.GetResourceInformationTypes().OrderBy(r => r.Name),
-                Departments = _resourceRepository.GetDepartments().OrderBy(r => r.Name)
+                Departments = _resourceRepository.GetDepartments().OrderBy(r => r.Name).ToList(),
+                RequestPermissionsDepartments = requestPermissionsDepartments
             };
         }
 
         public ResourceViewModel GetEmptyResourceViewModel()
         {
+            var departments = _resourceRepository.GetDepartments().OrderBy(r => r.Name).ToList();
+
             return new ResourceViewModel
             {
                 Resource = new Resource
@@ -113,7 +126,14 @@ namespace RequestsForRights.Web.Infrastructure.Services
                 },
                 ResourceGroups = _resourceRepository.GetResourceGroups().OrderBy(r => r.IdResourceGroup == 5).ThenBy(r => r.Name),
                 ResourceInformationTypes = _resourceRepository.GetResourceInformationTypes().OrderBy(r => r.Name),
-                Departments = _resourceRepository.GetDepartments().OrderBy(r => r.Name)
+                Departments = departments,
+                RequestPermissionsDepartments = departments.Select(
+                    r => new RequestPermissionsDepartmentsModel
+                    {
+                        IdDepartment = r.IdDepartment,
+                        DepartmentName = r.Name,
+                        RequestsAllowed = false
+                    }).ToList()
             };
         }
 
@@ -122,16 +142,44 @@ namespace RequestsForRights.Web.Infrastructure.Services
             return _resourceRepository.DeleteResource(idResource);
         }
 
-        public Resource UpdateResource(Resource resource, ResourceActFilesModel files)
+        public Resource UpdateResource(Resource resource, ResourceActFilesModel files, IList<RequestPermissionsDepartmentsModel> requestPermissionsDepartments)
         {
             PreInsertAndBindFiles(resource, files);
+            UpdateRequestPermissionsDepartments(resource, requestPermissionsDepartments);
             return _resourceRepository.UpdateResource(resource);
         }
 
-        public Resource InsertResource(Resource resource, ResourceActFilesModel files)
+        public Resource InsertResource(Resource resource, ResourceActFilesModel files, IList<RequestPermissionsDepartmentsModel> requestPermissionsDepartments)
         {
             PreInsertAndBindFiles(resource, files);
+            UpdateRequestPermissionsDepartments(resource, requestPermissionsDepartments);
             return _resourceRepository.InsertResource(resource);
+        }
+
+        private static void UpdateRequestPermissionsDepartments(Resource resource, IList<RequestPermissionsDepartmentsModel> requestPermissionsDepartments)
+        {
+            var newAllowedDepartmentIds =
+                requestPermissionsDepartments.Where(r => r.RequestsAllowed).Select(r => r.IdDepartment).Distinct().ToList();
+            if (resource.RequestAllowedDepartments == null)
+            {
+                resource.RequestAllowedDepartments = new List<Department>();
+            }
+            foreach (var allowedDepartment in resource.RequestAllowedDepartments)
+                {
+                    if (newAllowedDepartmentIds.Contains(allowedDepartment.IdDepartment))
+                    {
+                        newAllowedDepartmentIds.Remove(allowedDepartment.IdDepartment);
+                        continue;
+                    }
+                    resource.RequestAllowedDepartments.Remove(allowedDepartment);
+                }
+            foreach (var newAllowedDepartmentId in newAllowedDepartmentIds)
+            {
+                resource.RequestAllowedDepartments.Add(new Department
+                {
+                    IdDepartment = newAllowedDepartmentId
+                });
+            }
         }
 
         private static void PreInsertAndBindFiles(Resource resource, ResourceActFilesModel files)

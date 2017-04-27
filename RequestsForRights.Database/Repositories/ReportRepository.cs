@@ -21,7 +21,9 @@ namespace RequestsForRights.Database.Repositories
 
         public IQueryable<Resource> GetResources()
         {
-            return _databaseContext.Resources.Where(r => !r.Deleted).Include(r => r.ResourceGroup);
+            return _databaseContext.Resources.Where(r => !r.Deleted)
+                .Include(r => r.ResourceGroup)
+                .Include(r => r.RequestAllowedDepartments);
         }
 
         public IQueryable<RequestUser> GetUsers()

@@ -2,6 +2,8 @@
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Infrastructure.Annotations;
+using System.Data.Entity.Validation;
+using System.Linq;
 using RequestsForRights.Domain.Entities;
 
 namespace RequestsForRights.Database
@@ -64,6 +66,15 @@ namespace RequestsForRights.Database
                     cs.MapRightKey("IdDepartment");
                     cs.MapLeftKey("IdUser");
                     cs.ToTable("AclDepartments");
+                });
+            modelBuilder.Entity<Resource>()
+                .HasMany(f => f.RequestAllowedDepartments)
+                .WithMany(f => f.RequestAllowedResources)
+                .Map(cs =>
+                {
+                    cs.MapRightKey("IdDepartment");
+                    cs.MapLeftKey("IdResource");
+                    cs.ToTable("RequestAllowedResourceDepartments");
                 });
             modelBuilder.Entity<Department>()
                 .HasMany(f => f.Users)

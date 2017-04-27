@@ -1,0 +1,28 @@
+﻿@model RequestsForRights.Web.Models.ViewModels.ResourceViewModel
+@{
+    Layout = null;
+}
+
+<div class="panel panel-primary">
+    <div class="panel-heading">Подразделения, имеющие права на подачу заявок на данный ИР</div>
+    <div class="panel-body">
+        <div class="checkbox rr-resource-request-perm-all-departments-checkbox">
+            <label>
+                <input type="checkbox"/> Все подразделения
+            </label>
+        </div>
+        <hr/>
+        <div class="rr-resource-request-perm-departments">
+            @for (var i = 0; i < Model.RequestPermissionsDepartments.Count; i++)
+            {
+                <div class="checkbox">
+                    @Html.HiddenFor(r => r.RequestPermissionsDepartments[i].IdDepartment)
+                    <label>
+                        @Html.CheckBoxFor(r => r.RequestPermissionsDepartments[i].RequestsAllowed)
+                        @Model.RequestPermissionsDepartments[i].DepartmentName
+                    </label>
+                </div>
+            }
+        </div>
+    </div>
+</div>

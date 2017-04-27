@@ -28,6 +28,9 @@
         <li role="presentation">
             <a href="#acts" aria-controls="acts" role="tab" data-toggle="tab">Акты</a>
         </li>
+        <li role="presentation">
+            <a href="#permissions" aria-controls="acts" role="tab" data-toggle="tab">Разрешения</a>
+        </li>
     </ul>
 
     <div class="tab-content rr-detail-resource-tab-content">
@@ -45,6 +48,9 @@
         </div>
         <div role="tabpanel" class="tab-pane fade rr-tab-pane" id="acts">
             @Html.Partial("DetailActs")
+        </div>
+        <div role="tabpanel" class="tab-pane fade rr-tab-pane" id="permissions">
+            @Html.Partial("DetailPermissions")
         </div>
     </div>
 </div>

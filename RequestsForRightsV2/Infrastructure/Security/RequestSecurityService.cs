@@ -154,6 +154,27 @@ namespace RequestsForRights.Web.Infrastructure.Security
             return filteredRequests.Distinct();
         }
 
+        public IQueryable<Resource> FilterResources(IQueryable<Resource> resources)
+        {
+            if (InRole(new[]
+            {
+                AclRole.Administrator, AclRole.Dispatcher,
+                AclRole.Executor, 
+                AclRole.ResourceManager
+            }))
+            {
+                return resources;
+            }
+            if (InRole(AclRole.Requester))
+            {
+                var allowedDepartments = GetUserAllowedDepartments().Select(r => r.IdDepartment);
+                return resources.Where(r =>
+                    !r.RequestAllowedDepartments.Any() ||
+                    r.RequestAllowedDepartments.Select(rd => rd.IdDepartment).Intersect(allowedDepartments).Any());
+            }
+            return new List<Resource>().AsQueryable();
+        }
+
         public override bool CanRead()
         {
             return InRole(new[]

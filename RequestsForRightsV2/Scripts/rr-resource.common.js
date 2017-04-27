@@ -780,6 +780,30 @@
         $(nodes).datepicker(datePickerOptions);  
     }
 
+    $('.rr-resource-request-perm-all-departments-checkbox input[type="checkbox"]')
+        .on("change",
+        function() {
+            updatePermissionsCheckboxes(true);
+        });
+
+    function updatePermissionsCheckboxes(ignoreAllDepartmentsCheckgox) {
+        var allDepartmentsCheckbox = $('.rr-resource-request-perm-all-departments-checkbox input[type="checkbox"]');
+        if (($('.rr-resource-request-perm-departments input[type="checkbox"]:checked').length === 0 && !ignoreAllDepartmentsCheckgox) ||
+            allDepartmentsCheckbox.prop("checked")) {
+            allDepartmentsCheckbox.prop("checked", true);
+            $(".rr-resource-request-perm-departments .checkbox").each(function(idx, elem) {
+                $(elem).addClass("disabled");
+                $(elem).find('input[type="checkbox"]').prop("disabled", "disabled");
+            });
+        } 
+        else {
+            $(".rr-resource-request-perm-departments .checkbox").each(function (idx, elem) {
+                $(elem).removeClass("disabled");
+                $(elem).find('input[type="checkbox"]').removeProp("disabled");
+            });
+        }
+    }
+
     showErrorBadgets();
     updateControls();
     updateDeleteRightButton();
@@ -800,4 +824,6 @@
         .each(function () {
             $(this).inputmask("Regex", { regex: $(this).data("val-regex-pattern") });
         });
+
+    updatePermissionsCheckboxes(false);
 });

@@ -754,3 +754,7 @@ button[name="deleteAuthorityAct"] ,
 button[name="deleteDeviceAddress"]{
     margin-bottom: 5px;
 }
+
+.rr-resource-request-perm-departments .checkbox.disabled label, .rr-resource-request-perm-departments .checkbox.disabled {
+    cursor: not-allowed;
+}

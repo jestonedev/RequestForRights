@@ -63,7 +63,8 @@ namespace RequestsForRights.Web.Infrastructure.Services
                 .Concat(units.Select(r => r.ParentDepartment))
                 .Distinct()
                 .OrderBy(r => r.Name).ToList();
-            viewModel.Resources = _resourceRepository.GetResources().OrderBy(r => r.Name).ToList();
+            viewModel.Resources = RequestSecurityService.FilterResources(_resourceRepository.GetResources())
+                .OrderBy(r => r.Name).ToList();
             viewModel.ResourceRights = _resourceRepository.GetResourceRights().OrderBy(r => r.Name).ToList();
             return viewModel;
         }

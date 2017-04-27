@@ -245,6 +245,7 @@
     <Compile Include="Models\ReportOptions\ReportOptions.cs" />
     <Compile Include="Models\ReportOptions\ReportResourceRightsOptions.cs" />
     <Compile Include="Models\ReportOptions\ReportUserRightsOptions.cs" />
+    <Compile Include="Models\ViewModels\RequestPermissionsDepartmentsModel.cs" />
     <Compile Include="Models\ViewModels\ReportUserRightsViewModel.cs" />
     <Compile Include="Models\ViewModels\ReportResourceRightsViewModel.cs" />
     <Compile Include="Models\ViewModels\RequestIndexViewModel.cs" />
@@ -630,6 +631,8 @@
     <Content Include="Views\Resource\OperatorPersonActEditor.cshtml" />
     <Content Include="Views\Resource\OperatorActEditor.cshtml" />
     <Content Include="Views\Resource\UsingActEditor.cshtml" />
+    <Content Include="Views\Resource\ResourceFormPermissions.cshtml" />
+    <Content Include="Views\Resource\DetailPermissions.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RequestsForRights.Database\RequestsForRights.Database.csproj">

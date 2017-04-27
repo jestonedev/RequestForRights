@@ -94,7 +94,8 @@ namespace RequestsForRights.Web.Infrastructure.Services
         private RequestDelegatePermissionsViewModel LoadAdditionalInfoToViewModel(
             RequestDelegatePermissionsViewModel viewModel)
         {
-            viewModel.Resources = _resourceRepository.GetResources().OrderBy(r => r.Name).ToList();
+            viewModel.Resources = RequestSecurityService.FilterResources(_resourceRepository.GetResources())
+                .OrderBy(r => r.Name).ToList();
             viewModel.ResourceRights = _resourceRepository.GetResourceRights().OrderBy(r => r.Name).ToList();
             return viewModel;
         }

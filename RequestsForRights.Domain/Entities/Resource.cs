@@ -58,5 +58,6 @@ namespace RequestsForRights.Domain.Entities
         public bool HasNotInternetAccess { get; set; }
         public virtual IList<ResourceInternetAddress> ResourceInternetAddresses { get; set; }
         public virtual IList<ResourceDeviceAddress> ResourceDeviceAddresses { get; set; }
+        public virtual IList<Department> RequestAllowedDepartments { get; set; }
     }
 }
