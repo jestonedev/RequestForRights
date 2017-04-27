@@ -170,7 +170,8 @@ namespace RequestsForRights.Web.Infrastructure.Security
                 var allowedDepartments = GetUserAllowedDepartments().Select(r => r.IdDepartment);
                 return resources.Where(r =>
                     !r.RequestAllowedDepartments.Any() ||
-                    r.RequestAllowedDepartments.Select(rd => rd.IdDepartment).Intersect(allowedDepartments).Any());
+                    r.RequestAllowedDepartments.Select(rd => rd.IdDepartment).Intersect(allowedDepartments).Any() ||
+                    r.RequestAllowedDepartments.SelectMany(rd => rd.ChildDepartments).Select(rd => rd.IdDepartment).Intersect(allowedDepartments).Any());
             }
             return new List<Resource>().AsQueryable();
         }
