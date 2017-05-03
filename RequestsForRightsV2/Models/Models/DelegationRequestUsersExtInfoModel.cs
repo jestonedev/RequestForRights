@@ -14,8 +14,8 @@ namespace RequestsForRights.Web.Models.Models
         [DisplayName(@"Должность")]
         [Required(ErrorMessage = @"Должность является обязательной для заполнения")]
         public string PostDelegateTo { get; set; }
-        [DisplayName(@"Департамент")]
-        [Required(ErrorMessage = @"Департамент является обязательным для заполнения")]
+        [DisplayName(@"Организация")]
+        [Required(ErrorMessage = @"Организация является обязательной для заполнения")]
         public string DepartmentDelegateTo { get; set; }
         [DisplayName(@"Отдел")]
         public string UnitDelegateTo { get; set; }

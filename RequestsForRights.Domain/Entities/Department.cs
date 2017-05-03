@@ -75,5 +75,8 @@ namespace RequestsForRights.Domain.Entities
         [DisplayName("Дом")]
         public string ControlOrgAddressHouse { get; set; }
         public virtual IList<Resource> RequestAllowedResources { get; set; }
+        [Required]
+        [DefaultValue(false)]
+        public bool IsAlienDepartment { get; set; }
     }
 }

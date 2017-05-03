@@ -13,85 +13,90 @@
         return;
     }
     @if (Model.Options.ReportDisplayStyle == ReportDisplayStyle.Cards)
-{
-    foreach (var rightGroup in Model.Rights.GroupBy(r => new { r.IdResource, r.ResourceName }))
     {
-        <div class="panel panel-primary rr-report-right-group" id="panel@(rightGroup.Key.IdResource)">
-            <div class="panel-heading" role="tab" id="heading@(rightGroup.Key.IdResource)">
-                <h4 class="panel-title">
-                    <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-                    <a role="button" data-toggle="collapse"
-                       data-parent="#panel@(rightGroup.Key.IdResource)"
-                       href="#collapse@(rightGroup.Key.IdResource)"
-                       aria-expanded="true"
-                       aria-controls="collapse@(rightGroup.Key.IdResource)">
-                        Информационный ресурс @rightGroup.Key.ResourceName
-                    </a>
-                </h4>
+        foreach (var rightGroup in Model.Rights.GroupBy(r => new {r.IdResource, r.ResourceName}))
+        {
+            <div class="panel panel-primary rr-report-right-group" id="panel@(rightGroup.Key.IdResource)">
+                <div class="panel-heading" role="tab" id="heading@(rightGroup.Key.IdResource)">
+                    <h4 class="panel-title">
+                        <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                        <a role="button" data-toggle="collapse"
+                           data-parent="#panel@(rightGroup.Key.IdResource)"
+                           href="#collapse@(rightGroup.Key.IdResource)"
+                           aria-expanded="true"
+                           aria-controls="collapse@(rightGroup.Key.IdResource)">
+                            Информационный ресурс @rightGroup.Key.ResourceName
+                        </a>
+                    </h4>
+                </div>
+                <ul class="list-group panel-collapse collapse in" id="collapse@(rightGroup.Key.IdResource)"
+                    role="tabpanel"
+                    aria-labelledby="heading@(rightGroup.Key.IdResource)">
+                    @foreach (var right in rightGroup.Select(r => r))
+                    {
+                        <li class="list-group-item @(right.IdRequestUser != Model.RequestUser.IdRequestUser ? "rr-list-group-item-danger" : "")">
+                            <dl class="dl-horizontal">
+                                <dt>Право</dt>
+                                <dd>@right.ResourceRightName</dd>
+                                @if (right.DateFrom != null)
+                                {
+                                    <dt>Дата и время выдачи</dt>
+                                    <dd>@right.DateFrom</dd>
+                                }
+                                <dt>Категория</dt>
+                                <dd>@right.RightCategory</dd>
+                                @if (right.IdDelegateFromUser != null)
+                                {
+                                    if (right.DateDelegateFrom != null)
+                                    {
+                                        <dt>Дата начала действия</dt>
+                                        <dd>@right.DateDelegateFrom.Value.ToString("dd.MM.yyyy", CultureInfo.CurrentCulture)</dd>
+                                    }
+                                    if (right.DateDelegateTo != null)
+                                    {
+                                        <dt>Дата окончания</dt>
+                                        <dd>@right.DateDelegateTo.Value.ToString("dd.MM.yyyy", CultureInfo.CurrentCulture)</dd>
+                                    }
+                                    if (right.IdRequestUser == Model.RequestUser.IdRequestUser)
+                                    {
+                                        <dt>Делегировано от</dt>
+                                        <dd>@right.DelegateFromUserSnp</dd>
+                                        <dt></dt>
+                                        <dd>@right.DelegateFromUserDepartment</dd>
+                                        if (right.DelegateFromUserUnit != null)
+                                        {
+                                            <dt></dt>
+                                            <dd>@right.DelegateFromUserUnit</dd>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <dt>Делегировано к</dt>
+                                        <dd>@right.RequestUserSnp</dd>
+                                        <dt></dt>
+                                        <dd>@right.RequestUserDepartment</dd>
+                                        if (right.RequestUserUnit != null)
+                                        {
+                                            <dt></dt>
+                                            <dd>@right.RequestUserUnit</dd>
+                                        }
+                                    }
+                                }
+                                @if (!string.IsNullOrEmpty(right.Description))
+                                {
+                                    <dt>Описание права</dt>
+                                    <dd>@right.Description</dd>
+                                }
+                            </dl>
+                        </li>
+                    }
+                </ul>
             </div>
-            <ul class="list-group panel-collapse collapse in" id="collapse@(rightGroup.Key.IdResource)"
-                role="tabpanel"
-                aria-labelledby="heading@(rightGroup.Key.IdResource)">
-                @foreach (var right in rightGroup.Select(r => r))
-                {
-                    <li class="list-group-item @(right.IdRequestUser != Model.RequestUser.IdRequestUser ? "rr-list-group-item-danger" : "")">
-                        <dl class="dl-horizontal">
-                            <dt>Право</dt>
-                            <dd>@right.ResourceRightName</dd>
-                            @if (right.DateFrom != null)
-                            {
-                                <dt>Дата и время выдачи</dt>
-                                <dd>@right.DateFrom</dd>
-                            }
-                            <dt>Категория</dt>
-                            <dd>@right.RightCategory</dd>
-                            @if (right.IdDelegateFromUser != null)
-                            {
-                                if (right.DateDelegateFrom != null)
-                                {
-                                    <dt>Дата начала действия</dt>
-                                    <dd>@right.DateDelegateFrom.Value.ToString("dd.MM.yyyy", CultureInfo.CurrentCulture)</dd>
-                                }
-                                if (right.DateDelegateTo != null)
-                                {
-                                    <dt>Дата окончания</dt>
-                                    <dd>@right.DateDelegateTo.Value.ToString("dd.MM.yyyy", CultureInfo.CurrentCulture)</dd>
-                                }
-                                if (right.IdRequestUser == Model.RequestUser.IdRequestUser)
-                                {
-                                    <dt>Делегировано от</dt>
-                                    <dd>@right.DelegateFromUserSnp</dd>
-                                    <dt></dt>
-                                    <dd>@right.DelegateFromUserDepartment</dd>
-                                    if (right.DelegateFromUserUnit != null)
-                                    {
-                                        <dt></dt>
-                                        <dd>@right.DelegateFromUserUnit</dd>
-                                    }
-                                }
-                                else
-                                {
-                                    <dt>Делегировано к</dt>
-                                    <dd>@right.RequestUserSnp</dd>
-                                    <dt></dt>
-                                    <dd>@right.RequestUserDepartment</dd>
-                                    if (right.RequestUserUnit != null)
-                                    {
-                                        <dt></dt>
-                                        <dd>@right.RequestUserUnit</dd>
-                                    }
-                                }
-                            }
-                        </dl>
-                    </li>
-                }
-            </ul>
-        </div>
+        }
     }
-}
-else
-{
-    var headers = new[]
+    else
+    {
+        var headers = new[]
         {
             new
             {
@@ -120,78 +125,82 @@ else
         };
         <table class="table table-hover">
             <thead>
-                <tr>
-                    @foreach (var header in headers)
+            <tr>
+                @foreach (var header in headers)
+                {
+                    var iconClass = "glyphicon-sort";
+                    var sortDirection = RequestsForRights.Web.Infrastructure.Enums.SortDirection.Asc;
+                    if (header.Field == Model.Options.SortField)
                     {
-                        var iconClass = "glyphicon-sort";
-                        var sortDirection = RequestsForRights.Web.Infrastructure.Enums.SortDirection.Asc;
-                        if (header.Field == Model.Options.SortField)
-                        {
-                            iconClass = Model.Options.SortDirection == RequestsForRights.Web.Infrastructure.Enums.SortDirection.Asc ?
-                                "glyphicon-sort-by-attributes" :
-                                "glyphicon-sort-by-attributes-alt";
-                            sortDirection = Model.Options.SortDirection ==
-                                            RequestsForRights.Web.Infrastructure.Enums.SortDirection.Asc ?
-                                RequestsForRights.Web.Infrastructure.Enums.SortDirection.Desc : RequestsForRights.Web.Infrastructure.Enums.SortDirection.Asc;
-                        }
-                        <th class="rr-column rr-column-header"
-                            style="min-width: @(header.MinWidth)px">
-                            <a href="@Url.Action("GetDataTable", new {SortField = header.Field, SortDirection = sortDirection})">
-                                @header.Name
-                                <span class="glyphicon @iconClass pull-right" aria-hidden="true"></span>
-                            </a>
-                        </th>
+                        iconClass = Model.Options.SortDirection == RequestsForRights.Web.Infrastructure.Enums.SortDirection.Asc ?
+                            "glyphicon-sort-by-attributes" :
+                            "glyphicon-sort-by-attributes-alt";
+                        sortDirection = Model.Options.SortDirection ==
+                                        RequestsForRights.Web.Infrastructure.Enums.SortDirection.Asc ?
+                            RequestsForRights.Web.Infrastructure.Enums.SortDirection.Desc : RequestsForRights.Web.Infrastructure.Enums.SortDirection.Asc;
                     }
-                    <th>Дополнительная информация</th>
-                </tr>
+                    <th class="rr-column rr-column-header"
+                        style="min-width: @(header.MinWidth)px">
+                        <a href="@Url.Action("GetDataTable", new {SortField = header.Field, SortDirection = sortDirection})">
+                            @header.Name
+                            <span class="glyphicon @iconClass pull-right" aria-hidden="true"></span>
+                        </a>
+                    </th>
+                }
+                <th>Дополнительная информация</th>
+            </tr>
             </thead>
             <tbody>
-                @foreach (var right in Model.Rights)
-                {
-                    <tr class="@(right.IdRequestUser != Model.RequestUser.IdRequestUser ? "danger" : "")">
-                        <td class="rr-column">
-                            @right.ResourceName
-                        </td>
-                        <td class="rr-column">@right.ResourceRightName</td>
-                        <td class="rr-column">@(right.DateFrom != null ? 
-                        right.DateFrom.Value.ToString("dd.MM.yyyy hh:mm:ss", CultureInfo.CurrentCulture) : "н/д")</td>
-                        <td class="rr-column">@right.RightCategory</td>
-                        <td>
-                            @if (right.DateDelegateFrom != null)
+            @foreach (var right in Model.Rights)
+            {
+                <tr class="@(right.IdRequestUser != Model.RequestUser.IdRequestUser ? "danger" : "")">
+                    <td class="rr-column">
+                        @right.ResourceName
+                    </td>
+                    <td class="rr-column">@right.ResourceRightName</td>
+                    <td class="rr-column">@(right.DateFrom != null ?
+                                                right.DateFrom.Value.ToString("dd.MM.yyyy hh:mm:ss", CultureInfo.CurrentCulture) : "н/д")</td>
+                    <td class="rr-column">@right.RightCategory</td>
+                    <td>
+                        @if (right.DateDelegateFrom != null)
+                        {
+                            <p><b>Дата начала действия:</b> @right.DateDelegateFrom.Value.ToString("dd.MM.yyyy", CultureInfo.CurrentCulture)</p>
+                        }
+                        @if (right.DateDelegateTo != null)
+                        {
+                            <p><b>Дата окончания действия:</b> @right.DateDelegateTo.Value.ToString("dd.MM.yyyy", CultureInfo.CurrentCulture)</p>
+                        }
+                        @if (right.IdRequestUser == Model.RequestUser.IdRequestUser)
+                        {
+                            if (right.DelegateFromUserSnp != null)
                             {
-                                 <p><b>Дата начала действия:</b> @right.DateDelegateFrom.Value.ToString("dd.MM.yyyy", CultureInfo.CurrentCulture)</p>
-                            }
-                            @if (right.DateDelegateTo != null)
-                            {
-                                <p><b>Дата окончания действия:</b> @right.DateDelegateTo.Value.ToString("dd.MM.yyyy", CultureInfo.CurrentCulture)</p>
-                            }
-                            @if (right.IdRequestUser == Model.RequestUser.IdRequestUser)
-                            {
-                                if (right.DelegateFromUserSnp != null)
+                                <p><b>Делегировано от:</b> @right.DelegateFromUserSnp</p>
+                                <p><b>Департамент:</b> @right.DelegateFromUserDepartment</p>
+                                if (right.DelegateFromUserUnit != null)
                                 {
-                                    <p><b>Делегировано от:</b> @right.DelegateFromUserSnp</p>
-                                    <p><b>Департамент:</b> @right.DelegateFromUserDepartment</p>
-                                    if (right.DelegateFromUserUnit != null)
-                                    {
-                                        <p><b>Отдел:</b> @right.DelegateFromUserUnit</p>
-                                    }
+                                    <p><b>Отдел:</b> @right.DelegateFromUserUnit</p>
                                 }
                             }
-                            else
+                        }
+                        else
+                        {
+                            if (right.DelegateFromUserSnp != null)
                             {
-                                if (right.DelegateFromUserSnp != null)
+                                <p><b>Делегировано к:</b> @right.RequestUserSnp</p>
+                                <p><b>Департамент:</b> @right.RequestUserDepartment</p>
+                                if (right.RequestUserUnit != null)
                                 {
-                                    <p><b>Делегировано к:</b> @right.RequestUserSnp</p>
-                                    <p><b>Департамент:</b> @right.RequestUserDepartment</p>
-                                    if (right.RequestUserUnit != null)
-                                    {
-                                        <p><b>Отдел:</b> @right.RequestUserUnit</p>
-                                    }
+                                    <p><b>Отдел:</b> @right.RequestUserUnit</p>
                                 }
                             }
-                        </td>
-                    </tr>
-                }
+                        }
+                        @if (!string.IsNullOrEmpty(right.Description))
+                        {
+                            <p><b>Описание права:</b> @right.Description</p>
+                        }
+                    </td>
+                </tr>
+            }
             </tbody>
 
         </table>

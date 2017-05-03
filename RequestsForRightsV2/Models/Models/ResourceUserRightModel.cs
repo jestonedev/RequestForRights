@@ -20,5 +20,6 @@ namespace RequestsForRights.Web.Models.Models
         public DateTime? DateFrom { get; set; }
         public DateTime? DateDelegateFrom { get; set; }
         public DateTime? DateDelegateTo { get; set; }
+        public string Description { get; set; }
     }
 }

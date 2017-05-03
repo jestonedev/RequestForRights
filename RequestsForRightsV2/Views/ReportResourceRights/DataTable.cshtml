@@ -18,7 +18,16 @@
         <div class="text-center text-info">Права отсутствуют</div>
         return;
     }
-    @if (Model.Options.ReportDisplayStyle == ReportDisplayStyle.Cards)
+
+<div class="text-center text-info rr-report-total-alert">Всего сотрудников - @Model.Rights.GroupBy(r => new
+                                                                             {
+                                                                                 r.IdRequestUser,
+                                                                                 r.RequestUserSnp, 
+                                                                                 r.RequestUserDepartment, 
+                                                                                 r.RequestUserUnit
+                                                                             }).Count(), всего прав - @Model.Rights.Count()</div>
+
+@if (Model.Options.ReportDisplayStyle == ReportDisplayStyle.Cards)
 {
     foreach (var rightGroup in Model.Rights.GroupBy(r => new { r.IdRequestUser, r.RequestUserSnp, r.RequestUserDepartment, r.RequestUserUnit }))
     {
@@ -83,6 +92,11 @@
                                         <dt></dt>
                                         <dd>@right.DelegateFromUserUnit</dd>
                                     }
+                                }
+                                @if (!string.IsNullOrEmpty(right.Description))
+                                {
+                                    <dt>Описание права:</dt>
+                                    <dd>@right.Description</dd>
                                 }
                             </dl>
                         </li>
@@ -189,6 +203,10 @@ else
                             {
                                 <p><b>Отдел:</b> @right.RequestUserUnit</p>
                             }
+                        }
+                        @if (!string.IsNullOrEmpty(right.Description))
+                        {
+                            <p><b>Описание права:</b> @right.Description</p>
                         }
                     </td>
                 </tr>

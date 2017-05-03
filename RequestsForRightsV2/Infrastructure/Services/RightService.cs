@@ -42,9 +42,9 @@ namespace RequestsForRights.Web.Infrastructure.Services
                 {
                     requestRow.IdRequest,
                     requestRow.IdRequestType,
-                    DateFrom = stateRow.Date
+                    DateFrom = stateRow.Date,
                 };
-            var completedUsers = from completedRequestRow in completedRequests
+            var completedUsers = (from completedRequestRow in completedRequests
                 join requestUserAssocRow in _rightRepository.GetRequestUserAssocs()
                     on completedRequestRow.IdRequest equals requestUserAssocRow.IdRequest
                 where idRequestUser == null || requestUserAssocRow.IdRequestUser == idRequestUser.Value
@@ -55,7 +55,7 @@ namespace RequestsForRights.Web.Infrastructure.Services
                     completedRequestRow.DateFrom,
                     requestUserAssocRow.IdRequestUser,
                     requestUserAssocRow.IdRequestUserAssoc
-                };
+                }).ToList();
             date = date.Date.AddDays(1).AddSeconds(-1);
             var excludedUserDates = from completedUserRow in completedUsers
                 where completedUserRow.IdRequestType == 3 &&
@@ -76,7 +76,7 @@ namespace RequestsForRights.Web.Infrastructure.Services
                       (exUserRow == null || exUserRow.DisconnectDate < completedUserRow.DateFrom) &&
                       completedUserRow.DateFrom <= date
                 select completedUserRow;
-            var changingUserRightsAssoc = from userAssocRow in changingUserAssocs
+            var changingUserRightsAssoc = (from userAssocRow in changingUserAssocs
                 join rightAssocRow in _rightRepository.GetRequestUserRightAssocs()
                     on userAssocRow.IdRequestUserAssoc equals rightAssocRow.IdRequestUserAssoc
                 where idResource == null || rightAssocRow.ResourceRight.IdResource == idResource.Value
@@ -85,8 +85,9 @@ namespace RequestsForRights.Web.Infrastructure.Services
                     userAssocRow.IdRequestUser,
                     rightAssocRow.IdRequestRightGrantType,
                     rightAssocRow.IdResourceRight,
+                    rightAssocRow.Descirption,
                     userAssocRow.DateFrom
-                };
+                }).ToList();
             var lastRevokeRightDate = from rightAssocRow in changingUserRightsAssoc
                 where rightAssocRow.IdRequestRightGrantType == 2
                 group rightAssocRow.DateFrom by new
@@ -111,7 +112,7 @@ namespace RequestsForRights.Web.Infrastructure.Services
                       (revDateRow == null || revDateRow.RevokeDate < rightAssocRow.DateFrom)
                 select rightAssocRow;
             var lastCurrentUserRights = from userRight in currentUserRights
-                group userRight.DateFrom by new
+                group new { userRight.DateFrom, userRight.Descirption } by new
                 {
                     userRight.IdRequestUser,
                     userRight.IdResourceRight
@@ -121,7 +122,8 @@ namespace RequestsForRights.Web.Infrastructure.Services
                 {
                     gs.Key.IdRequestUser,
                     gs.Key.IdResourceRight,
-                    DateFrom = gs.Min()
+                    DateFrom = gs.Select(r => r.DateFrom).Min(),
+                    Description = gs.OrderByDescending(r => r.DateFrom).Select(r => r.Descirption).FirstOrDefault()
                 };
             return from userRight in lastCurrentUserRights
                    join requestUser in _rightRepository.GetRequestUsers()
@@ -139,7 +141,8 @@ namespace RequestsForRights.Web.Infrastructure.Services
                     IdResource = resourceRight.IdResource,
                     ResourceName = resourceRight.Resource.Name,
                     RightCategory = "Постоянное право",
-                    DateFrom = userRight.DateFrom
+                    DateFrom = userRight.DateFrom,
+                    Description = userRight.Description
                 };
         }
 

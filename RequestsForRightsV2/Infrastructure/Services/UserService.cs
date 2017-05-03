@@ -54,7 +54,7 @@ namespace RequestsForRights.Web.Infrastructure.Services
         {
             var users = _userRepository.FindUsers(snpPattern);
 
-            /*var lastStatesByRequest = from stateRow in _userRepository.GetRequestStates()
+            var lastStatesByRequest = from stateRow in _userRepository.GetRequestStates()
                                       group stateRow.IdRequestState by stateRow.IdRequest
                                           into gs
                                           select new
@@ -62,7 +62,7 @@ namespace RequestsForRights.Web.Infrastructure.Services
                                               IdRequest = gs.Key,
                                               IdRequestState = gs.Max()
                                           };
-            var completedRequests = from lastStateRow in lastStatesByRequest
+            var completedRequests = (from lastStateRow in lastStatesByRequest
                 join stateRow in _userRepository.GetRequestStates()
                     on lastStateRow.IdRequestState equals stateRow.IdRequestState
                 join requestRow in _userRepository.GetRequests()
@@ -76,7 +76,7 @@ namespace RequestsForRights.Web.Infrastructure.Services
                     requestRow.IdRequestType,
                     userAssocRow.IdRequestUser,
                     stateRow.Date
-                };
+                }).ToList();
 
             var lastRequestsDateForUsers = from row in completedRequests
                 group row.Date by row.IdRequestUser
@@ -87,7 +87,7 @@ namespace RequestsForRights.Web.Infrastructure.Services
                     IdRequestUser = gs.Key
                 };
 
-            completedRequests = from requestRow in completedRequests
+            completedRequests = (from requestRow in completedRequests
                 join lrRow in lastRequestsDateForUsers
                     on new {requestRow.IdRequestUser, requestRow.Date} equals
                     new {lrRow.IdRequestUser, lrRow.Date}
@@ -98,14 +98,14 @@ namespace RequestsForRights.Web.Infrastructure.Services
                     requestRow.IdRequestType,
                     requestRow.IdRequestUser,
                     requestRow.Date
-                };
+                }).ToList();
 
             var excludeUsers = from request in completedRequests
                 join userAssoc in _userRepository.GetRequestUserAssocs()
                     on request.IdRequest equals userAssoc.IdRequest
                 select userAssoc.RequestUser;
 
-            users = users.Except(excludeUsers);*/
+            users = users.Except(excludeUsers);
 
             return _securityRepository.FilterUsers(users).Take(maxCount);
         }

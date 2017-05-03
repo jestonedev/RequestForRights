@@ -758,3 +758,7 @@ button[name="deleteDeviceAddress"]{
 .rr-resource-request-perm-departments .checkbox.disabled label, .rr-resource-request-perm-departments .checkbox.disabled {
     cursor: not-allowed;
 }
+
+.rr-report-total-alert {
+    margin-bottom: 10px;
+}

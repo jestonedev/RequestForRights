@@ -84,9 +84,9 @@
                                 name="@Html.NameFor(r => r.RequestModel.Users[userIndex].Department)"
                                 id="@Html.IdFor(r => r.RequestModel.Users[userIndex].Department)"
                                 data-val="true"
-                                data-val-required="Департамент является обязательным для заполнения"
+                                data-val-required="Организация является обязательной для заполнения"
                                 aria-required="true">
-                            <option value="" selected>Выберите департамент</option>
+                            <option value="" selected>Выберите организацию</option>
                             @foreach (var department in Model.Departments)
                             {
                                 var selected = department.Name == Model.RequestModel.Users[userIndex].Department;
