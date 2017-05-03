@@ -149,6 +149,8 @@
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ReportDepartmentAndResourceRightsController.cs" />
+    <Compile Include="Controllers\ReportDepartmentRightsController.cs" />
     <Compile Include="Controllers\ReportResourceRightsController.cs" />
     <Compile Include="Controllers\ReportUserRightsController.cs" />
     <Compile Include="Controllers\RequestAddUserController.cs" />
@@ -218,8 +220,12 @@
     <Compile Include="Infrastructure\Services\RequestDelegatePermissionsService.cs" />
     <Compile Include="Infrastructure\Services\ResourceService.cs" />
     <Compile Include="Infrastructure\Services\ResourceGroupService.cs" />
+    <Compile Include="Infrastructure\ValueProviders\ReportDepartmentAndResourceRightsOptionsValueProvider.cs" />
+    <Compile Include="Infrastructure\ValueProviders\ReportDepartmentAndResourceRightsOptionsValueProviderFactory.cs" />
     <Compile Include="Infrastructure\ValueProviders\ReportOptionsValueProvider.cs" />
+    <Compile Include="Infrastructure\ValueProviders\ReportDepartmentRightsOptionsValueProvider.cs" />
     <Compile Include="Infrastructure\ValueProviders\ReportResourceRightsOptionsValueProvider.cs" />
+    <Compile Include="Infrastructure\ValueProviders\ReportDepartmentRightsOptionsValueProviderFactory.cs" />
     <Compile Include="Infrastructure\ValueProviders\ReportUserRightsOptionsValueProvider.cs" />
     <Compile Include="Infrastructure\ValueProviders\FilterOptionsValueProvider.cs" />
     <Compile Include="Infrastructure\ValueProviders\ReportUserRightsOptionsValueProviderFactory.cs" />
@@ -242,9 +248,13 @@
     <Compile Include="Models\Models\ResourceActFilesModel.cs" />
     <Compile Include="Models\Models\ResourcePersonActFilesModel.cs" />
     <Compile Include="Models\Models\ResourceUserRightModel.cs" />
+    <Compile Include="Models\ReportOptions\ReportDepartmentAndResourceRightsOptions.cs" />
     <Compile Include="Models\ReportOptions\ReportOptions.cs" />
+    <Compile Include="Models\ReportOptions\ReportDepartmentRightsOptions.cs" />
     <Compile Include="Models\ReportOptions\ReportResourceRightsOptions.cs" />
     <Compile Include="Models\ReportOptions\ReportUserRightsOptions.cs" />
+    <Compile Include="Models\ViewModels\ReportDepartmentAndResourceRightsViewModel.cs" />
+    <Compile Include="Models\ViewModels\ReportDepartmentRightsViewModel.cs" />
     <Compile Include="Models\ViewModels\RequestPermissionsDepartmentsModel.cs" />
     <Compile Include="Models\ViewModels\ReportUserRightsViewModel.cs" />
     <Compile Include="Models\ViewModels\ReportResourceRightsViewModel.cs" />
@@ -633,6 +643,12 @@
     <Content Include="Views\Resource\UsingActEditor.cshtml" />
     <Content Include="Views\Resource\ResourceFormPermissions.cshtml" />
     <Content Include="Views\Resource\DetailPermissions.cshtml" />
+    <Content Include="Views\ReportDepartmentRights\DataTable.cshtml" />
+    <Content Include="Views\ReportDepartmentRights\FilterControl.cshtml" />
+    <Content Include="Views\ReportDepartmentRights\Index.cshtml" />
+    <Content Include="Views\ReportDepartmentAndResourceRights\DataTable.cshtml" />
+    <Content Include="Views\ReportDepartmentAndResourceRights\FilterControl.cshtml" />
+    <Content Include="Views\ReportDepartmentAndResourceRights\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RequestsForRights.Database\RequestsForRights.Database.csproj">

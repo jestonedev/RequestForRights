@@ -7,5 +7,6 @@ namespace RequestsForRights.Database.Repositories.Interfaces
     {
         IQueryable<Resource> GetResources();
         IQueryable<RequestUser> GetUsers();
+        IQueryable<Department> GetDepartments();
     }
 }

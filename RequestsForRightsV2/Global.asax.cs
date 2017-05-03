@@ -1,8 +1,6 @@
-﻿using System;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
-using RequestsForRights.Web.Infrastructure.Logging;
 using RequestsForRights.Web.Infrastructure.ValueProviders;
 using RequestsForRights.Web.Models.FilterOptions;
 
@@ -20,6 +18,8 @@ namespace RequestsForRights.Web
             ValueProviderFactories.Factories.Add(new RequestsFilterOptionsValueProviderFactory());
             ValueProviderFactories.Factories.Add(new ReportUserRightsOptionsValueProviderFactory());
             ValueProviderFactories.Factories.Add(new ReportResourceRightsOptionsValueProviderFactory());
+            ValueProviderFactories.Factories.Add(new ReportDepartmentRightsOptionsValueProviderFactory());
+            ValueProviderFactories.Factories.Add(new ReportDepartmentAndResourceRightsOptionsValueProviderFactory());
             ClientDataTypeModelValidatorProvider.ResourceClassKey = "ErrorMessagesResource";
             DefaultModelBinder.ResourceClassKey = "ErrorMessagesResource";
         }

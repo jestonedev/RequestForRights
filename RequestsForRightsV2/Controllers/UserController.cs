@@ -71,7 +71,7 @@ namespace RequestsForRights.Web.Controllers
             {
                 return RedirectToAction("ForbiddenError", "Home");
             }
-            return Json(_rightService.GetPermanentRightsOnDate(date, requestUser.IdRequestUser, null),
+            return Json(_rightService.GetPermanentRightsOnDate(date, requestUser.IdRequestUser, null, null),
                 JsonRequestBehavior.AllowGet);
         }
 	}

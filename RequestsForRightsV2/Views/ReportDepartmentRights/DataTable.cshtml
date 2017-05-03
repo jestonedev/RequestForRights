@@ -1,0 +1,220 @@
+﻿@using System.Globalization
+@using RequestsForRights.Web.Infrastructure.Enums
+@model RequestsForRights.Web.Models.ViewModels.ReportDepartmentRightsViewModel
+
+@{
+    Layout = null;
+}
+
+<div id="main-table-wrapper" class="rr-table-wrapper">
+    @if (Model == null || Model.Rights == null || !Model.Rights.Any())
+    {
+        <div class="text-center text-info">Права отсутствуют</div>
+        return;
+    }
+
+    @if (!Model.Rights.Any())
+    {
+        <div class="text-center text-info">Права отсутствуют</div>
+        return;
+    }
+
+<div class="text-center text-info rr-report-total-alert">Всего сотрудников - @Model.Rights.GroupBy(r => new
+                                                                             {
+                                                                                 r.IdRequestUser,
+                                                                                 r.RequestUserSnp, 
+                                                                                 r.RequestUserDepartment, 
+                                                                                 r.RequestUserUnit
+                                                                             }).Count(), всего прав - @Model.Rights.Count()</div>
+
+@if (Model.Options.ReportDisplayStyle == ReportDisplayStyle.Cards)
+{
+    foreach (var rightGroup in Model.Rights.GroupBy(r => new { r.IdRequestUser, r.RequestUserSnp, r.RequestUserDepartment, r.RequestUserUnit }))
+    {
+        <div class="panel panel-primary rr-report-right-group" id="panel@(rightGroup.Key.IdRequestUser)">
+            <div class="panel-heading" role="tab" id="heading@(rightGroup.Key.IdRequestUser)">
+                <h4 class="panel-title">
+                    <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                    <a role="button" data-toggle="collapse"
+                       data-parent="#panel@(rightGroup.Key.IdRequestUser)"
+                       href="#collapse@(rightGroup.Key.IdRequestUser)"
+                       aria-expanded="true"
+                       aria-controls="collapse@(rightGroup.Key.IdRequestUser)">
+                        Сотрудник «@rightGroup.Key.RequestUserSnp»
+                    </a>
+                </h4>
+            </div>
+            <div id="collapse@(rightGroup.Key.IdRequestUser)" class="panel-collapse collapse in"
+                 role="tabpanel" aria-labelledby="heading@(rightGroup.Key.IdRequestUser)">
+                <div class="panel-body">
+                    <dl class="dl-horizontal">
+                        <dt>Департамент</dt>
+                        <dd>@rightGroup.Key.RequestUserDepartment</dd>
+                        @if (rightGroup.Key.RequestUserUnit != null)
+                        {
+                            <dt>Отдел</dt>
+                            <dd>@rightGroup.Key.RequestUserUnit</dd>
+                        }
+                    </dl>
+                </div>
+                <ul class="list-group">
+                    @foreach (var right in rightGroup.OrderBy(r => r.ResourceName).Select(r => r))
+                    {
+                        <li class="list-group-item">
+                            <dl class="dl-horizontal">
+                                <dt>Ресурс</dt>
+                                <dd>@right.ResourceName</dd>
+                                <dt>Право</dt>
+                                <dd>@right.ResourceRightName</dd>
+                                @if (right.DateDelegateFrom == null)
+                                {
+                                    <dt>Дата и время выдачи</dt>
+                                    <dd>@right.DateFrom</dd>
+                                }
+                                <dt>Категория</dt>
+                                <dd>@right.RightCategory</dd>
+                                @if (right.IdDelegateFromUser != null)
+                                {
+                                    if (right.DateDelegateFrom != null)
+                                    {
+                                        <dt>Дата начала действия</dt>
+                                        <dd>@right.DateDelegateFrom.Value.ToString("dd.MM.yyyy", CultureInfo.CurrentCulture)</dd>
+                                    }
+                                    if (right.DateDelegateTo != null)
+                                    {
+                                        <dt>Дата окончания</dt>
+                                        <dd>@right.DateDelegateTo.Value.ToString("dd.MM.yyyy", CultureInfo.CurrentCulture)</dd>
+                                    }
+                                    <dt>Делегировано от</dt>
+                                    <dd>@right.DelegateFromUserSnp</dd>
+                                    <dt></dt>
+                                    <dd>@right.DelegateFromUserDepartment</dd>
+                                    if (right.DelegateFromUserUnit != null)
+                                    {
+                                        <dt></dt>
+                                        <dd>@right.DelegateFromUserUnit</dd>
+                                    }
+                                }
+                                @if (!string.IsNullOrEmpty(right.Description))
+                                {
+                                    <dt>Описание права:</dt>
+                                    <dd>@right.Description</dd>
+                                }
+                            </dl>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    }
+}
+else
+{
+    var headers = new[]
+        {
+            new
+            {
+                Name = "Сотрудник",
+                Field = "RequestUserSnp",
+                MinWidth = 200
+            },
+            new
+            {
+                Name = "Право",
+                Field = "ResourceRightName",
+                MinWidth = 100
+            },
+            new
+            {
+                Name = "Когда выдано",
+                Field = "DateFrom",
+                MinWidth = 135
+            },
+            new
+            {
+                Name = "Категория",
+                Field = "RightCategory",
+                MinWidth = 110
+            }
+        };
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                @foreach (var header in headers)
+                {
+                    var iconClass = "glyphicon-sort";
+                    var sortDirection = RequestsForRights.Web.Infrastructure.Enums.SortDirection.Asc;
+                    if (header.Field == Model.Options.SortField)
+                    {
+                        iconClass = Model.Options.SortDirection == RequestsForRights.Web.Infrastructure.Enums.SortDirection.Asc ?
+                            "glyphicon-sort-by-attributes" :
+                            "glyphicon-sort-by-attributes-alt";
+                        sortDirection = Model.Options.SortDirection ==
+                                        RequestsForRights.Web.Infrastructure.Enums.SortDirection.Asc ?
+                            RequestsForRights.Web.Infrastructure.Enums.SortDirection.Desc : RequestsForRights.Web.Infrastructure.Enums.SortDirection.Asc;
+                    }
+                    <th class="rr-column rr-column-header"
+                        style="min-width: @(header.MinWidth)px">
+                        <a href="@Url.Action("GetDataTable", new {SortField = header.Field, SortDirection = sortDirection})">
+                            @header.Name
+                            <span class="glyphicon @iconClass pull-right" aria-hidden="true"></span>
+                        </a>
+                    </th>
+                }
+                <th>Дополнительная информация</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var right in Model.Rights)
+            {
+                <tr>
+                    <td class="rr-column">
+                        <p>@right.RequestUserSnp</p>
+                        <p class="rr-sub-cell-department">@right.RequestUserDepartment</p>
+                        @if (right.RequestUserUnit != null)
+                        {
+                            <p class="rr-sub-cell-unit">@right.RequestUserUnit</p>
+                        }
+                    </td>
+                    <td class="rr-column">@right.ResourceRightName</td>
+                    <td class="rr-column">
+                        @if (right.DateDelegateFrom != null)
+                        {
+                            @("н/д")
+                        }
+                        else
+                        {
+                            @right.DateFrom
+                        }
+                    </td>
+                    <td class="rr-column">@right.RightCategory</td>
+                    <td>
+                        @if (right.DateDelegateFrom != null)
+                        {
+                            <p><b>Дата начала действия:</b> @right.DateDelegateFrom.Value.ToString("dd.MM.yyyy", CultureInfo.CurrentCulture)</p>
+                        }
+                        @if (right.DateDelegateTo != null)
+                        {
+                            <p><b>Дата окончания действия:</b> @right.DateDelegateTo.Value.ToString("dd.MM.yyyy", CultureInfo.CurrentCulture)</p>
+                        }
+                        @if (right.DelegateFromUserSnp != null)
+                        {
+                            <p><b>Делегировано к:</b> @right.RequestUserSnp</p>
+                            <p><b>Департамент:</b> @right.RequestUserDepartment</p>
+                            if (right.RequestUserUnit != null)
+                            {
+                                <p><b>Отдел:</b> @right.RequestUserUnit</p>
+                            }
+                        }
+                        @if (!string.IsNullOrEmpty(right.Description))
+                        {
+                            <p><b>Описание права:</b> @right.Description</p>
+                        }
+                    </td>
+                </tr>
+            }
+            </tbody>
+
+        </table>
+    }
+</div>

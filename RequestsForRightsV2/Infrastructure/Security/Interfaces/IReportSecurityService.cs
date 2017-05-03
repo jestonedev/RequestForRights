@@ -9,5 +9,8 @@ namespace RequestsForRights.Web.Infrastructure.Security.Interfaces
         bool CanReadUserPermissions();
         bool CanReadUserPermissions(RequestUser requestUser);
         IQueryable<Resource> FilterResources(IQueryable<Resource> resources);
+        IQueryable<Department> FilterDepartments(IQueryable<Department> departments);
+
+        bool CanReadDepartmentPermissions();
     }
 }

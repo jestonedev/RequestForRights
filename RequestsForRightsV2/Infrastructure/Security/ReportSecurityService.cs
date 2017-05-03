@@ -70,5 +70,34 @@ namespace RequestsForRights.Web.Infrastructure.Security
         {
             return _userSecurityService.FilterUsers(new[] {entity}.AsQueryable()).Any();
         }
+
+        public bool CanReadDepartmentPermissions()
+        {
+            return CanReadUserPermissions();
+        }
+
+        public bool CanReadDepartmentAndResourcePermissions()
+        {
+            return CanReadResourcePermissions();
+        }
+
+        public IQueryable<Department> FilterDepartments(IQueryable<Department> departments)
+        {
+            if (InRole(new[]
+            {
+                AclRole.Administrator, AclRole.Dispatcher,
+                AclRole.Executor, 
+                AclRole.ResourceManager
+            }))
+            {
+                return departments;
+            }
+            if (InRole(AclRole.Requester))
+            {
+                var allowedDepartments = GetUserAllowedDepartments().Select(r => r.IdDepartment);
+                return departments.Where(r => allowedDepartments.Contains(r.IdDepartment));
+            }
+            return new List<Department>().AsQueryable();
+        }
     }
 }
