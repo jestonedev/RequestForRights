@@ -84,7 +84,7 @@ namespace RequestsForRights.Web.Infrastructure.Services
                     _resourceRepository.GetResourceGroups().OrderBy(r => r.IdResourceGroup == 5).ThenBy(r => r.Name),
                 ResourceInformationTypes = _resourceRepository.GetResourceInformationTypes().OrderBy(r => r.Name),
                 Departments = departments,
-                RequestPermissionsDepartments = departments.Select(r =>
+                RequestPermissionsDepartments = departments.Where(r => !r.IsAlienDepartment).Select(r =>
                     new RequestPermissionsDepartmentsModel
                     {
                         IdDepartment = r.IdDepartment,

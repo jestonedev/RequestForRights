@@ -10,10 +10,27 @@
     <div class="col-xs-12 rr-resource-department-id">
         <div class="form-group">
             @Html.RequiredLabelFor(r => r.Resource.IdOperatorDepartment, new {@class = "control-label"})
-            @Html.DropDownListFor(r => r.Resource.IdOperatorDepartment,
-                new SelectList(Model.Departments, "IdDepartment", "Name", Model.Resource.IdOperatorDepartment),
-                "Выберите департамент-оператор",
-                new {@class = "form-control"})
+            <select class="form-control" name="Resource.IdOperatorDepartment" id="Resource_IdOperatorDepartment">
+                <option selected value="">Выберите организацию-оператора</option>
+                @foreach (var departmentsGroup in Model.Departments.GroupBy(r => r.IsAlienDepartment).OrderBy(r => r.Key))
+                {
+                    if (departmentsGroup.Key)
+                    {
+                        @Html.Raw("<optgroup label=\"Сторонние организации\">")
+                    }
+                    foreach (var department in departmentsGroup)
+                    {
+                        var selected = Model.Resource.IdOperatorDepartment == department.IdDepartment;
+                        <option @(selected ? "selected" : "") value="@department.IdDepartment">
+                            @department.Name
+                        </option>
+                    }
+                    if (departmentsGroup.Key)
+                    {
+                        @Html.Raw("</optgroup>")
+                    }
+                }
+            </select>
             @Html.ValidationMessageFor(r => r.Resource.IdOperatorDepartment)
         </div>
     </div>

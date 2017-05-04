@@ -17,8 +17,8 @@ namespace RequestsForRights.Domain.Entities
         public string Name { get; set; }
         [DisplayName("Описание")]
         public string Description { get; set; }
-        [DisplayName("Департамент-владелец")]
-        [Required(ErrorMessage = "Департамент-владелец является обязательным для заполнения")]
+        [DisplayName("Организация-владелец")]
+        [Required(ErrorMessage = "Организация-владелец является обязательной для заполнения")]
         public int IdOwnerDepartment { get; set; }
         [ForeignKey("IdOwnerDepartment")]
         public virtual Department OwnerDepartment { get; set; }
@@ -31,8 +31,8 @@ namespace RequestsForRights.Domain.Entities
         public bool Deleted { get; set; }
         // Federal registry ext fields
 
-        [DisplayName("Департамент-оператор")]
-        [Required(ErrorMessage = "Департамент-оператор является обязательным для заполнения")]
+        [DisplayName("Организация-оператор")]
+        [Required(ErrorMessage = "Организация-оператор является обязательной для заполнения")]
         [DefaultValue(24)]
         public int IdOperatorDepartment { get; set; }
         [ForeignKey("IdOperatorDepartment")]
