@@ -621,7 +621,7 @@ namespace RequestsForRights.Web.Infrastructure.Services
                 select new RequestsCountByStateTypesViewModel
                 {
                     RequestStateType = requestStateTypesRow,
-                    RequestCount = rstRow == null ? 0 : (rstRow.Count > 99 ? 99 : rstRow.Count)
+                    RequestCount = rstRow == null ? 0 : rstRow.Count
                 };
         }
     }

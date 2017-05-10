@@ -143,6 +143,14 @@ namespace RequestsForRights.Web.Infrastructure.Utilities.EmailNotify
         public IEnumerable<MailMessage> CreateRequestEmails(Request request)
         {
             var messages = new List<MailMessage>();
+
+            // TODO: delete later
+            if (request.User.IdUser == 109)
+            {
+                return messages;
+            }
+            /////////////////////
+            
             var requester = request.User;
             var waitAgreementUsers = _requestService.GetWaitAgreementUsers(request.IdRequest,
                 _requestService.GetRequestAgreements(request.IdRequest).ToList()).ToList();
@@ -240,6 +248,14 @@ namespace RequestsForRights.Web.Infrastructure.Utilities.EmailNotify
         public IEnumerable<MailMessage> UpdateRequestEmails(Request request)
         {
             var messages = new List<MailMessage>();
+
+            // TODO: delete later
+            if (request.User.IdUser == 109)
+            {
+                return messages;
+            }
+            /////////////////////
+
             if (_requestSecurityService.InRole(AclRole.Administrator))
             {
                 return messages;
@@ -382,6 +398,14 @@ namespace RequestsForRights.Web.Infrastructure.Utilities.EmailNotify
         public IEnumerable<MailMessage> SetRequestStateEmails(Request request, int idRequestStateType, string agreementReason)
         {
             var messages = new List<MailMessage>();
+
+            // TODO: delete later
+            if (request.User.IdUser == 109)
+            {
+                return messages;
+            }
+            /////////////////////
+
             var lastRequestState = request.RequestStates.OrderByDescending(r => r.IdRequestState).
                 FirstOrDefault();
             if (lastRequestState == null ||

@@ -13,7 +13,7 @@
             @RequestHelper.PluralRequestState(value.RequestStateType.Name)
             @if (value.RequestCount > 0)
             {
-                <span class="rr-requests-menu-badge badge">@value.RequestCount</span>
+                <span class="rr-requests-menu-badge badge">@(value.RequestCount > 99 ? "99+" : value.RequestCount.ToString())</span>
             }
         </a>
     </li>
