@@ -214,6 +214,10 @@
     <Compile Include="Migrations\201705030159583_Corrections1.Designer.cs">
       <DependentUpon>201705030159583_Corrections1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201705100834243_AgreementSendDate.cs" />
+    <Compile Include="Migrations\201705100834243_AgreementSendDate.Designer.cs">
+      <DependentUpon>201705100834243_AgreementSendDate.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\Interfaces\IReportRepository.cs" />
@@ -368,6 +372,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201705030159583_Corrections1.resx">
       <DependentUpon>201705030159583_Corrections1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705100834243_AgreementSendDate.resx">
+      <DependentUpon>201705100834243_AgreementSendDate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

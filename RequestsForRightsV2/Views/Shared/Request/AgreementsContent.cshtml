@@ -39,6 +39,16 @@
                                         <dt>Почтовый адрес</dt>
                                         <dd><a href="mailto:@(user.Email)">@user.Email</a></dd>
                                     }
+                                    @{
+                                        var userAgreement = user.RequestAgreements.FirstOrDefault(r => r.IdRequest == idRequest);
+                                        var sendDate = Model.RequestModel.Date;
+                                        if (userAgreement != null)
+                                        {
+                                            sendDate = userAgreement.SendDate;
+                                        }
+                                    }
+                                    <dt>Отправлено на согласование</dt>
+                                    <dd>@(sendDate != null ? sendDate.ToString("dd.MM.yyyy HH:mm") : "")</dd>
                                     <dt>Телефон</dt>
                                     <dd>@user.Phone</dd>
                                     <dt>Тип согласования</dt>
@@ -77,6 +87,8 @@
                                     }
                                     <dt>Телефон</dt>
                                     <dd>@agreement.User.Phone</dd>
+                                    <dt>Отправлено на согласование</dt>
+                                    <dd>@(agreement.SendDate != null ? agreement.SendDate.Value.ToString("dd.MM.yyyy HH:mm") : "")</dd>
                                     <dt>Дата согласования</dt>
                                     <dd>@(agreement.Date != null ? agreement.Date.Value.ToString("dd.MM.yyyy HH:mm") : "")</dd>
                                     <dt>Тип согласования</dt>
@@ -112,6 +124,8 @@
                                 }
                                 <dt>Телефон</dt>
                                 <dd>@agreement.User.Phone</dd>
+                                <dt>Отправлено на согласование</dt>
+                                <dd>@(agreement.SendDate != null ? agreement.SendDate.Value.ToString("dd.MM.yyyy HH:mm") : "")</dd>
                                 <dt>Дата отклонения</dt>
                                 <dd>@(agreement.Date != null ? agreement.Date.Value.ToString("dd.MM.yyyy HH:mm") : "")</dd>
                                 <dt>Причина отклонения</dt>

@@ -424,6 +424,7 @@ namespace RequestsForRights.Web.Infrastructure.Services
                 IdRequest = idRequest,
                 IdAgreementType = 2,
                 IdAgreementState = 1,
+                SendDate = DateTime.Now,
                 User = new AclUser
                 {
                     Login = coordinator.Login,

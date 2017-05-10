@@ -166,6 +166,29 @@ namespace RequestsForRights.Database
                 .HasColumnAnnotation(
                     IndexAnnotation.AnnotationName,
                     new IndexAnnotation(new IndexAttribute("IX_RequestStates_IdRequest_IdRequestStateType_Date_Deleted", 4)));
+
+
+            modelBuilder.Entity<RequestState>()
+                .Property(f => f.IdRequest)
+                .HasColumnAnnotation(
+                    IndexAnnotation.AnnotationName,
+                    new IndexAnnotation(new IndexAttribute("IX_RequestStates", 1)));
+            modelBuilder.Entity<RequestState>()
+                .Property(f => f.IdRequestState)
+                .HasColumnAnnotation(
+                    IndexAnnotation.AnnotationName,
+                    new IndexAnnotation(new IndexAttribute("IX_RequestStates", 2)));
+            modelBuilder.Entity<RequestState>()
+                .Property(f => f.IdRequestStateType)
+                .HasColumnAnnotation(
+                    IndexAnnotation.AnnotationName,
+                    new IndexAnnotation(new IndexAttribute("IX_RequestStates", 3)));
+            modelBuilder.Entity<RequestState>()
+                .Property(f => f.Date)
+                .HasColumnAnnotation(
+                    IndexAnnotation.AnnotationName,
+                    new IndexAnnotation(new IndexAttribute("IX_RequestStates", 4)));
+
             modelBuilder.Entity<RequestUserRightAssoc>()
                 .Property(f => f.IdResourceRight)
                 .HasColumnAnnotation(

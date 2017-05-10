@@ -762,3 +762,13 @@ button[name="deleteDeviceAddress"]{
 .rr-report-total-alert {
     margin-bottom: 10px;
 }
+
+@media (min-width: 768px) {
+    .rr-agreements .dl-horizontal dd {
+        margin-left: 240px;
+    }
+
+    .rr-agreements .dl-horizontal dt {
+        width: 220px;
+    }
+}

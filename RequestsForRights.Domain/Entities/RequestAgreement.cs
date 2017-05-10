@@ -10,6 +10,7 @@ namespace RequestsForRights.Domain.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int IdRequestAgreement { get; set; }
         public string Description { get; set; }
+        public DateTime? SendDate { get; set; }
         public DateTime? Date { get; set; }
         public int IdUser { get; set; }
         public AclUser User { get; set; }
