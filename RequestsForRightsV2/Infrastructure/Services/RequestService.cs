@@ -40,13 +40,14 @@ namespace RequestsForRights.Web.Infrastructure.Services
 
         public IQueryable<Request> GetNotSeenRequests()
         {
-            var requests = RequestSecurityService.FilterRequests(RequestsRepository.GetRequests());
+            var requests = RequestSecurityService.FilterRequests(RequestsRepository.GetRequests())
+                .Where(r => r.RequestStates.FirstOrDefault(rs => rs.Date == new DateTime(2017, 4, 1)) == null);
             var requestsUserLastSeens = RequestsRepository.GetRequestsUserLastSeens(RequestSecurityService.CurrentUser);
             return from request in requests
                 join lastSeen in requestsUserLastSeens
                     on request.IdRequest equals lastSeen.IdRequest into joinedRequestsAndLastSeens
                 from joinedLastSeensRow in joinedRequestsAndLastSeens.DefaultIfEmpty()
-                   where joinedLastSeensRow == null && 
+                   where joinedLastSeensRow == null &&
                        request.User.Login.ToLower() != RequestSecurityService.CurrentUser.ToLower()
                 select request;
         }
