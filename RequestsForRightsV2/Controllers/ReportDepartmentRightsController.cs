@@ -62,7 +62,7 @@ namespace RequestsForRights.Web.Controllers
             {
                 return PartialView("DataTable", null);
             }
-            if (!_reportSecurityService.CanReadResourcePermissions())
+            if (!_reportSecurityService.CanReadDepartmentPermissions())
             {
                 return PartialView("DataTable", null);
             }

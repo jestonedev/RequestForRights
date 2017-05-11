@@ -12,5 +12,6 @@ namespace RequestsForRights.Web.Infrastructure.Security.Interfaces
         IQueryable<Department> FilterDepartments(IQueryable<Department> departments);
 
         bool CanReadDepartmentPermissions();
+        bool CanReadDepartmentAndResourcePermissions();
     }
 }

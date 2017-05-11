@@ -81,7 +81,9 @@
         @foreach (var request in Model.VisibleRequests)
         {
             var rowClass = "";
-            if (requestService.DidNotSeenRequest(request))
+            var requestState = request.RequestStates.FirstOrDefault();
+            if (requestState != null && requestState.Date != new DateTime(2017, 4, 1) && 
+                requestService.DidNotSeenRequest(request))
             {
                 rowClass = "warning";
             }

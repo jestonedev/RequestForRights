@@ -45,7 +45,7 @@ namespace RequestsForRights.Web.Controllers
 
         public ActionResult Index(ReportDepartmentAndResourceRightsOptions options)
         {
-            if (!_reportSecurityService.CanReadResourcePermissions())
+            if (!_reportSecurityService.CanReadDepartmentAndResourcePermissions())
             {
                 return RedirectToAction("ForbiddenError", "Home");
             }
@@ -63,7 +63,7 @@ namespace RequestsForRights.Web.Controllers
             {
                 return PartialView("DataTable", null);
             }
-            if (!_reportSecurityService.CanReadResourcePermissions())
+            if (!_reportSecurityService.CanReadDepartmentAndResourcePermissions())
             {
                 return PartialView("DataTable", null);
             }
