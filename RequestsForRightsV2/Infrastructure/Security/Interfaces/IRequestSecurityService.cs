@@ -20,6 +20,8 @@ namespace RequestsForRights.Web.Infrastructure.Security.Interfaces
         bool CanAddCoordinator();
         bool CanAddCoordinator(RequestModel<T> request);
         bool CanAddCoordinator(Request request);
+        bool CanAcceptCancelRequest(Request request);
+        bool CanAcceptCancelRequest(RequestModel<T> request);
         bool CanSetRequestState(RequestModel<T> request, int idRequestStateType);
         bool CanSetRequestState(Request request, int idRequestStateType);
         bool CanSetRequestStateGlobal(Request request, int idRequestStateType);

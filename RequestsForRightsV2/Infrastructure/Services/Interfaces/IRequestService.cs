@@ -36,5 +36,6 @@ namespace RequestsForRights.Web.Infrastructure.Services.Interfaces
         RequestExtComment AddComment(int idRequest, string comment);
         void SetRequestState(int idRequest, int idRequestStateType, string reason);
         void AddCooordinator(int idRequest, Coordinator coordinator);
+        void AcceptCancelRequest(int idRequest);
     }
 }

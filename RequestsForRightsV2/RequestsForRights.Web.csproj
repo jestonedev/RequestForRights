@@ -317,6 +317,9 @@
     <Content Include="Content\Images\Help\Delete_delegate_button.png" />
     <Content Include="Content\Images\Help\delete_right_button.png" />
     <Content Include="Content\Images\Help\detail_button.PNG" />
+    <Content Include="Content\Images\Help\Otchet_1.png" />
+    <Content Include="Content\Images\Help\Otchet_2.png" />
+    <Content Include="Content\Images\Help\Otchet_3.png" />
     <Content Include="Content\Images\Help\requests_button.PNG" />
     <Content Include="Content\Images\Help\request_add_agreement.png" />
     <Content Include="Content\Images\Help\request_add_agreement_2.png" />

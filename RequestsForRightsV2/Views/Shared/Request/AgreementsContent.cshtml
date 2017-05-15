@@ -40,7 +40,8 @@
                                         <dd><a href="mailto:@(user.Email)">@user.Email</a></dd>
                                     }
                                     @{
-                                        var userAgreement = user.RequestAgreements.FirstOrDefault(r => r.IdRequest == idRequest);
+                                        var userAgreement = user.RequestAgreements.FirstOrDefault(r => r.IdRequest == idRequest  &&
+                                            r.IdAgreementState == 1);
                                         var sendDate = Model.RequestModel.Date;
                                         if (userAgreement != null)
                                         {
@@ -53,8 +54,8 @@
                                     <dd>@user.Phone</dd>
                                     <dt>Тип согласования</dt>
                                     <dd>
-                                        @(user.RequestAgreements.Where(r => r.IdRequest == idRequest).
-                                                Select(r => r.AgreementType.Name).FirstOrDefault() ?? "Первичное")
+                                        @(user.RequestAgreements.Any(r => r.IdRequest == idRequest && r.IdAgreementType == 2)
+                                        ? "Дополнительное" : "Первичное")
                                     </dd>
                                 </dl>   
                             }
@@ -88,7 +89,8 @@
                                     <dt>Телефон</dt>
                                     <dd>@agreement.User.Phone</dd>
                                     <dt>Отправлено на согласование</dt>
-                                    <dd>@(agreement.SendDate != null ? agreement.SendDate.Value.ToString("dd.MM.yyyy HH:mm") : "")</dd>
+                                    <dd>@(agreement.SendDate != null ? agreement.SendDate.Value.ToString("dd.MM.yyyy HH:mm") :
+                                    Model.RequestModel.Date != null ? Model.RequestModel.Date.ToString("dd.MM.yyyy HH:mm") : "")</dd>
                                     <dt>Дата согласования</dt>
                                     <dd>@(agreement.Date != null ? agreement.Date.Value.ToString("dd.MM.yyyy HH:mm") : "")</dd>
                                     <dt>Тип согласования</dt>

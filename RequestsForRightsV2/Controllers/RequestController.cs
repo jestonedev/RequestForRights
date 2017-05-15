@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.Entity.Infrastructure;
+using System.Linq;
 using System.Web.Mvc;
 using RequestsForRights.Domain.Entities;
 using RequestsForRights.Web.Infrastructure.Helpers;
@@ -276,6 +277,33 @@ namespace RequestsForRights.Web.Controllers
                 var emails = _emailBuilder.SetRequestStateEmails(
                     _requestService.GetRequestById(idRequest, true),
                     idRequestStateType, agreementReason);
+                _emailSender.Send(emails);
+            }
+            catch (DbUpdateException e)
+            {
+                return RedirectToAction("ConflictError", "Home",
+                    new { message = ExceptionHelper.RollToInnerException(e).Message });
+            }
+            ViewData["SecurityService"] = _securityService;
+            return PartialView("Request/AgreementsContent", _requestService.GetRequestViewModelBy(request));
+        }
+
+        public ActionResult AcceptCancelRequest(int idRequest)
+        {
+            var request = _requestService.GetRequestById(idRequest);
+            if (!_securityService.CanAcceptCancelRequest(request))
+            {
+                return RedirectToAction("ForbiddenError", "Home");
+            }
+            try
+            {
+                _requestService.AcceptCancelRequest(idRequest);
+                _requestService.SaveChanges();
+                var agreementReason = request.RequestAgreements.Where(r => r.IdAgreementState == 3).Select(r => r.Description)
+                    .Aggregate((v, acc) => v + "<br>" + acc);
+                var emails = _emailBuilder.SetRequestStateEmails(
+                    _requestService.GetRequestById(idRequest, true),
+                    5, agreementReason);
                 _emailSender.Send(emails);
             }
             catch (DbUpdateException e)

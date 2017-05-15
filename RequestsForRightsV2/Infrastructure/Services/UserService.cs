@@ -105,7 +105,7 @@ namespace RequestsForRights.Web.Infrastructure.Services
                     on request.IdRequest equals userAssoc.IdRequest
                 select userAssoc.RequestUser;
 
-            users = users.Except(excludeUsers);
+            users = users.ToList().Except(excludeUsers).AsQueryable();
 
             return _securityRepository.FilterUsers(users).Take(maxCount);
         }

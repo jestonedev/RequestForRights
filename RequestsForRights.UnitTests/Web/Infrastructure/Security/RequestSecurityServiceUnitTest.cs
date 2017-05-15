@@ -2001,6 +2001,9 @@ namespace RequestsForRights.UnitTests.Web.Infrastructure.Security
                     ? u.AclDepartments.AsQueryable()
                     : new List<Department> { u.Department }.AsQueryable());
             }
+            securityRepositoryMock.Setup(r => r.GetUsersBy(2)).Returns(() => 
+                dbContext.AclUsers.Where(r =>
+                r.Roles.Any(role => role.IdRole == 2)).AsQueryable());
             securityRepositoryMock.Setup(r => r.GetUserRoles(null)).Returns(() => user.Roles.AsQueryable());
             var requestRepositoryMock = new Mock<IRequestRepository>();
             foreach (var request in dbContext.Requests)

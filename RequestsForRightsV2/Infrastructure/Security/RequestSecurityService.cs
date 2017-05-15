@@ -254,6 +254,21 @@ namespace RequestsForRights.Web.Infrastructure.Security
                 new[] { 1, 2 }.Contains(idRequestStateType);
         }
 
+        public bool CanAcceptCancelRequest(RequestModel<T> entity)
+        {
+            var request = _requestRepository.GetRequestById(entity.IdRequest);
+            return CanAcceptCancelRequest(request);
+        }
+
+        public bool CanAcceptCancelRequest(Request request)
+        {
+            var idRequestStateType = request.RequestStates.OrderBy(rs => rs.IdRequestState).
+                Last(r => !r.Deleted).IdRequestStateType;
+            return InRole(new[] { AclRole.Dispatcher, AclRole.Administrator }) &&
+                 new[] { 1, 2 }.Contains(idRequestStateType) && 
+                 request.RequestAgreements.Any(r => r.IdAgreementType == 2 && r.IdAgreementState == 3);
+        }
+
         public bool CanSetRequestState(Request request, int idRequestStateType)
         {
             if (request == null)
@@ -323,8 +338,10 @@ namespace RequestsForRights.Web.Infrastructure.Security
 
         private bool DispatcherCanSetRequestState(Request request)
         {
-            return request.RequestStates.OrderBy(rs => rs.IdRequestState).
-                Last(r => !r.Deleted).IdRequestStateType == 2;
+            return
+                request.RequestStates.Any(r => !r.Deleted && r.IdRequestStateType == 2) &&
+                new[] {1, 2}.Contains(request.RequestStates.OrderBy(rs => rs.IdRequestState).
+                    Last(r => !r.Deleted).IdRequestStateType);
         }
 
         private bool ResourceOperatorCanSetRequestState(Request request)

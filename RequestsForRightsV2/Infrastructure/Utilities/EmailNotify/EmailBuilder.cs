@@ -347,7 +347,7 @@ namespace RequestsForRights.Web.Infrastructure.Utilities.EmailNotify
                     request.IdRequest, request.RequestType.Name.ToLower());
             var body = string.Format("Здравствуйте, {0}!<br>{1} на <b>«{2}»</b>.",
                 requester.Snp, subject, RequestHelper.VerbRequestState(requestStateType.Name).ToLower());
-            if (!string.IsNullOrEmpty(agreementReason))
+            if (!string.IsNullOrEmpty(agreementReason) && requestStateType.IdRequestStateType == 5)
             {
                 body += "<br><br><b>Причина: </b>" + agreementReason;
             }
@@ -374,11 +374,21 @@ namespace RequestsForRights.Web.Infrastructure.Utilities.EmailNotify
                 RequestHelper.VerbRequestState(requestStateType.Name).ToLower());
             if (requestStateType.IdRequestStateType == 2)
             {
-                subject = string.Format("Поступила заявка №{0} {1}",
-                    request.IdRequest, request.RequestType.Name.ToLower());
+                if (request.RequestAgreements.Any(r => r.IdAgreementType == 2) &&
+                    request.RequestAgreements.Where(r => r.IdAgreementType == 2).
+                    All(r => r.IdAgreementState != 1))
+                {
+                    subject = string.Format("По заявке №{0} {1} завершено дополнительное согласование",
+                        request.IdRequest, request.RequestType.Name.ToLower());
+                }
+                else
+                {
+                    subject = string.Format("Поступила заявка №{0} {1}",
+                        request.IdRequest, request.RequestType.Name.ToLower());
+                }
                 body = string.Format("Здравствуйте, {0}!<br>{1}.", user.Snp, subject);
             }
-            if (!string.IsNullOrEmpty(agreementReason))
+            if (!string.IsNullOrEmpty(agreementReason) && requestStateType.IdRequestStateType == 5)
             {
                 body += "<br><br><b>Причина: </b>" + agreementReason;
             }
@@ -409,7 +419,8 @@ namespace RequestsForRights.Web.Infrastructure.Utilities.EmailNotify
             var lastRequestState = request.RequestStates.OrderByDescending(r => r.IdRequestState).
                 FirstOrDefault();
             if (lastRequestState == null ||
-                lastRequestState.IdRequestStateType != idRequestStateType)
+                (lastRequestState.IdRequestStateType != idRequestStateType && 
+                !(lastRequestState.IdRequestStateType == 2 && idRequestStateType == 5)))
             {
                 return messages;
             }

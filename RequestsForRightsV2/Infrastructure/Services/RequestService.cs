@@ -370,11 +370,6 @@ namespace RequestsForRights.Web.Infrastructure.Services
                     RequestsRepository.AddRequestState(requestState, true);
                     break;
                 case 2:
-                    if (RequestSecurityService.InRole(AclRole.Administrator))
-                    {
-                        RequestsRepository.AddRequestState(requestState, false);
-                        break;
-                    }
                     if (RequestSecurityService.InRole(AclRole.Coordinator) &&
                         !waitAgreementUsers.Any(r =>
                             !r.RequestAgreements.Any(
@@ -383,6 +378,11 @@ namespace RequestsForRights.Web.Infrastructure.Services
                                       ra.IdAgreementType == 2) && r.IdUser == userInfo.IdUser))
                     {
                         agreement.IdAgreementType = 2;
+                    } else
+                    if (RequestSecurityService.InRole(AclRole.Administrator))
+                    {
+                        RequestsRepository.AddRequestState(requestState, false);
+                        break;
                     }
                     RequestsRepository.UpdateRequestAgreement(agreement);
                     if (!NeedAdditionalAgreements(idRequest, agreement))
@@ -394,7 +394,6 @@ namespace RequestsForRights.Web.Infrastructure.Services
                     RequestsRepository.AddRequestState(requestState, false);
                     break;
                 case 5:
-                    RequestsRepository.AddRequestState(requestState, false);
                     if (RequestSecurityService.InRole(AclRole.Coordinator) &&
                         !waitAgreementUsers.Any(r =>
                             !r.RequestAgreements.Any(
@@ -403,8 +402,18 @@ namespace RequestsForRights.Web.Infrastructure.Services
                                       ra.IdAgreementType == 2) && r.IdUser == userInfo.IdUser))
                     {
                         agreement.IdAgreementType = 2;
+                        requestState.IdRequestStateType = 2;
+                        RequestsRepository.UpdateRequestAgreement(agreement);
+                        if (!NeedAdditionalAgreements(idRequest, agreement))
+                        {
+                            RequestsRepository.AddRequestState(requestState, false);
+                        }
                     }
-                    RequestsRepository.UpdateRequestAgreement(agreement);
+                    else
+                    {
+                        RequestsRepository.UpdateRequestAgreement(agreement);
+                        RequestsRepository.AddRequestState(requestState, false);
+                    }
                     break;
                 case 4:
                     RequestsRepository.AddRequestState(new RequestState
@@ -454,6 +463,22 @@ namespace RequestsForRights.Web.Infrastructure.Services
             };
             RequestsRepository.AddRequestState(requestState, false);
             RequestsRepository.AddAdditionalAgreement(agreement);
+        }
+
+        public void AcceptCancelRequest(int idRequest)
+        {
+            var userInfo = RequestSecurityService.GetUserInfo();
+            if (userInfo == null)
+            {
+                throw new DbUpdateException("Неизвестный пользователь");
+            }
+            var requestState = new RequestState
+            {
+                IdRequest = idRequest,
+                IdRequestStateType = 5,
+                Date = DateTime.Now
+            };
+            RequestsRepository.AddRequestState(requestState, false);
         }
 
         private bool NeedAdditionalAgreements(int idRequest, RequestAgreement newAgreement)

@@ -221,6 +221,27 @@
                         Отклонить
                     </button>
                 }
+                @if (securityService.CanAcceptCancelRequest(Model.RequestModel))
+                {
+                    @Ajax.ActionLink(@"Подтвердить отклонение", "AcceptCancelRequest", "Request",
+                            new
+                            {
+                                idRequest = Model.RequestModel.IdRequest
+                            },
+                            new AjaxOptions
+                            {
+                                UpdateTargetId = "rr-agreements",
+                                InsertionMode = InsertionMode.Replace,
+                                OnFailure = "sendAgreementFailure",
+                                OnBegin = "beforeSendAgreement",
+                                OnSuccess = "sendAgreementSuccess"
+                            }, new
+                            {
+                                @class = "btn btn-default rr-accept-cancel-agreement-button",
+                                title = @"Подтвердить отклонение заявки",
+                                aria_lable = @"Подтвердить отклонение"
+                            })
+                }
             </div>
         </div>
     </div>

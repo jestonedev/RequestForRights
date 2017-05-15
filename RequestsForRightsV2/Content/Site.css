@@ -772,3 +772,7 @@ button[name="deleteDeviceAddress"]{
         width: 220px;
     }
 }
+
+.rr-agreement-panel > .btn-group a.rr-accept-cancel-agreement-button {
+    width: 14em;
+}
