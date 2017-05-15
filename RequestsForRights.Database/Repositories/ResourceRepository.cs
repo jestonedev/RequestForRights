@@ -181,7 +181,7 @@ namespace RequestsForRights.Database.Repositories
 
             foreach (var act in newActsList)
             {
-                if (act.IdResourceOperatorPerson == default(int))
+                if (act.IdResourceOperatorPersonAct == default(int))
                 {
                     _databaseContext.ResourceOperatorPersonActs.Add(act);
                 }
