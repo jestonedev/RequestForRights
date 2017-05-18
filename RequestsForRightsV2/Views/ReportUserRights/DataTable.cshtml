@@ -37,7 +37,7 @@
                         <li class="list-group-item @(right.IdRequestUser != Model.RequestUser.IdRequestUser ? "rr-list-group-item-danger" : "")">
                             <dl class="dl-horizontal">
                                 <dt>Право</dt>
-                                <dd>@right.ResourceRightName</dd>
+                                <dd title="@right.ResourceRightDescription">@right.ResourceRightName</dd>
                                 @if (right.DateFrom != null)
                                 {
                                     <dt>Дата и время выдачи</dt>
@@ -157,7 +157,7 @@
                     <td class="rr-column">
                         @right.ResourceName
                     </td>
-                    <td class="rr-column">@right.ResourceRightName</td>
+                    <td class="rr-column" title="@right.ResourceRightDescription">@right.ResourceRightName</td>
                     <td class="rr-column">@(right.DateFrom != null ?
                                                 right.DateFrom.Value.ToString("dd.MM.yyyy hh:mm:ss", CultureInfo.CurrentCulture) : "н/д")</td>
                     <td class="rr-column">@right.RightCategory</td>

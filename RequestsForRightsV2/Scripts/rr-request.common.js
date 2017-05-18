@@ -6,4 +6,5 @@ function fixIELayoutProblems() {
 
 $(function() {
     $(".rr-request-users > .panel").first().find(".panel-heading a").click();
+    $('.rr-request-rights [data-toggle="tooltip"]').tooltip();
 });

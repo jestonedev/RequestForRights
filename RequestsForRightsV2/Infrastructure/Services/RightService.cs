@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using RequestsForRights.Database.Repositories.Interfaces;
+using RequestsForRights.Domain.Entities;
 using RequestsForRights.Web.Infrastructure.Services.Interfaces;
 using RequestsForRights.Web.Models.Models;
 
@@ -141,6 +143,7 @@ namespace RequestsForRights.Web.Infrastructure.Services
                     RequestUserUnit = requestUser.Unit,
                     IdResourceRight = resourceRight.IdResourceRight,
                     ResourceRightName = resourceRight.Name,
+                    ResourceRightDescription = resourceRight.Description,
                     IdResource = resourceRight.IdResource,
                     ResourceName = resourceRight.Resource.Name,
                     RightCategory = "Постоянное право",
@@ -268,6 +271,7 @@ namespace RequestsForRights.Web.Infrastructure.Services
                     RequestUserUnit = delegateUserTo.Unit,
                     IdResourceRight = resourceRight.IdResourceRight,
                     ResourceRightName = resourceRight.Name,
+                    ResourceRightDescription = resourceRight.Description,
                     IdResource = resourceRight.IdResource,
                     ResourceName = resourceRight.Resource.Name,
                     RightCategory = "Делегированное право",
@@ -319,6 +323,94 @@ namespace RequestsForRights.Web.Infrastructure.Services
         public IEnumerable<ResourceUserRightModel> GetDepartmentAndResourceRightsOnDate(DateTime date, string department, int? idResource)
         {
             return GetRightsOnDate(date, null, department, idResource);
+        }
+
+        public IEnumerable<ResourceUserRightHistoryModel> GetUserRightsHistoryOnDate(DateTime from, DateTime to, int idRequestUser)
+        {
+            var userRights = _rightRepository.GetRequestUserRightAssocs()
+                .Include(r => r.RequestUserAssoc)
+                .Include(r => r.RequestUserAssoc.Request)
+                .Include(r => r.RequestUserAssoc.Request.RequestStates)
+                .Include(r => r.RequestUserAssoc.RequestUser)
+                .Include(r => r.ResourceRight)
+                .Include(r => r.RequestRightGrantType)
+                .Include(r => r.ResourceRight.Resource)
+                .Include(r => r.RequestUserAssoc.Request.User)
+                .Include(r => r.RequestUserAssoc.Request.User.Department)
+                .Where(r => r.RequestUserAssoc.IdRequestUser == idRequestUser && !r.RequestUserAssoc.Deleted
+                    && !r.RequestUserAssoc.Request.Deleted && 
+                    r.RequestUserAssoc.Request.RequestStates
+                    .Where(rs => !r.Deleted).OrderByDescending(rs => rs.IdRequestState).FirstOrDefault().IdRequestStateType == 4 &&
+                    r.RequestUserAssoc.Request.IdRequestType != 4  && r.RequestUserAssoc.Request.IdRequestType != 3 &&
+                    r.RequestUserAssoc.Request.RequestStates
+                    .Where(rs => !r.Deleted).OrderByDescending(rs => rs.IdRequestState).FirstOrDefault().Date >= from &&
+                    r.RequestUserAssoc.Request.RequestStates
+                    .Where(rs => !r.Deleted).OrderByDescending(rs => rs.IdRequestState).FirstOrDefault().Date <= to)
+                    .Select(r => new ResourceUserRightHistoryModel
+                    {
+                        IdRequest = r.RequestUserAssoc.IdRequest,
+                        IdRequestType = r.RequestUserAssoc.Request.IdRequestType,
+                        RequestCompleteDate = r.RequestUserAssoc.Request.RequestStates.Where(rs => !r.Deleted)
+                            .OrderByDescending(rs => rs.IdRequestState)
+                            .FirstOrDefault().Date,
+                        DelegationExtInfo = null,
+                        AclUser = r.RequestUserAssoc.Request.User,
+                        RequestUser = r.RequestUserAssoc.RequestUser,
+                        GrantType = r.RequestRightGrantType,
+                        Right = r.ResourceRight,
+                        RequestRightDescription = r.Descirption
+                    }).ToList();
+            var delegations = (from delegationRow in _rightRepository.GetDelegationRequestUsersExtInfo()
+                              .Include(r => r.DelegateToUser)
+                    join userAssocRow in _rightRepository.GetRequestUserAssocs()
+                        .Include(r => r.Request)
+                        .Include(r => r.Request.RequestStates)
+                        .Include(r => r.Request.User)
+                        .Include(r => r.Request.User.Department)
+                        .Include(r => r.RequestUser)
+                    on delegationRow.IdRequestUserAssoc equals  userAssocRow.IdRequestUserAssoc
+                    join userRightAssocRow in _rightRepository.GetRequestUserRightAssocs()
+                        .Include(r => r.RequestRightGrantType)
+                        .Include(r => r.ResourceRight)
+                        .Include(r => r.ResourceRight.Resource)
+                    on userAssocRow.IdRequestUserAssoc equals  userRightAssocRow.IdRequestUserAssoc
+                    where delegationRow.IdDelegateToUser == idRequestUser || userAssocRow.IdRequestUser == idRequestUser &&
+                        userAssocRow.Request.RequestStates.Where(rs => !rs.Deleted)
+                            .OrderByDescending(rs => rs.IdRequestState)
+                            .FirstOrDefault().IdRequestStateType == 4 &&
+                            !delegationRow.Deleted && !userAssocRow.Deleted &&
+                            !userAssocRow.Request.Deleted && !userRightAssocRow.Deleted
+                    select new ResourceUserRightHistoryModel
+                    {
+                        IdRequest = userAssocRow.IdRequest,
+                        IdRequestType = userAssocRow.Request.IdRequestType,
+                        RequestCompleteDate = userAssocRow.Request.RequestStates.Where(rs => !rs.Deleted)
+                            .OrderByDescending(rs => rs.IdRequestState)
+                            .FirstOrDefault().Date,
+                        DelegationExtInfo = delegationRow,
+                        AclUser = userAssocRow.Request.User,
+                        RequestUser = userAssocRow.RequestUser,
+                        GrantType = userRightAssocRow.RequestRightGrantType,
+                        Right = userRightAssocRow.ResourceRight,
+                        RequestRightDescription = userRightAssocRow.Descirption
+                    }).ToList();
+            var excludeUser = (from requestRow in _rightRepository.GetRequests()
+                    join userAssocRow in _rightRepository.GetRequestUserAssocs()
+                    on requestRow.IdRequest equals userAssocRow.IdRequest
+                    where requestRow.RequestStates.Where(rs => !rs.Deleted).OrderByDescending(r => r.IdRequestState)
+                        .FirstOrDefault().IdRequestStateType == 4 && userAssocRow.IdRequestUser == idRequestUser
+                        && requestRow.IdRequestType == 3
+                    select new ResourceUserRightHistoryModel
+                    {
+                        IdRequest = requestRow.IdRequest,
+                        IdRequestType = requestRow.IdRequestType,
+                        RequestCompleteDate = requestRow.RequestStates.Where(rs => !rs.Deleted)
+                            .OrderByDescending(rs => rs.IdRequestState)
+                            .FirstOrDefault().Date,
+                        AclUser = requestRow.User
+                    }).ToList();
+
+            return userRights.Union(delegations).Union(excludeUser).OrderBy(r => r.RequestCompleteDate);
         }
     }
 }

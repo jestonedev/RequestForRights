@@ -46,12 +46,12 @@ namespace RequestsForRights.Database.Repositories
 
         public IQueryable<RequestUser> GetRequestUsers()
         {
-            return _databaseContext.Users;
+            return _databaseContext.Users.Where(r => !r.Deleted);
         }
 
         public IQueryable<ResourceRight> GetResourceRights()
         {
-            return _databaseContext.ResourceRights.Include(r => r.Resource);
+            return _databaseContext.ResourceRights.Include(r => r.Resource).Where(r => !r.Deleted);
         }
     }
 }

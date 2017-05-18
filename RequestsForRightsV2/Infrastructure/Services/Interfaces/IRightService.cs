@@ -17,5 +17,6 @@ namespace RequestsForRights.Web.Infrastructure.Services.Interfaces
         IEnumerable<ResourceUserRightModel> GetResourceRightsOnDate(DateTime date, int? idResource);
         IEnumerable<ResourceUserRightModel> GetDepartmentRightsOnDate(DateTime date, string department);
         IEnumerable<ResourceUserRightModel> GetDepartmentAndResourceRightsOnDate(DateTime date, string department, int? idResource);
+        IEnumerable<ResourceUserRightHistoryModel> GetUserRightsHistoryOnDate(DateTime from, DateTime to, int idRequestUser);
     }
 }

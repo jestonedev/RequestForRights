@@ -1,0 +1,54 @@
+﻿@using System.Globalization
+@using RequestsForRights.Web.Infrastructure.Enums
+@model RequestsForRights.Web.Models.ViewModels.ReportUserRightsHistoryViewModel
+
+@{
+    Layout = null;
+}
+
+<div class="rr-filter-control">
+    @using (Ajax.BeginForm("GetDataTable", new AjaxOptions
+    {
+        UpdateTargetId = "main-table-wrapper",
+        InsertionMode = InsertionMode.Replace,
+        Url = Url.Action("GetDataTable"),
+        OnBegin = "showWaitingElement",
+        OnSuccess = "hideWaitingElement",
+        OnFailure = "errorLoading"
+    }))
+    {
+        @Html.Hidden("Login", Model.Options.Login)
+        @Html.Hidden("Department", Model.Options.Department)
+        @Html.Hidden("Unit", Model.Options.Unit)
+        <div class="form-group col-sm-3 rr-col-sm-no-left-padding">
+            @Html.Label("DateFrom", "С")
+            <div class="input-group date">
+                @Html.TextBox("DateFrom", Model.Options.DateFrom != null ?
+                 Model.Options.DateFrom.Value.ToString("dd.MM.yyyy", CultureInfo.CurrentCulture) : "",
+                    new {@class = "form-control"})
+                <div class="input-group-addon">
+                    <span class="glyphicon glyphicon-th"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group col-sm-3">
+            @Html.Label("DateTo", "По")
+            <div class="input-group date">
+                @Html.TextBox("DateTo", Model.Options.DateTo != null ?
+                Model.Options.DateTo.Value.ToString("dd.MM.yyyy", CultureInfo.CurrentCulture) : "",
+                    new { @class = "form-control" })
+                <div class="input-group-addon">
+                    <span class="glyphicon glyphicon-th"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group col-sm-6">
+            @Html.Label("Snp", "Сотрудник")
+            @Html.TextBox("Snp", Model.Options.Snp, new { @class = "form-control" })
+        </div>
+        <div class="clearfix"></div>
+        <div class="rr-loading-data text-info text-center">
+            Загрузка...
+        </div>
+    }
+</div>
