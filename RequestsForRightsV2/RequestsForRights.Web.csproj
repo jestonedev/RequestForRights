@@ -172,6 +172,7 @@
     <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions.cs" />
     <Compile Include="Infrastructure\Extensions\LinqExtensions.cs" />
     <Compile Include="Infrastructure\Helpers\RightHelper.cs" />
+    <Compile Include="Infrastructure\Helpers\UserHelper.cs" />
     <Compile Include="Infrastructure\Logging\ILogger.cs" />
     <Compile Include="Infrastructure\Logging\LogUtility.cs" />
     <Compile Include="Infrastructure\Logging\NLogLogger.cs" />

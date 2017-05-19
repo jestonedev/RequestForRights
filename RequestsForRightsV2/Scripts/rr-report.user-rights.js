@@ -53,6 +53,9 @@
                 form.find("#Department").val(suggestion.data.Department);
                 form.find("#Unit").val(suggestion.data.Unit);
                 filterControlOnValue();
+            },
+            onSearchStart: function (query) {
+                query.usersCategory = $("#UsersCategory").val();
             }
         });
     }
@@ -60,4 +63,16 @@
     var snpInput = $(".rr-filter-control form #Snp");
     snpInput.off("keyup");
     initializeUsersAutocomplete(snpInput);
+
+    $("#UsersCategoryList a")
+        .on("click",
+            function() {
+                $("#UsersCategory").val($(this).data("category"));
+                $("#UsersCategoryCurrentLabel").text($.trim($(this).text()));
+                $(".rr-filter-control form #Snp").val("");
+                $(".rr-filter-control form #Login").val("");
+                $(".rr-filter-control form #Department").val("");
+                $(".rr-filter-control form #Unit").val("");
+                filterControlOnValue();
+            });
 });

@@ -23,7 +23,7 @@
                 @Html.TextBox("Date", Model.Options.Date != null ?
                    Model.Options.Date.Value.ToString("dd.MM.yyyy", CultureInfo.CurrentCulture) : "",
                     new {@class = "form-control"})
-                <div class="input-group-addon">
+                <div class="input-group-addon rr-show-date-picker-btn">
                     <span class="glyphicon glyphicon-th"></span>
                 </div>
             </div>

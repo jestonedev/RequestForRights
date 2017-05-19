@@ -12,7 +12,7 @@ namespace RequestsForRights.Web.Infrastructure.Services.Interfaces
             int? idRequestUser, string department, int? idResource);
         IEnumerable<ResourceUserRightModel> GetRightsOnDate(DateTime date,
             int? idRequestUser, string department, int? idResource);
-        IEnumerable<ResourceUserRightModel> GetUserRightsOnDate(DateTime date,
+        IEnumerable<ResourceUserRightModel> GetUserRightsOnDate(DateTime date, 
             int? idRequestUser);
         IEnumerable<ResourceUserRightModel> GetResourceRightsOnDate(DateTime date, int? idResource);
         IEnumerable<ResourceUserRightModel> GetDepartmentRightsOnDate(DateTime date, string department);

@@ -5,6 +5,8 @@ using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 using Newtonsoft.Json;
+using RequestsForRights.Domain.Enums;
+using RequestsForRights.Web.Infrastructure.Enums;
 using RequestsForRights.Web.Infrastructure.Helpers;
 using RequestsForRights.Web.Models.ReportOptions;
 
@@ -37,6 +39,7 @@ namespace RequestsForRights.Web.Infrastructure.ValueProviders
             options.Unit = ValueProviderHelper.GetValue<string>("Unit", context, null);
             options.DateFrom = ValueProviderHelper.GetValue("DateFrom", context, DateTime.Now.Date);
             options.DateTo = ValueProviderHelper.GetValue("DateTo", context, DateTime.Now.Date);
+            options.UsersCategory = ValueProviderHelper.GetValue("UsersCategory", context, UsersCategory.ActiveUsers);
             return new ValueProviderResult(options,
                 JsonConvert.SerializeObject(options),
                 CultureInfo.InvariantCulture);

@@ -27,6 +27,13 @@ if ($.validator !== undefined) {
 }
 
 $(function () {
+    $("body")
+        .on("click",
+            ".rr-show-date-picker-btn",
+            function() {
+                $(this).closest(".date.input-group").find("input").datepicker("show");
+            });
+
     var timer = undefined;
 
     $("body")

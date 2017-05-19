@@ -4,6 +4,7 @@ using System.DirectoryServices;
 using System.DirectoryServices.ActiveDirectory;
 using System.Globalization;
 using System.Linq;
+using RequestsForRights.Domain.Enums;
 
 namespace RequestsForRights.Ldap
 {
@@ -27,11 +28,11 @@ namespace RequestsForRights.Ldap
         }
         private static IEnumerable<string> GetDomains()
         {
-            return from Domain domain in Forest.GetCurrentForest().Domains 
+            return from System.DirectoryServices.ActiveDirectory.Domain domain in Forest.GetCurrentForest().Domains 
                    select domain.Name;
         }
 
-        public IEnumerable<LdapUser> FindUsers(string snpPattern, 
+        public IEnumerable<LdapUser> FindUsers(string snpPattern, UsersCategory usersCategory,
             IEnumerable<LdapDepartmentFilter> departemtnsFilter, int maxCount)
         {
             if (string.IsNullOrEmpty(snpPattern))
@@ -41,11 +42,24 @@ namespace RequestsForRights.Ldap
             var i = 0;
             var users = new List<LdapUser>();
             var filters = departemtnsFilter.ToList();
+            var blockedFilter = "";
+            switch (usersCategory)
+            {
+                case UsersCategory.ActiveUsers:
+                    blockedFilter = "(!(useraccountcontrol:1.2.840.113556.1.4.803:=2))";
+                    break;
+                case UsersCategory.BlockedUsers:
+                    blockedFilter = "((useraccountcontrol:1.2.840.113556.1.4.803:=2))";
+                    break;
+                case UsersCategory.ActiveAndBlockedUsers:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException("usersCategory", usersCategory, null);
+            }
             foreach (var domainName in GetDomains())
             {
-                var context = new DirectoryContext(
-                    DirectoryContextType.Domain, domainName, _userName, _password);
-                using (var domain = Domain.GetDomain(context))
+                var context = new DirectoryContext(DirectoryContextType.Domain, domainName, _userName, _password);
+                using (var domain = System.DirectoryServices.ActiveDirectory.Domain.GetDomain(context))
                 using (var domainEntry = domain.GetDirectoryEntry())
                 {
                     var domainLoginPrefix = domain.Name.Split('.')[0];
@@ -63,11 +77,12 @@ namespace RequestsForRights.Ldap
                         searcher.PropertiesToLoad.Add("telephonenumber");
                         foreach (var filter in filters)
                         {
-                            searcher.Filter = string.Format(CultureInfo.InvariantCulture,
-                            "(&(objectClass=user)(objectClass=person){1}{2}(displayName=*{0}*)(!(useraccountcontrol:1.2.840.113556.1.4.803:=2)))",
-                            snpPattern,
-                            string.IsNullOrEmpty(filter.Company) ? "" : string.Format("(company={0})", filter.Company),
-                             string.IsNullOrEmpty(filter.Department) ? "" : string.Format("(department={0})", filter.Department));
+                            searcher.Filter = string.Format(CultureInfo.InvariantCulture, 
+                                "(&(objectClass=user)(objectClass=person){1}{2}(displayName=*{0}*){3})", 
+                                snpPattern, 
+                                string.IsNullOrEmpty(filter.Company) ? "" : string.Format("(company={0})", filter.Company), 
+                                string.IsNullOrEmpty(filter.Department) ? "" : string.Format("(department={0})", filter.Department),
+                                blockedFilter);
                             var results = searcher.FindAll();
                             if (results.Count == 0)
                                 continue;
@@ -75,14 +90,7 @@ namespace RequestsForRights.Ldap
                             {
                                 var user = new LdapUser
                                 {
-                                    Snp = GetValue(result.Properties, "displayName"),
-                                    Login = domainLoginPrefix+"\\"+GetValue(result.Properties, "samAccountName").ToLower(),
-                                    Post = GetValue(result.Properties, "title"),
-                                    Department = GetValue(result.Properties, "company"),
-                                    Unit = GetValue(result.Properties, "department"),
-                                    Office = GetValue(result.Properties, "physicaldeliveryofficename"),
-                                    Email = GetValue(result.Properties, "mail"),
-                                    Phone = GetValue(result.Properties, "telephonenumber")
+                                    Snp = GetValue(result.Properties, "displayName"), Login = domainLoginPrefix + "\\" + GetValue(result.Properties, "samAccountName").ToLower(), Post = GetValue(result.Properties, "title"), Department = GetValue(result.Properties, "company"), Unit = GetValue(result.Properties, "department"), Office = GetValue(result.Properties, "physicaldeliveryofficename"), Email = GetValue(result.Properties, "mail"), Phone = GetValue(result.Properties, "telephonenumber")
                                 };
                                 users.Add(user);
                                 i++;
@@ -108,9 +116,7 @@ namespace RequestsForRights.Ldap
 
         private static string GetValue(ResultPropertyCollection properties, string parameter)
         {
-            return properties.Contains(parameter)
-                ? properties[parameter][0].ToString()
-                : null;
+            return properties.Contains(parameter) ? properties[parameter][0].ToString() : null;
         }
     }
 }

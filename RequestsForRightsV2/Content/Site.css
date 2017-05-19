@@ -790,3 +790,15 @@ button[name="deleteDeviceAddress"]{
         padding: 0;
     }    
 }
+
+.rr-filter-control .input-group-btn:first-child>.btn, .input-group-btn:first-child>.btn-group {
+    margin-right: -2px;
+}
+
+.input-group-btn:last-child>.btn, .input-group-btn:last-child>.btn-group {
+    margin-left: -1px;
+}
+
+.rr-show-date-picker-btn {
+    outline: none;
+}

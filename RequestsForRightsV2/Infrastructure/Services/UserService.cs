@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using RequestsForRights.Database.Repositories.Interfaces;
 using RequestsForRights.Domain.Entities;
+using RequestsForRights.Domain.Enums;
 using RequestsForRights.Ldap;
 using RequestsForRights.Web.Infrastructure.Security.Interfaces;
 using RequestsForRights.Web.Infrastructure.Services.Interfaces;
@@ -42,17 +43,22 @@ namespace RequestsForRights.Web.Infrastructure.Services
             return _userRepository.FindUser(requestUser);
         }
 
-        public IEnumerable<RequestUser> FindUsers(string snpPattern, int maxCount)
+        public IEnumerable<RequestUser> FindUsers(string snpPattern, UsersCategory usersCategory, int maxCount)
         {
-            var dbUsers = FilterUsersFields(FindDbUsers(snpPattern, maxCount));
-            var ldapUsers = FilterUsersFields(FindActiveDirectoryUsers(snpPattern, maxCount));
+            var dbUsers = FilterUsersFields(FindDbUsers(snpPattern, usersCategory, maxCount));
+            var ldapUsers = FilterUsersFields(FindActiveDirectoryUsers(snpPattern, usersCategory, maxCount));
             var result = ldapUsers.Concat(dbUsers).OrderBy(r => r.Snp).Distinct().Take(10);
             return result;
         }
 
-        private IEnumerable<RequestUser> FindDbUsers(string snpPattern, int maxCount)
+        private IEnumerable<RequestUser> FindDbUsers(string snpPattern, UsersCategory usersCategory, int maxCount)
         {
             var users = _userRepository.FindUsers(snpPattern);
+
+            if (usersCategory == UsersCategory.ActiveAndBlockedUsers)
+            {
+                return _securityRepository.FilterUsers(users).Take(maxCount);
+            }
 
             var lastStatesByRequest = from stateRow in _userRepository.GetRequestStates()
                                       group stateRow.IdRequestState by stateRow.IdRequest
@@ -105,20 +111,29 @@ namespace RequestsForRights.Web.Infrastructure.Services
                     on request.IdRequest equals userAssoc.IdRequest
                 select userAssoc.RequestUser;
 
-            users = users.ToList().Except(excludeUsers).AsQueryable();
-
+            switch (usersCategory)
+            {
+                case UsersCategory.ActiveUsers:
+                    users = users.ToList().Except(excludeUsers).AsQueryable();
+                    break;
+                case UsersCategory.BlockedUsers:
+                    users = excludeUsers.AsQueryable();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException("usersCategory");
+            }
             return _securityRepository.FilterUsers(users).Take(maxCount);
         }
 
-        private IEnumerable<LdapUser> FindActiveDirectoryUsers(string snpPattern, int maxCount)
+        private IEnumerable<LdapUser> FindActiveDirectoryUsers(string snpPattern, UsersCategory usersCategory, int maxCount)
         {
-            return _ldapRepository.FindUsers(snpPattern,
+            return _ldapRepository.FindUsers(snpPattern, usersCategory, 
                 GetLdapDepartmentFilter(), maxCount);
         }
 
         public IEnumerable<LdapUser> FindAllActiveDirectoryUsers(string snpPattern, int maxCount)
         {
-            return _ldapRepository.FindUsers(snpPattern,
+            return _ldapRepository.FindUsers(snpPattern, UsersCategory.ActiveUsers, 
                 new List<LdapDepartmentFilter>
                 {
                     new LdapDepartmentFilter
