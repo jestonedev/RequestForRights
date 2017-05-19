@@ -1,5 +1,10 @@
 ﻿@using RequestsForRights.Domain.Entities
 @{
+    dynamic securityService = ViewData["SecurityService"];
+    if (securityService == null)
+    {
+        return;
+    }
     var successAgreements = ((IEnumerable<RequestAgreement>)Model.SuccessAgreements)
         .GroupBy(r => r.User.Department).ToList();
     var cancelAgreements = ((IEnumerable<RequestAgreement>)Model.CancelAgreements)
@@ -48,8 +53,18 @@
                                             sendDate = userAgreement.SendDate;
                                         }
                                     }
-                                    <dt>Отправлено на согласование</dt>
-                                    <dd>@(sendDate != null ? sendDate.ToString("dd.MM.yyyy HH:mm") : "")</dd>
+                                    @if (sendDate != null)
+                                    {
+                                        <dt>Отправлено на согласование</dt>
+                                        <dd>@sendDate.ToString("dd.MM.yyyy HH:mm")</dd>
+                                    }
+                                    @if (userAgreement != null &&
+                                         !string.IsNullOrEmpty(userAgreement.SendDescription) &&
+                                        securityService.CanViewAgreementSendDescription(userAgreement))
+                                    {
+                                        <dt>Комментарий диспетчера</dt>
+                                        <dd>@userAgreement.SendDescription</dd>
+                                    }
                                     <dt>Телефон</dt>
                                     <dd>@user.Phone</dd>
                                     <dt>Тип согласования</dt>
@@ -88,11 +103,26 @@
                                     }
                                     <dt>Телефон</dt>
                                     <dd>@agreement.User.Phone</dd>
-                                    <dt>Отправлено на согласование</dt>
-                                    <dd>@(agreement.SendDate != null ? agreement.SendDate.Value.ToString("dd.MM.yyyy HH:mm") :
-                                    Model.RequestModel.Date != null ? Model.RequestModel.Date.ToString("dd.MM.yyyy HH:mm") : "")</dd>
+                                    @if (agreement.SendDate != null)
+                                    {
+                                        <dt>Отправлено на согласование</dt>
+                                        <dd>@agreement.SendDate.Value.ToString("dd.MM.yyyy HH:mm")</dd>
+                                    }
+                                    else
+                                    if (Model.RequestModel.Date != null)
+                                    {
+
+                                        <dt>Отправлено на согласование</dt>
+                                        <dd>@Model.RequestModel.Date.ToString("dd.MM.yyyy HH:mm")</dd>
+                                    }
+                                    @if (!string.IsNullOrEmpty(agreement.SendDescription) &&
+                                        securityService.CanViewAgreementSendDescription(agreement))
+                                    {
+                                        <dt>Комментарий диспетчера</dt>
+                                        <dd>@agreement.SendDescription</dd>
+                                    }
                                     <dt>Дата согласования</dt>
-                                    <dd>@(agreement.Date != null ? agreement.Date.Value.ToString("dd.MM.yyyy HH:mm") : "")</dd>
+                                    <dd>@(agreement.AgreementDate != null ? agreement.AgreementDate.Value.ToString("dd.MM.yyyy HH:mm") : "")</dd>
                                     <dt>Тип согласования</dt>
                                     <dd>@agreement.AgreementType.Name</dd>
                                 </dl>
@@ -126,12 +156,28 @@
                                 }
                                 <dt>Телефон</dt>
                                 <dd>@agreement.User.Phone</dd>
-                                <dt>Отправлено на согласование</dt>
-                                <dd>@(agreement.SendDate != null ? agreement.SendDate.Value.ToString("dd.MM.yyyy HH:mm") : "")</dd>
+                                @if (agreement.SendDate != null)
+                                {
+                                    <dt>Отправлено на согласование</dt>
+                                    <dd>@agreement.SendDate.Value.ToString("dd.MM.yyyy HH:mm")</dd>
+                                }
+                                else
+                                if (Model.RequestModel.Date != null)
+                                {
+
+                                    <dt>Отправлено на согласование</dt>
+                                    <dd>@Model.RequestModel.Date.ToString("dd.MM.yyyy HH:mm")</dd>
+                                }
+                                @if (!string.IsNullOrEmpty(agreement.SendDescription) &&
+                                        securityService.CanViewAgreementSendDescription(agreement))
+                                {
+                                    <dt>Комментарий диспетчера</dt>
+                                    <dd>@agreement.SendDescription</dd>
+                                }
                                 <dt>Дата отклонения</dt>
-                                <dd>@(agreement.Date != null ? agreement.Date.Value.ToString("dd.MM.yyyy HH:mm") : "")</dd>
+                                <dd>@(agreement.AgreementDate != null ? agreement.AgreementDate.Value.ToString("dd.MM.yyyy HH:mm") : "")</dd>
                                 <dt>Причина отклонения</dt>
-                                <dd>@agreement.Description</dd>
+                                <dd>@agreement.AgreementDescription</dd>
                                 <dt>Тип согласования</dt>
                                 <dd>@agreement.AgreementType.Name</dd>
                             </dl>

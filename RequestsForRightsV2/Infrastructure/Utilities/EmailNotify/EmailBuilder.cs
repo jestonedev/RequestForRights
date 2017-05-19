@@ -405,7 +405,7 @@ namespace RequestsForRights.Web.Infrastructure.Utilities.EmailNotify
             return message;
         }
 
-        public IEnumerable<MailMessage> SetRequestStateEmails(Request request, int idRequestStateType, string agreementReason)
+        public IEnumerable<MailMessage> SetRequestStateEmails(Request request, int idRequestStateType, string agreementDescription)
         {
             var messages = new List<MailMessage>();
 
@@ -428,7 +428,7 @@ namespace RequestsForRights.Web.Infrastructure.Utilities.EmailNotify
             if (!string.IsNullOrEmpty(requester.Email))
             {
                 var message = SetRequestStateRequesterEmail(request, 
-                    lastRequestState.RequestStateType, agreementReason);
+                    lastRequestState.RequestStateType, agreementDescription);
                 messages.Add(message);
             }
             if (idRequestStateType == 2 ||
@@ -449,7 +449,7 @@ namespace RequestsForRights.Web.Infrastructure.Utilities.EmailNotify
                         continue;
                     }
                     var message = SetRequestStateDispatcherEmail(request, 
-                        lastRequestState.RequestStateType, agreementReason, user);
+                        lastRequestState.RequestStateType, agreementDescription, user);
                     messages.Add(message);
                 }
             }
@@ -489,13 +489,18 @@ namespace RequestsForRights.Web.Infrastructure.Utilities.EmailNotify
             return message;
         }
 
-        private MailMessage AddCoordinatorEmail(Request request, Coordinator coordinator)
+        private MailMessage AddCoordinatorEmail(Request request, Coordinator coordinator, string sendDescription)
         {
             var subject = string.Format("Заявка №{0} {1} отправлена на дополнительное согласование",
                 request.IdRequest,
                 request.RequestType.Name.ToLower());
             var body = string.Format("Здравствуйте, {0}!<br>{1}. Требуется ваше согласование.",
                 coordinator.Snp, subject);
+            if (!string.IsNullOrEmpty(sendDescription))
+            {
+                body += string.Format("<br><br><b>Комментарий диспетчера:</b> {0}", sendDescription);
+            }
+
             body += GetRequestDescriptionPart(request);
             body += GetRequestLink(request);
             var message = new MailMessage
@@ -509,7 +514,7 @@ namespace RequestsForRights.Web.Infrastructure.Utilities.EmailNotify
             return message;
         }
 
-        public IEnumerable<MailMessage> AddCoordinatorEmails(Request request, Coordinator coordinator)
+        public IEnumerable<MailMessage> AddCoordinatorEmails(Request request, Coordinator coordinator, string sendDescription)
         {
             var messages = new List<MailMessage>();
             if (!string.IsNullOrEmpty(request.User.Email))
@@ -519,7 +524,7 @@ namespace RequestsForRights.Web.Infrastructure.Utilities.EmailNotify
             }
             if (!string.IsNullOrEmpty(coordinator.Email))
             {
-                var message = AddCoordinatorEmail(request, coordinator);
+                var message = AddCoordinatorEmail(request, coordinator, sendDescription);
                 messages.Add(message);
             }
             return messages;

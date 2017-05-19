@@ -183,6 +183,7 @@ function sendAgreementSuccess() {
     $("#rr-new-coordinator-snp").val("");
     $("#rr-new-coordinator-department").val("");
     $("#rr-new-coordinator-unit").val("");
+    $("#rr-new-coordinator-send-description").val("");
     initializeCoordinatorAutocomplete();
     agreementPanel = $(".rr-agreement-panel").clone();
 }

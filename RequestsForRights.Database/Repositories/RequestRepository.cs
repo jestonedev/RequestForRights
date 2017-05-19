@@ -190,8 +190,8 @@ namespace RequestsForRights.Database.Repositories
                 {
                     // Доп. согласование
                     requestAgreement.IdAgreementState = 1;
-                    requestAgreement.Description = null;
-                    requestAgreement.Date = null;
+                    requestAgreement.AgreementDescription = null;
+                    requestAgreement.AgreementDate = null;
                 }
                 else
                 {
@@ -233,10 +233,10 @@ namespace RequestsForRights.Database.Repositories
             }
             agreement.User = user;
             agreement.IdUser = user.IdUser;
-            return UpdateRequestAgreement(agreement);
+            return UpdateRequestAgreement(agreement, true);
         }
 
-        public RequestAgreement UpdateRequestAgreement(RequestAgreement agreement)
+        public RequestAgreement UpdateRequestAgreement(RequestAgreement agreement, bool updateSendInfo = false)
         {
             var reqAgreement = _databaseContext.RequestAgreements.
                 FirstOrDefault(r => r.IdUser == agreement.User.IdUser &&
@@ -248,6 +248,11 @@ namespace RequestsForRights.Database.Repositories
             }
             agreement.IdAgreementType = reqAgreement.IdAgreementType;
             agreement.IdRequestAgreement = reqAgreement.IdRequestAgreement;
+            if (!updateSendInfo)
+            {
+                agreement.SendDate = reqAgreement.SendDate;
+                agreement.SendDescription = reqAgreement.SendDescription;
+            }
             _databaseContext.Entry(reqAgreement).CurrentValues.SetValues(agreement);
             return reqAgreement;
         }

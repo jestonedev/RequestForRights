@@ -361,8 +361,8 @@ namespace RequestsForRights.Web.Infrastructure.Services
                 IdUser = userInfo.IdUser,
                 IdAgreementState = idRequestStateType == 2 ? 2 : 3,
                 IdAgreementType = 1,
-                Description = reason,
-                Date = DateTime.Now
+                AgreementDescription = reason,
+                AgreementDate = DateTime.Now
             };
             switch (idRequestStateType)
             {
@@ -427,7 +427,7 @@ namespace RequestsForRights.Web.Infrastructure.Services
             }
         }
 
-        public void AddCooordinator(int idRequest, Coordinator coordinator)
+        public void AddCooordinator(int idRequest, Coordinator coordinator, string sendDescription)
         {
             var agreement = new RequestAgreement
             {
@@ -435,6 +435,7 @@ namespace RequestsForRights.Web.Infrastructure.Services
                 IdAgreementType = 2,
                 IdAgreementState = 1,
                 SendDate = DateTime.Now,
+                SendDescription = sendDescription,
                 User = new AclUser
                 {
                     Login = coordinator.Login,
