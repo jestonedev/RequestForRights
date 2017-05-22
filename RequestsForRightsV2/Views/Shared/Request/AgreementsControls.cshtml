@@ -126,6 +126,20 @@
                         @readonly = "readonly"
                     })
                 </div>
+                <div class="form-group col-md-8 col-md-offset-2">
+                    @Html.Label("SendDescription", "Комментарий", new
+                    {
+                        @class = "control-label",
+                        @for = "rr-new-coordinator-send-description"
+                    })
+                    @Html.TextArea("SendDescription", "", new
+                    {
+                        @class = "form-control",
+                        placeholder = "Введите комментарий",
+                        rows = "4",
+                        id = "rr-new-coordinator-send-description"
+                    })
+                </div>
             </div>
             <div class="text-center rr-add-coordinator-panel">
                 <div class="btn-group" role="group" aria-label="Панель дополнительного согласования">

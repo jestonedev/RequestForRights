@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using RequestsForRights.Database.Repositories.Interfaces;
 using RequestsForRights.Domain.Entities;
+using RequestsForRights.Domain.Enums;
 using RequestsForRights.Ldap;
 using RequestsForRights.Web.Infrastructure.Security.Interfaces;
 using RequestsForRights.Web.Infrastructure.Services.Interfaces;
@@ -42,40 +43,48 @@ namespace RequestsForRights.Web.Infrastructure.Services
             return _userRepository.FindUser(requestUser);
         }
 
-        public IEnumerable<RequestUser> FindUsers(string snpPattern, int maxCount)
+        public IEnumerable<RequestUser> FindUsers(string snpPattern, UsersCategory usersCategory, int maxCount)
         {
-            var dbUsers = FilterUsersFields(FindDbUsers(snpPattern, maxCount));
-            var ldapUsers = FilterUsersFields(FindActiveDirectoryUsers(snpPattern, maxCount));
-            var result = ldapUsers.Concat(dbUsers).OrderBy(r => r.Snp).Distinct().Take(10);
-            return result;
+            var dbUsers = FilterUsersFields(FindDbUsers(snpPattern, usersCategory, maxCount));
+            var ldapUsers = FilterUsersFields(FindActiveDirectoryUsers(snpPattern, usersCategory, maxCount));
+            var maternityLeaveUsers = FilterUsersFields(_ldapRepository.FindMaternityLeaveUsers(snpPattern, GetLdapDepartmentFilter(),
+                maxCount));
+            switch (usersCategory)
+            {
+                case UsersCategory.ActiveUsers:
+                case UsersCategory.All:
+                    return ldapUsers.Concat(dbUsers).Concat(maternityLeaveUsers).OrderBy(r => r.Snp).Distinct().Take(10);
+                case UsersCategory.BlockedUsers:
+                    return ldapUsers.Concat(dbUsers).Except(maternityLeaveUsers).OrderBy(r => r.Snp).Distinct().Take(10);
+                default:
+                    throw new ArgumentOutOfRangeException("usersCategory", usersCategory, null);
+            }
         }
 
-        private IEnumerable<RequestUser> FindDbUsers(string snpPattern, int maxCount)
+        private IEnumerable<RequestUser> FindDbUsers(string snpPattern, UsersCategory usersCategory, int maxCount)
         {
             var users = _userRepository.FindUsers(snpPattern);
 
+            if (usersCategory == UsersCategory.All)
+            {
+                return _securityRepository.FilterUsers(users).Take(maxCount);
+            }
+
             var lastStatesByRequest = from stateRow in _userRepository.GetRequestStates()
-                                      group stateRow.IdRequestState by stateRow.IdRequest
-                                          into gs
-                                          select new
-                                          {
-                                              IdRequest = gs.Key,
-                                              IdRequestState = gs.Max()
-                                          };
+                group stateRow.IdRequestState by stateRow.IdRequest
+                into gs
+                select new
+                {
+                    IdRequest = gs.Key, IdRequestState = gs.Max()
+                };
             var completedRequests = (from lastStateRow in lastStatesByRequest
-                join stateRow in _userRepository.GetRequestStates()
-                    on lastStateRow.IdRequestState equals stateRow.IdRequestState
-                join requestRow in _userRepository.GetRequests()
-                    on stateRow.IdRequest equals requestRow.IdRequest
-                join userAssocRow in _userRepository.GetRequestUserAssocs()
-                    on requestRow.IdRequest equals userAssocRow.IdRequest
+                join stateRow in _userRepository.GetRequestStates() on lastStateRow.IdRequestState equals stateRow.IdRequestState
+                join requestRow in _userRepository.GetRequests() on stateRow.IdRequest equals requestRow.IdRequest
+                join userAssocRow in _userRepository.GetRequestUserAssocs() on requestRow.IdRequest equals userAssocRow.IdRequest
                 where stateRow.IdRequestStateType == 4
                 select new
                 {
-                    requestRow.IdRequest,
-                    requestRow.IdRequestType,
-                    userAssocRow.IdRequestUser,
-                    stateRow.Date
+                    requestRow.IdRequest, requestRow.IdRequestType, userAssocRow.IdRequestUser, stateRow.Date
                 }).ToList();
 
             var lastRequestsDateForUsers = from row in completedRequests
@@ -83,49 +92,49 @@ namespace RequestsForRights.Web.Infrastructure.Services
                 into gs
                 select new
                 {
-                    Date = gs.Max(),
-                    IdRequestUser = gs.Key
+                    Date = gs.Max(), IdRequestUser = gs.Key
                 };
 
             completedRequests = (from requestRow in completedRequests
-                join lrRow in lastRequestsDateForUsers
-                    on new {requestRow.IdRequestUser, requestRow.Date} equals
-                    new {lrRow.IdRequestUser, lrRow.Date}
+                join lrRow in lastRequestsDateForUsers on new {requestRow.IdRequestUser, requestRow.Date} equals new {lrRow.IdRequestUser, lrRow.Date}
                 where requestRow.IdRequestType == 3
                 select new
                 {
-                    requestRow.IdRequest,
-                    requestRow.IdRequestType,
-                    requestRow.IdRequestUser,
-                    requestRow.Date
+                    requestRow.IdRequest, requestRow.IdRequestType, requestRow.IdRequestUser, requestRow.Date
                 }).ToList();
 
             var excludeUsers = from request in completedRequests
-                join userAssoc in _userRepository.GetRequestUserAssocs()
-                    on request.IdRequest equals userAssoc.IdRequest
+                join userAssoc in _userRepository.GetRequestUserAssocs() on request.IdRequest equals userAssoc.IdRequest
                 select userAssoc.RequestUser;
 
-            users = users.ToList().Except(excludeUsers).AsQueryable();
-
+            switch (usersCategory)
+            {
+                case UsersCategory.ActiveUsers:
+                    users = users.ToList().Except(excludeUsers).AsQueryable();
+                    break;
+                case UsersCategory.BlockedUsers:
+                    users = excludeUsers.Where(r => r.Snp.Contains(snpPattern)).AsQueryable();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException("usersCategory");
+            }
             return _securityRepository.FilterUsers(users).Take(maxCount);
         }
 
-        private IEnumerable<LdapUser> FindActiveDirectoryUsers(string snpPattern, int maxCount)
+        private IEnumerable<LdapUser> FindActiveDirectoryUsers(string snpPattern, UsersCategory usersCategory, int maxCount)
         {
-            return _ldapRepository.FindUsers(snpPattern,
-                GetLdapDepartmentFilter(), maxCount);
+            return _ldapRepository.FindUsers(snpPattern, usersCategory, GetLdapDepartmentFilter(), maxCount);
         }
 
         public IEnumerable<LdapUser> FindAllActiveDirectoryUsers(string snpPattern, int maxCount)
         {
-            return _ldapRepository.FindUsers(snpPattern,
-                new List<LdapDepartmentFilter>
+            return _ldapRepository.FindUsers(snpPattern, UsersCategory.ActiveUsers, new List<LdapDepartmentFilter>
+            {
+                new LdapDepartmentFilter
                 {
-                    new LdapDepartmentFilter
-                    {
-                        Company = "*"
-                    }
-                }, maxCount);
+                    Company = "*"
+                }
+            }, maxCount);
         }
 
         public IEnumerable<Department> GetUnits()
@@ -142,13 +151,7 @@ namespace RequestsForRights.Web.Infrastructure.Services
         {
             return users.Select(r => new RequestUser
             {
-                Login = r.Login,
-                Snp = r.Snp,
-                Post = r.Post,
-                Department = r.Department,
-                Unit = r.Unit,
-                Office = r.Office,
-                Phone = r.Phone
+                Login = r.Login, Snp = r.Snp, Post = r.Post, Department = r.Department, Unit = r.Unit, Office = r.Office, Phone = r.Phone
             });
         }
 
@@ -156,13 +159,7 @@ namespace RequestsForRights.Web.Infrastructure.Services
         {
             return users.Select(r => new RequestUser
             {
-                Login = r.Login,
-                Snp = r.Snp,
-                Post = r.Post,
-                Department = r.Department,
-                Unit = r.Unit,
-                Office = r.Office,
-                Phone = r.Phone
+                Login = r.Login, Snp = r.Snp, Post = r.Post, Department = r.Department, Unit = r.Unit, Office = r.Office, Phone = r.Phone
             });
         }
 
@@ -170,12 +167,11 @@ namespace RequestsForRights.Web.Infrastructure.Services
         {
             if (_securityRepository.InRole(new[]
             {
-                AclRole.Administrator, AclRole.Dispatcher, 
-                AclRole.Executor, AclRole.Registrar, 
-                AclRole.ResourceManager, 
+                AclRole.Administrator, AclRole.Dispatcher, AclRole.Executor, AclRole.Registrar, AclRole.ResourceManager,
             }))
             {
-                return new List<LdapDepartmentFilter>{
+                return new List<LdapDepartmentFilter>
+                {
                     new LdapDepartmentFilter
                     {
                         Company = "*"
@@ -183,17 +179,14 @@ namespace RequestsForRights.Web.Infrastructure.Services
                 };
             }
             var allowedDepartments = _securityRepository.GetUserAllowedDepartments();
-            var ldapCompanies = allowedDepartments.Where(r => r.ParentDepartment == null).
-                Select(r => new LdapDepartmentFilter
-                {
-                    Company = r.Name
-                });
-            var ldapDepartments = allowedDepartments.Where(r => r.ParentDepartment != null).
-                Select(r => new LdapDepartmentFilter
-                {
-                    Company = r.ParentDepartment.Name,
-                    Department = r.Name
-                });
+            var ldapCompanies = allowedDepartments.Where(r => r.ParentDepartment == null).Select(r => new LdapDepartmentFilter
+            {
+                Company = r.Name
+            });
+            var ldapDepartments = allowedDepartments.Where(r => r.ParentDepartment != null).Select(r => new LdapDepartmentFilter
+            {
+                Company = r.ParentDepartment.Name, Department = r.Name
+            });
             var ldapDepartmentFilter = ldapCompanies.Concat(ldapDepartments).ToList();
             if (ldapDepartmentFilter.Any()) return ldapDepartmentFilter;
             var userInfo = _securityRepository.GetUserInfo();
@@ -206,8 +199,7 @@ namespace RequestsForRights.Web.Infrastructure.Services
             {
                 new LdapDepartmentFilter
                 {
-                    Company = userDepartment.ParentDepartment == null ? userDepartment.Name : userDepartment.ParentDepartment.Name,
-                    Department = userDepartment.ParentDepartment != null ? userDepartment.Name : null
+                    Company = userDepartment.ParentDepartment == null ? userDepartment.Name : userDepartment.ParentDepartment.Name, Department = userDepartment.ParentDepartment != null ? userDepartment.Name : null
                 }
             };
             return ldapDepartmentFilter;

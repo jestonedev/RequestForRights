@@ -35,7 +35,7 @@ namespace RequestsForRights.Web.Infrastructure.Services.Interfaces
         void UpdateUserLastSeen(int idRequest, int idUser);
         RequestExtComment AddComment(int idRequest, string comment);
         void SetRequestState(int idRequest, int idRequestStateType, string reason);
-        void AddCooordinator(int idRequest, Coordinator coordinator);
+        void AddCooordinator(int idRequest, Coordinator coordinator, string sendDescription);
         void AcceptCancelRequest(int idRequest);
     }
 }

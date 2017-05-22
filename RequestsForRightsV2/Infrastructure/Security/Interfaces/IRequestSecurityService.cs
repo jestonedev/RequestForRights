@@ -28,5 +28,6 @@ namespace RequestsForRights.Web.Infrastructure.Security.Interfaces
         bool CanAgreement(RequestModel<T> request);
         bool CanVisibleUser(RequestModel<T> request, T user);
         bool CanVisibleRight(RequestModel<T> request, RequestUserRightModel right);
+        bool CanViewAgreementSendDescription(RequestAgreement agreement);
     }
 }

@@ -10,6 +10,8 @@ namespace RequestsForRights.Web.Models.Models
         public int IdResourceRight { get; set; }
         [DisplayName(@"Право")]
         public string ResourceRightName { get; set; }
+        [DisplayName(@"Описание права")]
+        public string ResourceRightDescription { get; set; }
         [DisplayName(@"Действие")]
         [Required(ErrorMessage = @"Обязательно для заполнения")]
         public int IdRequestRightGrantType { get; set; }
@@ -30,7 +32,7 @@ namespace RequestsForRights.Web.Models.Models
         protected bool Equals(RequestUserRightModel other)
         {
             return IdResourceRight == other.IdResourceRight && string.Equals(ResourceRightName, other.ResourceRightName) &&
-                   IdRequestRightGrantType == other.IdRequestRightGrantType &&
+                   string.Equals(ResourceRightDescription, other.ResourceRightDescription) && IdRequestRightGrantType == other.IdRequestRightGrantType &&
                    string.Equals(RequestRightGrantTypeName, other.RequestRightGrantTypeName) &&
                    string.Equals(Description, other.Description) && IdResource == other.IdResource &&
                    string.Equals(ResourceName, other.ResourceName);
@@ -56,6 +58,7 @@ namespace RequestsForRights.Web.Models.Models
             {
                 var hashCode = IdResourceRight;
                 hashCode = (hashCode*397) ^ (ResourceRightName != null ? ResourceRightName.GetHashCode() : 0);
+                hashCode = (hashCode*397) ^ (ResourceRightDescription != null ? ResourceRightDescription.GetHashCode() : 0);
                 hashCode = (hashCode*397) ^ IdRequestRightGrantType;
                 hashCode = (hashCode*397) ^ (RequestRightGrantTypeName != null ? RequestRightGrantTypeName.GetHashCode() : 0);
                 hashCode = (hashCode*397) ^ (Description != null ? Description.GetHashCode() : 0);

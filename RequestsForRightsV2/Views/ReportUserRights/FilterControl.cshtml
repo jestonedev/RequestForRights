@@ -1,5 +1,7 @@
 ﻿@using System.Globalization
+@using RequestsForRights.Domain.Enums
 @using RequestsForRights.Web.Infrastructure.Enums
+@using RequestsForRights.Web.Infrastructure.Helpers
 @model RequestsForRights.Web.Models.ViewModels.ReportUserRightsViewModel
 
 @{
@@ -20,20 +22,34 @@
         @Html.Hidden("Login", Model.Options.Login)
         @Html.Hidden("Department", Model.Options.Department)
         @Html.Hidden("Unit", Model.Options.Unit)
+        @Html.Hidden("UsersCategory", Model.Options.UsersCategory)
         <div class="form-group col-sm-3 rr-col-sm-no-left-padding">
             @Html.Label("Date", "На дату")
             <div class="input-group date">
                 @Html.TextBox("Date", Model.Options.Date != null ?
-                   Model.Options.Date.Value.ToString("dd.MM.yyyy", CultureInfo.CurrentCulture) : "",
-                    new { @class = "form-control" })
-                <div class="input-group-addon">
+                    Model.Options.Date.Value.ToString("dd.MM.yyyy", CultureInfo.CurrentCulture) : "",
+                    new {@class = "form-control"})
+                <div class="input-group-addon rr-show-date-picker-btn">
                     <span class="glyphicon glyphicon-th"></span>
                 </div>
             </div>
         </div>
         <div class="form-group col-sm-6">
             @Html.Label("Snp", "Сотрудник")
-            @Html.TextBox("Snp", Model.Options.Snp, new { @class = "form-control" })
+            <div class="input-group">
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span id="UsersCategoryCurrentLabel">@UserHelper.LabelToUserCategory(Model.Options.UsersCategory)</span> <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" id="UsersCategoryList">
+                        @foreach (var userCategory in Enum.GetValues(typeof(UsersCategory)))
+                        {
+                            <li><a href="#" data-category="@userCategory"> @UserHelper.LabelToUserCategory((UsersCategory)userCategory)</a></li>
+                        }
+                    </ul>
+                </div> 
+                @Html.TextBox("Snp", Model.Options.Snp, new { @class = "form-control" })
+            </div>
         </div>
         <div class=" rr-col-sm-no-right-padding col-sm-3 rr-report-display-style">
             @Html.Label("ReportDisplayStyle", "Представление")

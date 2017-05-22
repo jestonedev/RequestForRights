@@ -9,6 +9,7 @@ namespace RequestsForRights.Web.Infrastructure.Services.Interfaces
     {
         RequestUser FindUser(ReportUserRightsOptions options);
         IEnumerable<ResourceUserRightModel> GetUserRightsOnDate(ReportUserRightsOptions options, int idRequestUser);
+        IEnumerable<ResourceUserRightHistoryModel> GetUserRightsHistoryOnDate(ReportUserRightsHistoryOptions options, int idRequestUser);
         IEnumerable<ResourceUserRightModel> GetDepartmentRightsOnDate(ReportDepartmentRightsOptions options);
         IEnumerable<ResourceUserRightModel> GetResourceRightsOnDate(ReportResourceRightsOptions options);
         IEnumerable<ResourceUserRightModel> GetDepartmentAndResourceRightsOnDate(ReportDepartmentAndResourceRightsOptions options);

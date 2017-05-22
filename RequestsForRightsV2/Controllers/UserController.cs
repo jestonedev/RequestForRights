@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Web.Mvc;
 using RequestsForRights.Domain.Entities;
+using RequestsForRights.Domain.Enums;
+using RequestsForRights.Web.Infrastructure.Enums;
 using RequestsForRights.Web.Infrastructure.Logging;
 using RequestsForRights.Web.Infrastructure.Security.Interfaces;
 using RequestsForRights.Web.Infrastructure.Services.Interfaces;
@@ -48,9 +50,9 @@ namespace RequestsForRights.Web.Controllers
             _logger.Error(filterContext.Exception);
         }
 
-        public JsonResult GetUsers(string snpPattern)
+        public JsonResult GetUsers(string snpPattern, UsersCategory usersCategory = UsersCategory.ActiveUsers)
         {
-            return Json(_userService.FindUsers(snpPattern, 10), 
+            return Json(_userService.FindUsers(snpPattern, usersCategory, 10), 
                 JsonRequestBehavior.AllowGet);
         }
 

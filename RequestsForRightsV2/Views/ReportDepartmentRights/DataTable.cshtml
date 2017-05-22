@@ -65,7 +65,7 @@
                                 <dt>Ресурс</dt>
                                 <dd>@right.ResourceName</dd>
                                 <dt>Право</dt>
-                                <dd>@right.ResourceRightName</dd>
+                                <dd title="@right.ResourceRightDescription">@right.ResourceRightName</dd>
                                 @if (right.DateDelegateFrom == null)
                                 {
                                     <dt>Дата и время выдачи</dt>
@@ -176,7 +176,7 @@ else
                             <p class="rr-sub-cell-unit">@right.RequestUserUnit</p>
                         }
                     </td>
-                    <td class="rr-column">@right.ResourceRightName</td>
+                    <td class="rr-column" title="@right.ResourceRightDescription">@right.ResourceRightName</td>
                     <td class="rr-column">
                         @if (right.DateDelegateFrom != null)
                         {

@@ -1,0 +1,105 @@
+﻿@model RequestsForRights.Web.Models.ViewModels.ReportUserRightsHistoryViewModel
+@using RequestsForRights.Web.Infrastructure.Helpers;
+
+@{
+    Layout = null;
+}
+
+<div id="main-table-wrapper" class="rr-table-wrapper">
+    @if (Model == null || Model.Rights == null || !Model.Rights.Any())
+    {
+        <div class="text-center text-info">В указанный период никаких изменений по правам не было</div>
+        return;
+    }
+    @foreach (var rightDateGroup in Model.Rights.GroupBy(r => r.RequestCompleteDate.Date))
+    {
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                <b>@rightDateGroup.Key.ToString("dd.MM.yyyy")</b>
+            </div>
+            <ul class="list-group">
+                @{
+                    var includeUserRequests = rightDateGroup.Where(r => r.IdRequestType == 1).GroupBy(r => new {r.IdRequest, r.AclUser });
+                }
+                @foreach(var includeUserRequest in includeUserRequests)
+                {
+                    <li class="list-group-item">
+                        <h4 class="list-group-item-heading">Подключение сотрудника</h4>
+                        <dl class="dl-horizontal">
+                            <dt>Заявка</dt>
+                            <dd><a href="/Request/Detail/@includeUserRequest.Key.IdRequest">№ @includeUserRequest.Key.IdRequest</a></dd>
+                            <dt>Заявитель</dt>
+                            <dd>@includeUserRequest.Key.AclUser.Snp (@includeUserRequest.Key.AclUser.Department.Name)</dd>
+                        </dl>
+                    </li>
+                }
+
+                @foreach (var rightCategory in rightDateGroup.GroupBy(r => r.GrantType))
+                {
+                    if (rightCategory.Key == null)
+                    {
+                        continue;
+                    }
+                    <li class="list-group-item">
+                        <h4 class="list-group-item-heading">@RightHelper.PastTenseRightGrantType(rightCategory.Key.Name)</h4>
+                        @foreach (var right in rightCategory)
+                        {
+                            <p class="list-group-item-text">
+                                <dl class="dl-horizontal">
+                                    <dt>Ресурс</dt>
+                                    <dd>@right.Right.Resource.Name</dd>
+                                    <dt>Право</dt>
+                                    <dd title="@right.Right.Description">@right.Right.Name</dd>
+                                    @if (!string.IsNullOrEmpty(right.RequestRightDescription))
+                                    {
+                                        <dt>Примечание к праву</dt>
+                                        <dd>@right.RequestRightDescription</dd>
+                                    }
+                                    @if (right.DelegationExtInfo != null)
+                                    {
+                                        <dt>Делегировано с</dt>
+                                        <dd>@right.DelegationExtInfo.DelegateFromDate.ToString("dd.MM.yyyy")</dd>
+                                        <dt>Делегировано по</dt>
+                                        <dd>@right.DelegationExtInfo.DelegateToDate.ToString("dd.MM.yyyy")</dd>
+                                        if (Model.RequestUser.IdRequestUser == right.RequestUser.IdRequestUser)
+                                        {
+                                            <dt>Кому передано</dt>
+                                            <dd>@right.DelegationExtInfo.DelegateToUser.Snp (@right.DelegationExtInfo.DelegateToUser.Department / @right.DelegationExtInfo.DelegateToUser.Unit)</dd>
+                                        }
+                                        else {if (Model.RequestUser.IdRequestUser == right.DelegationExtInfo.IdDelegateToUser)
+                                        {
+                                            <dt>От кого получено</dt>
+                                            <dd>@right.RequestUser.Snp (@right.RequestUser.Department / @right.RequestUser.Unit)</dd>
+                                        }
+                                        }
+                                    }
+                                    <dt>Заявка</dt>
+                                    <dd><a href="/Request/Detail/@right.IdRequest">№ @right.IdRequest</a></dd>
+                                    <dt>Заявитель</dt>
+                                    <dd>@right.AclUser.Snp (@right.AclUser.Department.Name)</dd>
+                                </dl>
+                            </p>
+                        }
+
+                    </li>
+                }
+                @{
+                    var excludeUserRequests = rightDateGroup.Where(r => r.IdRequestType == 3).GroupBy(r => new { r.IdRequest, r.AclUser });
+                }
+                @foreach (var excludeUserRequest in excludeUserRequests)
+                {
+                    <li class="list-group-item">
+                        <h4 class="list-group-item-heading">Отключение сотрудника</h4>
+                        <dl class="dl-horizontal">
+                            <dt>Заявка</dt>
+                            <dd><a href="/Request/Detail/@excludeUserRequest.Key.IdRequest">№ @excludeUserRequest.Key.IdRequest</a></dd>
+                            <dt>Заявитель</dt>
+                            <dd>@excludeUserRequest.Key.AclUser.Snp (@excludeUserRequest.Key.AclUser.Department.Name)</dd>
+                        </dl>
+                    </li>
+                }
+            </ul>
+        </div>
+    }
+</div>

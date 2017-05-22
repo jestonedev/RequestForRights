@@ -20,6 +20,7 @@ namespace RequestsForRights.Web
             ValueProviderFactories.Factories.Add(new ReportResourceRightsOptionsValueProviderFactory());
             ValueProviderFactories.Factories.Add(new ReportDepartmentRightsOptionsValueProviderFactory());
             ValueProviderFactories.Factories.Add(new ReportDepartmentAndResourceRightsOptionsValueProviderFactory());
+            ValueProviderFactories.Factories.Add(new ReportUserRightsHistoryOptionsValueProviderFactory());
             ClientDataTypeModelValidatorProvider.ResourceClassKey = "ErrorMessagesResource";
             DefaultModelBinder.ResourceClassKey = "ErrorMessagesResource";
         }

@@ -446,5 +446,11 @@ namespace RequestsForRights.Web.Infrastructure.Security
             var resource = _resourceRepository.GetResourceById(right.IdResource);
             return allowedDepartments.Contains(resource.IdOperatorDepartment);
         }
+
+        public bool CanViewAgreementSendDescription(RequestAgreement agreement)
+        {
+            return InRole(new [] { AclRole.Administrator, AclRole.Dispatcher, AclRole.Registrar  }) ||
+                (InRole(AclRole.Coordinator) && agreement.IdUser == GetUserInfo().IdUser);
+        }
     }
 }

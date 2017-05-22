@@ -74,6 +74,7 @@ namespace RequestsForRights.Domain.Entities
         public string ControlOrgAddressStreet { get; set; }
         [DisplayName("Дом")]
         public string ControlOrgAddressHouse { get; set; }
+        [ScriptIgnore(ApplyToOverrides = true)]
         public virtual IList<Resource> RequestAllowedResources { get; set; }
         [Required]
         [DefaultValue(false)]

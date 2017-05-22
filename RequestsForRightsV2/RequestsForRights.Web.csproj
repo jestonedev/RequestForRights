@@ -152,6 +152,7 @@
     <Compile Include="Controllers\ReportDepartmentAndResourceRightsController.cs" />
     <Compile Include="Controllers\ReportDepartmentRightsController.cs" />
     <Compile Include="Controllers\ReportResourceRightsController.cs" />
+    <Compile Include="Controllers\ReportUserRightsHistoryController.cs" />
     <Compile Include="Controllers\ReportUserRightsController.cs" />
     <Compile Include="Controllers\RequestAddUserController.cs" />
     <Compile Include="Controllers\RequestController.cs" />
@@ -170,6 +171,8 @@
     <Compile Include="Infrastructure\Enums\SortDirection.cs" />
     <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions.cs" />
     <Compile Include="Infrastructure\Extensions\LinqExtensions.cs" />
+    <Compile Include="Infrastructure\Helpers\RightHelper.cs" />
+    <Compile Include="Infrastructure\Helpers\UserHelper.cs" />
     <Compile Include="Infrastructure\Logging\ILogger.cs" />
     <Compile Include="Infrastructure\Logging\LogUtility.cs" />
     <Compile Include="Infrastructure\Logging\NLogLogger.cs" />
@@ -226,8 +229,10 @@
     <Compile Include="Infrastructure\ValueProviders\ReportDepartmentRightsOptionsValueProvider.cs" />
     <Compile Include="Infrastructure\ValueProviders\ReportResourceRightsOptionsValueProvider.cs" />
     <Compile Include="Infrastructure\ValueProviders\ReportDepartmentRightsOptionsValueProviderFactory.cs" />
+    <Compile Include="Infrastructure\ValueProviders\ReportUserRightsHistoryOptionsValueProvider.cs" />
     <Compile Include="Infrastructure\ValueProviders\ReportUserRightsOptionsValueProvider.cs" />
     <Compile Include="Infrastructure\ValueProviders\FilterOptionsValueProvider.cs" />
+    <Compile Include="Infrastructure\ValueProviders\ReportUserRightsHistoryOptionsValueProviderFactory.cs" />
     <Compile Include="Infrastructure\ValueProviders\ReportUserRightsOptionsValueProviderFactory.cs" />
     <Compile Include="Infrastructure\ValueProviders\ReportResourceRightsOptionsValueProviderFactory.cs" />
     <Compile Include="Infrastructure\ValueProviders\FilterOptionsValueProviderFactory.cs" />
@@ -247,14 +252,17 @@
     <Compile Include="Models\FilterOptions\RequestsFilterOptions.cs" />
     <Compile Include="Models\Models\ResourceActFilesModel.cs" />
     <Compile Include="Models\Models\ResourcePersonActFilesModel.cs" />
+    <Compile Include="Models\Models\ResourceUserRightHistoryModel.cs" />
     <Compile Include="Models\Models\ResourceUserRightModel.cs" />
     <Compile Include="Models\ReportOptions\ReportDepartmentAndResourceRightsOptions.cs" />
     <Compile Include="Models\ReportOptions\ReportOptions.cs" />
     <Compile Include="Models\ReportOptions\ReportDepartmentRightsOptions.cs" />
     <Compile Include="Models\ReportOptions\ReportResourceRightsOptions.cs" />
+    <Compile Include="Models\ReportOptions\ReportUserRightsHistoryOptions.cs" />
     <Compile Include="Models\ReportOptions\ReportUserRightsOptions.cs" />
     <Compile Include="Models\ViewModels\ReportDepartmentAndResourceRightsViewModel.cs" />
     <Compile Include="Models\ViewModels\ReportDepartmentRightsViewModel.cs" />
+    <Compile Include="Models\ViewModels\ReportUserRightsHistoryViewModel.cs" />
     <Compile Include="Models\ViewModels\RequestPermissionsDepartmentsModel.cs" />
     <Compile Include="Models\ViewModels\ReportUserRightsViewModel.cs" />
     <Compile Include="Models\ViewModels\ReportResourceRightsViewModel.cs" />
@@ -652,6 +660,9 @@
     <Content Include="Views\ReportDepartmentAndResourceRights\DataTable.cshtml" />
     <Content Include="Views\ReportDepartmentAndResourceRights\FilterControl.cshtml" />
     <Content Include="Views\ReportDepartmentAndResourceRights\Index.cshtml" />
+    <Content Include="Views\ReportUserRightsHistory\DataTable.cshtml" />
+    <Content Include="Views\ReportUserRightsHistory\FilterControl.cshtml" />
+    <Content Include="Views\ReportUserRightsHistory\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RequestsForRights.Database\RequestsForRights.Database.csproj">

@@ -299,7 +299,7 @@ namespace RequestsForRights.Web.Controllers
             {
                 _requestService.AcceptCancelRequest(idRequest);
                 _requestService.SaveChanges();
-                var agreementReason = request.RequestAgreements.Where(r => r.IdAgreementState == 3).Select(r => r.Description)
+                var agreementReason = request.RequestAgreements.Where(r => r.IdAgreementState == 3).Select(r => r.AgreementDescription)
                     .Aggregate((v, acc) => v + "<br>" + acc);
                 var emails = _emailBuilder.SetRequestStateEmails(
                     _requestService.GetRequestById(idRequest, true),
@@ -315,7 +315,7 @@ namespace RequestsForRights.Web.Controllers
             return PartialView("Request/AgreementsContent", _requestService.GetRequestViewModelBy(request));
         }
 
-        public ActionResult AddCoordinator(int idRequest, Coordinator coordinator)
+        public ActionResult AddCoordinator(int idRequest, Coordinator coordinator, string sendDescription)
         {
             var request = _requestService.GetRequestById(idRequest);
             if (!_securityService.CanAddCoordinator(request))
@@ -324,11 +324,11 @@ namespace RequestsForRights.Web.Controllers
             }
             try
             {
-                _requestService.AddCooordinator(idRequest, coordinator);
+                _requestService.AddCooordinator(idRequest, coordinator, sendDescription);
                 _requestService.SaveChanges();
                 var emails = _emailBuilder.AddCoordinatorEmails(
                     _requestService.GetRequestById(idRequest, true),
-                    coordinator);
+                    coordinator, sendDescription);
                 _emailSender.Send(emails);
             }
             catch (DbUpdateException e)

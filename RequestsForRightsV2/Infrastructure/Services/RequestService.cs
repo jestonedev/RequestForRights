@@ -361,8 +361,8 @@ namespace RequestsForRights.Web.Infrastructure.Services
                 IdUser = userInfo.IdUser,
                 IdAgreementState = idRequestStateType == 2 ? 2 : 3,
                 IdAgreementType = 1,
-                Description = reason,
-                Date = DateTime.Now
+                AgreementDescription = reason,
+                AgreementDate = DateTime.Now
             };
             switch (idRequestStateType)
             {
@@ -371,8 +371,8 @@ namespace RequestsForRights.Web.Infrastructure.Services
                     break;
                 case 2:
                     if (RequestSecurityService.InRole(AclRole.Coordinator) &&
-                        !waitAgreementUsers.Any(r =>
-                            !r.RequestAgreements.Any(
+                        waitAgreementUsers.Any(r =>
+                            r.RequestAgreements.Any(
                                 ra => ra.IdRequest == idRequest &&
                                       ra.IdUser == userInfo.IdUser &&
                                       ra.IdAgreementType == 2) && r.IdUser == userInfo.IdUser))
@@ -395,8 +395,8 @@ namespace RequestsForRights.Web.Infrastructure.Services
                     break;
                 case 5:
                     if (RequestSecurityService.InRole(AclRole.Coordinator) &&
-                        !waitAgreementUsers.Any(r =>
-                            !r.RequestAgreements.Any(
+                        waitAgreementUsers.Any(r =>
+                            r.RequestAgreements.Any(
                                 ra => ra.IdRequest == idRequest &&
                                       ra.IdUser == userInfo.IdUser &&
                                       ra.IdAgreementType == 2) && r.IdUser == userInfo.IdUser))
@@ -427,7 +427,7 @@ namespace RequestsForRights.Web.Infrastructure.Services
             }
         }
 
-        public void AddCooordinator(int idRequest, Coordinator coordinator)
+        public void AddCooordinator(int idRequest, Coordinator coordinator, string sendDescription)
         {
             var agreement = new RequestAgreement
             {
@@ -435,6 +435,7 @@ namespace RequestsForRights.Web.Infrastructure.Services
                 IdAgreementType = 2,
                 IdAgreementState = 1,
                 SendDate = DateTime.Now,
+                SendDescription = sendDescription,
                 User = new AclUser
                 {
                     Login = coordinator.Login,
@@ -546,6 +547,7 @@ namespace RequestsForRights.Web.Infrastructure.Services
                 Description = rightAssoc.Descirption, 
                 IdResourceRight = rightAssoc.IdResourceRight, 
                 ResourceRightName = rightAssoc.ResourceRight.Name, 
+                ResourceRightDescription = rightAssoc.ResourceRight.Description, 
                 IdRequestRightGrantType = rightAssoc.IdRequestRightGrantType, 
                 RequestRightGrantTypeName = rightAssoc.RequestRightGrantType.Name,
                 IdResource = rightAssoc.ResourceRight.IdResource,

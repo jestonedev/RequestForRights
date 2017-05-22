@@ -82,6 +82,15 @@ namespace RequestsForRights.Web.Infrastructure.Services
             return rights.AsQueryable().OrderBy(options.SortDirection, options.SortField);
         }
 
+        public IEnumerable<ResourceUserRightHistoryModel> GetUserRightsHistoryOnDate(ReportUserRightsHistoryOptions options, int idRequestUser)
+        {
+            if (options.DateFrom == null || options.DateTo == null)
+            {
+                return null;
+            }
+            return _rightService.GetUserRightsHistoryOnDate(options.DateFrom.Value, options.DateTo.Value.AddDays(1).AddSeconds(-1), idRequestUser);
+        }
+
         public IEnumerable<ResourceUserRightModel> GetResourceRightsOnDate(ReportResourceRightsOptions options)
         {
             if (options.Date == null)
