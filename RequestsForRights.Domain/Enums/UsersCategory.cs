@@ -4,6 +4,6 @@
     {
         ActiveUsers,
         BlockedUsers,
-        ActiveAndBlockedUsers
+        All
     }
 }

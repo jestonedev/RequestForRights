@@ -1,6 +1,5 @@
 ﻿using System;
 using RequestsForRights.Domain.Enums;
-using RequestsForRights.Web.Infrastructure.Enums;
 
 namespace RequestsForRights.Web.Infrastructure.Helpers
 {
@@ -14,8 +13,8 @@ namespace RequestsForRights.Web.Infrastructure.Helpers
                     return "Активные";
                 case UsersCategory.BlockedUsers:
                     return "Заблокированные";
-                case UsersCategory.ActiveAndBlockedUsers:
-                    return "Активные и заблокированные";
+                case UsersCategory.All:
+                    return "Все";
                 default:
                     throw new ArgumentOutOfRangeException("usersCategory", usersCategory, null);
             }

@@ -7,5 +7,8 @@ namespace RequestsForRights.Ldap
     {
         IEnumerable<LdapUser> FindUsers(string snpPattern, UsersCategory usersCategory,
             IEnumerable<LdapDepartmentFilter> departemtnsFilter, int maxCount);
+
+        IEnumerable<LdapUser> FindMaternityLeaveUsers(string snpPattern,
+            IEnumerable<LdapDepartmentFilter> departemtnsFilter, int maxCount);
     }
 }
