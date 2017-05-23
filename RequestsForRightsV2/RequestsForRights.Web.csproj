@@ -312,6 +312,7 @@
     <Content Include="Content\Images\Help\4_3_1.png" />
     <Content Include="Content\Images\Help\4_3_2.png" />
     <Content Include="Content\Images\Help\4_3_3.png" />
+    <Content Include="Content\Images\Help\5_1.png" />
     <Content Include="Content\Images\Help\5_1_1.png" />
     <Content Include="Content\Images\Help\5_1_2.png" />
     <Content Include="Content\Images\Help\5_1_3.PNG" />
@@ -328,6 +329,10 @@
     <Content Include="Content\Images\Help\Otchet_1.png" />
     <Content Include="Content\Images\Help\Otchet_2.png" />
     <Content Include="Content\Images\Help\Otchet_3.png" />
+    <Content Include="Content\Images\Help\otchet_5_1_1.png" />
+    <Content Include="Content\Images\Help\otchet_5_1_2.png" />
+    <Content Include="Content\Images\Help\otchet_5_5_1.png" />
+    <Content Include="Content\Images\Help\othet_5_1_3.png" />
     <Content Include="Content\Images\Help\requests_button.PNG" />
     <Content Include="Content\Images\Help\request_add_agreement.png" />
     <Content Include="Content\Images\Help\request_add_agreement_2.png" />
