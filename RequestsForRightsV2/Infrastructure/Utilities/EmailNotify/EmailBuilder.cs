@@ -419,6 +419,7 @@ namespace RequestsForRights.Web.Infrastructure.Utilities.EmailNotify
             var lastRequestState = request.RequestStates.OrderByDescending(r => r.IdRequestState).
                 FirstOrDefault();
             if (lastRequestState == null ||
+                lastRequestState.IdRequestStateType == 4 ||
                 (lastRequestState.IdRequestStateType != idRequestStateType && 
                 !(lastRequestState.IdRequestStateType == 2 && idRequestStateType == 5)))
             {
