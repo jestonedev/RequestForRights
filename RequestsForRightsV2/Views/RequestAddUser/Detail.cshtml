@@ -114,7 +114,7 @@
                                                                 <dt>
                                                                     @Html.DisplayNameFor(r => r.RequestModel.Users[i].Rights[j].ResourceRightName)
                                                                 </dt>
-                                                                <dd title="@Model.RequestModel.Users[i].Rights[j].ResourceRightDescription">
+                                                                <dd title="@Html.AttributeEncode(Model.RequestModel.Users[i].Rights[j].ResourceRightDescription)">
                                                                     @Model.RequestModel.Users[i].Rights[j].ResourceRightName
                                                                 </dd>
                                                                 @if (!string.IsNullOrEmpty(Model.RequestModel.Users[i].Rights[j].Description))
