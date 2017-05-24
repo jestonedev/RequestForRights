@@ -47,7 +47,7 @@
                             var selected = r.ResourceRights.Any(rr => rr.IdResourceRight == idResourceRight);
                             return string.Format(
                                 "<option data-id-resource=\"{2}\" data-description=\"{3}\" {1}>{0}</option>",
-                                Html.Encode(r.Name), selected ? "selected" : "", r.IdResource, r.Description);
+                                Html.Encode(r.Name), selected ? "selected" : "", r.IdResource, Html.AttributeEncode(r.Description));
                         }).Aggregate((acc, v) => acc + v));
                 </optgroup>
             }
@@ -73,7 +73,7 @@
                                Model.RequestModel.Users[userIndex].Rights[rightIndex].IdResourceRight;
                 <option value="@right.IdResourceRight" @(selected ? "selected" : "")
                         data-id-resource="@right.IdResource"
-                        data-description="@right.Description">
+                        data-description="@Html.AttributeEncode(right.Description)">
                     @right.Name
                 </option>
             }
