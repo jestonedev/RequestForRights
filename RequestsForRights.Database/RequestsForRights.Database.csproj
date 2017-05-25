@@ -226,6 +226,14 @@
     <Compile Include="Migrations\201705190228367_RefactoringAndModificationOfRequestAgreements.Designer.cs">
       <DependentUpon>201705190228367_RefactoringAndModificationOfRequestAgreements.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201705250249038_AddRequestExecutors.cs" />
+    <Compile Include="Migrations\201705250249038_AddRequestExecutors.Designer.cs">
+      <DependentUpon>201705250249038_AddRequestExecutors.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705250338303_AddAlexApplicRequestNumColumn.cs" />
+    <Compile Include="Migrations\201705250338303_AddAlexApplicRequestNumColumn.Designer.cs">
+      <DependentUpon>201705250338303_AddAlexApplicRequestNumColumn.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\Interfaces\IReportRepository.cs" />
@@ -389,6 +397,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201705190228367_RefactoringAndModificationOfRequestAgreements.resx">
       <DependentUpon>201705190228367_RefactoringAndModificationOfRequestAgreements.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705250249038_AddRequestExecutors.resx">
+      <DependentUpon>201705250249038_AddRequestExecutors.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705250338303_AddAlexApplicRequestNumColumn.resx">
+      <DependentUpon>201705250338303_AddAlexApplicRequestNumColumn.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -41,6 +41,7 @@ namespace RequestsForRights.Database
         public IDbSet<ResourceOperatorAct> ResourceOperatorActs { get; set; }
         public IDbSet<ResourceUsingAct> ResourceUsingActs { get; set; }
         public IDbSet<ActFile> ActFiles { get; set; }
+        public IDbSet<RequestExecutor> RequestExecutors { get; set; }
 
         public DatabaseContext()
             : base("DatabaseContext")
