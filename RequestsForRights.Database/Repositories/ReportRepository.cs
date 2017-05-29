@@ -36,5 +36,15 @@ namespace RequestsForRights.Database.Repositories
         {
             return _databaseContext.Departments.Where(r => !r.Deleted && r.IdParentDepartment == null);
         }
+
+        public IQueryable<ResourceOperatorPerson> GetOperatorPersons()
+        {
+            return _databaseContext.ResourceOperatorPersons.Where(r => !r.Deleted);
+        }
+
+        public IQueryable<ResourceOperatorPersonAct> GetOperatorPersonActs()
+        {
+            return _databaseContext.ResourceOperatorPersonActs.Where(r => !r.Deleted);
+        }
     }
 }

@@ -180,5 +180,36 @@ namespace RequestsForRights.Web.Infrastructure.Services
             return _reportRepository.GetDepartments()
                 .OrderBy(r => r.Name).ToList();
         }
+
+        public IEnumerable<ResourceOperatorModel> GetResourceOperatorInfo(int? idDepartment)
+        {
+            return from resourceRow in _reportRepository.GetResources()
+                join departmentRow in _reportRepository.GetDepartments()
+                    on resourceRow.IdOperatorDepartment equals departmentRow.IdDepartment
+                join operatorPersonRow in _reportRepository.GetOperatorPersons()
+                    on resourceRow.IdResource equals operatorPersonRow.IdResource into op
+                from opRow in op.DefaultIfEmpty()
+                join operatorPersonActRow in _reportRepository.GetOperatorPersonActs()
+                    on opRow.IdResourceOperatorPerson equals operatorPersonActRow.IdResourceOperatorPerson into opa
+                from opaRow in opa.DefaultIfEmpty()
+                where idDepartment == 0 || resourceRow.IdOperatorDepartment == idDepartment
+                orderby departmentRow.Name, resourceRow.Name, opRow.Surname, opRow.Name, opRow.Patronimic, opaRow.ActDate, opaRow.ActNumber
+                select new ResourceOperatorModel
+                {
+                    Department = departmentRow.Name,
+                    IdResource = resourceRow.IdResource,
+                    ResourceName = resourceRow.Name,
+                    ResourceDescription = resourceRow.Description,
+                    Surname = opRow.Surname,
+                    Name = opRow.Name,
+                    Patronymic = opRow.Patronimic,
+                    Post = opRow.Post,
+                    ActType = opaRow.ActType,
+                    ActName = opaRow.ActName,
+                    ActDate = opaRow.ActDate,
+                    ActNumber = opaRow.ActNumber,
+                    IdFile = opaRow.IdFile
+                };
+        }
     }
 }

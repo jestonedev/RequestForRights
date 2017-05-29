@@ -437,7 +437,8 @@ button.rr-ext-filter-button.collapsed:hover {
     margin-bottom: 0;
 }
 
-.rr-sub-cell-unit, .rr-sub-cell-department {
+.rr-sub-cell-unit, .rr-sub-cell-department, .rr-sub-cell-resource-operator-post,
+.rr-sub-cell-resource-operator-description {
     font-size: 12px;
     color: #aaa;
 }
@@ -801,4 +802,17 @@ button[name="deleteDeviceAddress"]{
 
 .rr-show-date-picker-btn {
     outline: none;
+}
+
+.rr-resource-operator-report-empty-hint {
+    margin-top: 43px;
+}
+
+.rr-resource-operator-report-agg-info {
+    margin-top: 23px; 
+    margin-bottom: 15px
+}
+
+.rr-resource-operator-report-agg-info p {
+    margin: 0;
 }

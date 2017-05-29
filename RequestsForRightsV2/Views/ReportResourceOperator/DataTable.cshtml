@@ -1,0 +1,163 @@
+﻿@model RequestsForRights.Web.Models.ViewModels.ReportResourceOperatorViewModel
+
+@{
+    Layout = null;
+}
+
+<div id="main-table-wrapper" class="rr-table-wrapper">
+    @if (Model == null || Model.ResourceOperators == null || !Model.ResourceOperators.Any())
+    {
+        <div class="text-center text-info col-sm-6 rr-col-sm-no-right-padding rr-resource-operator-report-empty-hint">Информация отсутствует</div>
+        return;
+    }
+    <div class="text-center col-sm-6 rr-col-sm-no-right-padding rr-resource-operator-report-agg-info">
+        <p class="text-info">Всего ресурсов: @Model.ResourceOperators.GroupBy(r => r.ResourceName).Count()</p>
+        <p class="text-danger">
+            Ресурсов без должностного лица-оператора: @Model.ResourceOperators.GroupBy(r => r.ResourceName).Count(rs => rs.All(r => 
+                                                    r.Surname == null &&
+                                                    r.Name == null &&
+                                                    r.Patronymic == null &&
+                                                    r.Post == null))
+        </p>
+        <p class="text-danger">
+            Не указан документ-основание: @Model.ResourceOperators.GroupBy(r => new
+                                          {
+                                            r.ResourceName,
+                                            r.Surname,
+                                            r.Name,
+                                            r.Patronymic,
+                                            r.Post
+                                          }).Where(r =>
+                                               r.Key.Surname != null ||
+                                               r.Key.Name != null ||
+                                               r.Key.Patronymic != null ||
+                                               r.Key.Post != null).Count(rs => rs.All(r => 
+                                            r.ActDate == null &&
+                                            r.ActName == null &&
+                                            r.ActNumber == null &&
+                                            r.IdFile == null &&
+                                            r.ActType == null)) чел.
+        </p>
+    </div>
+    
+
+
+    <table class="table table-hover clearfix">
+        <thead>
+            <tr>
+                <th class="rr-column rr-column-header" style="width: 25%">Организация-оператор</th>
+                <th class="rr-column rr-column-header" style="width: 25%">Информационные ресурс</th>
+                <th class="rr-column rr-column-header" style="width: 25%">Должностное лицо-оператор</th>
+                <th style="width: 25%">Документ-основание</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var departmentsCounter = 0;
+                var resourceCounter = 0;
+                var operatorCounter = 0;
+            }
+            @foreach (var resourceOperator in Model.ResourceOperators)
+            {
+                <tr>
+                    @if (departmentsCounter <= 0)
+                    {
+                        departmentsCounter = Model.ResourceOperators.Count(r => r.Department == resourceOperator.Department);
+                        <td class="rr-column" rowspan="@departmentsCounter">
+                            @resourceOperator.Department
+                        </td>
+                    }
+                    @{ departmentsCounter--; }
+                    @if (resourceCounter <= 0)
+                    {
+                        resourceCounter = Model.ResourceOperators.Count(r =>
+                                r.Department == resourceOperator.Department &&
+                                r.ResourceName == resourceOperator.ResourceName);
+                        <td class="rr-column" rowspan="@resourceCounter">
+                            <p>
+                                <a href="/Resource/Detail/@resourceOperator.IdResource">
+                                    @resourceOperator.ResourceName
+                                </a>
+                            </p>
+                            @if (resourceOperator.ResourceDescription != null)
+                            {
+                                <p class="rr-sub-cell-resource-operator-description">@resourceOperator.ResourceDescription</p>
+                            }
+                        </td>
+                    }
+                    @{ resourceCounter--; }
+                    @if (operatorCounter <= 0)
+                    {
+                        operatorCounter = Model.ResourceOperators.Count(r =>
+                                r.Department == resourceOperator.Department &&
+                                r.ResourceName == resourceOperator.ResourceName &&
+                                r.Surname == resourceOperator.Surname &&
+                                r.Name == resourceOperator.Name &&
+                                r.Patronymic == resourceOperator.Patronymic);
+                        <td class="rr-column" rowspan="@operatorCounter">
+                            @if (resourceOperator.Surname != null || resourceOperator.Name != null || resourceOperator.Patronymic != null)
+                            {
+                                <p>
+                                    @(resourceOperator.Surname +
+                                (resourceOperator.Surname != null && resourceOperator.Name != null ? " " : "") +
+                                resourceOperator.Name +
+                                (resourceOperator.Name != null && resourceOperator.Patronymic != null ? " " : "") +
+                                resourceOperator.Patronymic)
+                            </p>
+                            }
+                            @if (resourceOperator.Post != null)
+                            {
+                                <p class="rr-sub-cell-resource-operator-post">@resourceOperator.Post</p>
+                            }
+                        </td>
+                    }
+                    @{ operatorCounter--; }
+                    <td>
+                        @if (resourceOperator.ActNumber != null || resourceOperator.ActType != null || resourceOperator.ActName != null
+                        || resourceOperator.ActDate != null)
+                        {
+                            var act = "";
+                            if (resourceOperator.ActType != null)
+                            {
+                                act = resourceOperator.ActType;
+                            }
+                            if (resourceOperator.ActName != null)
+                            {
+                                if (!string.IsNullOrEmpty(act))
+                                {
+                                    act += " ";
+                                }
+                                act += string.Format("«{0}»", resourceOperator.ActName);
+                            }
+                            if (resourceOperator.ActNumber != null)
+                            {
+                                if (!string.IsNullOrEmpty(act))
+                                {
+                                    act += " ";
+                                }
+                                act += string.Format("№ {0}", resourceOperator.ActNumber);
+                            }
+                            if (resourceOperator.ActDate != null)
+                            {
+                                if (!string.IsNullOrEmpty(act))
+                                {
+                                    act += " ";
+                                }
+                                act += string.Format("от {0}", resourceOperator.ActDate.Value.ToString("dd.MM.yyyy"));
+                            }
+
+                            <p>
+                                @act
+                            </p>
+                        }
+                        @if (resourceOperator.IdFile != null)
+                        {
+                            <a href="/Resource/LoadFile?IdFile=@resourceOperator.IdFile">Скачать</a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+</div>

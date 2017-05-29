@@ -1,0 +1,19 @@
+﻿@model RequestsForRights.Web.Models.ViewModels.ReportResourceOperatorViewModel
+
+@{
+    ViewBag.Title = "Отчет по операторам ИР";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Отчет по операторам ИР</h2>
+
+@Html.Partial("ErrorAlert")
+@Html.Partial("FilterControl")
+@Html.Action("GetDataTable")
+
+@section scripts {
+    @Styles.Render("~/Content/bootstrap-datepicker")
+    @Scripts.Render("~/bundles/bootstrap-datepicker")
+    @Scripts.Render("~/bundles/rr-index.common")
+    @Scripts.Render("~/bundles/rr-report.common")
+}

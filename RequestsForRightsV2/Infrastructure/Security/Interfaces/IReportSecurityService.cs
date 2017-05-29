@@ -13,5 +13,7 @@ namespace RequestsForRights.Web.Infrastructure.Security.Interfaces
 
         bool CanReadDepartmentPermissions();
         bool CanReadDepartmentAndResourcePermissions();
+        bool CanReadResourceOperatorInfo();
+        bool CanVisiblieAllDepartmentsMark();
     }
 }

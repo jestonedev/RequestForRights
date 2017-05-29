@@ -8,5 +8,7 @@ namespace RequestsForRights.Database.Repositories.Interfaces
         IQueryable<Resource> GetResources();
         IQueryable<RequestUser> GetUsers();
         IQueryable<Department> GetDepartments();
+        IQueryable<ResourceOperatorPerson> GetOperatorPersons();
+        IQueryable<ResourceOperatorPersonAct> GetOperatorPersonActs();
     }
 }

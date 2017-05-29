@@ -81,6 +81,29 @@ namespace RequestsForRights.Web.Infrastructure.Security
             return CanReadResourcePermissions();
         }
 
+        public bool CanReadResourceOperatorInfo()
+        {
+            return InRole(new []
+            {
+                AclRole.Administrator, 
+                AclRole.Dispatcher, 
+                AclRole.ResourceManager, 
+                AclRole.Registrar
+            });
+        }
+
+        public bool CanVisiblieAllDepartmentsMark()
+        {
+            return InRole(new[]
+            {
+                AclRole.Administrator, 
+                AclRole.Dispatcher, 
+                AclRole.ResourceManager,
+                AclRole.Executor, 
+                AclRole.Registrar
+            });
+        }
+
         public IQueryable<Department> FilterDepartments(IQueryable<Department> departments)
         {
             if (InRole(new[]
