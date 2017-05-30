@@ -60,7 +60,7 @@ $("#rr-request-form")
             return false;
         });
 
-$(".rr-save-button").on("click", submitButtonClick);
+$(".rr-send-button").on("click", submitButtonClick);
 
 $(".rr-request-description textarea")
     .on("change",

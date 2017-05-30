@@ -56,12 +56,20 @@ namespace RequestsForRights.Database.Repositories
             requestUser.Department = string.IsNullOrEmpty(requestUser.Department) ? null : requestUser.Department;
             requestUser.Unit = string.IsNullOrEmpty(requestUser.Unit) ? null : requestUser.Unit;
 
-            return _databaseContext.Users.FirstOrDefault(
-                r => !r.Deleted && (requestUser.Login != null
+            var users = _databaseContext.Users.Where(r => !r.Deleted && 
+                (requestUser.Login != null
                 ? r.Login.ToLower() == requestUser.Login.ToLower()
                 : r.Snp == requestUser.Snp &&
                   r.Department == requestUser.Department &&
-                  r.Unit == requestUser.Unit));
+                  r.Unit == requestUser.Unit)).ToList();
+
+
+
+            return users.Count == 1
+                ? users.FirstOrDefault()
+                : users.FirstOrDefault(r => r.Snp == requestUser.Snp &&
+                                            r.Department == requestUser.Department &&
+                                            r.Unit == requestUser.Unit);
         }
     }
 }
