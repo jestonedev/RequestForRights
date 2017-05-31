@@ -360,6 +360,10 @@ namespace RequestsForRights.Web.Infrastructure.Security
             {
                 return false;
             }
+            if (request.RequestAgreements.Any(r => r.IdAgreementState == 4 && r.IdUser == GetUserInfo().IdUser))
+            {
+                return false;
+            }
             var allowedDepartments = GetUserAllowedDepartments().Select(r => r.IdDepartment);
             var resourceDepartments = request.RequestUserAssoc.
                 Where(ru => !ru.Deleted && ru.RequestUserRightAssocs != null).
