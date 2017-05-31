@@ -23,6 +23,7 @@ namespace RequestsForRights.Database.Repositories.Interfaces
         RequestExtComment AddComment(RequestExtComment requestComment);
         RequestState AddRequestState(RequestState state, bool resetAgreements);
         RequestAgreement AddAdditionalAgreement(RequestAgreement agreement);
+        RequestAgreement ExcludeAgreementor(RequestAgreement agreement);
         RequestAgreement UpdateRequestAgreement(RequestAgreement agreement, bool updateSendInfo = false);
 
         void UpdateDelegationRequestUsersExtInfo(int idRequest, 

@@ -145,7 +145,7 @@ namespace RequestsForRights.Web.Infrastructure.Utilities.EmailNotify
             var messages = new List<MailMessage>();
 
             // TODO: delete later
-            if (request.User.IdUser == 109)
+            if (request.User.IdUser == 109 || request.User.IdUser == 49)
             {
                 return messages;
             }
@@ -250,7 +250,7 @@ namespace RequestsForRights.Web.Infrastructure.Utilities.EmailNotify
             var messages = new List<MailMessage>();
 
             // TODO: delete later
-            if (request.User.IdUser == 109)
+            if (request.User.IdUser == 109 || request.User.IdUser == 49)
             {
                 return messages;
             }
@@ -410,7 +410,7 @@ namespace RequestsForRights.Web.Infrastructure.Utilities.EmailNotify
             var messages = new List<MailMessage>();
 
             // TODO: delete later
-            if (request.User.IdUser == 109)
+            if (request.User.IdUser == 109 || request.User.IdUser == 49)
             {
                 return messages;
             }

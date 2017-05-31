@@ -236,6 +236,13 @@ namespace RequestsForRights.Database.Repositories
             return UpdateRequestAgreement(agreement, true);
         }
 
+        public RequestAgreement ExcludeAgreementor(RequestAgreement agreement)
+        {
+            var user = _databaseContext.AclUsers.FirstOrDefault(r => !r.Deleted && (r.IdUser == agreement.IdUser));
+            agreement.User = user;
+            return UpdateRequestAgreement(agreement);
+        }
+
         public RequestAgreement UpdateRequestAgreement(RequestAgreement agreement, bool updateSendInfo = false)
         {
             var reqAgreement = _databaseContext.RequestAgreements.

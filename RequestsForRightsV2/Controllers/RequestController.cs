@@ -339,5 +339,29 @@ namespace RequestsForRights.Web.Controllers
             ViewData["SecurityService"] = _securityService;
             return PartialView("Request/AgreementsContent", _requestService.GetRequestViewModelBy(request));
         }
+
+        public ActionResult ExcludeAgreementor(int idRequest, int idUser, int idRequestAgreementType)
+        {
+            var request = _requestService.GetRequestById(idRequest);
+            if (!_securityService.CanExcludeAgreementor(request))
+            {
+                return RedirectToAction("ForbiddenError", "Home");
+            }
+            try
+            {
+                _requestService.ExcludeAgreementor(idRequest, idUser, idRequestAgreementType);
+                _requestService.SaveChanges();
+                var emails = _emailBuilder.SetRequestStateEmails(
+                    _requestService.GetRequestById(idRequest, true), 2, null);
+                _emailSender.Send(emails);
+            }
+            catch (DbUpdateException e)
+            {
+                return RedirectToAction("ConflictError", "Home",
+                    new { message = ExceptionHelper.RollToInnerException(e).Message });
+            }
+            ViewData["SecurityService"] = _securityService;
+            return PartialView("Request/AgreementsContent", _requestService.GetRequestViewModelBy(request));
+        }
     }
 }

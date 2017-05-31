@@ -37,5 +37,6 @@ namespace RequestsForRights.Web.Infrastructure.Services.Interfaces
         void SetRequestState(int idRequest, int idRequestStateType, string reason);
         void AddCooordinator(int idRequest, Coordinator coordinator, string sendDescription);
         void AcceptCancelRequest(int idRequest);
+        void ExcludeAgreementor(int idRequest, int idUser, int idRequestAgreementType);
     }
 }

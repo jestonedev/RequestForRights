@@ -144,6 +144,16 @@ button.rr-ext-filter-button.collapsed:hover {
     margin-bottom: 15px;
 }
 
+.rr-agreement-item {
+    position: relative;
+}
+
+.rr-agreement-item .rr-agreement-exclude-button {
+    position: absolute;
+    right: 10px;
+    top: 5px;
+}
+
 .rr-edit-panel > .btn-group a, .rr-edit-panel > .btn-group button,
 .rr-add-comment-panel > .btn-group a, .rr-add-comment-panel > .btn-group button,
 .rr-add-request-user-panel > button, .rr-remove-user-button,
@@ -816,3 +826,4 @@ button[name="deleteDeviceAddress"]{
 .rr-resource-operator-report-agg-info p {
     margin: 0;
 }
+

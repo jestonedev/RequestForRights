@@ -99,7 +99,7 @@ namespace RequestsForRights.Web.Infrastructure.Security
         {
             var filteredRequests = requests.Where(r => false);
             requests = requests.Where(r => !r.Deleted);
-            if (InRole(AclRole.Administrator))
+            if (InRole(new[] { AclRole.Administrator, AclRole.Dispatcher, AclRole.Registrar }))
             {
                 return requests;
             }
@@ -132,12 +132,6 @@ namespace RequestsForRights.Web.Infrastructure.Security
                          !ru.Deleted && ru.RequestUserRightAssocs.Any(rur => 
                          !rur.Deleted && 
                          allowedDepartments.Any(d => d == rur.ResourceRight.Resource.IdOperatorDepartment)))));
-            }
-            if (InRole(new[] {AclRole.Dispatcher, AclRole.Registrar}))
-            {
-                filteredRequests = filteredRequests.Concat(
-                    requests.Where(r => r.RequestStates.Any(
-                        rs => !rs.Deleted && rs.IdRequestStateType == 2)));
             }
             if (InRole(AclRole.Executor))
             {
@@ -254,6 +248,20 @@ namespace RequestsForRights.Web.Infrastructure.Security
                 new[] { 1, 2 }.Contains(idRequestStateType);
         }
 
+        public bool CanExcludeAgreementor(RequestModel<T> entity)
+        {
+            var request = _requestRepository.GetRequestById(entity.IdRequest);
+            return CanExcludeAgreementor(request);
+        }
+
+        public bool CanExcludeAgreementor(Request request)
+        {
+            var idRequestStateType = request.RequestStates.OrderBy(rs => rs.IdRequestState).
+                Last(r => !r.Deleted).IdRequestStateType;
+            return InRole(new[] { AclRole.Dispatcher, AclRole.Administrator }) &&
+                new[] { 1, 2 }.Contains(idRequestStateType);
+        }
+
         public bool CanAcceptCancelRequest(RequestModel<T> entity)
         {
             var request = _requestRepository.GetRequestById(entity.IdRequest);
@@ -336,10 +344,10 @@ namespace RequestsForRights.Web.Infrastructure.Security
             return CanSetRequestState(request, idRequestStateType);
         }
 
-        private bool DispatcherCanSetRequestState(Request request)
+        private static bool DispatcherCanSetRequestState(Request request)
         {
             return
-                request.RequestStates.Any(r => !r.Deleted && r.IdRequestStateType == 2) &&
+                request.RequestStates.Any(r => !r.Deleted && new [] {1,2}.Contains(r.IdRequestStateType)) &&
                 new[] {1, 2}.Contains(request.RequestStates.OrderBy(rs => rs.IdRequestState).
                     Last(r => !r.Deleted).IdRequestStateType);
         }

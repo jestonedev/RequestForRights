@@ -482,6 +482,29 @@ namespace RequestsForRights.Web.Infrastructure.Services
             RequestsRepository.AddRequestState(requestState, false);
         }
 
+        public void ExcludeAgreementor(int idRequest, int idUser, int idRequestAgreementType)
+        {
+            var requestState = new RequestState
+            {
+                IdRequest = idRequest,
+                IdRequestStateType = 2,
+                Date = DateTime.Now
+            };
+
+            var agreement = new RequestAgreement
+            {
+                IdRequest = idRequest,
+                IdUser = idUser,
+                IdAgreementState = 4,
+                IdAgreementType = idRequestAgreementType
+            };
+            RequestsRepository.ExcludeAgreementor(agreement);
+            if (!NeedAdditionalAgreements(idRequest, agreement))
+            {
+                RequestsRepository.AddRequestState(requestState, false);
+            }
+        }
+
         private bool NeedAdditionalAgreements(int idRequest, RequestAgreement newAgreement)
         {
             return GetWaitAgreementUsers(idRequest,
@@ -580,6 +603,7 @@ namespace RequestsForRights.Web.Infrastructure.Services
             preRequestViewModel.Comments = RequestsRepository.GetRequestExtComments(idRequest);
             preRequestViewModel.SuccessAgreements = GetSuccessAgreements(agreements);
             preRequestViewModel.CancelAgreements = GetCancelAgreements(agreements);
+            preRequestViewModel.ExcludedAgreements = GetExcludedAgreements(agreements);
             preRequestViewModel.WaitAgreementUsers = GetWaitAgreementUsers(idRequest, agreements);
             return preRequestViewModel;
         }
@@ -594,6 +618,12 @@ namespace RequestsForRights.Web.Infrastructure.Services
             IEnumerable<RequestAgreement> agreements)
         {
             return agreements.Where(r => r.IdAgreementState == 3).ToList();
+        }
+
+        private static IEnumerable<RequestAgreement> GetExcludedAgreements(
+            IEnumerable<RequestAgreement> agreements)
+        {
+            return agreements.Where(r => r.IdAgreementState == 4).ToList();
         }
 
         public IEnumerable<AclUser> GetWaitAgreementUsers(int idRequest,
@@ -613,15 +643,16 @@ namespace RequestsForRights.Web.Infrastructure.Services
                         u.AclDepartments == null || 
                         !u.AclDepartments.Any());
                     return aclUsers.Concat(users).Where(u => u.Roles.Any(role => role.IdRole == 2));
-                });
+                }).Where(r => !agreements.Any(a => a.IdAgreementType == 1 && a.IdAgreementState == 4 && a.IdUser == r.IdUser));
             var excludeDepartments = agreements.Where(r => r.IdAgreementType == 1 &&
-                                                           new[] {2, 3}.Contains(r.IdAgreementState)).ToList().
+                    new [] {2,3}.Contains(r.IdAgreementState)).ToList().
                 SelectMany(r => 
                     RequestSecurityService.GetUserAllowedDepartments(r.User).Select(u => u.IdDepartment)).
                     Concat(RequestSecurityService.GetUserAllowedDepartments(request.User).Select(u => u.IdDepartment)).
                     Distinct();
             var additionalAgreementUsers =
-                agreements.Where(r => r.IdAgreementType == 2 && r.IdAgreementState == 1).Select(r => r.User);
+                agreements.Where(r => r.IdAgreementType == 2 && r.IdAgreementState == 1).Select(r => r.User).
+                Where(r => !agreements.Any(a => a.IdAgreementType == 2 && a.IdAgreementState == 4 && a.IdUser == r.IdUser));
             return
                 requestResourceOwners.Where(r =>
                 {

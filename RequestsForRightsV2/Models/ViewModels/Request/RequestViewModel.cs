@@ -12,5 +12,6 @@ namespace RequestsForRights.Web.Models.ViewModels.Request
         public IEnumerable<AclUser> WaitAgreementUsers { get; set; }
         public IEnumerable<RequestAgreement> SuccessAgreements { get; set; }
         public IEnumerable<RequestAgreement> CancelAgreements { get; set; }
+        public IEnumerable<RequestAgreement> ExcludedAgreements { get; set; }
     }
 }
