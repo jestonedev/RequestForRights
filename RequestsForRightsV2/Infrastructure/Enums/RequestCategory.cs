@@ -4,6 +4,7 @@
     {
         AllRequests,
         MyRequests,
-        NotSeenRequests
+        NotSeenRequests,
+        AssignedToMeRequests
     }
 }

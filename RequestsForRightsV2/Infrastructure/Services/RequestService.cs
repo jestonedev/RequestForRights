@@ -118,8 +118,11 @@ namespace RequestsForRights.Web.Infrastructure.Services
             }
             if (filterOptions.RequestCategory == RequestCategory.MyRequests)
             {
-                requests = requests.Where(r => r.User.Login.ToLower() == 
-                    RequestSecurityService.CurrentUser.ToLower());
+                requests = requests.Where(r => r.User.Login == RequestSecurityService.CurrentUser);
+            }
+            if (filterOptions.RequestCategory == RequestCategory.AssignedToMeRequests)
+            {
+                requests = requests.Where(r => r.RequestExecutors.Any(re => re.Login == RequestSecurityService.CurrentUser));
             }
             if (filterOptions.DateOfFillingFrom != null)
             {
@@ -188,6 +191,10 @@ namespace RequestsForRights.Web.Infrastructure.Services
                 new RequestCategoryModel
                 {
                     RequestCategory = RequestCategory.NotSeenRequests, DisplayName = "Только непросмотренные"
+                },
+                new RequestCategoryModel
+                {
+                    RequestCategory = RequestCategory.AssignedToMeRequests, DisplayName = "Назначенные мне"
                 }
             };
         }

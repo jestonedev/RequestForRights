@@ -48,6 +48,7 @@
                             <li>@Html.ActionLink("Все заявки", "Index", "Request", null, new { id = "rr-dropdown-menu-all-requests" })</li>
                             <li>@Html.ActionLink("Мои заявки", "Index", "Request", null, new { id = "rr-dropdown-menu-my-requests" })</li>
                             <li>@Html.ActionLink("Непросмотренные", "Index", "Request", null, new { id = "rr-dropdown-menu-not-seen-requests" })</li>
+                            <li>@Html.ActionLink("Назначенные мне", "Index", "Request", null, new { id = "rr-dropdown-menu-assigned-to-me-requests" })</li>
                             <li role="separator" class="divider"></li>
                             @Html.Action("RequestsByStatesMenuItems", "Request")
                         </ul>

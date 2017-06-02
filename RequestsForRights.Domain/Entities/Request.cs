@@ -18,6 +18,7 @@ namespace RequestsForRights.Domain.Entities
         public virtual IList<RequestAgreement> RequestAgreements { get; set; }
         public virtual IList<RequestUserLastSeen> RequestUserLastSeens { get; set; }
         public virtual IList<RequestState> RequestStates { get; set; }
+        public virtual IList<RequestExecutor> RequestExecutors { get; set; }
         public virtual IList<RequestUserAssoc> RequestUserAssoc { get; set; }
         [DefaultValue(false)]
         public bool Deleted { get; set; }

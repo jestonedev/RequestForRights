@@ -115,6 +115,13 @@ $(function () {
             });
 
     $(".requests-menu")
+        .on("click", "#rr-dropdown-menu-assigned-to-me-requests",
+            function () {
+                resetRequestIndexState();
+                setCookie("Request.RequestCategory", "AssignedToMeRequests", { "path": "/" });
+            });
+
+    $(".requests-menu")
         .on("click", ".rr-dropdown-menu-request-state-type",
             function () {
                 resetRequestIndexState();
