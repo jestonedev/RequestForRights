@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Net.Mail;
 using System.Web;
@@ -526,6 +527,68 @@ namespace RequestsForRights.Web.Infrastructure.Utilities.EmailNotify
             if (!string.IsNullOrEmpty(coordinator.Email))
             {
                 var message = AddCoordinatorEmail(request, coordinator, sendDescription);
+                messages.Add(message);
+            }
+            return messages;
+        }
+
+        public IEnumerable<MailMessage> CreateSendTransferUserEmails(string requesterSnp, string requesterDepartment, string transferUserSnp,
+            string transferToDepartment, string transferToUnit, string transferFromDepartment, string transferFromUnit)
+        {
+            var messages = new List<MailMessage>();
+            var allRequesters = _requestSecurityService.GetUsersBy(AclRole.Requester).Include(r => r.Department)
+                .Include(r => r.Department.ParentDepartment);
+            List<AclUser> requesters;
+            if (!string.IsNullOrEmpty(transferFromUnit))
+            {
+                requesters = allRequesters.Where(r => r.Department.Name == transferFromDepartment &&
+                                                   r.Department.ParentDepartment.Name == transferFromUnit).ToList();
+                if (!requesters.Any())
+                {
+                    requesters = allRequesters.Where(r => r.Department.Name == transferFromDepartment).ToList();
+                }
+            }
+            else
+            {
+                requesters = allRequesters.Where(r => r.Department.Name == transferFromDepartment).ToList();
+            }
+            foreach (var requester in requesters)
+            {
+                if (string.IsNullOrEmpty(requester.Email))
+                {
+                    continue;
+                }
+                var transferFrom = string.Format("«{0}»", transferFromDepartment);
+                if (!string.IsNullOrEmpty(transferFromUnit))
+                {
+                    transferFrom += string.Format(" («{0}»)", transferFromUnit);
+                }
+                var transferTo = string.Format("«{0}»", transferToDepartment);
+                if (!string.IsNullOrEmpty(transferToUnit))
+                {
+                    transferTo += string.Format(" («{0}»)", transferToUnit);
+                }
+
+                const string subject = "Уведомление о необходимости отключения сотрудника";
+                var body = string.Format(
+                    "Здравствуйте, {3}!<br>"+
+                    "В связи с переводом сотрудника «{0}» из организации {1} в организацию {2} " +
+                    "убедительная просьба <a href=\"http://rqrights/Request/Create?IdRequestType=3\">подать заявку на отключение</a> " +
+                    "данного сотрудника от информационных ресурсов вашей организации.<br>" +
+                    "При подаче заявки в поле <strong>Примечание</strong> просьба указать <strong>«В связи с переводом в другую организацию»</strong><br><br>" +
+                    "<strong style=\"color:#b94a48\">В случае игнорирования данного сообщение у " +
+                    "сотрудника останется доступ к информационным ресурсам вашей организации.</strong><br><br>" +
+                    "В случае, если данное письмо пришло вам по ошибке, просьба сообщить диспетчеру по телефону 349-671",
+                    transferUserSnp, transferFrom,
+                    transferTo, requester.Snp);
+                var message = new MailMessage
+                {
+                    IsBodyHtml = true,
+                    From = _from,
+                    Subject = subject,
+                    Body = body
+                };
+                message.To.Add(new MailAddress(requester.Email));
                 messages.Add(message);
             }
             return messages;

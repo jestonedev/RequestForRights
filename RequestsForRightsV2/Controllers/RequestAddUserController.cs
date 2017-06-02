@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
+using System.Net;
 using System.Web.Mvc;
 using RequestsForRights.Web.Infrastructure.Helpers;
 using RequestsForRights.Web.Infrastructure.Logging;
@@ -17,12 +18,14 @@ namespace RequestsForRights.Web.Controllers
     {
         private readonly IRequestAddUserService _requestService;
         private readonly IRequestSecurityService<RequestUserModel> _securityService;
+        private readonly IUserService _userService;
         private readonly IEmailBuilder _emailBuilder;
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
 
         public RequestAddUserController(IRequestAddUserService requestService,
             IRequestSecurityService<RequestUserModel> securityService,
+            IUserService userService,
             IEmailBuilder emailBuilder, IEmailSender emailSender,
             ILogger logger)
         {
@@ -36,6 +39,11 @@ namespace RequestsForRights.Web.Controllers
                 throw new ArgumentNullException("securityService");
             }
             _securityService = securityService;
+            if (userService == null)
+            {
+                throw new ArgumentNullException("userService");
+            }
+            _userService = userService;
             if (emailBuilder == null)
             {
                 throw new ArgumentNullException("emailBuilder");
@@ -67,6 +75,7 @@ namespace RequestsForRights.Web.Controllers
                 return RedirectToAction("ForbiddenError", "Home");
             }
             ViewData["SecurityService"] = _securityService;
+            ViewData["UserService"] = _userService;
             return View(_requestService.GetRequestViewModelBy(request));
         }
 
@@ -209,6 +218,30 @@ namespace RequestsForRights.Web.Controllers
             {
                 ModelState.AddModelError(string.Empty, @"Некорректно задан тип одного из прав доступа");
             }
+        }
+
+        public ActionResult SendTransferUserNotification(string requesterSnp,
+            string requesterDepartment,
+            string transferUserSnp,
+            string transferToDepartment,
+            string transferToUnit,
+            string transferFromDepartment,
+            string transferFromUnit)
+        {
+            if (!_securityService.CanSendTransferUserNotification())
+            {
+                return RedirectToAction("ForbiddenError", "Home");
+            }
+            var emails = _emailBuilder.CreateSendTransferUserEmails(
+                requesterSnp,
+                requesterDepartment,
+                transferUserSnp,
+                transferToDepartment,
+                transferToUnit,
+                transferFromDepartment,
+                transferFromUnit);
+            _emailSender.Send(emails);
+            return new HttpStatusCodeResult(HttpStatusCode.OK);
         }
 	}
 }

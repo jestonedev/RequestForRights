@@ -14,6 +14,7 @@ namespace RequestsForRights.Web.Infrastructure.Security.Interfaces
         bool CanCreate(Request request);
         bool CanRead(Request request);
         bool CanSeeLogin();
+        bool CanSendTransferUserNotification();
         bool CanComment();
         bool CanComment(RequestModel<T> request);
         bool CanComment(Request request);

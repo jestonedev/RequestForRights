@@ -163,9 +163,12 @@ namespace RequestsForRights.UnitTests.Web.Infrastructure.Security
             var user = requestsData.AclUsers.First(r => r.IdUser == 11);
             var requestSecurityService = GetRequestSecurityService(user, requestsData);
             var requests = requestSecurityService.FilterRequests(requestsData.Requests.AsQueryable());
-            Assert.AreEqual(10, requests.Count());
+            Assert.AreEqual(14, requests.Count());
+            Assert.IsTrue(requests.Any(r => r.IdRequest == 1));
             Assert.IsTrue(requests.Any(r => r.IdRequest == 2));
             Assert.IsTrue(requests.Any(r => r.IdRequest == 3));
+            Assert.IsTrue(requests.Any(r => r.IdRequest == 5));
+            Assert.IsTrue(requests.Any(r => r.IdRequest == 6));
             Assert.IsTrue(requests.Any(r => r.IdRequest == 7));
             Assert.IsTrue(requests.Any(r => r.IdRequest == 8));
             Assert.IsTrue(requests.Any(r => r.IdRequest == 9));
@@ -174,6 +177,7 @@ namespace RequestsForRights.UnitTests.Web.Infrastructure.Security
             Assert.IsTrue(requests.Any(r => r.IdRequest == 12));
             Assert.IsTrue(requests.Any(r => r.IdRequest == 13));
             Assert.IsTrue(requests.Any(r => r.IdRequest == 14));
+            Assert.IsTrue(requests.Any(r => r.IdRequest == 15));
         }
 
         [TestMethod]
@@ -183,9 +187,12 @@ namespace RequestsForRights.UnitTests.Web.Infrastructure.Security
             var user = requestsData.AclUsers.First(r => r.IdUser == 12);
             var requestSecurityService = GetRequestSecurityService(user, requestsData);
             var requests = requestSecurityService.FilterRequests(requestsData.Requests.AsQueryable());
-            Assert.AreEqual(10, requests.Count());
+            Assert.AreEqual(14, requests.Count());
+            Assert.IsTrue(requests.Any(r => r.IdRequest == 1));
             Assert.IsTrue(requests.Any(r => r.IdRequest == 2));
             Assert.IsTrue(requests.Any(r => r.IdRequest == 3));
+            Assert.IsTrue(requests.Any(r => r.IdRequest == 5));
+            Assert.IsTrue(requests.Any(r => r.IdRequest == 6));
             Assert.IsTrue(requests.Any(r => r.IdRequest == 7));
             Assert.IsTrue(requests.Any(r => r.IdRequest == 8));
             Assert.IsTrue(requests.Any(r => r.IdRequest == 9));
@@ -194,6 +201,7 @@ namespace RequestsForRights.UnitTests.Web.Infrastructure.Security
             Assert.IsTrue(requests.Any(r => r.IdRequest == 12));
             Assert.IsTrue(requests.Any(r => r.IdRequest == 13));
             Assert.IsTrue(requests.Any(r => r.IdRequest == 14));
+            Assert.IsTrue(requests.Any(r => r.IdRequest == 15));
         }
 
         [TestMethod]
@@ -437,7 +445,7 @@ namespace RequestsForRights.UnitTests.Web.Infrastructure.Security
             var requestSecurityService = GetRequestSecurityService(user, requestsData);
             var can = requestSecurityService.CanSetRequestState(
                 requestsData.Requests.First(r => r.IdRequest == 1), 5);
-            Assert.IsFalse(can);
+            Assert.IsTrue(can);
         }
 
         [TestMethod]
@@ -481,7 +489,7 @@ namespace RequestsForRights.UnitTests.Web.Infrastructure.Security
             var requestSecurityService = GetRequestSecurityService(user, requestsData);
             var can = requestSecurityService.CanSetRequestState(
                 requestsData.Requests.First(r => r.IdRequest == 1), 3);
-            Assert.IsFalse(can);
+            Assert.IsTrue(can);
         }
 
         [TestMethod]

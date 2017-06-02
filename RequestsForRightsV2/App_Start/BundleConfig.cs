@@ -62,7 +62,8 @@ namespace RequestsForRights.Web
             bundles.Add(new ScriptBundle("~/bundles/rr-request.update.insert.common").Include("~/Scripts/rr-request.update.insert.common.*"));
             bundles.Add(new ScriptBundle("~/bundles/rr-resource.common").Include("~/Scripts/rr-resource.common.*"));
             bundles.Add(new ScriptBundle("~/bundles/rr-request.index").Include("~/Scripts/rr-request.index.*"));
-            bundles.Add(new ScriptBundle("~/bundles/rr-request.add-user").Include("~/Scripts/rr-request.add-user.*"));
+            bundles.Add(new ScriptBundle("~/bundles/rr-request.add-user").Include("~/Scripts/rr-request.add-user.js"));
+            bundles.Add(new ScriptBundle("~/bundles/rr-request.add-user.detail").Include("~/Scripts/rr-request.add-user.detail.*"));
             bundles.Add(new ScriptBundle("~/bundles/rr-request.delegate-permissions").Include("~/Scripts/rr-request.delegate-permissions.*"));
             bundles.Add(new ScriptBundle("~/bundles/rr-request.comments").Include("~/Scripts/rr-request.comments.*"));
             bundles.Add(new ScriptBundle("~/bundles/rr-request.agreements").Include("~/Scripts/rr-request.agreements.*"));

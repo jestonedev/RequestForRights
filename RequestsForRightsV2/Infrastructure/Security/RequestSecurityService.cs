@@ -213,6 +213,11 @@ namespace RequestsForRights.Web.Infrastructure.Security
             return InRole(new[] { AclRole.Executor, AclRole.Administrator });
         }
 
+        public bool CanSendTransferUserNotification()
+        {
+            return InRole(new[] {AclRole.Administrator, AclRole.Dispatcher});
+        }
+
         public bool CanComment()
         {
             return CanRead();
