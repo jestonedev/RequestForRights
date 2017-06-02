@@ -423,12 +423,6 @@ namespace RequestsForRights.Web.Infrastructure.Services
                     }
                     break;
                 case 4:
-                    RequestsRepository.AddRequestState(new RequestState
-                    {
-                        IdRequest = idRequest,
-                        IdRequestStateType = 3,
-                        Date = DateTime.Now
-                    }, false);
                     RequestsRepository.AddRequestState(requestState, false);
                     break;
             }
