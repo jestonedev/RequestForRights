@@ -15,6 +15,17 @@
             <span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span>
             Назад
         </a>
+        @if (securityService.CanCreate())
+        {
+            <a href="@Url.Action("Copy", "Request",
+                            new {id = Model.RequestModel.IdRequest})"
+                class="btn btn-default"
+                title="Скопировать заявку"
+                aria-label="Скопировать">
+                <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
+                Скопировать
+            </a>
+        }
         <button class="btn btn-default rr-save-button"
                 title="Сохранить заявку"
                 aria-label="Сохранить">

@@ -122,13 +122,18 @@ namespace RequestsForRights.Web.Controllers
 
         [TransferActionOnly]
         [HttpGet]
-        public ActionResult Create()
+        public ActionResult Create(int? id)
         {
             if (!_securityService.CanCreate())
             {
                 return RedirectToAction("ForbiddenError", "Home");
             }
             ViewData["SecurityService"] = _securityService;
+            if (id != null)
+            {
+                var request = _requestService.GetRequestById(id.Value);
+                return View(_requestService.GetRequestViewModelBy(request));
+            }
             return View(_requestService.GetEmptyRequestViewModel());
         }
 

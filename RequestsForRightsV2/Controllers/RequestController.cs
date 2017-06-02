@@ -127,6 +127,16 @@ namespace RequestsForRights.Web.Controllers
             return TransfertTo("Update", requestViewModel.RequestModel.IdRequestType);
         }
 
+        public ActionResult Copy(int id)
+        {
+            var request = _requestService.GetRequestById(id);
+            if (request == null)
+            {
+                return RedirectToAction("NotFoundError", "Home");
+            }
+            return RedirectToAction("Create", new { id, request.IdRequestType });
+        }
+
         public ActionResult Detail(int id)
         {
             var request = _requestService.GetRequestById(id);
@@ -175,7 +185,7 @@ namespace RequestsForRights.Web.Controllers
         }
 
         [HttpGet]
-        public ActionResult Create(int idRequestType)
+        public ActionResult Create(int idRequestType, int? id)
         {
             return TransfertTo("Create", idRequestType);
         }

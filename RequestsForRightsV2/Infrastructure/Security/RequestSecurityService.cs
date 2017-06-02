@@ -143,7 +143,7 @@ namespace RequestsForRights.Web.Infrastructure.Security
             {
                 filteredRequests = filteredRequests.Concat(
                     requests.Where(r => r.RequestAgreements.Any(
-                        ra => ra.User.IdUser == userInfo.IdUser)));
+                        ra => ra.User.IdUser == userInfo.IdUser && ra.IdAgreementType == 2)));
             }
             return filteredRequests.Distinct();
         }
