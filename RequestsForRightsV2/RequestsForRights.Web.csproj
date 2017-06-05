@@ -315,6 +315,9 @@
     <Content Include="Content\Images\Help\4_3_1.png" />
     <Content Include="Content\Images\Help\4_3_2.png" />
     <Content Include="Content\Images\Help\4_3_3.png" />
+    <Content Include="Content\Images\Help\4_4_1.png" />
+    <Content Include="Content\Images\Help\4_4_2.png" />
+    <Content Include="Content\Images\Help\4_4_3.png" />
     <Content Include="Content\Images\Help\5_1.png" />
     <Content Include="Content\Images\Help\5_1_1.png" />
     <Content Include="Content\Images\Help\5_1_2.png" />
@@ -326,6 +329,8 @@
     <Content Include="Content\Images\Help\block_button.png" />
     <Content Include="Content\Images\Help\cards_button.PNG" />
     <Content Include="Content\Images\Help\convert_button.PNG" />
+    <Content Include="Content\Images\Help\copy_button.png" />
+    <Content Include="Content\Images\Help\copy_button_2.png" />
     <Content Include="Content\Images\Help\Delete_delegate_button.png" />
     <Content Include="Content\Images\Help\delete_right_button.png" />
     <Content Include="Content\Images\Help\detail_button.PNG" />
