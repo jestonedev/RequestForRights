@@ -25,8 +25,13 @@
                         <dd>@Model.RequestModel.OwnerSnp</dd>
                         <dt>@Html.DisplayNameFor(r => r.RequestModel.OwnerDepartment)</dt>
                         <dd>@Model.RequestModel.OwnerDepartment</dd>
-                        <dt>@Html.DisplayNameFor(r => r.RequestModel.Date)</dt>
-                        <dd>@Model.RequestModel.Date.ToString("dd.MM.yyyy HH:mm", CultureInfo.CurrentCulture)</dd>
+                        <dt>@Html.DisplayNameFor(r => r.RequestModel.RequestDate)</dt>
+                        <dd>@Model.RequestModel.RequestDate.ToString("dd.MM.yyyy HH:mm", CultureInfo.CurrentCulture)</dd>
+                        @if (Model.RequestModel.CompleteDate != null)
+                        {
+                            <dt>@Html.DisplayNameFor(r => r.RequestModel.CompleteDate)</dt>
+                            <dd>@Model.RequestModel.CompleteDate.Value.ToString("dd.MM.yyyy HH:mm", CultureInfo.CurrentCulture)</dd>
+                        }
                         @if (!string.IsNullOrEmpty(Model.RequestModel.Description))
                         {
                             <dt>@Html.DisplayNameFor(r => r.RequestModel.Description)</dt>

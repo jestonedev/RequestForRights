@@ -49,7 +49,7 @@
                                     @{
                                         var userAgreement = user.RequestAgreements.FirstOrDefault(r => r.IdRequest == idRequest &&
                                                                                                        r.IdAgreementState == 1);
-                                        var sendDate = Model.RequestModel.Date;
+                                        var sendDate = Model.RequestModel.RequestDate;
                                         if (userAgreement != null)
                                         {
                                             sendDate = userAgreement.SendDate;
@@ -134,11 +134,11 @@
                                         <dd>@agreement.SendDate.Value.ToString("dd.MM.yyyy HH:mm")</dd>
                                     }
                                     else
-                                    if (Model.RequestModel.Date != null)
+                                        if (Model.RequestModel.RequestDate != null)
                                     {
 
                                         <dt>Отправлено на согласование</dt>
-                                        <dd>@Model.RequestModel.Date.ToString("dd.MM.yyyy HH:mm")</dd>
+                                        <dd>@Model.RequestModel.RequestDate.ToString("dd.MM.yyyy HH:mm")</dd>
                                     }
                                     @if (!string.IsNullOrEmpty(agreement.SendDescription) &&
                                         securityService.CanViewAgreementSendDescription(agreement))
@@ -187,12 +187,12 @@
                                     <dd>@agreement.SendDate.Value.ToString("dd.MM.yyyy HH:mm")</dd>
                                 }
                                 else
-                                if (Model.RequestModel.Date != null)
-                                {
+                                    if (Model.RequestModel.RequestDate != null)
+                                    {
 
-                                    <dt>Отправлено на согласование</dt>
-                                    <dd>@Model.RequestModel.Date.ToString("dd.MM.yyyy HH:mm")</dd>
-                                }
+                                        <dt>Отправлено на согласование</dt>
+                                        <dd>@Model.RequestModel.RequestDate.ToString("dd.MM.yyyy HH:mm")</dd>
+                                    }
                                 @if (!string.IsNullOrEmpty(agreement.SendDescription) &&
                                         securityService.CanViewAgreementSendDescription(agreement))
                                 {
@@ -242,11 +242,11 @@
                                     <dd>@agreement.SendDate.Value.ToString("dd.MM.yyyy HH:mm")</dd>
                                 }
                                 else
-                                    if (Model.RequestModel.Date != null)
+                                    if (Model.RequestModel.RequestDate != null)
                                     {
 
                                         <dt>Отправлено на согласование</dt>
-                                        <dd>@Model.RequestModel.Date.ToString("dd.MM.yyyy HH:mm")</dd>
+                                        <dd>@Model.RequestModel.RequestDate.ToString("dd.MM.yyyy HH:mm")</dd>
                                     }
                                 @if (!string.IsNullOrEmpty(agreement.SendDescription) &&
                                         securityService.CanViewAgreementSendDescription(agreement))

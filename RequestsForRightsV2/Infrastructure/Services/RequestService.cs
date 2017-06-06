@@ -206,6 +206,12 @@ namespace RequestsForRights.Web.Infrastructure.Services
 
         public virtual RequestModel<TUserModel> GetRequestModelBy(Request request)
         {
+            var lastState = request.RequestStates.OrderByDescending(r => r.IdRequestState).First(r => !r.Deleted);
+            DateTime? completeDate = null;
+            if (lastState.IdRequestStateType == 4)
+            {
+                completeDate = lastState.Date;
+            }
             return new RequestModel<TUserModel>
             {
                 IdRequest = request.IdRequest,
@@ -213,7 +219,8 @@ namespace RequestsForRights.Web.Infrastructure.Services
                 OwnerSnp = request.User.Snp,
                 OwnerDepartment = request.User.Department.Name,
                 RequestStateName = request.RequestStates.OrderBy(r => r.IdRequestState).Last(r => !r.Deleted).RequestStateType.Name,
-                Date = request.RequestStates.First(r => !r.Deleted).Date,
+                RequestDate = request.RequestStates.First(r => !r.Deleted).Date,
+                CompleteDate = completeDate,
                 IdRequestType = request.IdRequestType,
                 Users = request.RequestUserAssoc.Where(ru => !ru.Deleted).
                     Select(FillRequestUserModel).ToList()

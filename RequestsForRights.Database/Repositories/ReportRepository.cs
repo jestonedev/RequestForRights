@@ -34,7 +34,7 @@ namespace RequestsForRights.Database.Repositories
 
         public IQueryable<Department> GetDepartments()
         {
-            return _databaseContext.Departments.Where(r => !r.Deleted && r.IdParentDepartment == null);
+            return _databaseContext.Departments.Where(r => !r.Deleted && (r.IdParentDepartment == null || r.IdParentDepartment == 1));
         }
 
         public IQueryable<ResourceOperatorPerson> GetOperatorPersons()

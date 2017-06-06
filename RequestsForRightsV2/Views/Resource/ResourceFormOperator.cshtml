@@ -20,10 +20,22 @@
                     }
                     foreach (var department in departmentsGroup)
                     {
-                        var selected = Model.Resource.IdOperatorDepartment == department.IdDepartment;
-                        <option @(selected ? "selected" : "") value="@department.IdDepartment">
-                            @department.Name
+                        var dep = department;
+                        if (dep.IdParentDepartment != null)
+                        {
+                            continue;
+                        }
+                        var selected = Model.Resource.IdOperatorDepartment == dep.IdDepartment;
+                        <option @(selected ? "selected" : "") value="@dep.IdDepartment">
+                            @dep.Name
                         </option>
+                        foreach (var unit in departmentsGroup.Where(r => r.IdParentDepartment == dep.IdDepartment))
+                        {
+                            selected = Model.Resource.IdOperatorDepartment == unit.IdDepartment;
+                            <option @(selected ? "selected" : "") value="@unit.IdDepartment">
+                                @Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")@unit.Name
+                            </option>
+                        }
                     }
                     if (departmentsGroup.Key)
                     {

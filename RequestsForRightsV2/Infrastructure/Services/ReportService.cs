@@ -127,12 +127,19 @@ namespace RequestsForRights.Web.Infrastructure.Services
             {
                 return null;
             }
+            var department = options.Department;
+            string unit = null;
+            if (options.Department.Contains("//"))
+            {
+                department = options.Department.Split(new[] {"//"}, StringSplitOptions.None)[0];
+                unit = options.Department.Split(new[] { "//" }, StringSplitOptions.None)[1];
+            }
             if (!_reportRepository.GetDepartments().Select(r => r.Name).
-                Contains(options.Department))
+                Contains(department))
             {
                 return null;
             }
-            var rights = _rightService.GetDepartmentRightsOnDate(options.Date.Value, options.Department);
+            var rights = _rightService.GetDepartmentRightsOnDate(options.Date.Value, department, unit);
             if (options.ReportDisplayStyle == ReportDisplayStyle.Cards)
             {
                 return rights
@@ -153,12 +160,19 @@ namespace RequestsForRights.Web.Infrastructure.Services
             {
                 return null;
             }
+            var department = options.Department;
+            string unit = null;
+            if (options.Department.Contains("//"))
+            {
+                department = options.Department.Split(new[] { "//" }, StringSplitOptions.None)[0];
+                unit = options.Department.Split(new[] { "//" }, StringSplitOptions.None)[1];
+            }
             if (!_reportRepository.GetDepartments().Select(r => r.Name).
-                Contains(options.Department))
+                Contains(department))
             {
                 return null;
             }
-            var rights = _rightService.GetDepartmentAndResourceRightsOnDate(options.Date.Value, options.Department, options.IdResource);
+            var rights = _rightService.GetDepartmentAndResourceRightsOnDate(options.Date.Value, department, unit, options.IdResource);
             if (options.ReportDisplayStyle == ReportDisplayStyle.Cards)
             {
                 return rights
@@ -192,7 +206,9 @@ namespace RequestsForRights.Web.Infrastructure.Services
                 join operatorPersonActRow in _reportRepository.GetOperatorPersonActs()
                     on opRow.IdResourceOperatorPerson equals operatorPersonActRow.IdResourceOperatorPerson into opa
                 from opaRow in opa.DefaultIfEmpty()
-                where idDepartment == 0 || resourceRow.IdOperatorDepartment == idDepartment
+                where idDepartment == 0 || 
+                    resourceRow.IdOperatorDepartment == idDepartment || 
+                    resourceRow.OperatorDepartment.IdParentDepartment == idDepartment
                 orderby departmentRow.Name, resourceRow.Name, opRow.Surname, opRow.Name, opRow.Patronimic, opaRow.ActDate, opaRow.ActNumber
                 select new ResourceOperatorModel
                 {

@@ -11,7 +11,9 @@ namespace RequestsForRights.Web.Models.Models
         [DisplayName(@"Описание")]
         public string Description { get; set; }
         [DisplayName(@"Дата подачи")]
-        public DateTime Date { get; set; }
+        public DateTime RequestDate { get; set; }
+        [DisplayName(@"Дата выполнения")]
+        public DateTime? CompleteDate { get; set; }
         [DisplayName(@"Заявитель")]
         public string OwnerSnp { get; set; }
         [DisplayName(@"Департамент")]

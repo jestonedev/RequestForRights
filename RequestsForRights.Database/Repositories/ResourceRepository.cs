@@ -483,7 +483,7 @@ namespace RequestsForRights.Database.Repositories
 
         public IQueryable<Department> GetDepartments()
         {
-            return _databaseContext.Departments.Where(r => r.IdParentDepartment == null).Where(r => !r.Deleted);
+            return _databaseContext.Departments.Where(r => r.IdParentDepartment == null || r.IdParentDepartment == 1).Where(r => !r.Deleted);
         }
     }
 }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Web.Mvc;
 using RequestsForRights.Domain.Entities;
 using RequestsForRights.Domain.Enums;
-using RequestsForRights.Web.Infrastructure.Enums;
 using RequestsForRights.Web.Infrastructure.Logging;
 using RequestsForRights.Web.Infrastructure.Security.Interfaces;
 using RequestsForRights.Web.Infrastructure.Services.Interfaces;
@@ -73,7 +72,7 @@ namespace RequestsForRights.Web.Controllers
             {
                 return RedirectToAction("ForbiddenError", "Home");
             }
-            return Json(_rightService.GetPermanentRightsOnDate(date, requestUser.IdRequestUser, null, null),
+            return Json(_rightService.GetPermanentRightsOnDate(date, requestUser.IdRequestUser, null, null, null),
                 JsonRequestBehavior.AllowGet);
         }
 	}

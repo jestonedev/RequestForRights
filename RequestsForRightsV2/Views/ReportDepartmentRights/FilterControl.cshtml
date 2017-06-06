@@ -40,9 +40,31 @@
                     }
                     foreach (var department in departmentsGroup)
                     {
-                        var selected = Model.Options.Department == department.Name;
-                        <option @(selected ? "selected" : "") value="@department.Name">
-                            @department.Name
+                        var dep = department;
+                        if (dep.IdParentDepartment != null)
+                        {
+                            continue;
+                        }
+                        var selected = Model.Options.Department == dep.Name;
+                        <option @(selected ? "selected" : "") value="@dep.Name">
+                            @dep.Name
+                        </option>
+                        foreach (var unit in departmentsGroup.Where(r => r.IdParentDepartment == dep.IdDepartment))
+                        {
+                            selected = Model.Options.Department == unit.Name;
+                            <option @(selected ? "selected" : "") value="@unit.ParentDepartment.Name//@unit.Name">
+                                @Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")@unit.Name
+                            </option>
+                        }
+                    }
+                    var depGroup = departmentsGroup;
+                    var orphanUnits = departmentsGroup.Where(r => r.IdParentDepartment != null && 
+                        depGroup.All(dg => dg.IdDepartment != r.IdParentDepartment));
+                    foreach (var unit in orphanUnits)
+                    {
+                        var selected = Model.Options.Department == unit.Name;
+                        <option @(selected ? "selected" : "") value="@unit.ParentDepartment.Name//@unit.Name">
+                            @unit.Name
                         </option>
                     }
                     if (departmentsGroup.Key)

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using RequestsForRights.Database.Repositories.Interfaces;
-using RequestsForRights.Domain.Entities;
 using RequestsForRights.Web.Infrastructure.Services.Interfaces;
 using RequestsForRights.Web.Models.Models;
 
@@ -23,7 +22,7 @@ namespace RequestsForRights.Web.Infrastructure.Services
         }
 
         public IEnumerable<ResourceUserRightModel> GetPermanentRightsOnDate(DateTime date, 
-            int? idRequestUser, string department, int? idResource)
+            int? idRequestUser, string department, string unit, int? idResource)
         {
             var lastStatesByRequest = from stateRow in _rightRepository.GetRequestStates()
                 group stateRow.IdRequestState by stateRow.IdRequest
@@ -52,7 +51,8 @@ namespace RequestsForRights.Web.Infrastructure.Services
                 join requestUserRow in _rightRepository.GetRequestUsers()
                     on requestUserAssocRow.IdRequestUser equals  requestUserRow.IdRequestUser
                 where (idRequestUser == null || requestUserAssocRow.IdRequestUser == idRequestUser.Value) &&
-                    (department == null || requestUserRow.Department == department)
+                    (department == null || requestUserRow.Department == department) &&
+                    (unit == null || requestUserRow.Unit == unit)
                 select new
                 {
                     completedRequestRow.IdRequest,
@@ -153,7 +153,7 @@ namespace RequestsForRights.Web.Infrastructure.Services
         }
 
         public IEnumerable<ResourceUserRightModel> GetDelegatedRightsOnDate(DateTime date,
-            int? idRequestUser, string department, int? idResource)
+            int? idRequestUser, string department, string unit, int? idResource)
         {
             var lastStatesByRequest = from stateRow in _rightRepository.GetRequestStates()
                 group stateRow.IdRequestState by stateRow.IdRequest
@@ -219,7 +219,10 @@ namespace RequestsForRights.Web.Infrastructure.Services
                       delegateExtInfoRow.IdDelegateToUser == idRequestUser.Value) &&
                       (department == null ||
                       delegateToUserRow.Department == department ||
-                      delegateFromUserRow.Department == department)
+                      delegateFromUserRow.Department == department) &&
+                      (unit == null ||
+                      delegateToUserRow.Unit == unit ||
+                      delegateFromUserRow.Unit == unit)
                 select new
                 {
                     completedUserRow.IdRequestUserAssoc,
@@ -285,10 +288,10 @@ namespace RequestsForRights.Web.Infrastructure.Services
         }
 
         public IEnumerable<ResourceUserRightModel> GetRightsOnDate(DateTime date,
-            int? idRequestUser, string department, int? idResource)
+            int? idRequestUser, string department, string unit, int? idResource)
         {
-            var permanentRights = GetPermanentRightsOnDate(date, idRequestUser, department, idResource);
-            var delegateRights = GetDelegatedRightsOnDate(date, idRequestUser, department, idResource).ToList();
+            var permanentRights = GetPermanentRightsOnDate(date, idRequestUser, department, unit, idResource);
+            var delegateRights = GetDelegatedRightsOnDate(date, idRequestUser, department, unit, idResource).ToList();
             delegateRights.ForEach(r =>
             {
                 var permanentRight = permanentRights.FirstOrDefault(pr => pr.IdResourceRight == r.IdResourceRight);
@@ -307,22 +310,22 @@ namespace RequestsForRights.Web.Infrastructure.Services
         public IEnumerable<ResourceUserRightModel> GetUserRightsOnDate(DateTime date,
             int? idRequestUser)
         {
-            return GetRightsOnDate(date, idRequestUser, null, null);
+            return GetRightsOnDate(date, idRequestUser, null, null, null);
         }
 
         public IEnumerable<ResourceUserRightModel> GetResourceRightsOnDate(DateTime date, int? idResource)
         {
-            return GetRightsOnDate(date, null, null, idResource);
+            return GetRightsOnDate(date, null, null, null, idResource);
         }
 
-        public IEnumerable<ResourceUserRightModel> GetDepartmentRightsOnDate(DateTime date, string department)
+        public IEnumerable<ResourceUserRightModel> GetDepartmentRightsOnDate(DateTime date, string department, string unit)
         {
-            return GetRightsOnDate(date, null, department, null);
+            return GetRightsOnDate(date, null, department, unit, null);
         }
 
-        public IEnumerable<ResourceUserRightModel> GetDepartmentAndResourceRightsOnDate(DateTime date, string department, int? idResource)
+        public IEnumerable<ResourceUserRightModel> GetDepartmentAndResourceRightsOnDate(DateTime date, string department, string unit, int? idResource)
         {
-            return GetRightsOnDate(date, null, department, idResource);
+            return GetRightsOnDate(date, null, department, unit, idResource);
         }
 
         public IEnumerable<ResourceUserRightHistoryModel> GetUserRightsHistoryOnDate(DateTime from, DateTime to, int idRequestUser)
