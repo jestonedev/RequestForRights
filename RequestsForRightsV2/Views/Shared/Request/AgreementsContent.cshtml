@@ -31,77 +31,79 @@
     <div class=" col-md-8 col-md-offset-2">
         <div class="panel panel-primary">
             <div class="panel-heading">Ожидается согласование</div>
-                @foreach (var agreementDepartment in waitAgreementUsers)
-                {
-                    <div class="list-group">
-                        <div class="list-group-item rr-agreement-item">
-                            <h4 class="list-group-item-heading">@agreementDepartment.Key.Name</h4>
-                            @foreach (var user in agreementDepartment.Select(r => r))
-                            {
-                                <dl class="dl-horizontal">
-                                    <dt>ФИО сотрудника</dt>
-                                    <dd>@user.Snp</dd>
-                                    @if (!string.IsNullOrEmpty(user.Email))
+            @foreach (var agreementDepartment in waitAgreementUsers)
+            {
+                <div class="list-group">
+                    <div class="list-group-item rr-agreement-item">
+                        <h4 class="list-group-item-heading">@agreementDepartment.Key.Name</h4>
+                        @foreach (var user in agreementDepartment.Select(r => r))
+                        {
+                            var idAgreementType = user.RequestAgreements.Any(r => r.IdRequest == idRequest && r.IdAgreementType == 2) ? 2 : 1;
+                            <dl class="dl-horizontal">
+                                <dt>
+                                    ФИО сотрудника
+                                </dt>
+                                <dd>@user.Snp
+                                    @if (securityService.CanExcludeAgreementor(Model.RequestModel))
                                     {
-                                        <dt>Почтовый адрес</dt>
-                                        <dd><a href="mailto:@(user.Email)">@user.Email</a></dd>
-                                    }
-                                    @{
-                                        var userAgreement = user.RequestAgreements.FirstOrDefault(r => r.IdRequest == idRequest &&
-                                                                                                       r.IdAgreementState == 1);
-                                        var sendDate = Model.RequestModel.RequestDate;
-                                        if (userAgreement != null)
+                                        using (Ajax.BeginForm("ExcludeAgreementor", "Request",
+                                            new AjaxOptions
+                                            {
+                                                UpdateTargetId = "rr-agreements",
+                                                InsertionMode = InsertionMode.Replace,
+                                                OnFailure = "sendAgreementFailure",
+                                                OnSuccess = "sendAgreementSuccess"
+                                            }))
                                         {
-                                            sendDate = userAgreement.SendDate;
+                                            <input type="hidden" name="IdRequest" id="IdRequest" value="@idRequest" />
+                                            <input type="hidden" name="IdRequestAgreementType" id="IdRequestAgreementType" value="@idAgreementType" />
+                                            <input type="hidden" name="IdUser" id="IdUser" value="@user.IdUser" />
+                                            <button type="submit" class="close rr-agreement-exclude-button"
+                                                    aria-label="Исключить из согласования"
+                                                    title="Исключить из согласования">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
                                         }
                                     }
-                                    @if (sendDate != null)
-                                    {
-                                        <dt>Отправлено на согласование</dt>
-                                        <dd>@sendDate.ToString("dd.MM.yyyy HH:mm")</dd>
-                                    }
-                                    @if (userAgreement != null &&
-                                         !string.IsNullOrEmpty(userAgreement.SendDescription) &&
-                                         securityService.CanViewAgreementSendDescription(userAgreement))
-                                    {
-                                        <dt>Комментарий диспетчера</dt>
-                                        <dd>@userAgreement.SendDescription</dd>
-                                    }
-                                    <dt>Телефон</dt>
-                                    <dd>@user.Phone</dd>
-                                    <dt>Тип согласования</dt>
-                                    @{
-                                        var idAgreementType = user.RequestAgreements.Any(r => r.IdRequest == idRequest && r.IdAgreementType == 2) ? 2 : 1;
-                                    }
-                                    <dd>
-                                        @(idAgreementType == 2 ? "Дополнительное" : "Первичное")
-                                    </dd>
-                                </dl>
-                                if (securityService.CanExcludeAgreementor(Model.RequestModel))
+                                </dd>
+                                @if (!string.IsNullOrEmpty(user.Email))
                                 {
-                                    using (Ajax.BeginForm("ExcludeAgreementor", "Request",
-                                        new AjaxOptions
-                                        {
-                                            UpdateTargetId = "rr-agreements",
-                                            InsertionMode = InsertionMode.Replace,
-                                            OnFailure = "sendAgreementFailure",
-                                            OnSuccess = "sendAgreementSuccess"
-                                        }))
-                                    {
-                                        <input type="hidden" name="IdRequest" id="IdRequest" value="@idRequest" />
-                                        <input type="hidden" name="IdRequestAgreementType" id="IdRequestAgreementType" value="@idAgreementType" />
-                                        <input type="hidden" name="IdUser" id="IdUser" value="@user.IdUser" />
-                                        <button type="submit" class="close rr-agreement-exclude-button"
-                                                aria-label="Исключить из согласования"
-                                                title="Исключить из согласования">
-                                            <span aria-hidden="true">×</span>
-                                        </button>
-                                    }
+                                    <dt>Почтовый адрес</dt>
+                                    <dd><a href="mailto:@(user.Email)">@user.Email</a></dd>
                                 }
-                            }
-                        </div>
+                                @{
+                                var userAgreement = user.RequestAgreements.FirstOrDefault(r => r.IdRequest == idRequest &&
+                                                                                                r.IdAgreementState == 1);
+                                var sendDate = Model.RequestModel.RequestDate;
+                                if (userAgreement != null)
+                                {
+                                    sendDate = userAgreement.SendDate;
+                                }
+                                }
+                                @if (sendDate != null)
+                                {
+                                    <dt>Отправлено на согласование</dt>
+                                    <dd>@sendDate.ToString("dd.MM.yyyy HH:mm")</dd>
+                                }
+                                @if (userAgreement != null &&
+                                        !string.IsNullOrEmpty(userAgreement.SendDescription) &&
+                                        securityService.CanViewAgreementSendDescription(userAgreement))
+                                {
+                                    <dt>Комментарий диспетчера</dt>
+                                    <dd>@userAgreement.SendDescription</dd>
+                                }
+                                <dt>Телефон</dt>
+                                <dd>@user.Phone</dd>
+                                <dt>Тип согласования</dt>
+                                <dd>
+                                    @(idAgreementType == 2 ? "Дополнительное" : "Первичное")
+                                </dd>
+                            </dl>
+                        }
                     </div>
-                }
+
+                </div>
+            }
         </div>
     </div>
 }

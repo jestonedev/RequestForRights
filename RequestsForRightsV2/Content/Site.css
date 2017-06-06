@@ -144,14 +144,14 @@ button.rr-ext-filter-button.collapsed:hover {
     margin-bottom: 15px;
 }
 
-.rr-agreement-item {
-    position: relative;
+.rr-agreement-item form {
+    display: inline-block;
+    margin-left: 3px;    
+    vertical-align: middle;
 }
 
-.rr-agreement-item .rr-agreement-exclude-button {
-    position: absolute;
-    right: 10px;
-    top: 5px;
+.rr-agreement-item form .close {
+    font-size: 20px;
 }
 
 .rr-edit-panel > .btn-group a, .rr-edit-panel > .btn-group button,
