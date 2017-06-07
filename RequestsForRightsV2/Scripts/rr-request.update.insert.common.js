@@ -1,5 +1,6 @@
-﻿var descriptionModifiedManual = false;
-var initialDescriptionIsEmpty = !$(".rr-request-description textarea").val();
+﻿var descriptionModifiedManual =
+    $(".rr-request-description textarea").val() !== "" &&
+    $(".rr-request-description textarea").val() !== getRequestDescription();
 
 $("#rr-request-form")
 .on("click",
@@ -487,12 +488,7 @@ function addUserAfterLoad(userLayout, template) {
     $(window).scrollTop($(document).height());
 }
 
-function updateRequestDescription() {
-    if (descriptionModifiedManual || !initialDescriptionIsEmpty) {
-        return;
-    }
-    var requestDescription = $(".rr-request-description textarea");
-    requestDescription.off("change");
+function getRequestDescription() {
     var idRequestType = $('[name="RequestModel.IdRequestType"]').val();
     var description = getRequestDescriptionPreamble(idRequestType);
     $(".rr-request-user-wrapper").each(function (index, userWrapperElem) {
@@ -516,7 +512,17 @@ function updateRequestDescription() {
         }
         description += textLine;
     });
-    requestDescription.val(description.replace(/,\n$/, "."));
+    return description.replace(/,\n$/, ".");
+}
+
+function updateRequestDescription() {
+    if (descriptionModifiedManual) {
+        return;
+    }
+    var requestDescription = $(".rr-request-description textarea");
+    requestDescription.off("change");
+    var description = getRequestDescription();
+    requestDescription.val(description);
     requestDescription.on("change",
         function () {
             descriptionModifiedManual = true;
