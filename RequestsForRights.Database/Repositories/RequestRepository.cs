@@ -165,10 +165,12 @@ namespace RequestsForRights.Database.Repositories
             requestUser.Department = string.IsNullOrEmpty(requestUser.Department) ? null : requestUser.Department;
             requestUser.Unit = string.IsNullOrEmpty(requestUser.Unit) ? null : requestUser.Unit;
 
-            Func<RequestUser, bool> condition = r => !r.Deleted && requestUser.Login != null
-                ? r.Login == requestUser.Login
+            Func<RequestUser, bool> condition = r => !r.Deleted && (requestUser.Login != null
+                ? r.Login == requestUser.Login && 
+                  r.Department == requestUser.Department && 
+                  r.Unit == requestUser.Unit
                 : r.Snp == requestUser.Snp && r.Department == requestUser.Department &&
-                  r.Unit == requestUser.Unit;
+                  r.Unit == requestUser.Unit);
             var user = _databaseContext.Users.FirstOrDefault(condition) ??
                        _databaseContext.Users.Local.FirstOrDefault(condition);
             if (user == null)

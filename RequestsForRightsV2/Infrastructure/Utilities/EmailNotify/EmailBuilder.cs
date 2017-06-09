@@ -145,12 +145,10 @@ namespace RequestsForRights.Web.Infrastructure.Utilities.EmailNotify
         {
             var messages = new List<MailMessage>();
 
-            // TODO: delete later
-            if (request.User.IdUser == 109 || request.User.IdUser == 49)
+            if (request.User.Roles.Any(r => r.IdRole == 1))
             {
                 return messages;
             }
-            /////////////////////
             
             var requester = request.User;
             var waitAgreementUsers = _requestService.GetWaitAgreementUsers(request.IdRequest,
@@ -250,12 +248,10 @@ namespace RequestsForRights.Web.Infrastructure.Utilities.EmailNotify
         {
             var messages = new List<MailMessage>();
 
-            // TODO: delete later
-            if (request.User.IdUser == 109 || request.User.IdUser == 49)
+            if (request.User.Roles.Any(r => r.IdRole == 1))
             {
                 return messages;
             }
-            /////////////////////
 
             if (_requestSecurityService.InRole(AclRole.Administrator))
             {
@@ -410,12 +406,10 @@ namespace RequestsForRights.Web.Infrastructure.Utilities.EmailNotify
         {
             var messages = new List<MailMessage>();
 
-            // TODO: delete later
-            if (request.User.IdUser == 109 || request.User.IdUser == 49)
+            if (request.User.Roles.Any(r => r.IdRole == 1))
             {
                 return messages;
             }
-            /////////////////////
 
             var lastRequestState = request.RequestStates.OrderByDescending(r => r.IdRequestState).
                 FirstOrDefault();
