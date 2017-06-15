@@ -35,7 +35,7 @@
                         @if (!string.IsNullOrEmpty(Model.RequestModel.Description))
                         {
                             <dt>@Html.DisplayNameFor(r => r.RequestModel.Description)</dt>
-                            <dd>@Html.Raw(Model.RequestModel.Description.Replace("\n", "<br>"))</dd>   
+                            <dd>@Html.Raw(Html.Encode(Model.RequestModel.Description).Replace("\n", "<br>"))</dd>   
                         }
                     </dl>
                 </div>
@@ -88,7 +88,7 @@
                                             @if (!string.IsNullOrEmpty(Model.RequestModel.Users[i].Description))
                                             {
                                                 <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].Description)</dt>
-                                                <dd>@Html.Raw(Model.RequestModel.Users[i].Description.Replace("\n", "<br>"))</dd>
+                                                <dd>@Html.Raw(Html.Encode(Model.RequestModel.Users[i].Description).Replace("\n", "<br>"))</dd>
                                             }
                                         </dl>
                                     </div>

@@ -44,7 +44,7 @@
                 }
                 else
                 {
-                    @Model.Description
+                    @Html.Raw(Html.Encode(Model.Description).Replace("\n", "<br>"))
                 }
             </dd>
         </dl>
@@ -74,7 +74,7 @@
                 }
                 else
                 {
-                    @Model.PersonalInfoDescription
+                    @Html.Raw(Html.Encode(Model.PersonalInfoDescription).Replace("\n", "<br>"))
                 }
             </dd>
         </dl>

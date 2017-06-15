@@ -16,7 +16,7 @@
                     @if (!string.IsNullOrEmpty(Model.ResourceRights[i].Description))
                     {
                         <dt>@Html.DisplayNameFor(r => r.ResourceRights[i].Description)</dt>
-                        <dd>@Html.Raw(Model.ResourceRights[i].Description.Replace("\n", "<br>"))</dd>
+                        <dd>@Html.Raw(Html.Encode(Model.ResourceRights[i].Description).Replace("\n", "<br>"))</dd>
                     }
                 </dl>
             </li>
