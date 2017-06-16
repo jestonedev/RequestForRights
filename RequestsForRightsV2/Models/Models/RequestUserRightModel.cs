@@ -23,6 +23,8 @@ namespace RequestsForRights.Web.Models.Models
         public int IdResource { get; set; } // Using on detail forms only
         [DisplayName(@"Ресурс")]
         public string ResourceName { get; set; } // Using on detail forms only
+        [DisplayName(@"Описание ресурса")]
+        public string ResourceDescription { get; set; } // Using on detail forms only
 
         public override bool Equals(object obj)
         {
@@ -35,7 +37,8 @@ namespace RequestsForRights.Web.Models.Models
                    string.Equals(ResourceRightDescription, other.ResourceRightDescription) && IdRequestRightGrantType == other.IdRequestRightGrantType &&
                    string.Equals(RequestRightGrantTypeName, other.RequestRightGrantTypeName) &&
                    string.Equals(Description, other.Description) && IdResource == other.IdResource &&
-                   string.Equals(ResourceName, other.ResourceName);
+                   string.Equals(ResourceName, other.ResourceName) &&
+                   string.Equals(ResourceDescription, other.ResourceDescription);
         }
 
         public static bool operator ==(RequestUserRightModel first, RequestUserRightModel second)
@@ -64,6 +67,7 @@ namespace RequestsForRights.Web.Models.Models
                 hashCode = (hashCode*397) ^ (Description != null ? Description.GetHashCode() : 0);
                 hashCode = (hashCode*397) ^ IdResource;
                 hashCode = (hashCode*397) ^ (ResourceName != null ? ResourceName.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (ResourceDescription != null ? ResourceDescription.GetHashCode() : 0);
                 return hashCode;
             }
         }

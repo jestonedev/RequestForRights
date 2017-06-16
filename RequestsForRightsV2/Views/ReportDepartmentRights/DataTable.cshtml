@@ -63,7 +63,7 @@
                         <li class="list-group-item">
                             <dl class="dl-horizontal">
                                 <dt>Ресурс</dt>
-                                <dd>@right.ResourceName</dd>
+                                <dd title="@right.ResourceDescription">@right.ResourceName</dd>
                                 <dt>Право</dt>
                                 <dd title="@right.ResourceRightDescription">@right.ResourceRightName</dd>
                                 @if (right.DateDelegateFrom == null)
@@ -117,6 +117,12 @@ else
                 Name = "Сотрудник",
                 Field = "RequestUserSnp",
                 MinWidth = 200
+            },
+            new
+            {
+                Name = "Ресурс",
+                Field = "ResourceName",
+                MinWidth = 100
             },
             new
             {
@@ -175,6 +181,9 @@ else
                         {
                             <p class="rr-sub-cell-unit">@right.RequestUserUnit</p>
                         }
+                    </td>
+                    <td class="rr-column" title="@right.ResourceDescription">
+                        @right.ResourceName
                     </td>
                     <td class="rr-column" title="@right.ResourceRightDescription">@right.ResourceRightName</td>
                     <td class="rr-column">

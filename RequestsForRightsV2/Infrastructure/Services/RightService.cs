@@ -146,6 +146,7 @@ namespace RequestsForRights.Web.Infrastructure.Services
                     ResourceRightDescription = resourceRight.Description,
                     IdResource = resourceRight.IdResource,
                     ResourceName = resourceRight.Resource.Name,
+                    ResourceDescription = resourceRight.Resource.Description,
                     RightCategory = "Постоянное право",
                     DateFrom = userRight.DateFrom,
                     Description = userRight.Description
@@ -277,6 +278,7 @@ namespace RequestsForRights.Web.Infrastructure.Services
                     ResourceRightDescription = resourceRight.Description,
                     IdResource = resourceRight.IdResource,
                     ResourceName = resourceRight.Resource.Name,
+                    ResourceDescription = resourceRight.Resource.Description,
                     RightCategory = "Делегированное право",
                     IdDelegateFromUser = delegateUserFrom.IdRequestUser,
                     DelegateFromUserSnp = delegateUserFrom.Snp,

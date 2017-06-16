@@ -14,7 +14,7 @@
     }
     @if (Model.Options.ReportDisplayStyle == ReportDisplayStyle.Cards)
     {
-        foreach (var rightGroup in Model.Rights.GroupBy(r => new {r.IdResource, r.ResourceName}))
+        foreach (var rightGroup in Model.Rights.GroupBy(r => new {r.IdResource, r.ResourceName, r.ResourceDescription}))
         {
             <div class="panel panel-primary rr-report-right-group" id="panel@(rightGroup.Key.IdResource)">
                 <div class="panel-heading" role="tab" id="heading@(rightGroup.Key.IdResource)">
@@ -24,7 +24,8 @@
                            data-parent="#panel@(rightGroup.Key.IdResource)"
                            href="#collapse@(rightGroup.Key.IdResource)"
                            aria-expanded="true"
-                           aria-controls="collapse@(rightGroup.Key.IdResource)">
+                           aria-controls="collapse@(rightGroup.Key.IdResource)"
+                           title="@rightGroup.Key.ResourceDescription">
                             Информационный ресурс @rightGroup.Key.ResourceName
                         </a>
                     </h4>
@@ -154,7 +155,7 @@
             @foreach (var right in Model.Rights)
             {
                 <tr class="@(right.IdRequestUser != Model.RequestUser.IdRequestUser ? "danger" : "")">
-                    <td class="rr-column">
+                    <td class="rr-column" title="@right.ResourceDescription">
                         @right.ResourceName
                     </td>
                     <td class="rr-column" title="@right.ResourceRightDescription">@right.ResourceRightName</td>

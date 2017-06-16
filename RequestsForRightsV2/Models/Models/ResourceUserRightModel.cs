@@ -9,6 +9,7 @@ namespace RequestsForRights.Web.Models.Models
         public string ResourceRightDescription { get; set; }
         public int IdResource { get; set; }
         public string ResourceName { get; set; }
+        public string ResourceDescription { get; set; }
         public string RightCategory { get; set; }
         public int IdRequestUser { get; set; }
         public string RequestUserSnp { get; set; }

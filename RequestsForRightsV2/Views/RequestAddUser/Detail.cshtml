@@ -195,7 +195,9 @@
                                                         <li class="list-group-item">
                                                             <dl class="dl-horizontal rr-request-right-container">
                                                                 <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].Rights[j].ResourceName)</dt>
-                                                                <dd>@Model.RequestModel.Users[i].Rights[j].ResourceName</dd>
+                                                                <dd title="@Html.AttributeEncode(Model.RequestModel.Users[i].Rights[j].ResourceDescription)">
+                                                                    @Model.RequestModel.Users[i].Rights[j].ResourceName
+                                                                </dd>
                                                                 <dt>
                                                                     @Html.DisplayNameFor(r => r.RequestModel.Users[i].Rights[j].ResourceRightName)
                                                                 </dt>

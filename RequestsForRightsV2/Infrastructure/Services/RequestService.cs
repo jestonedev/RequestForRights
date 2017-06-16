@@ -582,7 +582,8 @@ namespace RequestsForRights.Web.Infrastructure.Services
                 IdRequestRightGrantType = rightAssoc.IdRequestRightGrantType, 
                 RequestRightGrantTypeName = rightAssoc.RequestRightGrantType.Name,
                 IdResource = rightAssoc.ResourceRight.IdResource,
-                ResourceName = rightAssoc.ResourceRight.Resource.Name
+                ResourceName = rightAssoc.ResourceRight.Resource.Name,
+                ResourceDescription = rightAssoc.ResourceRight.Resource.Description
             };
         }
 
