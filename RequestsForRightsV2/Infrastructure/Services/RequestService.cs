@@ -12,6 +12,7 @@ using RequestsForRights.Web.Models.FilterOptions;
 using RequestsForRights.Web.Models.Models;
 using RequestsForRights.Web.Models.ViewModels;
 using RequestsForRights.Web.Models.ViewModels.Request;
+using WebGrease.Css.Extensions;
 using AclRole = RequestsForRights.Web.Infrastructure.Enums.AclRole;
 
 namespace RequestsForRights.Web.Infrastructure.Services
@@ -259,6 +260,7 @@ namespace RequestsForRights.Web.Infrastructure.Services
 
         protected Request ConvertToRequest(RequestModel<TUserModel> requestModel, Action<RequestUserAssoc, TUserModel> requestUserAssocAddedCallback = null)
         {
+            requestModel.Users.ForEach(r => r.Snp = r.Snp.Trim());
             requestModel.Users = ClearUsersDuplicates(requestModel.Users);
 
             var request = new Request
