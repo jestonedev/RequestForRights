@@ -39,7 +39,7 @@ namespace RequestsForRights.Web.Infrastructure.Services
             var emtpyRequest = LoadAdditionalInfoToViewModel(base.GetEmptyRequestViewModel());
             emtpyRequest.RequestModel.Users.ForEach(u =>
             {
-                var createAccountRight = emtpyRequest.ResourceRights.FirstOrDefault(r => r.Resource.Name == "Создать учетную запись");
+                var createAccountRight = emtpyRequest.ResourceRights.FirstOrDefault(r => r.Resource.Name == "Учетная запись пользователя");
                 if (createAccountRight != null)
                 {
                     u.Rights.Insert(0, new RequestUserRightModel
