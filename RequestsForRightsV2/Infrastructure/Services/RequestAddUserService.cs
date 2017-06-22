@@ -6,6 +6,7 @@ using RequestsForRights.Web.Infrastructure.Security.Interfaces;
 using RequestsForRights.Web.Infrastructure.Services.Interfaces;
 using RequestsForRights.Web.Models.Models;
 using RequestsForRights.Web.Models.ViewModels.Request;
+using WebGrease.Css.Extensions;
 
 namespace RequestsForRights.Web.Infrastructure.Services
 {
@@ -35,7 +36,21 @@ namespace RequestsForRights.Web.Infrastructure.Services
 
         public override RequestAddUserViewModel GetEmptyRequestViewModel()
         {
-            return LoadAdditionalInfoToViewModel(base.GetEmptyRequestViewModel());
+            var emtpyRequest = LoadAdditionalInfoToViewModel(base.GetEmptyRequestViewModel());
+            emtpyRequest.RequestModel.Users.ForEach(u =>
+            {
+                var createAccountRight = emtpyRequest.ResourceRights.FirstOrDefault(r => r.Resource.Name == "Создать учетную запись");
+                if (createAccountRight != null)
+                {
+                    u.Rights.Insert(0, new RequestUserRightModel
+                    {
+                        IdResource = createAccountRight.IdResource,
+                        IdResourceRight = createAccountRight.IdResourceRight,
+                        IdRequestRightGrantType = 1
+                    });
+                }
+            });
+            return emtpyRequest;
         }
 
         public override RequestAddUserViewModel GetRequestViewModelBy(Request request)

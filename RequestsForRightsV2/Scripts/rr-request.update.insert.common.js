@@ -78,7 +78,13 @@ $("#rr-request-form")
         updateVisibleRights(rightPanel);
     });
 
+var loadingRights = false;
+
 function updateVisibleRights(rightPanel) {
+    if (loadingRights) {
+        setTimeout(function () { updateVisibleRights(rightPanel); }, 500);
+        return;
+    }
     var resourceSelect = rightPanel.find(".rr-request-right-resource select");
     var rightIdSelect = rightPanel.find(".rr-request-right-id select");
     var idRequestRightGrantType = rightPanel.find(".rr-request-right-grant-type select, .rr-request-right-grant-type input").
@@ -101,10 +107,13 @@ function updateVisibleRights(rightPanel) {
         if (userRightsBuffer[JSON.stringify(user)] != undefined) {
             return;
         }
+        loadingRights = true;
         $.getJSON("/User/GetPermanentRightsOnDate",
-            ajaxData,
-            function (userRights) {
+            ajaxData, function (userRights) {
                 userRightsBuffer[JSON.stringify(user)] = userRights;
+                loadingRights = false;
+            }).error(function () {
+                loadingRights = false;
             });
         return;
     }
@@ -113,11 +122,15 @@ function updateVisibleRights(rightPanel) {
         setResourceAndRightsValues(rightPanel, idResource, idResourceRight);
         return;
     }
+    loadingRights = true;
     $.getJSON("/User/GetPermanentRightsOnDate", ajaxData,
         function (userRights) {
             userRightsBuffer[JSON.stringify(user)] = userRights;
             loadResources(rightPanel, userRights);
             setResourceAndRightsValues(rightPanel, idResource, idResourceRight);
+            loadingRights = false;
+        }).error(function () {
+            loadingRights = false;
         });
 }
 
@@ -227,7 +240,12 @@ $("#rr-request-form")
                     }
                 }
             });
-            rightIdSelect.val(idResourceRight);
+            var rightOptions = rightIdSelect.find("option");
+            if (rightOptions.length === 2) {
+                $(rightOptions[1]).prop("selected", "selected");
+            } else {
+                rightIdSelect.val(idResourceRight);
+            }
             if (rightIdSelect.val() === null) {
                 rightIdSelect.val("");
             }
@@ -600,7 +618,12 @@ updateControls();
 updateDeleteUserButton();
 updateDeleteRightButton();
 refreshValidation();
+
+updateUserFieldsTitles($(".rr-request-user"));
+updateRequestDescription();
+
 initializeUsersAutocomplete($(".rr-request-user-snp input"));
+
 loadUserCache();
 loadRightCache();
 
@@ -608,5 +631,3 @@ var rightPanels = $(".rr-request-right");
 for (var i = 0; i < rightPanels.length; i++) {
     updateVisibleRights($(rightPanels[i]));
 }
-updateUserFieldsTitles($(".rr-request-user"));
-updateRequestDescription();
