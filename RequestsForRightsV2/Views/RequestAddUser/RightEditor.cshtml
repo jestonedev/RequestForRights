@@ -53,9 +53,11 @@
             }
         </select>
     </div>
+
     <div class="form-group col-sm-6 col-xs-12 rr-request-right-id">
         @Html.RequiredLabelFor(r => r.RequestModel.Users[userIndex].Rights[rightIndex].IdResourceRight,
             new {@class = "control-label"})
+
         <select class="form-control"
                 name="@Html.NameFor(r => r.RequestModel.Users[userIndex].Rights[rightIndex].IdResourceRight)"
                 id="@Html.IdFor(r => r.RequestModel.Users[userIndex].Rights[rightIndex].IdResourceRight)"
@@ -66,12 +68,15 @@
                 data-trigger="manual"
                 data-html="true"
                 data-container="body">
-            <option value="" selected>Выберите право</option>
             @foreach (var right in Model.ResourceRights)
             {
                 var selected = right.IdResourceRight ==
                                Model.RequestModel.Users[userIndex].Rights[rightIndex].IdResourceRight;
-                <option value="@right.IdResourceRight" @(selected ? "selected" : "")
+                if (!selected)
+                {
+                    continue;
+                }
+                <option value="@right.IdResourceRight" selected
                         data-id-resource="@right.IdResource"
                         data-description="@Html.AttributeEncode(right.Description)">
                     @right.Name

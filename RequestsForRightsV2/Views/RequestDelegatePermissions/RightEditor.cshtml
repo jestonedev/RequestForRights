@@ -71,7 +71,11 @@
             {
                 var selected = right.IdResourceRight ==
                                Model.RequestModel.Users[userIndex].Rights[rightIndex].IdResourceRight;
-                <option value="@right.IdResourceRight" @(selected ? "selected" : "")
+                if (!selected)
+                {
+                    continue;
+                }
+                <option value="@right.IdResourceRight" selected
                         data-id-resource="@right.IdResource"
                         data-description="@Html.AttributeEncode(right.Description)">
                     @right.Name

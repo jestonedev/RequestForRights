@@ -11,7 +11,6 @@ using RequestsForRights.Web.Infrastructure.Utilities.EmailNotify;
 using RequestsForRights.Web.Infrastructure.Utilities.TransfertToRoute;
 using RequestsForRights.Web.Models.Models;
 using RequestsForRights.Web.Models.ViewModels.Request;
-using WebGrease.Css.Extensions;
 
 namespace RequestsForRights.Web.Controllers
 {
@@ -168,23 +167,6 @@ namespace RequestsForRights.Web.Controllers
             }
             try
             {
-                var resourceRights = _requestService.GetRequestViewModelBy(requestViewModel.RequestModel).ResourceRights.ToList();
-                var createAccountRight = resourceRights.FirstOrDefault(r => r.Resource.Name == "Создать учетную запись");
-                if (createAccountRight != null)
-                {
-                    requestViewModel.RequestModel.Users.ForEach(u =>
-                    {
-                        if (u.Rights.All(r => r.IdResourceRight != createAccountRight.IdResourceRight))
-                        {
-                            u.Rights.Insert(0, new RequestUserRightModel
-                            {
-                                IdResource = createAccountRight.IdResource,
-                                IdResourceRight = createAccountRight.IdResourceRight,
-                                IdRequestRightGrantType = 1
-                            });
-                        }
-                    });
-                }
                 var request = _requestService.InsertRequest(requestViewModel.RequestModel);
                 _requestService.SaveChanges();
                 var emails = _emailBuilder.CreateRequestEmails(

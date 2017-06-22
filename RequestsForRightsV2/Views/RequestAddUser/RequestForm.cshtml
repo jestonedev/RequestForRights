@@ -13,6 +13,20 @@
 </div>
 
 <div class="panel-group rr-request-users" id="accordion" role="tablist" aria-multiselectable="true">
+    <select class="form-control"
+            name="CacheRrRequestRightId"
+            id="cache-rr-request-right-id" style="display:none">
+        <option value="" selected>Выберите право</option>
+        @foreach (var right in Model.ResourceRights)
+        {
+            <option value="@right.IdResourceRight"
+                    data-id-resource="@right.IdResource"
+                    data-description="@Html.AttributeEncode(right.Description)">
+                @right.Name
+            </option>
+        }
+    </select>
+
     @if (Model.RequestModel.Users != null)
     {
         for (var i = 0; i < Model.RequestModel.Users.Count; i++)

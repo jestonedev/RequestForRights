@@ -206,12 +206,13 @@ $("#rr-request-form")
             var rightPanel = $(this).closest(".rr-request-right");
             var idResource = $(this).find("option:selected").data("id-resource");
             var rightIdSelect = rightPanel.find(".rr-request-right-id select");
+            var cacheRightIdSelect = $("#cache-rr-request-right-id");
             var idResourceRight = rightIdSelect.val();
-            var options = rightIdSelect.find("option");
+            var options = cacheRightIdSelect.find("option");
             if (rightsOptionsCache == undefined) {
                 rightsOptionsCache = options.clone();
             }
-            options.remove();
+            rightIdSelect.empty();
 
             var idRequestRightGrantType = rightPanel.find(".rr-request-right-grant-type select," +
                 ".rr-request-right-grant-type input").first().val();
