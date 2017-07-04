@@ -253,11 +253,13 @@ $("#rr-request-form")
         });
 
 function submitButtonClick(e) {
+    $(this).prop("disabled", "disabled");
     var form = $("#rr-request-form");
     if (formIsValid(form)) {
         form.submit();
     } else {
         showErrorBadgets();
+        $(this).removeProp("disabled");
     }
     e.preventDefault();
     return false;
