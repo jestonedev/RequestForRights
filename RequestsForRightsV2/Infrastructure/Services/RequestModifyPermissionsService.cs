@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using RequestsForRights.Database.Repositories.Interfaces;
 using RequestsForRights.Domain.Entities;
 using RequestsForRights.Web.Infrastructure.Security.Interfaces;
@@ -13,19 +12,13 @@ namespace RequestsForRights.Web.Infrastructure.Services
         RequestModifyPermissionsViewModel>, 
         IRequestModifyPermissionsService
     {
-        private readonly IResourceRepository _resourceRepository;
 
         public RequestModifyPermissionsService(
             IRequestRepository requestsRepository,
             IResourceRepository resourceRepository, 
             IRequestSecurityService<RequestUserModel> requestSecurityService) : 
-            base(requestsRepository, requestSecurityService)
+            base(requestsRepository, resourceRepository, requestSecurityService)
         {
-            if (resourceRepository == null)
-            {
-                throw new ArgumentNullException("resourceRepository");
-            }
-            _resourceRepository = resourceRepository;
         }
         public override RequestModifyPermissionsViewModel GetEmptyRequestViewModel()
         {

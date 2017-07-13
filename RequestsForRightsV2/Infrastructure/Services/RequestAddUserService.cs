@@ -14,24 +14,18 @@ namespace RequestsForRights.Web.Infrastructure.Services
         IRequestAddUserService
     {
         private readonly IUserService _userService;
-        private readonly IResourceRepository _resourceRepository;
 
         public RequestAddUserService(IRequestRepository requestsRepository, 
             IResourceRepository resourceRepository, 
             IUserService userService,
             IRequestSecurityService<RequestUserModel> requestSecurityService)
-            : base(requestsRepository, requestSecurityService)
+            : base(requestsRepository, resourceRepository, requestSecurityService)
         {
             if (userService == null)
             {
                 throw new ArgumentNullException("userService");
             }
             _userService = userService;
-            if (resourceRepository == null)
-            {
-                throw new ArgumentNullException("resourceRepository");
-            }
-            _resourceRepository = resourceRepository;
         }
 
         public override RequestAddUserViewModel GetEmptyRequestViewModel()

@@ -22,9 +22,10 @@ namespace RequestsForRights.Web.Infrastructure.Services
         where TViewModel: RequestViewModel<TUserModel>, new()
     {
         protected readonly IRequestRepository RequestsRepository;
+        protected readonly IResourceRepository _resourceRepository;
         protected readonly IRequestSecurityService<TUserModel> RequestSecurityService;
 
-        public RequestService(IRequestRepository requestsRepository,
+        public RequestService(IRequestRepository requestsRepository, IResourceRepository resourceRepository,
             IRequestSecurityService<TUserModel> requestSecurityService)
         {
             if (requestsRepository == null)
@@ -37,6 +38,11 @@ namespace RequestsForRights.Web.Infrastructure.Services
                 throw new ArgumentNullException("requestSecurityService");
             }
             RequestSecurityService = requestSecurityService;
+            if (resourceRepository == null)
+            {
+                throw new ArgumentNullException("resourceRepository");
+            }
+            _resourceRepository = resourceRepository;
         }
 
         public IQueryable<Request> GetNotSeenRequests()
@@ -236,8 +242,23 @@ namespace RequestsForRights.Web.Infrastructure.Services
         public virtual Request UpdateRequest(RequestModel<TUserModel> requestModel)
         {
             var request = ConvertToRequest(requestModel);
-            return RequestsRepository.UpdateRequest(request, 
+            var updatedRequest = RequestsRepository.UpdateRequest(request, 
                 !RequestSecurityService.InRole(AclRole.Administrator));
+            return updatedRequest;
+        }
+
+        public void UpdateRequestState(Request request)
+        {
+            if (request.RequestStates.OrderByDescending(r => r.IdRequestState).First().IdRequestStateType == 1 &&
+                !GetWaitAgreementUsers(request.IdRequest, new List<RequestAgreement>()).Any())
+            {
+                RequestsRepository.AddRequestState(new RequestState
+                {
+                    Date = DateTime.Now,
+                    Request = request,
+                    RequestStateType = RequestsRepository.GetRequestStateTypes().First(r => r.IdRequestStateType == 2)
+                }, false);
+            }
         }
 
         public virtual Request InsertRequest(RequestModel<TUserModel> requestModel)
@@ -649,11 +670,13 @@ namespace RequestsForRights.Web.Infrastructure.Services
                 SelectMany(r => r.RequestUserRightAssocs).Where(r => !r.Deleted).
                 SelectMany(r =>
                 {
-                    var aclUsers = r.ResourceRight.Resource.OperatorDepartment.AclUsers;
-                    var users = r.ResourceRight.Resource.OperatorDepartment.Users.Where(u => 
+                    var resourceRight = r.ResourceRight ?? _resourceRepository.GetResourceRights()
+                        .First(rr => rr.IdResourceRight == r.IdResourceRight);
+                    var aclUsers = resourceRight.Resource.OperatorDepartment.AclUsers;
+                    var users = resourceRight.Resource.OperatorDepartment.Users.Where(u => 
                         u.AclDepartments == null || 
                         !u.AclDepartments.Any());
-                    return aclUsers.Concat(users).Where(u => u.Roles.Any(role => role.IdRole == 2));
+                    return aclUsers.Concat(users).Where(u => !u.Deleted && u.Roles.Any(role => role.IdRole == 2));
                 }).Where(r => !agreements.Any(a => a.IdAgreementType == 1 && a.IdAgreementState == 4 && a.IdUser == r.IdUser));
             var excludeDepartments = agreements.Where(r => r.IdAgreementType == 1 &&
                     new [] {2,3}.Contains(r.IdAgreementState)).ToList().

@@ -14,18 +14,12 @@ namespace RequestsForRights.Web.Infrastructure.Services
     public class RequestDelegatePermissionsService: RequestService<RequestDelegatePermissionsUserModel,
         RequestDelegatePermissionsViewModel>, IRequestDelegatePermissionsService
     {
-        private readonly IResourceRepository _resourceRepository;
 
         public RequestDelegatePermissionsService(IRequestRepository requestsRepository,
             IResourceRepository resourceRepository,
             IRequestSecurityService<RequestDelegatePermissionsUserModel> requestSecurityService) :
-            base(requestsRepository, requestSecurityService)
+            base(requestsRepository, resourceRepository, requestSecurityService)
         {
-            if (resourceRepository == null)
-            {
-                throw new ArgumentNullException("resourceRepository");
-            }
-            _resourceRepository = resourceRepository;
         }
 
         public override RequestModel<RequestDelegatePermissionsUserModel> GetRequestModelBy(Request request)

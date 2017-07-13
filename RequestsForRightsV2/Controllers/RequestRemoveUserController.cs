@@ -106,6 +106,7 @@ namespace RequestsForRights.Web.Controllers
             try
             {
                 _requestService.UpdateRequest(requestViewModel.RequestModel);
+                _requestService.UpdateRequestState(request);
                 _requestService.SaveChanges();
                 var emails = _emailBuilder.UpdateRequestEmails(
                     _requestService.GetRequestById(request.IdRequest, true));

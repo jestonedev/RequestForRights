@@ -302,6 +302,7 @@ namespace RequestsForRights.UnitTests.Web.Infrastructure.Services
                 .AsQueryable());
             requestRepositoryMock.Setup(r => r.GetRequestStateTypes())
                 .Returns(dbContext.RequestStateTypes.AsQueryable());
+            var resourceRepositoryMock = new Mock<IResourceRepository>();
             foreach (var request in dbContext.Requests)
             {
                 var req = request;
@@ -321,7 +322,7 @@ namespace RequestsForRights.UnitTests.Web.Infrastructure.Services
                         : new List<Department> {u.Department}.AsQueryable());
             }
             return new RequestService<RequestUserModel, RequestViewModel<RequestUserModel>>(
-                requestRepositoryMock.Object, requestSecurityService.Object);
+                requestRepositoryMock.Object, resourceRepositoryMock.Object,  requestSecurityService.Object);
         }
     }
 }

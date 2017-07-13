@@ -244,6 +244,26 @@ namespace RequestsForRights.Web.Infrastructure.Utilities.EmailNotify
             return message;
         }
 
+        private MailMessage UpdateRequestDispatcherEmail(Request request, AclUser user)
+        {
+            var subject = string.Format("Создана заявка №{0} {1}",
+                request.IdRequest,
+                request.RequestType.Name.ToLower());
+            var body = string.Format("Здравствуйте, {0}!<br>{1}. Данная заявка является автоматически согласованной.",
+                user.Snp, subject);
+            body += GetRequestDescriptionPart(request);
+            body += GetRequestLink(request);
+            var message = new MailMessage
+            {
+                IsBodyHtml = true,
+                From = _from,
+                Subject = subject,
+                Body = body
+            };
+            message.To.Add(new MailAddress(user.Email));
+            return message;
+        }
+
         public IEnumerable<MailMessage> UpdateRequestEmails(Request request)
         {
             var messages = new List<MailMessage>();
@@ -274,6 +294,21 @@ namespace RequestsForRights.Web.Infrastructure.Utilities.EmailNotify
                 var message = UpdateRequestCoordinatorEmail(request, user);
                 messages.Add(message);
             }
+            if (request.RequestStates.OrderByDescending(r => r.IdRequestState).First().IdRequestStateType == 2)
+            {
+                var users = _requestSecurityService.GetUsersBy(AclRole.Dispatcher)
+                    .Union(_requestSecurityService.GetUsersBy(AclRole.Registrar));
+                foreach (var user in users)
+                {
+                    if (string.IsNullOrEmpty(user.Email))
+                    {
+                        continue;
+                    }
+                    var message = UpdateRequestDispatcherEmail(request, user);
+                    messages.Add(message);
+                }
+            }
+
             return messages;
         }
 

@@ -30,6 +30,7 @@ namespace RequestsForRights.Web.Infrastructure.Services.Interfaces
         int SaveChanges();
         Request DeleteRequest(int idRequest);
         Request UpdateRequest(RequestModel<TUserModel> requestModel);
+        void UpdateRequestState(Request request);
         Request InsertRequest(RequestModel<TUserModel> requestModel);
         IQueryable<RequestType> GetRequestTypes();
         void UpdateUserLastSeen(int idRequest, int idUser);

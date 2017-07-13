@@ -11,8 +11,9 @@ namespace RequestsForRights.Web.Infrastructure.Services
     {
         public RequestRemoveUserService(
             IRequestRepository requestsRepository, 
+            IResourceRepository resourceRepository,
             IRequestSecurityService<RequestUserModel> requestSecurityService) : 
-            base(requestsRepository, requestSecurityService)
+            base(requestsRepository, resourceRepository, requestSecurityService)
         {
         }
     }
