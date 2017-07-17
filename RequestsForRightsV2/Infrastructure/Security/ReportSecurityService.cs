@@ -88,7 +88,8 @@ namespace RequestsForRights.Web.Infrastructure.Security
                 AclRole.Administrator, 
                 AclRole.Dispatcher, 
                 AclRole.ResourceManager, 
-                AclRole.Registrar
+                AclRole.Registrar,
+                AclRole.ResourceViewer
             });
         }
 
@@ -100,7 +101,8 @@ namespace RequestsForRights.Web.Infrastructure.Security
                 AclRole.Dispatcher, 
                 AclRole.ResourceManager,
                 AclRole.Executor, 
-                AclRole.Registrar
+                AclRole.Registrar,
+                AclRole.ResourceViewer
             });
         }
 
@@ -110,7 +112,7 @@ namespace RequestsForRights.Web.Infrastructure.Security
             {
                 AclRole.Administrator, AclRole.Dispatcher,
                 AclRole.Executor, 
-                AclRole.ResourceManager
+                AclRole.ResourceManager, AclRole.ResourceViewer
             }))
             {
                 return departments;

@@ -9,6 +9,7 @@
         Registrar,
         Executor,
         ResourceManager,
-        Coordinator
+        Coordinator,
+        ResourceViewer
     }
 }
