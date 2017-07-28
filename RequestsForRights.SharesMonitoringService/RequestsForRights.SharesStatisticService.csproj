@@ -4,15 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{45B2F648-AA9A-4FCE-BD87-99C184A6FA29}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{2735D4E3-6C1B-450B-9FBA-8E37A57027E3}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RequestsForRights.Ldap</RootNamespace>
-    <AssemblyName>RequestsForRights.Ldap</AssemblyName>
+    <RootNamespace>RequestsForRights.SharesStatisticService</RootNamespace>
+    <AssemblyName>RequestsForRights.SharesStatisticService</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +23,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -30,10 +32,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.DirectoryServices" />
-    <Reference Include="System.DirectoryServices.AccountManagement" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -41,17 +51,30 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ILdapRepository.cs" />
-    <Compile Include="LdapDepartmentFilter.cs" />
-    <Compile Include="LdapRepository.cs" />
-    <Compile Include="LdapGroup.cs" />
-    <Compile Include="LdapUser.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ShareUserInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RequestsForRights.Database\RequestsForRights.Database.csproj">
+      <Project>{1ce3aa34-a68d-4364-b5b0-128ac8771d3f}</Project>
+      <Name>RequestsForRights.Database</Name>
+    </ProjectReference>
     <ProjectReference Include="..\RequestsForRights.Domain\RequestsForRights.Domain.csproj">
       <Project>{f4cca6b9-9648-47f4-a750-4eccba53f5fb}</Project>
       <Name>RequestsForRights.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RequestsForRights.Ldap\RequestsForRights.Ldap.csproj">
+      <Project>{45b2f648-aa9a-4fce-bd87-99c184a6fa29}</Project>
+      <Name>RequestsForRights.Ldap</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RequestsForRightsV2\RequestsForRights.Web.csproj">
+      <Project>{f681ac1d-0629-4021-8ff6-ec5fb119fa6b}</Project>
+      <Name>RequestsForRights.Web</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

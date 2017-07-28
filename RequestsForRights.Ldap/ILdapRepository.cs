@@ -10,5 +10,8 @@ namespace RequestsForRights.Ldap
 
         IEnumerable<LdapUser> FindMaternityLeaveUsers(string snpPattern,
             IEnumerable<LdapDepartmentFilter> departemtnsFilter, int maxCount);
+
+        IEnumerable<LdapUser> GetUsersInGroup(string group);
+        string ConvertGroupNameToCn(string group);
     }
 }

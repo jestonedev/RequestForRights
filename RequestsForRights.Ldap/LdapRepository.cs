@@ -22,7 +22,8 @@ namespace RequestsForRights.Ldap
             "department",
             "physicaldeliveryofficename",
             "mail",
-            "telephonenumber"
+            "telephonenumber",
+            "memberof"
         };
 
         public LdapRepository(string userName, string password)
@@ -163,7 +164,7 @@ namespace RequestsForRights.Ldap
             return users;
         }
 
-        private LdapUser SearchResultToUser(SearchResult result, string domainLoginPrefix)
+        private static LdapUser SearchResultToUser(SearchResult result, string domainLoginPrefix)
         {
             return new LdapUser
             {
@@ -181,6 +182,121 @@ namespace RequestsForRights.Ldap
         private static string GetValue(ResultPropertyCollection properties, string parameter)
         {
             return properties.Contains(parameter) ? properties[parameter][0].ToString() : null;
+        }
+
+        public IEnumerable<LdapUser> GetUsersInGroup(string group)
+        {
+            var users = new List<LdapUser>();
+            if (string.IsNullOrEmpty(group))
+            {
+                return users;
+            }
+            var searchRoots = new Dictionary<string, string[]>
+            {
+                {
+                    "pwr.mcs.br", new[]
+                    {
+                        "LDAP://pwr.mcs.br/OU=UserRoot,DC=pwr,DC=mcs,DC=br",
+                        "LDAP://pwr.mcs.br/OU=UserRTwo,DC=pwr,DC=mcs,DC=br",
+                        "LDAP://pwr.mcs.br/OU=UserOther,DC=pwr,DC=mcs,DC=br"
+                    }
+                }
+            };
+            foreach (var domainName in GetDomains())
+            {
+                if (!searchRoots.ContainsKey(domainName))
+                {
+                    continue;
+                }
+                var context = new DirectoryContext(DirectoryContextType.Domain, domainName, _userName, _password);
+                // Search users in group
+                using (var domain = System.DirectoryServices.ActiveDirectory.Domain.GetDomain(context))
+                using (var domainEntry = domain.GetDirectoryEntry())
+                {
+                    var domainLoginPrefix = domain.Name.Split('.')[0];
+                    foreach (var searchRoot in searchRoots[domainName])
+                    {
+                        domainEntry.Path = searchRoot;
+                        using (var searcher = new DirectorySearcher(domainEntry, "", _propertiesToLoad))
+                        {
+                            searcher.SearchScope = SearchScope.Subtree;
+                            searcher.Filter =
+                                "(&(objectClass=user)(objectClass=person)(!(useraccountcontrol:1.2.840.113556.1.4.803:=2)))";
+                            var results = searcher.FindAll();
+                            if (results.Count != 0)
+                            {
+                                foreach (SearchResult result in results)
+                                {
+                                    var samaccountname = result.Properties["samaccountname"][0].ToString();
+                                    var groupResultCollection = result.Properties["memberof"];
+                                    foreach (var groupResult in groupResultCollection)
+                                    {
+                                        if (string.Format("LDAP://{0}/", domainName) + groupResult == group)
+                                        {
+                                            users.Add(SearchResultToUser(result, domainLoginPrefix));
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Search groups in group and run recursive search users in subgroups
+                using (var domain = System.DirectoryServices.ActiveDirectory.Domain.GetDomain(context))
+                using (var domainEntry = domain.GetDirectoryEntry())
+                {
+                    using (var searcher = new DirectorySearcher(domainEntry, "", _propertiesToLoad))
+                    {
+                        searcher.Filter = "(objectClass=group)";
+                        var results = searcher.FindAll();
+                        if (results.Count == 0)
+                            continue;
+                        foreach (SearchResult result in results)
+                        {
+                            var groupResultCollection = result.Properties["memberof"];
+                            foreach (var groupResult in groupResultCollection)
+                            {
+                                if (string.Format("LDAP://{0}/", domainName) + groupResult == group)
+                                {
+                                    users = users.Concat(GetUsersInGroup(result.Properties["adsPath"][0].ToString())).ToList();
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+            return users;
+        }
+
+        public string ConvertGroupNameToCn(string group)
+        {
+            if (string.IsNullOrEmpty(group))
+            {
+                throw new ArgumentNullException("group");
+            }
+            foreach (var domainName in GetDomains())
+            {
+                var context = new DirectoryContext(DirectoryContextType.Domain, domainName, _userName, _password);
+                using (var domain = System.DirectoryServices.ActiveDirectory.Domain.GetDomain(context))
+                using (var domainEntry = domain.GetDirectoryEntry())
+                {
+                    var domainLoginPrefix = domain.Name.Split('.')[0];
+                    using (var searcher = new DirectorySearcher(domainEntry, "", _propertiesToLoad))
+                    {
+                        searcher.SearchScope = SearchScope.Subtree;
+                        searcher.Filter = string.Format("(&(objectClass=group)(samaccountname={0}))", group);
+                        var result = searcher.FindOne();
+                        if (result == null)
+                        {
+                            continue;
+                        }
+                        return result.Properties["adspath"][0].ToString();
+                    }
+                }
+            }
+            return null;
         }
     }
 }
