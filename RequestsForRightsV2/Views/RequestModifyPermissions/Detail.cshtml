@@ -117,11 +117,11 @@
                                                                 <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].Rights[j].RequestRightGrantTypeName)</dt>
                                                                 <dd>@Model.RequestModel.Users[i].Rights[j].RequestRightGrantTypeName</dd>
                                                                 <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].Rights[j].ResourceName)</dt>
-                                                                <dd title="@Html.AttributeEncode(Model.RequestModel.Users[i].Rights[j].ResourceDescription)">
+                                                                <dd title="@Html.Raw(Html.AttributeEncode(Model.RequestModel.Users[i].Rights[j].ResourceDescription))">
                                                                     @Model.RequestModel.Users[i].Rights[j].ResourceName
                                                                 </dd>
                                                                 <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].Rights[j].ResourceRightName)</dt>
-                                                                <dd title="@Html.AttributeEncode(Model.RequestModel.Users[i].Rights[j].ResourceRightDescription)">@Model.RequestModel.Users[i].Rights[j].ResourceRightName</dd>
+                                                                <dd title="@Html.Raw(Html.AttributeEncode(Model.RequestModel.Users[i].Rights[j].ResourceRightDescription))">@Model.RequestModel.Users[i].Rights[j].ResourceRightName</dd>
                                                                 @if (!string.IsNullOrEmpty(Model.RequestModel.Users[i].Rights[j].Description))
                                                                 {
                                                                     <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].Rights[j].Description)</dt>

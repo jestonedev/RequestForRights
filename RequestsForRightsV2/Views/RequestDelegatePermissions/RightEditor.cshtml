@@ -77,7 +77,7 @@
                 }
                 <option value="@right.IdResourceRight" selected
                         data-id-resource="@right.IdResource"
-                        data-description="@Html.AttributeEncode(right.Description)">
+                        data-description="@Html.Raw(Html.AttributeEncode(right.Description))">
                     @right.Name
                 </option>
             }

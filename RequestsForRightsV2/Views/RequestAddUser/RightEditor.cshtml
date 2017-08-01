@@ -68,7 +68,7 @@
                 data-trigger="manual"
                 data-html="true"
                 data-container="body">
-            @foreach (var right in Model.ResourceRights)
+                        @foreach (var right in Model.ResourceRights)
             {
                 var selected = right.IdResourceRight ==
                                Model.RequestModel.Users[userIndex].Rights[rightIndex].IdResourceRight;
@@ -78,7 +78,7 @@
                 }
                 <option value="@right.IdResourceRight" selected
                         data-id-resource="@right.IdResource"
-                        data-description="@Html.AttributeEncode(right.Description)">
+                        data-description="@Html.Raw(Html.AttributeEncode(right.Description))">
                     @right.Name
                 </option>
             }

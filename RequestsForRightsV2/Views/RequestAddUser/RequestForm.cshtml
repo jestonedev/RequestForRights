@@ -17,11 +17,11 @@
             name="CacheRrRequestRightId"
             id="cache-rr-request-right-id" style="display:none">
         <option value="" selected>Выберите право</option>
-        @foreach (var right in Model.ResourceRights)
+                @foreach (var right in Model.ResourceRights)
         {
             <option value="@right.IdResourceRight"
                     data-id-resource="@right.IdResource"
-                    data-description="@Html.AttributeEncode(right.Description)">
+                    data-description="@Html.Raw(Html.AttributeEncode(right.Description))">
                 @right.Name
             </option>
         }
