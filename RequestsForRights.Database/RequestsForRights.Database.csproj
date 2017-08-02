@@ -234,6 +234,10 @@
     <Compile Include="Migrations\201705250338303_AddAlexApplicRequestNumColumn.Designer.cs">
       <DependentUpon>201705250338303_AddAlexApplicRequestNumColumn.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201708020821337_AddAclUserDateCreatedField.cs" />
+    <Compile Include="Migrations\201708020821337_AddAclUserDateCreatedField.Designer.cs">
+      <DependentUpon>201708020821337_AddAclUserDateCreatedField.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\Interfaces\IReportRepository.cs" />
@@ -403,6 +407,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201705250338303_AddAlexApplicRequestNumColumn.resx">
       <DependentUpon>201705250338303_AddAlexApplicRequestNumColumn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708020821337_AddAclUserDateCreatedField.resx">
+      <DependentUpon>201708020821337_AddAclUserDateCreatedField.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

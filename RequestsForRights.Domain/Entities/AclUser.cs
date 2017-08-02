@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -23,6 +24,8 @@ namespace RequestsForRights.Domain.Entities
         [MaxLength(256)]
         public string Phone { get; set; }
         public int IdDepartment { get; set; }
+        public DateTime DateCreated { get; set; }
+
         [ForeignKey("IdDepartment")]
         public virtual Department Department { get; set; }
         public virtual IList<Department> AclDepartments { get; set; }
