@@ -1,13 +1,10 @@
 ﻿@using System.Globalization
-@using RequestsForRights.Domain.Enums
 @using RequestsForRights.Web.Infrastructure.Security.Interfaces
-@using RequestsForRights.Web.Infrastructure.Services.Interfaces
 @using RequestsForRights.Web.Models.Models
 @model RequestsForRights.Web.Models.ViewModels.Request.RequestAddUserViewModel
 
 @{    
     var securityService = (IRequestSecurityService<RequestUserModel>)ViewData["SecurityService"];
-    var userService = (IUserService)ViewData["UserService"];
     ViewData["IdRequest"] = Model.RequestModel.IdRequest;
     ViewBag.Title = "Заявка на подключение нового сотрудника";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -101,80 +98,12 @@
                                         </dl>
                                         @if (securityService.CanSendTransferUserNotification())
                                         {
-                                            // Find first active user from another department and alert info about him
-                                            var department = Model.RequestModel.Users[i].Department;
-                                            var unit = Model.RequestModel.Users[i].Unit;
-                                            var snp = Model.RequestModel.Users[i].Snp;
-                                            var users = userService.FindUsers(snp, UsersCategory.ActiveUsers, 5).Where(u => u.Department != department).ToList();
-                                            //users = users.Concat(users).ToList();
-                                            if (users.Any())
-                                            {
-                                                <div class="alert alert-danger rr-request-user-duplicate-notification">
-
-                                                    <strong>Внимание!</strong>
-                                                    @if (users.Count == 1)
-                                                    {
-                                                        var user = users.First();
-                                                        <p>Сотрудник с такими ФИО присутствует в организации <strong>«@(user.Department)»</strong>.
-                                                        </p>
-                                                        <p>
-                                                            Если это подключение связано с переводом сотрудника в другую организацию,
-                                                            то рекомендуется отправить уведомление ответственному
-                                                            о необходимости подачи заявки на отключение сотрудника от информационных ресурсов данной организации.
-                                                        </p>
-                                                        <p>
-                                                            @Ajax.ActionLink(@"Уведомить ответственного", "SendTransferUserNotification", "RequestAddUser",
-                                                                new
-                                                                {
-                                                                    RequesterSnp = Model.RequestModel.OwnerSnp,
-                                                                    RequesterDepartment = Model.RequestModel.OwnerDepartment,
-                                                                    TransferUserSnp = snp,
-                                                                    TransferToDepartment = department,
-                                                                    TransferToUnit = unit,
-                                                                    TransferFromDepartment = user.Department,
-                                                                    TransferFromUnit = user.Unit
-                                                                }, new AjaxOptions
-                                                                {
-                                                                    OnSuccess = "sendTransferUserNotificationSuccess",
-                                                                    OnFailure = "sendTransferUserNotificationFailure",
-                                                                    OnBegin = "sendTransferUserNotificationBegin"
-                                                                }, null)
-                                                        </p>
-                                                    }
-                                                    else
-                                                    {
-                                                        <p>Сотрудник с такими ФИО присутствует в следующих организациях:</p>
-                                                        <ul>
-                                                            @foreach (var user in users)
-                                                            {
-                                                                <li>@user.Department —
-                                                                    @Ajax.ActionLink(@"Уведомить ответственного", "SendTransferUserNotification", "RequestAddUser",
-                                                                        new
-                                                                        {
-                                                                            RequesterSnp = Model.RequestModel.OwnerSnp,
-                                                                            RequesterDepartment = Model.RequestModel.OwnerDepartment,
-                                                                            TransferUserSnp = snp,
-                                                                            TransferToDepartment = department,
-                                                                            TransferToUnit = unit,
-                                                                            TransferFromDepartment = user.Department,
-                                                                            TransferFromUnit = user.Unit
-                                                                        }, new AjaxOptions
-                                                                        {
-                                                                            OnSuccess = "sendTransferUserNotificationSuccess",
-                                                                            OnFailure = "sendTransferUserNotificationFailure",
-                                                                            OnBegin = "sendTransferUserNotificationBegin"
-                                                                        }, null)
-                                                                </li>
-                                                            }
-                                                        </ul>
-                                                        <p>
-                                                            Если это подключение связано с переводом сотрудника в другую организацию,
-                                                            то рекомендуется отправить уведомление одному или нескольким ответственным
-                                                            о необходимости подачи заявки на отключение сотрудника от информационных ресурсов организации.
-                                                        </p>
-                                                    }
-                                                </div>
-                                            }
+                                            <div class="rr-user-duplicate-notification"
+                                                 data-department="@Model.RequestModel.Users[i].Department"
+                                                 data-unit="@Model.RequestModel.Users[i].Unit"
+                                                 data-snp="@Model.RequestModel.Users[i].Snp"
+                                                 data-requester-department="@Model.RequestModel.OwnerDepartment"
+                                                 data-requester-snp="@Model.RequestModel.OwnerSnp"></div>
                                         }
                                         @if (Model.RequestModel.Users[i].Rights != null &&
                                              Model.RequestModel.Users[i].Rights.Any())

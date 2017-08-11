@@ -570,8 +570,8 @@ namespace RequestsForRights.Web.Infrastructure.Utilities.EmailNotify
             List<AclUser> requesters;
             if (!string.IsNullOrEmpty(transferFromUnit))
             {
-                requesters = allRequesters.Where(r => r.Department.Name == transferFromDepartment &&
-                                                   r.Department.ParentDepartment.Name == transferFromUnit).ToList();
+                requesters = allRequesters.Where(r => r.Department.Name == transferFromUnit &&
+                                                   r.Department.ParentDepartment.Name == transferFromDepartment).ToList();
                 if (!requesters.Any())
                 {
                     requesters = allRequesters.Where(r => r.Department.Name == transferFromDepartment).ToList();

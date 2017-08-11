@@ -11,6 +11,7 @@ using RequestsForRights.Web.Infrastructure.Utilities.EmailNotify;
 using RequestsForRights.Web.Infrastructure.Utilities.TransfertToRoute;
 using RequestsForRights.Web.Models.Models;
 using RequestsForRights.Web.Models.ViewModels.Request;
+using RequestsForRights.Domain.Enums;
 
 namespace RequestsForRights.Web.Controllers
 {
@@ -226,6 +227,29 @@ namespace RequestsForRights.Web.Controllers
             }
         }
 
+        public ActionResult GetDuplicateUserNotification(string requesterSnp,
+            string requesterDepartment,
+            string requestUserSnp,
+            string requestUserDepartment,
+            string requestUserUnit)
+        {
+            if (!_securityService.CanSendTransferUserNotification())
+            {
+                return Content("");
+            }
+            var users = _userService.FindUsers(requestUserSnp, UsersCategory.ActiveUsers, 5).Where(u => u.Department != requestUserDepartment).ToList();
+            if (!users.Any())
+            {
+                return Content("");
+            }
+            ViewData["requesterSnp"] = requesterSnp;
+            ViewData["requesterDepartment"] = requesterDepartment;
+            ViewData["requestUserSnp"] = requestUserSnp;
+            ViewData["requestUserDepartment"] = requestUserDepartment;
+            ViewData["requestUserUnit"] = requestUserUnit;
+            return PartialView(users);
+        }
+
         public ActionResult SendTransferUserNotification(string requesterSnp,
             string requesterDepartment,
             string transferUserSnp,
@@ -248,6 +272,6 @@ namespace RequestsForRights.Web.Controllers
                 transferFromUnit);
             _emailSender.Send(emails);
             return new HttpStatusCodeResult(HttpStatusCode.OK);
-        }
-	}
+        } 
+    }
 }

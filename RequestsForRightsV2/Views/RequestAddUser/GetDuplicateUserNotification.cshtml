@@ -1,0 +1,71 @@
+﻿@model List<RequestsForRights.Domain.Entities.RequestUser>
+
+@if (Model.Any())
+{
+    <div class="alert alert-danger rr-request-user-duplicate-notification">
+        <strong>Внимание!</strong>
+        @if (Model.Count == 1)
+        {
+            var user = Model.First();
+            <p>
+                Сотрудник с такими ФИО присутствует в организации <strong>«@(user.Department)»</strong>.
+            </p>
+            <p>
+                Если это подключение связано с переводом сотрудника в другую организацию,
+                то рекомендуется отправить уведомление ответственному
+                о необходимости подачи заявки на отключение сотрудника от информационных ресурсов данной организации.
+            </p>
+            <p>
+                @Ajax.ActionLink(@"Уведомить ответственного", "SendTransferUserNotification", "RequestAddUser",
+                    new
+                    {
+                        RequesterSnp = ViewData["requesterSnp"],
+                        RequesterDepartment = ViewData["requesterDepartment"],
+                        TransferUserSnp = ViewData["requestUserSnp"],
+                        TransferToDepartment = ViewData["requestUserDepartment"],
+                        TransferToUnit = ViewData["requestUserUnit"],
+                        TransferFromDepartment = user.Department,
+                        TransferFromUnit = user.Unit
+                    }, new AjaxOptions
+                    {
+                        OnSuccess = "sendTransferUserNotificationSuccess",
+                        OnFailure = "sendTransferUserNotificationFailure",
+                        OnBegin = "sendTransferUserNotificationBegin"
+                    }, null)
+            </p>
+        }
+        else
+        {
+            <p>Сотрудник с такими ФИО присутствует в следующих организациях:</p>
+            <ul>
+                @foreach (var user in Model)
+                {
+                    <li>
+                        @user.Department —
+                        @Ajax.ActionLink(@"Уведомить ответственного", "SendTransferUserNotification", "RequestAddUser",
+                            new
+                            {
+                                RequesterSnp = ViewData["requesterSnp"],
+                                RequesterDepartment = ViewData["requesterDepartment"],
+                                TransferUserSnp = ViewData["requestUserSnp"],
+                                TransferToDepartment = ViewData["requestUserDepartment"],
+                                TransferToUnit = ViewData["requestUserUnit"],
+                                TransferFromDepartment = user.Department,
+                                TransferFromUnit = user.Unit
+                            }, new AjaxOptions
+                            {
+                                OnSuccess = "sendTransferUserNotificationSuccess",
+                                OnFailure = "sendTransferUserNotificationFailure",
+                                OnBegin = "sendTransferUserNotificationBegin"
+                            }, null)
+                    </li>
+                }
+            </ul>
+            <p>
+                Если это подключение связано с переводом сотрудника в другую организацию,
+                то рекомендуется отправить уведомление одному или нескольким ответственным
+                о необходимости подачи заявки на отключение сотрудника от информационных ресурсов организации.
+            </p>
+        }
+    </div>
+}
