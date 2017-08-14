@@ -111,18 +111,12 @@ namespace RequestsForRights.Web.Infrastructure.Security
             }
             if (InRole(AclRole.Requester))
             {
-                var requestDepartments = requests
-                    .Where(r => r.User.AclDepartments.Any())
-                    .SelectMany(r => r.User.AclDepartments.Select(d =>
-                        new {d.IdDepartment, r.IdRequest})).Concat(
-                            requests.Where(r => !r.User.AclDepartments.Any()).Select(r =>
-                                new {r.User.IdDepartment, r.IdRequest}));
                 filteredRequests = filteredRequests.Concat(
                     from row in requests
-                    join depRow in requestDepartments
-                    on row.IdRequest equals  depRow.IdRequest
                     where row.IdUser == userInfo.IdUser ||
-                    allowedDepartments.Any(ad => ad == depRow.IdDepartment)
+                        allowedDepartments.Any(ad => row.User.AclDepartments.Any() ? 
+                            row.User.AclDepartments.Any(acld => acld.IdDepartment == ad) : 
+                            row.User.IdDepartment == ad)
                     select row);
             }
             if (InRole(AclRole.ResourceOperator))

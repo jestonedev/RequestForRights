@@ -119,9 +119,8 @@ namespace RequestsForRights.Web.Infrastructure.Services
             }
             if (filterOptions.IdRequestStateType != null)
             {
-                requests = requests.Where(r => r.RequestStates.OrderBy(rs => rs.IdRequestState).Where(rs => !rs.Deleted).
-                    OrderByDescending(rs => rs.IdRequestState).FirstOrDefault().IdRequestStateType == 
-                    filterOptions.IdRequestStateType);
+                requests = requests.Where(r => r.RequestStates.OrderByDescending(rs => rs.IdRequestState).
+                    FirstOrDefault(rs => !rs.Deleted).IdRequestStateType == filterOptions.IdRequestStateType);
             }
             if (filterOptions.RequestCategory == RequestCategory.MyRequests)
             {
