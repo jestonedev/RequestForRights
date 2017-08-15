@@ -81,7 +81,9 @@
         @foreach (var request in Model.VisibleRequests)
         {
             var rowClass = "";
-            var requestState = request.RequestStates.OrderBy(rs => rs.IdRequestState).FirstOrDefault();
+            // Странное поведение. Иногда не подгружаются RequestStates после сортировки по User.Snp. Приходится принудительно перезапрашивать
+            var requestState = request.RequestStates.OrderBy(rs => rs.IdRequestState).FirstOrDefault() ?? 
+                requestService.GetRequestById(request.IdRequest).RequestStates.OrderBy(rs => rs.IdRequestState).FirstOrDefault();
             if (requestState != null && requestState.Date != new DateTime(2017, 4, 1) && 
                 requestService.DidNotSeenRequest(request))
             {
@@ -90,10 +92,10 @@
             <tr class="@rowClass">
                 <td class="rr-column col-sm-1">@request.IdRequest</td>
                 <td class="rr-column col-sm-2">@request.User.Snp</td>
-                <td class="rr-column col-sm-2">@request.RequestStates.OrderBy(rs => rs.IdRequestState).Last(r => !r.Deleted).RequestStateType.Name</td>
+                <td class="rr-column col-sm-2">@request.CurrentRequestStateType.Name</td>
                 <td class="rr-column col-sm-2">@request.RequestType.Name</td>
                 <td class="rr-column col-sm-4">@request.Description</td>
-                <td class="rr-column col-sm-1">@request.RequestStates.OrderBy(rs => rs.IdRequestState).First(r => !r.Deleted).Date.ToString("dd.MM.yyyy", CultureInfo.CurrentCulture)</td>
+                <td class="rr-column col-sm-1">@(request.RequestStates.Any() ? request.RequestStates.OrderBy(rs => rs.IdRequestState).First(r => !r.Deleted).Date.ToString("dd.MM.yyyy", CultureInfo.CurrentCulture) : "")</td>
                 <td class="rr-edit-column text-center">
                     <div class="btn-group btn-group-xs" role="group" aria-label="Панель редактирования заявки">
                         <a href="@Url.Action("Detail", new {id = request.IdRequest})"
