@@ -40,10 +40,10 @@ namespace RequestsForRights.Web.Infrastructure.Services
             RequestModifyPermissionsViewModel viewModel)
         {
             viewModel.Resources =
-                RequestSecurityService.FilterResources(_resourceRepository.GetResources())
+                RequestSecurityService.FilterResources(ResourceRepository.GetResources())
                     .OrderBy(r => r.Name)
                     .ToList();
-            viewModel.ResourceRights = _resourceRepository.GetResourceRights().OrderBy(r => r.Name).ToList();
+            viewModel.ResourceRights = ResourceRepository.GetResourceRights().OrderBy(r => r.Name).ToList();
             viewModel.RequestRightGrantTypes = RequestsRepository.GetRequestRightGrantTypes()
                 .Where(r => r.IdRequestRightGrantType != 3)
                 .OrderBy(r => r.Name).ToList();

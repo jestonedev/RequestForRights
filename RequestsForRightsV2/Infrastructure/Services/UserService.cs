@@ -70,22 +70,16 @@ namespace RequestsForRights.Web.Infrastructure.Services
                 return _securityRepository.FilterUsers(users).Take(maxCount);
             }
 
-            var lastStatesByRequest = from stateRow in _userRepository.GetRequestStates()
-                group stateRow.IdRequestState by stateRow.IdRequest
-                into gs
-                select new
-                {
-                    IdRequest = gs.Key, IdRequestState = gs.Max()
-                };
-            var completedRequests = (from lastStateRow in lastStatesByRequest
-                join stateRow in _userRepository.GetRequestStates() on lastStateRow.IdRequestState equals stateRow.IdRequestState
-                join requestRow in _userRepository.GetRequests() on stateRow.IdRequest equals requestRow.IdRequest
-                join userAssocRow in _userRepository.GetRequestUserAssocs() on requestRow.IdRequest equals userAssocRow.IdRequest
-                where stateRow.IdRequestStateType == 4
-                select new
-                {
-                    requestRow.IdRequest, requestRow.IdRequestType, userAssocRow.IdRequestUser, stateRow.Date
-                }).ToList();
+            var completedRequests = (from requestRow in _userRepository.GetRequests()
+                                        join userAssocRow in _userRepository.GetRequestUserAssocs() on requestRow.IdRequest equals userAssocRow.IdRequest
+                                    where requestRow.IdCurrentRequestStateType == 4
+                                    select new
+                                    {
+                                        requestRow.IdRequest,
+                                        requestRow.IdRequestType,
+                                        userAssocRow.IdRequestUser,
+                                        Date = requestRow.CurrentRequestStateDate,
+                                    }).ToList();
 
             var lastRequestsDateForUsers = from row in completedRequests
                 group row.Date by row.IdRequestUser

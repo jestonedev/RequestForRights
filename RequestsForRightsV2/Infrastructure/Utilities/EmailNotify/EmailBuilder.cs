@@ -294,7 +294,7 @@ namespace RequestsForRights.Web.Infrastructure.Utilities.EmailNotify
                 var message = UpdateRequestCoordinatorEmail(request, user);
                 messages.Add(message);
             }
-            if (request.RequestStates.OrderByDescending(r => r.IdRequestState).First().IdRequestStateType == 2)
+            if (request.IdCurrentRequestStateType == 2)
             {
                 var users = _requestSecurityService.GetUsersBy(AclRole.Dispatcher)
                     .Union(_requestSecurityService.GetUsersBy(AclRole.Registrar));
@@ -445,21 +445,17 @@ namespace RequestsForRights.Web.Infrastructure.Utilities.EmailNotify
             {
                 return messages;
             }
-
-            var lastRequestState = request.RequestStates.OrderByDescending(r => r.IdRequestState).
-                FirstOrDefault();
-            if (lastRequestState == null ||
-                lastRequestState.IdRequestStateType == 4 ||
-                (lastRequestState.IdRequestStateType != idRequestStateType && 
-                !(lastRequestState.IdRequestStateType == 2 && idRequestStateType == 5)))
+            if (request.IdCurrentRequestStateType == 4 ||
+                (request.IdCurrentRequestStateType != idRequestStateType &&
+                !(request.IdCurrentRequestStateType == 2 && idRequestStateType == 5)))
             {
                 return messages;
             }
             var requester = request.User;
             if (!string.IsNullOrEmpty(requester.Email))
             {
-                var message = SetRequestStateRequesterEmail(request, 
-                    lastRequestState.RequestStateType, agreementDescription);
+                var message = SetRequestStateRequesterEmail(request,
+                    request.CurrentRequestStateType, agreementDescription);
                 messages.Add(message);
             }
             if (idRequestStateType == 2 ||
@@ -479,8 +475,8 @@ namespace RequestsForRights.Web.Infrastructure.Utilities.EmailNotify
                     {
                         continue;
                     }
-                    var message = SetRequestStateDispatcherEmail(request, 
-                        lastRequestState.RequestStateType, agreementDescription, user);
+                    var message = SetRequestStateDispatcherEmail(request,
+                        request.CurrentRequestStateType, agreementDescription, user);
                     messages.Add(message);
                 }
             }

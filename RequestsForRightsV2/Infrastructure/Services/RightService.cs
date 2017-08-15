@@ -24,26 +24,13 @@ namespace RequestsForRights.Web.Infrastructure.Services
         public IEnumerable<ResourceUserRightModel> GetPermanentRightsOnDate(DateTime date, 
             int? idRequestUser, string department, string unit, int? idResource)
         {
-            var lastStatesByRequest = from stateRow in _rightRepository.GetRequestStates()
-                group stateRow.IdRequestState by stateRow.IdRequest
-                into gs
-                select new
-                {
-                    IdRequest = gs.Key,
-                    IdRequestState = gs.Max()
-                };
-            var completedRequests = from lastStateRow in lastStatesByRequest
-                join stateRow in _rightRepository.GetRequestStates()
-                    on lastStateRow.IdRequestState equals stateRow.IdRequestState
-                join requestRow in _rightRepository.GetRequests()
-                    on stateRow.IdRequest equals requestRow.IdRequest
-                where stateRow.IdRequestStateType == 4
-                // Completed
+            var completedRequests = from requestRow in _rightRepository.GetRequests()
+                where requestRow.IdCurrentRequestStateType == 4
                 select new
                 {
                     requestRow.IdRequest,
                     requestRow.IdRequestType,
-                    DateFrom = stateRow.Date,
+                    DateFrom = requestRow.CurrentRequestStateDate,
                 };
             var completedUsers = (from completedRequestRow in completedRequests
                 join requestUserAssocRow in _rightRepository.GetRequestUserAssocs()
@@ -156,26 +143,13 @@ namespace RequestsForRights.Web.Infrastructure.Services
         public IEnumerable<ResourceUserRightModel> GetDelegatedRightsOnDate(DateTime date,
             int? idRequestUser, string department, string unit, int? idResource)
         {
-            var lastStatesByRequest = from stateRow in _rightRepository.GetRequestStates()
-                group stateRow.IdRequestState by stateRow.IdRequest
-                into gs
-                select new
-                {
-                    IdRequest = gs.Key,
-                    IdRequestState = gs.Max()
-                };
-            var completedRequests = from lastStateRow in lastStatesByRequest
-                join stateRow in _rightRepository.GetRequestStates()
-                    on lastStateRow.IdRequestState equals stateRow.IdRequestState
-                join requestRow in _rightRepository.GetRequests()
-                    on stateRow.IdRequest equals requestRow.IdRequest
-                where stateRow.IdRequestStateType == 4
-                // Completed
+            var completedRequests = from requestRow in _rightRepository.GetRequests()
+                where requestRow.IdCurrentRequestStateType == 4
                 select new
                 {
                     requestRow.IdRequest,
                     requestRow.IdRequestType,
-                    DateFrom = stateRow.Date
+                    DateFrom = requestRow.CurrentRequestStateDate,
                 };
             var completedUsers = (from completedRequestRow in completedRequests
                 join requestUserAssocRow in _rightRepository.GetRequestUserAssocs()
@@ -344,20 +318,15 @@ namespace RequestsForRights.Web.Infrastructure.Services
                 .Include(r => r.RequestUserAssoc.Request.User.Department)
                 .Where(r => r.RequestUserAssoc.IdRequestUser == idRequestUser && !r.RequestUserAssoc.Deleted
                     && !r.RequestUserAssoc.Request.Deleted && 
-                    r.RequestUserAssoc.Request.RequestStates
-                    .Where(rs => !r.Deleted).OrderByDescending(rs => rs.IdRequestState).FirstOrDefault().IdRequestStateType == 4 &&
+                    r.RequestUserAssoc.Request.IdCurrentRequestStateType == 4 &&
                     r.RequestUserAssoc.Request.IdRequestType != 4  && r.RequestUserAssoc.Request.IdRequestType != 3 &&
-                    r.RequestUserAssoc.Request.RequestStates
-                    .Where(rs => !r.Deleted).OrderByDescending(rs => rs.IdRequestState).FirstOrDefault().Date >= from &&
-                    r.RequestUserAssoc.Request.RequestStates
-                    .Where(rs => !r.Deleted).OrderByDescending(rs => rs.IdRequestState).FirstOrDefault().Date <= to)
+                    r.RequestUserAssoc.Request.CurrentRequestStateDate >= from &&
+                    r.RequestUserAssoc.Request.CurrentRequestStateDate <= to)
                     .Select(r => new ResourceUserRightHistoryModel
                     {
                         IdRequest = r.RequestUserAssoc.IdRequest,
                         IdRequestType = r.RequestUserAssoc.Request.IdRequestType,
-                        RequestCompleteDate = r.RequestUserAssoc.Request.RequestStates.Where(rs => !r.Deleted)
-                            .OrderByDescending(rs => rs.IdRequestState)
-                            .FirstOrDefault().Date,
+                        RequestCompleteDate = r.RequestUserAssoc.Request.CurrentRequestStateDate.Value,
                         DelegationExtInfo = null,
                         AclUser = r.RequestUserAssoc.Request.User,
                         RequestUser = r.RequestUserAssoc.RequestUser,
@@ -380,18 +349,14 @@ namespace RequestsForRights.Web.Infrastructure.Services
                         .Include(r => r.ResourceRight.Resource)
                     on userAssocRow.IdRequestUserAssoc equals  userRightAssocRow.IdRequestUserAssoc
                     where delegationRow.IdDelegateToUser == idRequestUser || userAssocRow.IdRequestUser == idRequestUser &&
-                        userAssocRow.Request.RequestStates.Where(rs => !rs.Deleted)
-                            .OrderByDescending(rs => rs.IdRequestState)
-                            .FirstOrDefault().IdRequestStateType == 4 &&
+                        userAssocRow.Request.IdCurrentRequestStateType == 4 &&
                             !delegationRow.Deleted && !userAssocRow.Deleted &&
                             !userAssocRow.Request.Deleted && !userRightAssocRow.Deleted
                     select new ResourceUserRightHistoryModel
                     {
                         IdRequest = userAssocRow.IdRequest,
                         IdRequestType = userAssocRow.Request.IdRequestType,
-                        RequestCompleteDate = userAssocRow.Request.RequestStates.Where(rs => !rs.Deleted)
-                            .OrderByDescending(rs => rs.IdRequestState)
-                            .FirstOrDefault().Date,
+                        RequestCompleteDate = userAssocRow.Request.CurrentRequestStateDate.Value,
                         DelegationExtInfo = delegationRow,
                         AclUser = userAssocRow.Request.User,
                         RequestUser = userAssocRow.RequestUser,
@@ -402,16 +367,13 @@ namespace RequestsForRights.Web.Infrastructure.Services
             var excludeUser = (from requestRow in _rightRepository.GetRequests()
                     join userAssocRow in _rightRepository.GetRequestUserAssocs()
                     on requestRow.IdRequest equals userAssocRow.IdRequest
-                    where requestRow.RequestStates.Where(rs => !rs.Deleted).OrderByDescending(r => r.IdRequestState)
-                        .FirstOrDefault().IdRequestStateType == 4 && userAssocRow.IdRequestUser == idRequestUser
+                    where requestRow.IdCurrentRequestStateType == 4 && userAssocRow.IdRequestUser == idRequestUser
                         && requestRow.IdRequestType == 3
                     select new ResourceUserRightHistoryModel
                     {
                         IdRequest = requestRow.IdRequest,
                         IdRequestType = requestRow.IdRequestType,
-                        RequestCompleteDate = requestRow.RequestStates.Where(rs => !rs.Deleted)
-                            .OrderByDescending(rs => rs.IdRequestState)
-                            .FirstOrDefault().Date,
+                        RequestCompleteDate = requestRow.CurrentRequestStateDate.Value,
                         AclUser = requestRow.User
                     }).ToList();
 

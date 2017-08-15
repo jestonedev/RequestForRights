@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -15,6 +16,12 @@ namespace RequestsForRights.Domain.Entities
         public virtual AclUser User { get; set; }
         public int IdRequestType { get; set; }
         public virtual RequestType RequestType { get; set; }
+        
+        public DateTime? CurrentRequestStateDate { get; set; }
+        public int? IdCurrentRequestStateType { get; set; }
+        [ForeignKey("IdCurrentRequestStateType")]
+        public virtual RequestStateType CurrentRequestStateType { get; set; }
+
         public virtual IList<RequestAgreement> RequestAgreements { get; set; }
         public virtual IList<RequestUserLastSeen> RequestUserLastSeens { get; set; }
         public virtual IList<RequestState> RequestStates { get; set; }

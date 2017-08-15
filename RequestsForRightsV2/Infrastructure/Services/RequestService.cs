@@ -22,7 +22,7 @@ namespace RequestsForRights.Web.Infrastructure.Services
         where TViewModel: RequestViewModel<TUserModel>, new()
     {
         protected readonly IRequestRepository RequestsRepository;
-        protected readonly IResourceRepository _resourceRepository;
+        protected readonly IResourceRepository ResourceRepository;
         protected readonly IRequestSecurityService<TUserModel> RequestSecurityService;
 
         public RequestService(IRequestRepository requestsRepository, IResourceRepository resourceRepository,
@@ -42,13 +42,13 @@ namespace RequestsForRights.Web.Infrastructure.Services
             {
                 throw new ArgumentNullException("resourceRepository");
             }
-            _resourceRepository = resourceRepository;
+            ResourceRepository = resourceRepository;
         }
 
         public IQueryable<Request> GetNotSeenRequests()
         {
             var requests = RequestSecurityService.FilterRequests(RequestsRepository.GetRequests())
-                .Where(r => r.RequestStates.FirstOrDefault(rs => rs.Date == new DateTime(2017, 4, 1)) == null);
+                .Where(r => r.RequestStates.OrderBy(rs => rs.IdRequestState).FirstOrDefault(rs => !rs.Deleted).Date != new DateTime(2017, 4, 1));
             var requestsUserLastSeens = RequestsRepository.GetRequestsUserLastSeens(RequestSecurityService.CurrentUser);
             return from request in requests
                 join lastSeen in requestsUserLastSeens
@@ -85,13 +85,9 @@ namespace RequestsForRights.Web.Infrastructure.Services
                     switch (sortDirection)
                     {
                         case SortDirection.Asc:
-                            return requests.OrderBy(r => r.RequestStates.OrderByDescending(
-                                rs => rs.IdRequestState).
-                                FirstOrDefault().RequestStateType.Name);
+                            return requests.OrderBy(r => r.CurrentRequestStateType.Name);
                         case SortDirection.Desc:
-                            return requests.OrderByDescending(r => r.RequestStates.OrderByDescending(
-                                rs => rs.IdRequestState).
-                                FirstOrDefault().RequestStateType.Name);
+                            return requests.OrderByDescending(r => r.CurrentRequestStateType.Name);
                         default:
                             return requests;
                     }
@@ -119,8 +115,7 @@ namespace RequestsForRights.Web.Infrastructure.Services
             }
             if (filterOptions.IdRequestStateType != null)
             {
-                requests = requests.Where(r => r.RequestStates.OrderByDescending(rs => rs.IdRequestState).
-                    FirstOrDefault(rs => !rs.Deleted).IdRequestStateType == filterOptions.IdRequestStateType);
+                requests = requests.Where(r => r.IdCurrentRequestStateType == filterOptions.IdRequestStateType);
             }
             if (filterOptions.RequestCategory == RequestCategory.MyRequests)
             {
@@ -153,7 +148,7 @@ namespace RequestsForRights.Web.Infrastructure.Services
             var filter = filterOptions.Filter.ToLower();
             return requests.Where(r => r.IdRequest.ToString().ToLower().Contains(filter) || 
                 r.User.Snp.ToLower().Contains(filter) ||
-                r.RequestStates.Where(rs => !rs.Deleted).OrderByDescending(rs => rs.IdRequestState).FirstOrDefault().RequestStateType.Name.ToLower().Contains(filter) || 
+                r.CurrentRequestStateType.Name.ToLower().Contains(filter) || 
                 r.RequestType.Name.ToLower().Contains(filter) || 
                 (r.Description != null && r.Description.ToLower().Contains(filter)));
         }
@@ -212,11 +207,10 @@ namespace RequestsForRights.Web.Infrastructure.Services
 
         public virtual RequestModel<TUserModel> GetRequestModelBy(Request request)
         {
-            var lastState = request.RequestStates.OrderByDescending(r => r.IdRequestState).First(r => !r.Deleted);
             DateTime? completeDate = null;
-            if (lastState.IdRequestStateType == 4)
+            if (request.IdCurrentRequestStateType == 4)
             {
-                completeDate = lastState.Date;
+                completeDate = request.CurrentRequestStateDate;
             }
             return new RequestModel<TUserModel>
             {
@@ -224,7 +218,7 @@ namespace RequestsForRights.Web.Infrastructure.Services
                 Description = request.Description,
                 OwnerSnp = request.User.Snp,
                 OwnerDepartment = request.User.Department.Name,
-                RequestStateName = request.RequestStates.OrderBy(r => r.IdRequestState).Last(r => !r.Deleted).RequestStateType.Name,
+                RequestStateName = request.CurrentRequestStateType.Name,
                 RequestDate = request.RequestStates.First(r => !r.Deleted).Date,
                 CompleteDate = completeDate,
                 IdRequestType = request.IdRequestType,
@@ -248,7 +242,7 @@ namespace RequestsForRights.Web.Infrastructure.Services
 
         public void UpdateRequestState(Request request)
         {
-            if (request.RequestStates.OrderByDescending(r => r.IdRequestState).First().IdRequestStateType == 1 &&
+            if (request.IdCurrentRequestStateType == 1 &&
                 !GetWaitAgreementUsers(request.IdRequest, new List<RequestAgreement>()).Any())
             {
                 RequestsRepository.AddRequestState(new RequestState
@@ -263,18 +257,24 @@ namespace RequestsForRights.Web.Infrastructure.Services
         public virtual Request InsertRequest(RequestModel<TUserModel> requestModel)
         {
             var request = ConvertToRequest(requestModel);
-            request.User = RequestSecurityService.GetUserInfo();
             var idRequestStateType =
                 RequestSecurityService.CanSetRequestStateGlobal(request, 1) ? 1 : 2;
+            var firstState = new RequestState
+            {
+                IdRequestStateType = idRequestStateType,
+                Request = request,
+                Date = DateTime.Now
+            };
             request.RequestStates = new List<RequestState>
             {
-                new RequestState
-                {
-                    IdRequestStateType = idRequestStateType,
-                    Request = request,
-                    Date = DateTime.Now
-                }
+                firstState
             };
+            request.User = RequestSecurityService.GetUserInfo();
+            request.CurrentRequestStateDate = firstState.Date;
+            request.IdCurrentRequestStateType = firstState.IdRequestStateType;
+            request.CurrentRequestStateType =
+                RequestsRepository.GetRequestStateTypes()
+                    .FirstOrDefault(r => r.IdRequestStateType == firstState.IdRequestStateType);
             return RequestsRepository.InsertRequest(request);
         }
 
@@ -661,7 +661,7 @@ namespace RequestsForRights.Web.Infrastructure.Services
             IList<RequestAgreement> agreements)
         {
             var request = GetRequestById(idRequest);
-            if (request.RequestStates.OrderBy(r => r.IdRequestState).Last(r => !r.Deleted).IdRequestStateType != 1)
+            if (request.IdCurrentRequestStateType != 1)
             {
                 return new List<AclUser>();
             }
@@ -669,7 +669,7 @@ namespace RequestsForRights.Web.Infrastructure.Services
                 SelectMany(r => r.RequestUserRightAssocs).Where(r => !r.Deleted).
                 SelectMany(r =>
                 {
-                    var resourceRight = r.ResourceRight ?? _resourceRepository.GetResourceRights()
+                    var resourceRight = r.ResourceRight ?? ResourceRepository.GetResourceRights()
                         .First(rr => rr.IdResourceRight == r.IdResourceRight);
                     var aclUsers = resourceRight.Resource.OperatorDepartment.AclUsers;
                     var users = resourceRight.Resource.OperatorDepartment.Users.Where(u => 
@@ -698,9 +698,7 @@ namespace RequestsForRights.Web.Infrastructure.Services
         public IEnumerable<RequestsCountByStateTypesViewModel> GetRequestsCountByStateTypes()
         {
             var notSeenRequests = from row in GetNotSeenRequests()
-                group row.IdRequest by row.RequestStates.Where(r => !r.Deleted)
-                    .OrderByDescending(rs => rs.IdRequestState)
-                    .FirstOrDefault().IdRequestStateType
+                group row.IdRequest by row.IdCurrentRequestStateType
                 into gs
                 select new
                 {

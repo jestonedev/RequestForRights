@@ -47,10 +47,8 @@ namespace RequestsForRights.Web.Infrastructure.Security
         {
             return InRole(AclRole.Administrator) ||
                    (InRole(AclRole.Requester) &&
-                    request.RequestStates.Where(r => !r.Deleted)
-                        .OrderBy(rs => rs.IdRequestState).Last().IdRequestStateType == 1 &&
-                    request.RequestStates.Where(r => !r.Deleted)
-                        .All(r => r.IdRequestStateType != 2) &&
+                    request.IdCurrentRequestStateType == 1 &&
+                    request.RequestStates.Where(r => !r.Deleted).All(r => r.IdRequestStateType != 2) &&
                     GetUserAllowedDepartments(request.User)
                         .Any(r => GetUserAllowedDepartments(GetUserInfo())
                             .Any(cu => r.IdDepartment == cu.IdDepartment)));
@@ -80,8 +78,7 @@ namespace RequestsForRights.Web.Infrastructure.Security
         {
             return InRole(AclRole.Administrator) ||
                    (InRole(AclRole.Requester) &&
-                    request.RequestStates.Where(r => !r.Deleted)
-                        .OrderBy(rs => rs.IdRequestState).Last().IdRequestStateType == 1 &&
+                    request.IdCurrentRequestStateType == 1 &&
                     request.RequestStates.Where(r => !r.Deleted)
                         .All(r => r.IdRequestStateType != 2) &&
                     GetUserAllowedDepartments(request.User)
@@ -109,6 +106,20 @@ namespace RequestsForRights.Web.Infrastructure.Security
             {
                 return filteredRequests;
             }
+            if (InRole(AclRole.ResourceOperator) && InRole(AclRole.Requester))
+            {
+                filteredRequests = filteredRequests.Concat(
+                    from row in requests
+                    where row.IdUser == userInfo.IdUser ||
+                          allowedDepartments.Any(ad => row.User.AclDepartments.Any()
+                              ? row.User.AclDepartments.Any(acld => acld.IdDepartment == ad)
+                              : row.User.IdDepartment == ad) ||
+                          row.RequestUserAssoc.Any(ru =>
+                              !ru.Deleted && ru.RequestUserRightAssocs.Any(rur =>
+                                  !rur.Deleted &&
+                                  allowedDepartments.Any(d => d == rur.ResourceRight.Resource.IdOperatorDepartment)))
+                    select row);
+            } else
             if (InRole(AclRole.Requester))
             {
                 filteredRequests = filteredRequests.Concat(
@@ -118,14 +129,15 @@ namespace RequestsForRights.Web.Infrastructure.Security
                             row.User.AclDepartments.Any(acld => acld.IdDepartment == ad) : 
                             row.User.IdDepartment == ad)
                     select row);
-            }
+            } else
             if (InRole(AclRole.ResourceOperator))
             {
                 filteredRequests = filteredRequests.Concat(
-                    requests.Where(r => r.RequestUserAssoc.Any(ru => 
-                         !ru.Deleted && ru.RequestUserRightAssocs.Any(rur => 
-                         !rur.Deleted && 
-                         allowedDepartments.Any(d => d == rur.ResourceRight.Resource.IdOperatorDepartment)))));
+                    requests.Where(r => r.RequestUserAssoc.Any(ru =>
+                        !ru.Deleted && ru.RequestUserRightAssocs.Any(rur =>
+                            !rur.Deleted &&
+                            allowedDepartments.Any(d => d == rur.ResourceRight.Resource.IdOperatorDepartment)))));
+
             }
             if (InRole(AclRole.Executor))
             {
@@ -241,10 +253,8 @@ namespace RequestsForRights.Web.Infrastructure.Security
 
         public bool CanAddCoordinator(Request request)
         {
-            var idRequestStateType = request.RequestStates.OrderBy(rs => rs.IdRequestState).
-                Last(r => !r.Deleted).IdRequestStateType;
             return InRole(new[] { AclRole.Dispatcher, AclRole.Administrator }) && 
-                new[] { 1, 2 }.Contains(idRequestStateType);
+                new[] { 1, 2 }.Contains(request.IdCurrentRequestStateType ?? 0);
         }
 
         public bool CanExcludeAgreementor(RequestModel<T> entity)
@@ -255,10 +265,8 @@ namespace RequestsForRights.Web.Infrastructure.Security
 
         public bool CanExcludeAgreementor(Request request)
         {
-            var idRequestStateType = request.RequestStates.OrderBy(rs => rs.IdRequestState).
-                Last(r => !r.Deleted).IdRequestStateType;
             return InRole(new[] { AclRole.Dispatcher, AclRole.Administrator }) &&
-                new[] { 1, 2 }.Contains(idRequestStateType);
+                new[] { 1, 2 }.Contains(request.IdCurrentRequestStateType ?? 0);
         }
 
         public bool CanAcceptCancelRequest(RequestModel<T> entity)
@@ -269,10 +277,8 @@ namespace RequestsForRights.Web.Infrastructure.Security
 
         public bool CanAcceptCancelRequest(Request request)
         {
-            var idRequestStateType = request.RequestStates.OrderBy(rs => rs.IdRequestState).
-                Last(r => !r.Deleted).IdRequestStateType;
             return InRole(new[] { AclRole.Dispatcher, AclRole.Administrator }) &&
-                 new[] { 1, 2 }.Contains(idRequestStateType) && 
+                 new[] { 1, 2 }.Contains(request.IdCurrentRequestStateType ?? 0) && 
                  request.RequestAgreements.Any(r => r.IdAgreementType == 2 && r.IdAgreementState == 3);
         }
 
@@ -282,8 +288,7 @@ namespace RequestsForRights.Web.Infrastructure.Security
             {
                 return false;
             }
-            if (request.RequestStates.OrderBy(rs => rs.IdRequestState).
-                Last(r => !r.Deleted).IdRequestStateType == idRequestStateType)
+            if (request.IdCurrentRequestStateType == idRequestStateType)
             {
                 return false;
             }
@@ -346,14 +351,12 @@ namespace RequestsForRights.Web.Infrastructure.Security
         {
             return
                 request.RequestStates.Any(r => !r.Deleted && new [] {1,2}.Contains(r.IdRequestStateType)) &&
-                new[] {1, 2}.Contains(request.RequestStates.OrderBy(rs => rs.IdRequestState).
-                    Last(r => !r.Deleted).IdRequestStateType);
+                new[] {1, 2}.Contains(request.IdCurrentRequestStateType ?? 0);
         }
 
         private bool ResourceOperatorCanSetRequestState(Request request)
         {
-            var isFirstState = request.RequestStates.OrderBy(rs => rs.IdRequestState).
-                Last(r => !r.Deleted).IdRequestStateType == 1;
+            var isFirstState = request.IdCurrentRequestStateType == 1;
             if (!isFirstState)
             {
                 return false;
@@ -384,7 +387,7 @@ namespace RequestsForRights.Web.Infrastructure.Security
                 return false;
             }
             return
-                request.RequestStates.OrderBy(rs => rs.IdRequestState).Last(r => !r.Deleted).IdRequestStateType == 1 &&
+                request.IdCurrentRequestStateType == 1 &&
                 request.RequestAgreements.Any(r =>
                     r.IdUser == userInfo.IdUser &&
                     r.IdAgreementType == 2 && r.IdAgreementState == 1);

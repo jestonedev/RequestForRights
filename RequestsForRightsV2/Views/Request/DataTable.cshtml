@@ -81,7 +81,7 @@
         @foreach (var request in Model.VisibleRequests)
         {
             var rowClass = "";
-            var requestState = request.RequestStates.FirstOrDefault();
+            var requestState = request.RequestStates.OrderBy(rs => rs.IdRequestState).FirstOrDefault();
             if (requestState != null && requestState.Date != new DateTime(2017, 4, 1) && 
                 requestService.DidNotSeenRequest(request))
             {

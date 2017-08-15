@@ -24,11 +24,10 @@ namespace RequestsForRights.Web.Infrastructure.Services
 
         public override RequestModel<RequestDelegatePermissionsUserModel> GetRequestModelBy(Request request)
         {
-            var lastState = request.RequestStates.OrderByDescending(r => r.IdRequestState).First(r => !r.Deleted);
             DateTime? completeDate = null;
-            if (lastState.IdRequestStateType == 4)
+            if (request.IdCurrentRequestStateType == 4)
             {
-                completeDate = lastState.Date;
+                completeDate = request.CurrentRequestStateDate;
             }
             return new RequestModel<RequestDelegatePermissionsUserModel>
             {
@@ -36,7 +35,7 @@ namespace RequestsForRights.Web.Infrastructure.Services
                 Description = request.Description,
                 OwnerSnp = request.User.Snp,
                 OwnerDepartment = request.User.Department.Name,
-                RequestStateName = request.RequestStates.OrderBy(r => r.IdRequestState).Last(r => !r.Deleted).RequestStateType.Name,
+                RequestStateName = request.CurrentRequestStateType.Name,
                 RequestDate = request.RequestStates.First(r => !r.Deleted).Date,
                 CompleteDate = completeDate,
                 IdRequestType = request.IdRequestType,
@@ -95,9 +94,9 @@ namespace RequestsForRights.Web.Infrastructure.Services
         private RequestDelegatePermissionsViewModel LoadAdditionalInfoToViewModel(
             RequestDelegatePermissionsViewModel viewModel)
         {
-            viewModel.Resources = RequestSecurityService.FilterResources(_resourceRepository.GetResources())
+            viewModel.Resources = RequestSecurityService.FilterResources(ResourceRepository.GetResources())
                 .OrderBy(r => r.Name).ToList();
-            viewModel.ResourceRights = _resourceRepository.GetResourceRights().OrderBy(r => r.Name).ToList();
+            viewModel.ResourceRights = ResourceRepository.GetResourceRights().OrderBy(r => r.Name).ToList();
             return viewModel;
         }
 

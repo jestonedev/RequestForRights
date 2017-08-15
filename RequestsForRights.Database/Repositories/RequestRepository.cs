@@ -127,6 +127,9 @@ namespace RequestsForRights.Database.Repositories
         {
             var req = GetRequestById(request.IdRequest);
             request.IdUser = req.IdUser;
+            request.CurrentRequestStateDate = req.CurrentRequestStateDate;
+            request.CurrentRequestStateType = req.CurrentRequestStateType;
+            request.IdCurrentRequestStateType = req.IdCurrentRequestStateType;
             _databaseContext.Entry(req).CurrentValues.SetValues(request);
             UpdateRequestUsers(
                 req.RequestUserAssoc.Where(r => !r.Deleted), 
@@ -210,6 +213,10 @@ namespace RequestsForRights.Database.Repositories
             {
                 ResetAgreements(state.IdRequest);
             }
+            var request = _databaseContext.Requests.First(r => r.IdRequest == state.IdRequest);
+            request.CurrentRequestStateDate = state.Date;
+            request.CurrentRequestStateType = state.RequestStateType;
+            request.IdCurrentRequestStateType = state.IdRequestStateType;
             return requestState;
         }
 
