@@ -602,21 +602,36 @@ namespace RequestsForRights.UnitTests.Database
         {
             var requests = new[]
             {
-                new { IdRequest = 1, IdUser = 3, IdRequestType = 1, Deleted = false },
-                new { IdRequest = 2, IdUser = 3, IdRequestType = 2, Deleted = false },
-                new { IdRequest = 3, IdUser = 4, IdRequestType = 4, Deleted = false },
-                new { IdRequest = 4, IdUser = 4, IdRequestType = 3, Deleted = true },
-                new { IdRequest = 5, IdUser = 5, IdRequestType = 1, Deleted = false },
-                new { IdRequest = 6, IdUser = 3, IdRequestType = 2, Deleted = false },
-                new { IdRequest = 7, IdUser = 3, IdRequestType = 4, Deleted = false },
-                new { IdRequest = 8, IdUser = 4, IdRequestType = 3, Deleted = false },
-                new { IdRequest = 9, IdUser = 4, IdRequestType = 1, Deleted = false },
-                new { IdRequest = 10, IdUser = 5, IdRequestType = 2, Deleted = false },
-                new { IdRequest = 11, IdUser = 5, IdRequestType = 4, Deleted = false },
-                new { IdRequest = 12, IdUser = 5, IdRequestType = 3, Deleted = false },
-                new { IdRequest = 13, IdUser = 4, IdRequestType = 1, Deleted = false },
-                new { IdRequest = 14, IdUser = 4, IdRequestType = 2, Deleted = false },
-                new { IdRequest = 15, IdUser = 15, IdRequestType = 2, Deleted = false }
+                new { IdRequest = 1, IdUser = 3, IdRequestType = 1, Deleted = false, 
+                    CurrentRequestStateDate =  new DateTime(2017, 1, 1, 10, 0, 0), IdCurrentRequestStateType = 1 },
+                new { IdRequest = 2, IdUser = 3, IdRequestType = 2, Deleted = false, 
+                    CurrentRequestStateDate =  new DateTime(2017, 1, 2, 10, 0, 1), IdCurrentRequestStateType = 3 },
+                new { IdRequest = 3, IdUser = 4, IdRequestType = 4, Deleted = false, 
+                    CurrentRequestStateDate =  new DateTime(2017, 1, 7, 11, 0, 0), IdCurrentRequestStateType = 4 },
+                new { IdRequest = 4, IdUser = 4, IdRequestType = 3, Deleted = true, 
+                    CurrentRequestStateDate =  new DateTime(2017, 1, 8, 11, 0, 0), IdCurrentRequestStateType = 2 },
+                new { IdRequest = 5, IdUser = 5, IdRequestType = 1, Deleted = false, 
+                    CurrentRequestStateDate =  new DateTime(2017, 1, 6, 11, 0, 0), IdCurrentRequestStateType = 5 },
+                new { IdRequest = 6, IdUser = 3, IdRequestType = 2, Deleted = false, 
+                    CurrentRequestStateDate =  new DateTime(2017, 1, 7, 11, 0, 0), IdCurrentRequestStateType = 5 },
+                new { IdRequest = 7, IdUser = 3, IdRequestType = 4, Deleted = false, 
+                    CurrentRequestStateDate =  new DateTime(2017, 1, 9, 11, 0, 0), IdCurrentRequestStateType = 5 },
+                new { IdRequest = 8, IdUser = 4, IdRequestType = 3, Deleted = false, 
+                    CurrentRequestStateDate =  new DateTime(2017, 1, 11, 11, 0, 0), IdCurrentRequestStateType = 1 },
+                new { IdRequest = 9, IdUser = 4, IdRequestType = 1, Deleted = false, 
+                    CurrentRequestStateDate =  new DateTime(2017, 1, 5, 11, 0, 0), IdCurrentRequestStateType = 2 },
+                new { IdRequest = 10, IdUser = 5, IdRequestType = 2, Deleted = false, 
+                    CurrentRequestStateDate =  new DateTime(2017, 1, 5, 11, 0, 0), IdCurrentRequestStateType = 3 },
+                new { IdRequest = 11, IdUser = 5, IdRequestType = 4, Deleted = false, 
+                    CurrentRequestStateDate =  new DateTime(2017, 1, 5, 11, 0, 0), IdCurrentRequestStateType = 5 },
+                new { IdRequest = 12, IdUser = 5, IdRequestType = 3, Deleted = false, 
+                    CurrentRequestStateDate =  new DateTime(2017, 1, 5, 11, 0, 0), IdCurrentRequestStateType = 2 },
+                new { IdRequest = 13, IdUser = 4, IdRequestType = 1, Deleted = false, 
+                    CurrentRequestStateDate =  new DateTime(2017, 1, 5, 11, 0, 0), IdCurrentRequestStateType = 5 },
+                new { IdRequest = 14, IdUser = 4, IdRequestType = 2, Deleted = false, 
+                    CurrentRequestStateDate =  new DateTime(2017, 1, 5, 11, 0, 0), IdCurrentRequestStateType = 2 },
+                new { IdRequest = 15, IdUser = 15, IdRequestType = 2, Deleted = false, 
+                    CurrentRequestStateDate =  new DateTime(2016, 1, 5, 11, 0, 0), IdCurrentRequestStateType = 1 }
             };
             foreach (var requestParams in requests)
             {
@@ -631,6 +646,9 @@ namespace RequestsForRights.UnitTests.Database
                     RequestUserAssoc = new List<RequestUserAssoc>(),
                     RequestAgreements = new List<RequestAgreement>(),
                     RequestUserLastSeens = new List<RequestUserLastSeen>(),
+                    CurrentRequestStateDate = requestParams.CurrentRequestStateDate,
+                    IdCurrentRequestStateType = requestParams.IdCurrentRequestStateType,
+                    CurrentRequestStateType = RequestStateTypes.First(r => r.IdRequestStateType == requestParams.IdCurrentRequestStateType),
                     Deleted = requestParams.Deleted
                 };
                 AclUsers.First(r => r.IdUser == requestParams.IdUser).Requests.Add(request);
