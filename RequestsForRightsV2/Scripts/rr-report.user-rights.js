@@ -73,6 +73,10 @@
                 $(".rr-filter-control form #Login").val("");
                 $(".rr-filter-control form #Department").val("");
                 $(".rr-filter-control form #Unit").val("");
+                prevLogin = null;
+                prevSnp = null;
+                prevDepartment = null;
+                prevUnit = null;
                 filterControlOnValue();
             });
 });
