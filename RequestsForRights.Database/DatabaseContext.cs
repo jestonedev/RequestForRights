@@ -105,7 +105,11 @@ namespace RequestsForRights.Database
                 .WillCascadeOnDelete(false);
             modelBuilder.Entity<Resource>()
                 .HasRequired(f => f.OwnerDepartment)
-                .WithMany(f => f.Resources)
+                .WithMany(f => f.OwnerResources)
+                .WillCascadeOnDelete(false);
+            modelBuilder.Entity<Resource>()
+                .HasRequired(f => f.OperatorDepartment)
+                .WithMany(f => f.OperatorResources)
                 .WillCascadeOnDelete(false);
             modelBuilder.Entity<Request>()
                 .HasOptional(f => f.CurrentRequestStateType)

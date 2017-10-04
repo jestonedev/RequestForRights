@@ -246,6 +246,10 @@
     <Compile Include="Migrations\201708150231523_CurrentRequestDateNullable.Designer.cs">
       <DependentUpon>201708150231523_CurrentRequestDateNullable.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201710040232287_DepartmentConstraintsModification.cs" />
+    <Compile Include="Migrations\201710040232287_DepartmentConstraintsModification.Designer.cs">
+      <DependentUpon>201710040232287_DepartmentConstraintsModification.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\Interfaces\IReportRepository.cs" />
@@ -424,6 +428,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201708150231523_CurrentRequestDateNullable.resx">
       <DependentUpon>201708150231523_CurrentRequestDateNullable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710040232287_DepartmentConstraintsModification.resx">
+      <DependentUpon>201710040232287_DepartmentConstraintsModification.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

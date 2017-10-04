@@ -23,7 +23,9 @@ namespace RequestsForRights.Domain.Entities
         [ScriptIgnore(ApplyToOverrides = true)]
         public virtual IList<Department> ChildDepartments { get; set; }
         [ScriptIgnore(ApplyToOverrides = true)]
-        public virtual IList<Resource> Resources { get; set; }
+        public virtual IList<Resource> OwnerResources { get; set; }
+        [ScriptIgnore(ApplyToOverrides = true)]
+        public virtual IList<Resource> OperatorResources { get; set; }
         [ScriptIgnore(ApplyToOverrides = true)]
         public virtual IList<AclUser> Users { get; set; }
         [ScriptIgnore(ApplyToOverrides = true)]

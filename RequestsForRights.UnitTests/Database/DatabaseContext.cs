@@ -308,7 +308,7 @@ namespace RequestsForRights.UnitTests.Database
                 };
                 Resources.Add(resource);
                 ResourceGroups.First(r => r.IdResourceGroup == resourceParams.IdResourceGroup).Resources.Add(resource);
-                Departments.First(r => r.IdDepartment == resourceParams.IdDepartment).Resources.Add(resource);
+                Departments.First(r => r.IdDepartment == resourceParams.IdDepartment).OperatorResources.Add(resource);
             }
         }
 
@@ -374,7 +374,7 @@ namespace RequestsForRights.UnitTests.Database
                     AclUsers = new List<AclUser>(),
                     ChildDepartments = new List<Department>(),
                     Users = new List<AclUser>(),
-                    Resources = new List<Resource>()
+                    OperatorResources = new List<Resource>()
                 };
                 Departments.Add(department);
                 if (departmentParams.IdParentDepartment == null) continue;

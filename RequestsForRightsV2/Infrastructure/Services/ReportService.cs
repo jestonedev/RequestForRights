@@ -72,7 +72,8 @@ namespace RequestsForRights.Web.Infrastructure.Services
             {
                 return null;
             }
-            var rights = _rightService.GetUserRightsOnDate(options.Date.Value, idRequestUser);
+            var rights = _reportSecurityService.FilterResourceRights(
+                _rightService.GetUserRightsOnDate(options.Date.Value, idRequestUser));
             if (options.ReportDisplayStyle == ReportDisplayStyle.Cards)
             {
                 return rights
@@ -106,7 +107,9 @@ namespace RequestsForRights.Web.Infrastructure.Services
             {
                 return null;
             }
-            var rights = _rightService.GetResourceRightsOnDate(options.Date.Value, options.IdResource);
+            var rights = _reportSecurityService.FilterResourceRights(
+                _rightService.GetResourceRightsOnDate(options.Date.Value, options.IdResource));
+            
             if (options.ReportDisplayStyle == ReportDisplayStyle.Cards)
             {
                 return rights
@@ -139,7 +142,8 @@ namespace RequestsForRights.Web.Infrastructure.Services
             {
                 return null;
             }
-            var rights = _rightService.GetDepartmentRightsOnDate(options.Date.Value, department, unit);
+            var rights = _reportSecurityService.FilterResourceRights(
+                _rightService.GetDepartmentRightsOnDate(options.Date.Value, department, unit));
             if (options.ReportDisplayStyle == ReportDisplayStyle.Cards)
             {
                 return rights
@@ -172,7 +176,8 @@ namespace RequestsForRights.Web.Infrastructure.Services
             {
                 return null;
             }
-            var rights = _rightService.GetDepartmentAndResourceRightsOnDate(options.Date.Value, department, unit, options.IdResource);
+            var rights = _reportSecurityService.FilterResourceRights(
+                _rightService.GetDepartmentAndResourceRightsOnDate(options.Date.Value, department, unit, options.IdResource));
             if (options.ReportDisplayStyle == ReportDisplayStyle.Cards)
             {
                 return rights

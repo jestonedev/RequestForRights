@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using RequestsForRights.Domain.Entities;
+using RequestsForRights.Web.Models.Models;
 
 namespace RequestsForRights.Web.Infrastructure.Security.Interfaces
 {
@@ -15,5 +17,6 @@ namespace RequestsForRights.Web.Infrastructure.Security.Interfaces
         bool CanReadDepartmentAndResourcePermissions();
         bool CanReadResourceOperatorInfo();
         bool CanVisiblieAllDepartmentsMark();
+        IEnumerable<ResourceUserRightModel> FilterResourceRights(IEnumerable<ResourceUserRightModel> resourceRights);
     }
 }
