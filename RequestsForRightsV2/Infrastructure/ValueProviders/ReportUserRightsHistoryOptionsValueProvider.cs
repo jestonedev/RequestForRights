@@ -6,7 +6,6 @@ using System.Web;
 using System.Web.Mvc;
 using Newtonsoft.Json;
 using RequestsForRights.Domain.Enums;
-using RequestsForRights.Web.Infrastructure.Enums;
 using RequestsForRights.Web.Infrastructure.Helpers;
 using RequestsForRights.Web.Models.ReportOptions;
 

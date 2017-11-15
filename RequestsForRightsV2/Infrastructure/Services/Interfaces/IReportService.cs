@@ -16,6 +16,8 @@ namespace RequestsForRights.Web.Infrastructure.Services.Interfaces
         IEnumerable<Resource> GetResources();
         IEnumerable<Department> GetAllowedDepartments();
         IEnumerable<Department> GetAllDepartments();
+        IEnumerable<AclUserRolesModel> GetAclUserRoles(int? idDepartment, int? idRole);
+        IEnumerable<AclRole> GetAclRoles();
         IEnumerable<ResourceOperatorModel> GetResourceOperatorInfo(int? idDepartment);
     }
 }

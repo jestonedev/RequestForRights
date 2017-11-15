@@ -9,6 +9,7 @@ using RequestsForRights.Web.Infrastructure.Security.Interfaces;
 using RequestsForRights.Web.Infrastructure.Services.Interfaces;
 using RequestsForRights.Web.Models.Models;
 using RequestsForRights.Web.Models.ReportOptions;
+using AclRole = RequestsForRights.Domain.Entities.AclRole;
 
 namespace RequestsForRights.Web.Infrastructure.Services
 {
@@ -198,6 +199,29 @@ namespace RequestsForRights.Web.Infrastructure.Services
         {
             return _reportRepository.GetDepartments()
                 .OrderBy(r => r.Name).ToList();
+        }
+
+        public IEnumerable<AclUserRolesModel> GetAclUserRoles(int? idDepartment, int? idRole)
+        {
+            var users = _reportRepository.GetAclUsers();
+            users = users.Where(u => idRole == 0 || idRole == null || u.Roles.Select(r => r.IdRole).Contains(idRole.Value));
+            users = users.Where(u => idDepartment == 0 || idDepartment == null ||
+                u.Department.IdDepartment == idDepartment || u.Department.IdParentDepartment == idDepartment);
+            return users.Select(u => new AclUserRolesModel
+            {
+                Snp = u.Snp,
+                Email = u.Email,
+                Phone = u.Phone,
+                Department = u.Department.ParentDepartment == null ? u.Department.Name : u.Department.ParentDepartment.Name,
+                Unit = u.Department.ParentDepartment == null ? null : u.Department.Name,
+                DateCreated = u.DateCreated,
+                Roles = u.Roles.Select(r => r.Name)
+            });
+        }
+
+        public IEnumerable<AclRole> GetAclRoles()
+        {
+            return _reportRepository.GetAclRoles().OrderBy(r => r.Name).ToList();
         }
 
         public IEnumerable<ResourceOperatorModel> GetResourceOperatorInfo(int? idDepartment)

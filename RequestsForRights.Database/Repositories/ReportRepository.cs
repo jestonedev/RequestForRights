@@ -46,5 +46,15 @@ namespace RequestsForRights.Database.Repositories
         {
             return _databaseContext.ResourceOperatorPersonActs.Where(r => !r.Deleted);
         }
+
+        public IQueryable<AclRole> GetAclRoles()
+        {
+            return _databaseContext.AclRoles;
+        }
+
+        public IQueryable<AclUser> GetAclUsers()
+        {
+            return _databaseContext.AclUsers.Include(u => u.Roles).Include(u => u.Department).Where(u => !u.Deleted);
+        }
     }
 }

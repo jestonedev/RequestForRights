@@ -150,6 +150,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ReportDepartmentAndResourceRightsController.cs" />
+    <Compile Include="Controllers\ReportAclUserRolesController.cs" />
     <Compile Include="Controllers\ReportResourceOperatorController.cs" />
     <Compile Include="Controllers\ReportDepartmentRightsController.cs" />
     <Compile Include="Controllers\ReportResourceRightsController.cs" />
@@ -244,6 +245,7 @@
     <Compile Include="Infrastructure\Services\RequestService.cs" />
     <Compile Include="Infrastructure\Security\SecurityService.cs" />
     <Compile Include="Models\FilterOptions\FilterOptions.cs" />
+    <Compile Include="Models\Models\AclUserRolesModel.cs" />
     <Compile Include="Models\Models\DelegationRequestUsersExtInfoModel.cs" />
     <Compile Include="Models\Models\RequestCategoryModel.cs" />
     <Compile Include="Models\Models\RequestDelegatePermissionsUserModel.cs" />
@@ -261,6 +263,7 @@
     <Compile Include="Models\ReportOptions\ReportResourceRightsOptions.cs" />
     <Compile Include="Models\ReportOptions\ReportUserRightsHistoryOptions.cs" />
     <Compile Include="Models\ReportOptions\ReportUserRightsOptions.cs" />
+    <Compile Include="Models\ViewModels\ReportAclUserRolesViewModel.cs" />
     <Compile Include="Models\ViewModels\ReportDepartmentAndResourceRightsViewModel.cs" />
     <Compile Include="Models\ViewModels\ReportResourceOperatorViewModel.cs" />
     <Compile Include="Models\ViewModels\ReportDepartmentRightsViewModel.cs" />
@@ -682,6 +685,9 @@
     <Content Include="Views\ReportResourceOperator\FilterControl.cshtml" />
     <Content Include="Views\ReportResourceOperator\Index.cshtml" />
     <Content Include="Views\RequestAddUser\GetDuplicateUserNotification.cshtml" />
+    <Content Include="Views\ReportAclUserRoles\DataTable.cshtml" />
+    <Content Include="Views\ReportAclUserRoles\FilterControl.cshtml" />
+    <Content Include="Views\ReportAclUserRoles\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RequestsForRights.Database\RequestsForRights.Database.csproj">

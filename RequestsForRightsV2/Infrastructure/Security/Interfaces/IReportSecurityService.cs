@@ -16,6 +16,7 @@ namespace RequestsForRights.Web.Infrastructure.Security.Interfaces
         bool CanReadDepartmentPermissions();
         bool CanReadDepartmentAndResourcePermissions();
         bool CanReadResourceOperatorInfo();
+        bool CanReadAclUserRights();
         bool CanVisiblieAllDepartmentsMark();
         IEnumerable<ResourceUserRightModel> FilterResourceRights(IEnumerable<ResourceUserRightModel> resourceRights);
     }

@@ -95,6 +95,17 @@ namespace RequestsForRights.Web.Infrastructure.Security
             });
         }
 
+        public bool CanReadAclUserRights()
+        {
+            return InRole(new[]
+            {
+                AclRole.Administrator, 
+                AclRole.Dispatcher, 
+                AclRole.Registrar, 
+                AclRole.Executor
+            });
+        }
+
         public bool CanVisiblieAllDepartmentsMark()
         {
             return InRole(new[]
@@ -146,7 +157,7 @@ namespace RequestsForRights.Web.Infrastructure.Security
             if (InRole(new[]
             {
                 AclRole.Administrator, AclRole.Dispatcher,
-                AclRole.Executor, 
+                AclRole.Executor, AclRole.Registrar, 
                 AclRole.ResourceManager, AclRole.ResourceViewer
             }))
             {

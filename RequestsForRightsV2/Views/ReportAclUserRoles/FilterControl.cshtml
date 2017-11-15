@@ -1,0 +1,72 @@
+﻿@model RequestsForRights.Web.Models.ViewModels.ReportAclUserRolesViewModel
+
+@{
+    Layout = null;
+}
+
+<div class="rr-filter-control">
+    @using (Ajax.BeginForm("GetDataTable", new AjaxOptions
+    {
+        UpdateTargetId = "main-table-wrapper",
+        InsertionMode = InsertionMode.Replace,
+        Url = Url.Action("GetDataTable"),
+        OnBegin = "showWaitingElement",
+        OnSuccess = "hideWaitingElement",
+        OnFailure = "errorLoading"
+    }))
+    {
+        <div class="form-group col-sm-6">
+            @Html.Label("Department", "Организация")
+            <select class="form-control" name="IdDepartment" id="IdDepartment">
+                <option selected>Выберите организацию</option>
+                @foreach (var departmentsGroup in Model.Departments.GroupBy(r => r.IsAlienDepartment).OrderBy(r => r.Key))
+                {
+                    if (departmentsGroup.Key)
+                    {
+                        @Html.Raw("<optgroup label=\"Сторонние организации\">")
+                    }
+                    foreach (var department in departmentsGroup)
+                    {
+                        var dep = department;
+                        if (dep.IdParentDepartment != null)
+                        {
+                            continue;
+                        }
+                        var selected = Model.IdDepartment == dep.IdDepartment;
+                        <option @(selected ? "selected" : "") value="@dep.IdDepartment">
+                            @dep.Name
+                        </option>
+                        foreach (var unit in departmentsGroup.Where(r => r.IdParentDepartment == dep.IdDepartment))
+                        {
+                            selected = Model.IdDepartment == unit.IdDepartment;
+                            <option @(selected ? "selected" : "") value="@unit.IdDepartment">
+                                @Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")@unit.Name
+                            </option>
+                        }
+                    }
+                    if (departmentsGroup.Key)
+                    {
+                        @Html.Raw("</optgroup>")
+                    }
+                }
+            </select>
+        </div>
+        <div class="form-group col-sm-6">
+            @Html.Label("AclRole", "Роль")
+            <select class="form-control" name="IdRole" id="IdRole">
+                <option selected>Выберите роль</option>
+                @foreach (var role in Model.Roles)
+                {
+                    var selected = Model.IdRole == role.IdRole;
+                    <option @(selected ? "selected" : "") value="@role.IdRole">
+                        @role.Name
+                    </option>
+                }
+            </select>
+        </div>
+        <div class="clearfix"></div>
+        <div class="rr-loading-data text-info text-center">
+            Загрузка...
+        </div>
+    }
+</div>

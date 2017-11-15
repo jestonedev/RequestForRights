@@ -1,0 +1,55 @@
+﻿@model RequestsForRights.Web.Models.ViewModels.ReportAclUserRolesViewModel
+
+@{
+    Layout = null;
+}
+
+<div id="main-table-wrapper" class="rr-table-wrapper">
+    @if (Model == null || Model.UserRoles == null || !Model.UserRoles.Any())
+    {
+        <div class="text-center text-info">Информация отсутствует</div>
+        return;
+    }
+
+    <table class="table table-hover clearfix">
+        <thead>
+            <tr>
+                <th class="rr-column rr-column-header" style="width: 25%">Должностное лицо</th>
+                <th class="rr-column rr-column-header" style="width: 25%">Контакты</th>
+                <th class="rr-column rr-column-header" style="width: 25%">Роли</th>
+                <th style="width: 25%">Дата внесения</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var userRole in Model.UserRoles)
+            {
+                <tr>
+                    <td class="rr-column">
+                        <p>@userRole.Snp</p>
+                        <p class="rr-sub-cell-acl-user-department">@userRole.Department</p>
+                        @if (!string.IsNullOrEmpty(userRole.Unit))
+                        {
+                            <p class="rr-sub-cell-acl-user-unit">@userRole.Unit</p>
+                        }
+                    </td>
+                    <td class="rr-column">
+                        <p><b>Телефон:</b> @userRole.Phone</p>
+                        <p>
+                            <b>Email:</b> <a href="mailto:@(userRole.Email)">@userRole.Email</a>
+                        </p>
+                    </td>
+                    <td class="rr-column">
+                        @foreach (var role in userRole.Roles)
+                        {
+                            <p>@role</p>
+                        }
+                    </td>
+                    <td>
+                        @userRole.DateCreated.ToString("dd.MM.yyyy hh:mm:ss")
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+</div>

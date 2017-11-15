@@ -448,7 +448,7 @@ button.rr-ext-filter-button.collapsed:hover {
 }
 
 .rr-sub-cell-unit, .rr-sub-cell-department, .rr-sub-cell-resource-operator-post,
-.rr-sub-cell-resource-operator-description {
+.rr-sub-cell-resource-operator-description, .rr-sub-cell-acl-user-department, .rr-sub-cell-acl-user-unit {
     font-size: 12px;
     color: #aaa;
 }
