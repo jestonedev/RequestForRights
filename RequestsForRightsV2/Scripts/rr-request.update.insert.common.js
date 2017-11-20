@@ -431,6 +431,7 @@ function initializeUsersAutocomplete(userSnp) {
         },
         paramName: "snpPattern",
         deferRequestBy: 0,
+        noCache: true,
         transformResult: function (response) {
             return {
                 suggestions: $.map(response, function (dataItem) {

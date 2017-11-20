@@ -65,54 +65,17 @@ namespace RequestsForRights.Web.Infrastructure.Services
         {
             var users = _userRepository.FindUsers(snpPattern);
 
-            if (usersCategory == UsersCategory.All)
-            {
-                return _securityRepository.FilterUsers(users).Take(maxCount);
-            }
-
-            var completedRequests = (from requestRow in _userRepository.GetRequests()
-                                        join userAssocRow in _userRepository.GetRequestUserAssocs() on requestRow.IdRequest equals userAssocRow.IdRequest
-                                    where requestRow.IdCurrentRequestStateType == 4
-                                    select new
-                                    {
-                                        requestRow.IdRequest,
-                                        requestRow.IdRequestType,
-                                        userAssocRow.IdRequestUser,
-                                        Date = requestRow.CurrentRequestStateDate,
-                                    }).ToList();
-
-            var lastRequestsDateForUsers = from row in completedRequests
-                group row.Date by row.IdRequestUser
-                into gs
-                select new
-                {
-                    Date = gs.Max(), IdRequestUser = gs.Key
-                };
-
-            completedRequests = (from requestRow in completedRequests
-                join lrRow in lastRequestsDateForUsers on new {requestRow.IdRequestUser, requestRow.Date} equals new {lrRow.IdRequestUser, lrRow.Date}
-                where requestRow.IdRequestType == 3
-                select new
-                {
-                    requestRow.IdRequest, requestRow.IdRequestType, requestRow.IdRequestUser, requestRow.Date
-                }).ToList();
-
-            var excludeUsers = from request in completedRequests
-                join userAssoc in _userRepository.GetRequestUserAssocs() on request.IdRequest equals userAssoc.IdRequest
-                select userAssoc.RequestUser;
-
             switch (usersCategory)
             {
+                case UsersCategory.All:
+                    return users.Take(maxCount);
                 case UsersCategory.ActiveUsers:
-                    users = users.ToList().Except(excludeUsers).AsQueryable();
-                    break;
+                    return users.Where(r => r.IsActive).Take(maxCount);
                 case UsersCategory.BlockedUsers:
-                    users = excludeUsers.Where(r => r.Snp.Contains(snpPattern)).AsQueryable();
-                    break;
+                    return users.Where(r => !r.IsActive).Take(maxCount);
                 default:
                     throw new ArgumentOutOfRangeException("usersCategory");
             }
-            return _securityRepository.FilterUsers(users).Take(maxCount);
         }
 
         private IEnumerable<LdapUser> FindActiveDirectoryUsers(string snpPattern, UsersCategory usersCategory, int maxCount)

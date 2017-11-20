@@ -39,9 +39,17 @@ namespace RequestsForRights.Domain.Entities
         [ScriptIgnore(ApplyToOverrides = true)]
         public virtual IList<RequestUserAssoc> RequestUserAssoc { get; set; }
 
+        [DefaultValue(true)]
+        public bool IsActive { get; set; }
+
         [DefaultValue(false)]
         [ScriptIgnore]
         public bool Deleted { get; set; }
+
+        public RequestUser()
+        {
+            IsActive = true;
+        }
 
         public override bool Equals(object obj)
         {
@@ -54,7 +62,7 @@ namespace RequestsForRights.Domain.Entities
                    string.Equals(Snp, other.Snp) && string.Equals(Post, other.Post) && string.Equals(Phone, other.Phone) &&
                    string.Equals(Department, other.Department) && string.Equals(Unit, other.Unit) &&
                    string.Equals(Office, other.Office) && Equals(RequestUserAssoc, other.RequestUserAssoc) &&
-                   Deleted == other.Deleted;
+                   IsActive == other.IsActive && Deleted == other.Deleted;
         }
 
         public static bool operator==(RequestUser first, RequestUser second)
@@ -83,7 +91,8 @@ namespace RequestsForRights.Domain.Entities
                 hashCode = (hashCode*397) ^ (Department != null ? Department.GetHashCode() : 0);
                 hashCode = (hashCode*397) ^ (Unit != null ? Unit.GetHashCode() : 0);
                 hashCode = (hashCode*397) ^ (Office != null ? Office.GetHashCode() : 0);
-                hashCode = (hashCode*397) ^ (RequestUserAssoc != null ? RequestUserAssoc.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (RequestUserAssoc != null ? RequestUserAssoc.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ IsActive.GetHashCode();
                 hashCode = (hashCode*397) ^ Deleted.GetHashCode();
                 return hashCode;
             }
