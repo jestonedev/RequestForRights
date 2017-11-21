@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -16,6 +17,8 @@ namespace RequestsForRights.Domain.Entities
         public int IdRequestRightGrantType { get; set; }
         public virtual RequestRightGrantType RequestRightGrantType { get; set; }
         public string Descirption { get; set; }
+        public DateTime? GrantedFrom { get;set; }
+        public DateTime? GrantedTo { get;set; }
         [DefaultValue(false)]
         public bool Deleted { get; set; }
     }
