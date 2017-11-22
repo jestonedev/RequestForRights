@@ -24,243 +24,119 @@ namespace RequestsForRights.Web.Infrastructure.Services
         public IEnumerable<ResourceUserRightModel> GetPermanentRightsOnDate(DateTime date, 
             int? idRequestUser, string department, string unit, int? idResource)
         {
-            var completedRequests = from requestRow in _rightRepository.GetRequests()
-                where requestRow.IdCurrentRequestStateType == 4
-                select new
-                {
-                    requestRow.IdRequest,
-                    requestRow.IdRequestType,
-                    DateFrom = requestRow.CurrentRequestStateDate,
-                };
-            var completedUsers = (from completedRequestRow in completedRequests
-                join requestUserAssocRow in _rightRepository.GetRequestUserAssocs()
-                    on completedRequestRow.IdRequest equals requestUserAssocRow.IdRequest
-                join requestUserRow in _rightRepository.GetRequestUsers()
-                    on requestUserAssocRow.IdRequestUser equals  requestUserRow.IdRequestUser
-                where (idRequestUser == null || requestUserAssocRow.IdRequestUser == idRequestUser.Value) &&
-                    (department == null || requestUserRow.Department == department) &&
-                    (unit == null || requestUserRow.Unit == unit)
-                select new
-                {
-                    completedRequestRow.IdRequest,
-                    completedRequestRow.IdRequestType,
-                    completedRequestRow.DateFrom,
-                    requestUserAssocRow.IdRequestUser,
-                    requestUserAssocRow.IdRequestUserAssoc
-                }).ToList();
-            date = date.Date.AddDays(1).AddSeconds(-1);
-            var excludedUserDates = from completedUserRow in completedUsers
-                where completedUserRow.IdRequestType == 3 &&
-                    completedUserRow.DateFrom <= date
-                // Disconnect user
-                group completedUserRow.DateFrom by completedUserRow.IdRequestUser
-                into gs
-                select new
-                {
-                    IdRequestUser = gs.Key,
-                    DisconnectDate = gs.Max()
-                };
-            var changingUserAssocs = from completedUserRow in completedUsers
-                join excludeUserDateRow in excludedUserDates
-                    on completedUserRow.IdRequestUser equals excludeUserDateRow.IdRequestUser into exUser
-                from exUserRow in exUser.DefaultIfEmpty()
-                where new[] {1, 2}.Contains(completedUserRow.IdRequestType) &&
-                      (exUserRow == null || exUserRow.DisconnectDate < completedUserRow.DateFrom) &&
-                      completedUserRow.DateFrom <= date
-                select completedUserRow;
-            var changingUserRightsAssoc = (from userAssocRow in changingUserAssocs
-                join rightAssocRow in _rightRepository.GetRequestUserRightAssocs()
-                    on userAssocRow.IdRequestUserAssoc equals rightAssocRow.IdRequestUserAssoc
-                where idResource == null || rightAssocRow.ResourceRight.IdResource == idResource.Value
-                select new
-                {
-                    userAssocRow.IdRequestUser,
-                    rightAssocRow.IdRequestRightGrantType,
-                    rightAssocRow.IdResourceRight,
-                    rightAssocRow.Descirption,
-                    userAssocRow.DateFrom
-                }).ToList();
-            var lastRevokeRightDate = from rightAssocRow in changingUserRightsAssoc
-                where rightAssocRow.IdRequestRightGrantType == 2
-                group rightAssocRow.DateFrom by new
-                {
-                    rightAssocRow.IdRequestUser,
-                    rightAssocRow.IdResourceRight
-                }
-                into gs
-                select new
-                {
-                    gs.Key.IdRequestUser,
-                    gs.Key.IdResourceRight,
-                    RevokeDate = gs.Max()
-                };
-            var currentUserRights = from rightAssocRow in changingUserRightsAssoc
-                join lastRevokeRightDateRow in lastRevokeRightDate
-                    on new {rightAssocRow.IdRequestUser, rightAssocRow.IdResourceRight}
-                    equals new {lastRevokeRightDateRow.IdRequestUser, lastRevokeRightDateRow.IdResourceRight} into
-                    revDate
-                from revDateRow in revDate.DefaultIfEmpty()
-                where rightAssocRow.IdRequestRightGrantType == 1 &&
-                      (revDateRow == null || revDateRow.RevokeDate < rightAssocRow.DateFrom)
-                select rightAssocRow;
-            var lastCurrentUserRights = from userRight in currentUserRights
-                group new { userRight.DateFrom, userRight.Descirption } by new
-                {
-                    userRight.IdRequestUser,
-                    userRight.IdResourceRight
-                }
-                into gs
-                select new
-                {
-                    gs.Key.IdRequestUser,
-                    gs.Key.IdResourceRight,
-                    DateFrom = gs.Select(r => r.DateFrom).Min(),
-                    Description = gs.OrderByDescending(r => r.DateFrom).Select(r => r.Descirption).FirstOrDefault()
-                };
-            return from userRight in lastCurrentUserRights
-                   join requestUser in _rightRepository.GetRequestUsers()
-                    on userRight.IdRequestUser equals requestUser.IdRequestUser
+            var toDate = date;
+            var fromDate = date.Date.AddDays(1);
+            return (from rightAssoc in _rightRepository.GetRequestUserRightAssocs()
+                join userAssoc in _rightRepository.GetRequestUserAssocs()
+                    on rightAssoc.IdRequestUserAssoc equals userAssoc.IdRequestUserAssoc
+                join requestUser in _rightRepository.GetRequestUsers()
+                    on userAssoc.IdRequestUser equals requestUser.IdRequestUser
                 join resourceRight in _rightRepository.GetResourceRights()
-                    on userRight.IdResourceRight equals resourceRight.IdResourceRight
+                    on rightAssoc.IdResourceRight equals resourceRight.IdResourceRight
+                    where rightAssoc.IdRequestRightGrantType == 1 && rightAssoc.GrantedFrom < fromDate &&
+                      (rightAssoc.GrantedTo == null || rightAssoc.GrantedTo > toDate) &&
+                      (idRequestUser == null || userAssoc.IdRequestUser == idRequestUser.Value) &&
+                      (department == null || requestUser.Department == department) &&
+                      (unit == null || requestUser.Unit == unit) &&
+                      (idResource == null || rightAssoc.ResourceRight.IdResource == idResource.Value)
+                group new {rightAssoc.GrantedFrom, rightAssoc.Descirption} by
+                    new
+                    {
+                        requestUser.IdRequestUser,
+                        RequestUserSnp = requestUser.Snp,
+                        RequestUserDepartment = requestUser.Department,
+                        RequestUserUnit = requestUser.Unit,
+                        resourceRight.IdResourceRight,
+                        ResourceRightName = resourceRight.Name,
+                        ResourceRightDescription = resourceRight.Description,
+                        resourceRight.IdResource,
+                        ResourceName = resourceRight.Resource.Name,
+                        ResourceDescription = resourceRight.Resource.Description,
+                    }
+                into gs
                 select new ResourceUserRightModel
                 {
-                    IdRequestUser = requestUser.IdRequestUser,
-                    RequestUserSnp = requestUser.Snp,
-                    RequestUserDepartment = requestUser.Department,
-                    RequestUserUnit = requestUser.Unit,
-                    IdResourceRight = resourceRight.IdResourceRight,
-                    ResourceRightName = resourceRight.Name,
-                    ResourceRightDescription = resourceRight.Description,
-                    IdResource = resourceRight.IdResource,
-                    ResourceName = resourceRight.Resource.Name,
-                    ResourceDescription = resourceRight.Resource.Description,
+                    IdRequestUser = gs.Key.IdRequestUser,
+                    RequestUserSnp = gs.Key.RequestUserSnp,
+                    RequestUserDepartment = gs.Key.RequestUserDepartment,
+                    RequestUserUnit = gs.Key.RequestUserUnit,
+                    IdResourceRight = gs.Key.IdResourceRight,
+                    ResourceRightName = gs.Key.ResourceRightName,
+                    ResourceRightDescription = gs.Key.ResourceRightDescription,
+                    IdResource = gs.Key.IdResource,
+                    ResourceName = gs.Key.ResourceName,
+                    ResourceDescription = gs.Key.ResourceDescription,
                     RightCategory = "Постоянное право",
-                    DateFrom = userRight.DateFrom,
-                    Description = userRight.Description
-                };
+                    DateFrom = gs.Select(r => r.GrantedFrom).Min(),
+                    Description = gs.OrderByDescending(r => r.GrantedFrom).Select(r => r.Descirption).FirstOrDefault()
+                }).ToList();
         }
 
         public IEnumerable<ResourceUserRightModel> GetDelegatedRightsOnDate(DateTime date,
             int? idRequestUser, string department, string unit, int? idResource)
         {
-            var completedRequests = from requestRow in _rightRepository.GetRequests()
-                where requestRow.IdCurrentRequestStateType == 4
-                select new
-                {
-                    requestRow.IdRequest,
-                    requestRow.IdRequestType,
-                    DateFrom = requestRow.CurrentRequestStateDate,
-                };
-            var completedUsers = (from completedRequestRow in completedRequests
-                join requestUserAssocRow in _rightRepository.GetRequestUserAssocs()
-                    on completedRequestRow.IdRequest equals requestUserAssocRow.IdRequest
-                select new
-                {
-                    completedRequestRow.IdRequest,
-                    completedRequestRow.IdRequestType,
-                    completedRequestRow.DateFrom,
-                    requestUserAssocRow.IdRequestUser,
-                    requestUserAssocRow.IdRequestUserAssoc
-                }).ToList();
-            date = date.Date.AddDays(1).AddSeconds(-1);
-            var excludedUserDates = from completedUserRow in completedUsers
-                where completedUserRow.IdRequestType == 3 &&
-                      completedUserRow.DateFrom <= date
-                // Disconnect user
-                group completedUserRow.DateFrom by completedUserRow.IdRequestUser
-                into gs
-                select new
-                {
-                    IdRequestUser = gs.Key,
-                    DisconnectDate = gs.Max()
-                };
-            var delegateUserAssocs = from completedUserRow in completedUsers
-                join delegateExtInfoRow in _rightRepository.GetDelegationRequestUsersExtInfo()
-                    on completedUserRow.IdRequestUserAssoc equals delegateExtInfoRow.IdRequestUserAssoc
-                join delegateFromUserRow in _rightRepository.GetRequestUsers()
-                    on completedUserRow.IdRequestUser equals delegateFromUserRow.IdRequestUser
-                join delegateToUserRow in _rightRepository.GetRequestUsers()
-                    on delegateExtInfoRow.IdDelegateToUser equals delegateToUserRow.IdRequestUser
-                join excludeUserDateRow in excludedUserDates
-                    on completedUserRow.IdRequestUser equals excludeUserDateRow.IdRequestUser into exUser
-                from exUserRow in exUser.DefaultIfEmpty()
-                where completedUserRow.IdRequestType == 4 &&
-                      date >= delegateExtInfoRow.DelegateFromDate && 
-                      date <= delegateExtInfoRow.DelegateToDate  &&
-                      (exUserRow == null || 
-                      exUserRow.DisconnectDate < delegateExtInfoRow.DelegateFromDate) &&
-                      (idRequestUser == null || 
-                      completedUserRow.IdRequestUser == idRequestUser.Value ||
-                      delegateExtInfoRow.IdDelegateToUser == idRequestUser.Value) &&
-                      (department == null ||
-                      delegateToUserRow.Department == department ||
-                      delegateFromUserRow.Department == department) &&
-                      (unit == null ||
-                      delegateToUserRow.Unit == unit ||
-                      delegateFromUserRow.Unit == unit)
-                select new
-                {
-                    completedUserRow.IdRequestUserAssoc,
-                    IdDelegateFromUser = completedUserRow.IdRequestUser,
-                    delegateExtInfoRow.IdDelegateToUser,
-                    delegateExtInfoRow.DelegateFromDate,
-                    delegateExtInfoRow.DelegateToDate
-                };
-            var delegateRights = from delegateUserAssocRow in delegateUserAssocs
-                join rightAssocRow in _rightRepository.GetRequestUserRightAssocs()
-                    on delegateUserAssocRow.IdRequestUserAssoc equals rightAssocRow.IdRequestUserAssoc
-                where idResource == null || rightAssocRow.ResourceRight.IdResource == idResource.Value
-                select new
-                {
-                    rightAssocRow.IdResourceRight,
-                    delegateUserAssocRow.IdDelegateFromUser,
-                    delegateUserAssocRow.IdDelegateToUser,
-                    delegateUserAssocRow.DelegateFromDate,
-                    delegateUserAssocRow.DelegateToDate
-                };
-            var lastDelegateRights = from delegateRight in delegateRights
-                group new {delegateRight.DelegateFromDate, delegateRight.DelegateToDate} by new
-                {
-                    delegateRight.IdDelegateFromUser,
-                    delegateRight.IdDelegateToUser,
-                    delegateRight.IdResourceRight
-                }
-                into gs
-                select new
-                {
-                    gs.Key.IdDelegateFromUser,
-                    gs.Key.IdDelegateToUser,
-                    gs.Key.IdResourceRight,
-                    DelegateFromDate = gs.Select(r => r.DelegateFromDate).Min(),
-                    DelegateToDate = gs.Select(r => r.DelegateToDate).Max()
-                };
-            return from delegateRight in lastDelegateRights
-                   join delegateUserFrom in _rightRepository.GetRequestUsers()
-                    on delegateRight.IdDelegateFromUser equals delegateUserFrom.IdRequestUser
-                join delegateUserTo in _rightRepository.GetRequestUsers()
-                    on delegateRight.IdDelegateToUser equals delegateUserTo.IdRequestUser
+            var toDate = date;
+            var fromDate = date.Date.AddDays(1);
+            return (from rightAssoc in _rightRepository.GetRequestUserRightAssocs()
+                join userAssoc in _rightRepository.GetRequestUserAssocs()
+                    on rightAssoc.IdRequestUserAssoc equals userAssoc.IdRequestUserAssoc
+                join requestUser in _rightRepository.GetRequestUsers()
+                    on userAssoc.IdRequestUser equals requestUser.IdRequestUser
                 join resourceRight in _rightRepository.GetResourceRights()
-                    on delegateRight.IdResourceRight equals resourceRight.IdResourceRight
+                    on rightAssoc.IdResourceRight equals resourceRight.IdResourceRight
+                join delegation in _rightRepository.GetDelegationRequestUsersExtInfo()
+                    on userAssoc.IdRequestUserAssoc equals delegation.IdRequestUserAssoc
+                join delegationUser in _rightRepository.GetRequestUsers()
+                    on delegation.IdDelegateToUser equals delegationUser.IdRequestUser
+                where rightAssoc.IdRequestRightGrantType == 3 && rightAssoc.GrantedFrom < fromDate &&
+                      (rightAssoc.GrantedTo == null || rightAssoc.GrantedTo > toDate) &&
+                      (idRequestUser == null || requestUser.IdRequestUser == idRequestUser.Value ||
+                       delegation.IdDelegateToUser == idRequestUser.Value) &&
+                      (department == null || requestUser.Department == department ||
+                       delegationUser.Department == department) &&
+                      (unit == null || requestUser.Unit == unit || delegationUser.Unit == unit) &&
+                      (idResource == null || rightAssoc.ResourceRight.IdResource == idResource.Value)
+                group new {rightAssoc.GrantedFrom, rightAssoc.GrantedTo} by
+                    new
+                    {
+                        IdRequestFromUser = requestUser.IdRequestUser,
+                        RequestUserFromSnp = requestUser.Snp,
+                        RequestUserFromDepartment = requestUser.Department,
+                        RequestUserFromUnit = requestUser.Unit,
+
+                        delegation.IdDelegateToUser,
+                        DelegateToUserSnp = delegationUser.Snp,
+                        DelegateToUserDepartment = delegationUser.Department,
+                        DelegateToUserUnit = delegationUser.Unit,
+
+                        resourceRight.IdResourceRight,
+                        ResourceRightName = resourceRight.Name,
+                        ResourceRightDescription = resourceRight.Description,
+                        resourceRight.IdResource,
+                        ResourceName = resourceRight.Resource.Name,
+                        ResourceDescription = resourceRight.Resource.Description,
+                    }
+                into gs
                 select new ResourceUserRightModel
                 {
-                    IdRequestUser = delegateUserTo.IdRequestUser,
-                    RequestUserSnp = delegateUserTo.Snp,
-                    RequestUserDepartment = delegateUserTo.Department,
-                    RequestUserUnit = delegateUserTo.Unit,
-                    IdResourceRight = resourceRight.IdResourceRight,
-                    ResourceRightName = resourceRight.Name,
-                    ResourceRightDescription = resourceRight.Description,
-                    IdResource = resourceRight.IdResource,
-                    ResourceName = resourceRight.Resource.Name,
-                    ResourceDescription = resourceRight.Resource.Description,
+                    IdRequestUser = gs.Key.IdDelegateToUser,
+                    RequestUserSnp = gs.Key.DelegateToUserSnp,
+                    RequestUserDepartment = gs.Key.DelegateToUserDepartment,
+                    RequestUserUnit = gs.Key.DelegateToUserUnit,
+                    IdResourceRight = gs.Key.IdResourceRight,
+                    ResourceRightName = gs.Key.ResourceRightName,
+                    ResourceRightDescription = gs.Key.ResourceRightDescription,
+                    IdResource = gs.Key.IdResource,
+                    ResourceName = gs.Key.ResourceName,
+                    ResourceDescription = gs.Key.ResourceDescription,
                     RightCategory = "Делегированное право",
-                    IdDelegateFromUser = delegateUserFrom.IdRequestUser,
-                    DelegateFromUserSnp = delegateUserFrom.Snp,
-                    DelegateFromUserDepartment = delegateUserFrom.Department,
-                    DelegateFromUserUnit = delegateUserFrom.Unit,
-                    DateDelegateFrom = delegateRight.DelegateFromDate,
-                    DateDelegateTo = delegateRight.DelegateToDate
-                };
+                    IdDelegateFromUser = gs.Key.IdRequestFromUser,
+                    DelegateFromUserSnp = gs.Key.RequestUserFromSnp,
+                    DelegateFromUserDepartment = gs.Key.RequestUserFromDepartment,
+                    DelegateFromUserUnit = gs.Key.RequestUserFromUnit,
+                    DateDelegateFrom = gs.Select(r => r.GrantedFrom).Min(),
+                    DateDelegateTo = gs.Select(r => r.GrantedTo).Max()
+                }).ToList();
         }
 
         public IEnumerable<ResourceUserRightModel> GetRightsOnDate(DateTime date,
