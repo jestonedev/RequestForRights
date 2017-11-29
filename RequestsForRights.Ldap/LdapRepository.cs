@@ -79,6 +79,7 @@ namespace RequestsForRights.Ldap
                     using (var searcher = new DirectorySearcher(domainEntry, "", _propertiesToLoad))
                     {
                         searcher.SearchScope = SearchScope.Subtree;
+                        searcher.PageSize = maxCount;
                         foreach (var filter in filters)
                         {
                             searcher.Filter = string.Format(CultureInfo.InvariantCulture, 
@@ -130,6 +131,7 @@ namespace RequestsForRights.Ldap
                 using (var searcher = new DirectorySearcher(domainEntry, "", _propertiesToLoad))
                 {
                     searcher.SearchScope = SearchScope.Subtree;
+                    searcher.PageSize = maxCount;
                     foreach (var filter in filters)
                     {
                         searcher.Filter = string.Format(CultureInfo.InvariantCulture,
@@ -227,7 +229,6 @@ namespace RequestsForRights.Ldap
                             {
                                 foreach (SearchResult result in results)
                                 {
-                                    var samaccountname = result.Properties["samaccountname"][0].ToString();
                                     var groupResultCollection = result.Properties["memberof"];
                                     foreach (var groupResult in groupResultCollection)
                                     {
@@ -282,7 +283,6 @@ namespace RequestsForRights.Ldap
                 using (var domain = System.DirectoryServices.ActiveDirectory.Domain.GetDomain(context))
                 using (var domainEntry = domain.GetDirectoryEntry())
                 {
-                    var domainLoginPrefix = domain.Name.Split('.')[0];
                     using (var searcher = new DirectorySearcher(domainEntry, "", _propertiesToLoad))
                     {
                         searcher.SearchScope = SearchScope.Subtree;
