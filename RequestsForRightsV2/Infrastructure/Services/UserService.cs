@@ -63,7 +63,7 @@ namespace RequestsForRights.Web.Infrastructure.Services
 
         private IEnumerable<RequestUser> FindDbUsers(string snpPattern, UsersCategory usersCategory, int maxCount)
         {
-            var users = _userRepository.FindUsers(snpPattern);
+            var users = _securityRepository.FilterUsers(_userRepository.FindUsers(snpPattern));
 
             switch (usersCategory)
             {
