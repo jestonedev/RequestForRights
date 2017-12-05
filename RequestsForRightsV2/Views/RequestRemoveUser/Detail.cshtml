@@ -61,7 +61,7 @@
                                             <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].Snp)</dt>
                                             <dd>@Model.RequestModel.Users[i].Snp</dd>
                                             @if (!string.IsNullOrEmpty(Model.RequestModel.Users[i].Login) &&
-                                                securityService.CanSeeLogin())
+                                                 securityService.CanSeeLogin())
                                             {
                                                 <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].Login)</dt>
                                                 <dd>@Model.RequestModel.Users[i].Login</dd>
@@ -91,6 +91,47 @@
                                                 <dd>@Html.Raw(Html.Encode(Model.RequestModel.Users[i].Description).Replace("\n", "<br>"))</dd>
                                             }
                                         </dl>
+
+                                        @if (Model.RequestModel.Users[i].Rights != null &&
+                                             Model.RequestModel.Users[i].Rights.Any())
+                                        {
+                                            <div class="panel panel-primary rr-request-rights">
+                                                <div class="panel-heading">
+                                                    <h3 class="panel-title">Текущие права сотрудника</h3>
+                                                </div>
+                                                <ul class="list-group">
+                                                    @for (var j = 0; j < Model.RequestModel.Users[i].Rights.Count; j++)
+                                                    {
+                                                        if (!securityService.CanVisibleRight(
+                                                            Model.RequestModel,
+                                                            Model.RequestModel.Users[i].Rights[j]))
+                                                        {
+                                                            continue;
+                                                        }
+                                                        <li class="list-group-item">
+                                                            <dl class="dl-horizontal rr-request-right-container">
+                                                                <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].Rights[j].ResourceName)</dt>
+                                                                <dd title="@Html.Raw(Html.AttributeEncode(Model.RequestModel.Users[i].Rights[j].ResourceDescription))">
+                                                                    @Model.RequestModel.Users[i].Rights[j].ResourceName
+                                                                </dd>
+                                                                <dt>
+                                                                    @Html.DisplayNameFor(r => r.RequestModel.Users[i].Rights[j].ResourceRightName)
+                                                                </dt>
+                                                                <dd title="@Html.Raw(Html.AttributeEncode(Model.RequestModel.Users[i].Rights[j].ResourceRightDescription))">
+                                                                    @Model.RequestModel.Users[i].Rights[j].ResourceRightName
+                                                                </dd>
+                                                                @if (!string.IsNullOrEmpty(Model.RequestModel.Users[i].Rights[j].Description))
+                                                                {
+                                                                    <dt>@Html.DisplayNameFor(r => r.RequestModel.Users[i].Rights[j].Description)</dt>
+                                                                    <dd>@Html.Raw(Html.Encode(Model.RequestModel.Users[i].Rights[j].Description).Replace("\n", "<br>"))</dd>
+                                                                }
+                                                            </dl>
+                                                        </li>
+                                                    }
+                                                </ul>
+                                            </div>
+                                        }
+
                                     </div>
                                 </div>
                             </div>
@@ -102,6 +143,7 @@
         </div>
         @Html.Partial("Request/Agreements")
         @Html.Partial("Request/ExtComments", Model.Comments)
+        @Html.Partial("Request/Executors", Model.Executors)
     </div>
 </div>
 

@@ -31,5 +31,8 @@ namespace RequestsForRights.Database.Repositories.Interfaces
 
         void InsertDelegationRequestUsersExtInfo(
             System.Collections.Generic.List<DelegationRequestUsersExtInfo> delegationRequestUsersExtInfo);
+
+        IQueryable<AclUser> GetAclUsers();
+        IQueryable<RequestExecutor> GetRequestExecutors(int idRequest);
     }
 }

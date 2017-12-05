@@ -249,6 +249,7 @@
     <Compile Include="Models\Models\DelegationRequestUsersExtInfoModel.cs" />
     <Compile Include="Models\Models\RequestCategoryModel.cs" />
     <Compile Include="Models\Models\RequestDelegatePermissionsUserModel.cs" />
+    <Compile Include="Models\Models\RequestExecutorModel.cs" />
     <Compile Include="Models\Models\RequestModel.cs" />
     <Compile Include="Models\Models\RequestUserModel.cs" />
     <Compile Include="Models\Models\RequestUserRightModel.cs" />
@@ -412,6 +413,7 @@
     <Content Include="Content\Images\Help\edit_button.PNG" />
     <Content Include="Content\Images\Help\filter_button.PNG" />
     <Content Include="Content\Images\Help\save_button.PNG" />
+    <Content Include="Content\Images\Help\send_button.png" />
     <Content Include="Content\Images\Help\Sort_button.PNG" />
     <Content Include="Content\Images\Help\table_button.PNG" />
     <Content Include="Content\Images\ic_polymer_black_18dp.png" />
@@ -688,6 +690,7 @@
     <Content Include="Views\ReportAclUserRoles\DataTable.cshtml" />
     <Content Include="Views\ReportAclUserRoles\FilterControl.cshtml" />
     <Content Include="Views\ReportAclUserRoles\Index.cshtml" />
+    <Content Include="Views\Shared\Request\Executors.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RequestsForRights.Database\RequestsForRights.Database.csproj">

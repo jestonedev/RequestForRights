@@ -1,4 +1,12 @@
-﻿<ul class="nav nav-tabs rr-requests-tabs" role="tablist">
+﻿@{
+    dynamic securityService = ViewData["SecurityService"];
+    if (securityService == null)
+    {
+        return;
+    }
+}
+
+<ul class="nav nav-tabs rr-requests-tabs" role="tablist">
     <li role="presentation" class="active" id="rr-request-tab">
         <a href="#rr-request-content" aria-controls="request" role="tab" data-toggle="tab">
             Заявка <span class="badge rr-badge">0</span>
@@ -14,4 +22,12 @@
             Комментарии <span class="badge rr-comments-badge">0</span>
         </a>
     </li>
+    @if (securityService.CanVisibleExecutors())
+    {
+        <li role="presentation" id="rr-executors-tab">
+            <a href="#rr-executors-content" aria-controls="executors" role="tab" data-toggle="tab">
+                Исполнители
+            </a>
+        </li>
+    }
 </ul>

@@ -325,5 +325,15 @@ namespace RequestsForRights.Database.Repositories
         {
             return _databaseContext.RequestExtComments.Add(requestComment);
         }
+
+        public IQueryable<AclUser> GetAclUsers()
+        {
+            return _databaseContext.AclUsers.Include(u => u.Roles).Include(u => u.Department).Where(u => !u.Deleted);
+        }
+
+        public IQueryable<RequestExecutor> GetRequestExecutors(int idRequest)
+        {
+            return _databaseContext.RequestExecutors.Where(r => r.IdRequest == idRequest);
+        }
     }
 }

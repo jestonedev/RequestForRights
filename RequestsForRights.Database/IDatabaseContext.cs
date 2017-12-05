@@ -37,6 +37,7 @@ namespace RequestsForRights.Database
         IDbSet<ResourceOperatorAct> ResourceOperatorActs { get; set; }
         IDbSet<ResourceUsingAct> ResourceUsingActs { get; set; }
         IDbSet<ActFile> ActFiles { get; set; }
+        IDbSet<RequestExecutor> RequestExecutors { get; set; }
         int SaveChanges();
         DbEntityEntry<TEntity> Entry<TEntity>(TEntity entity)
             where TEntity : class;

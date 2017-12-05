@@ -1,0 +1,46 @@
+﻿@model IQueryable<RequestsForRights.Web.Models.Models.RequestExecutorModel>
+
+<div role="tabpanel" class="tab-pane fade rr-tab-pane" id="rr-executors-content">
+    <div class="rr-executors" id="rr-executors">
+
+        @if (Model == null || !Model.Any())
+        {
+            <div class="text-center text-info rr-comments-empty">Исполнители не назначены</div>
+        }
+
+        @if (Model != null && Model.Any())
+        {
+            var executors = Model.ToList();
+            <table class="table table-hover clearfix">
+                <thead>
+                <tr>
+                    <th class="rr-column rr-column-header" style="width: 25%">Логин</th>
+                    <th class="rr-column rr-column-header" style="width: 25%">ФИО</th>
+                    <th class="rr-column rr-column-header" style="width: 25%">Email</th>
+                    <th style="width: 25%">Телефон</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var executor in executors)
+                {
+                    <tr>
+                        <td class="rr-column">
+                            @executor.Login
+                        </td>
+                        <td class="rr-column">
+                            @executor.Snp
+                        </td>
+                        <td class="rr-column">
+                            <a href="mailto:@(executor.Email)">@executor.Email</a>
+                        </td>
+                        <td>
+                            @executor.Phone
+                        </td>
+                    </tr>
+                }
+                </tbody>
+
+            </table>
+        }
+    </div>
+</div>

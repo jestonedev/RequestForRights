@@ -9,6 +9,7 @@ namespace RequestsForRights.Web.Models.ViewModels.Request
     {
         public RequestModel<T> RequestModel { get; set; }
         public IEnumerable<RequestExtComment> Comments { get; set; }
+        public IEnumerable<RequestExecutorModel> Executors { get; set; }
         public IEnumerable<AclUser> WaitAgreementUsers { get; set; }
         public IEnumerable<RequestAgreement> SuccessAgreements { get; set; }
         public IEnumerable<RequestAgreement> CancelAgreements { get; set; }

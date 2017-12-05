@@ -636,6 +636,7 @@ namespace RequestsForRights.Web.Infrastructure.Services
             preRequestViewModel.CancelAgreements = GetCancelAgreements(agreements);
             preRequestViewModel.ExcludedAgreements = GetExcludedAgreements(agreements);
             preRequestViewModel.WaitAgreementUsers = GetWaitAgreementUsers(idRequest, agreements);
+            preRequestViewModel.Executors = GetRequestExecutors(idRequest);
             return preRequestViewModel;
         }
 
@@ -693,6 +694,21 @@ namespace RequestsForRights.Web.Infrastructure.Services
                         RequestSecurityService.GetUserAllowedDepartments(r).
                         Select(d => d.IdDepartment).Contains(ed));
                 }).Concat(additionalAgreementUsers).ToList().Distinct();
+        }
+
+        public IEnumerable<RequestExecutorModel> GetRequestExecutors(int idRequest)
+        {
+            return from executor in RequestsRepository.GetRequestExecutors(idRequest)
+                join aclUser in RequestsRepository.GetAclUsers()
+                    on executor.Login equals aclUser.Login into acl
+                from aclRow in acl.DefaultIfEmpty()
+                select new RequestExecutorModel
+                {
+                    Login = aclRow.Login,
+                    Snp = aclRow.Snp,
+                    Email = aclRow.Email,
+                    Phone = aclRow.Phone
+                };
         }
 
         public IEnumerable<RequestsCountByStateTypesViewModel> GetRequestsCountByStateTypes()

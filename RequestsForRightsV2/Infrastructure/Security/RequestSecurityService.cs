@@ -465,5 +465,16 @@ namespace RequestsForRights.Web.Infrastructure.Security
             return InRole(new [] { AclRole.Administrator, AclRole.Dispatcher, AclRole.Registrar  }) ||
                 (InRole(AclRole.Coordinator) && agreement.IdUser == GetUserInfo().IdUser);
         }
+
+        public bool CanVisibleExecutors()
+        {
+            return InRole(new[]
+            {
+                AclRole.Administrator, 
+                AclRole.Dispatcher, 
+                AclRole.Registrar, 
+                AclRole.Executor
+            });
+        }
     }
 }
