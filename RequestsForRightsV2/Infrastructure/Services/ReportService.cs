@@ -15,6 +15,8 @@ namespace RequestsForRights.Web.Infrastructure.Services
 {
     public class ReportService: IReportService
     {
+        private readonly DateTime _minSqlDateTimeValue = new DateTime(1753, 1, 1, 12, 0, 0);
+
         private readonly IRightService _rightService;
         private readonly IUserService _userService;
         private readonly IReportRepository _reportRepository;
@@ -73,6 +75,10 @@ namespace RequestsForRights.Web.Infrastructure.Services
             {
                 return null;
             }
+            if (options.Date < _minSqlDateTimeValue)
+            {
+                options.Date = _minSqlDateTimeValue;
+            }
             var rights = _reportSecurityService.FilterResourceRights(
                 _rightService.GetUserRightsOnDate(options.Date.Value, idRequestUser));
             if (options.ReportDisplayStyle == ReportDisplayStyle.Cards)
@@ -90,6 +96,14 @@ namespace RequestsForRights.Web.Infrastructure.Services
             {
                 return null;
             }
+            if (options.DateFrom < _minSqlDateTimeValue)
+            {
+                options.DateFrom = _minSqlDateTimeValue;
+            }
+            if (options.DateTo < _minSqlDateTimeValue)
+            {
+                options.DateTo = _minSqlDateTimeValue;
+            }
             return _rightService.GetUserRightsHistoryOnDate(options.DateFrom.Value, options.DateTo.Value.AddDays(1).AddSeconds(-1), idRequestUser);
         }
 
@@ -98,6 +112,10 @@ namespace RequestsForRights.Web.Infrastructure.Services
             if (options.Date == null)
             {
                 return null;
+            }
+            if (options.Date < _minSqlDateTimeValue)
+            {
+                options.Date = _minSqlDateTimeValue;
             }
             if (options.IdResource == null)
             {
@@ -126,6 +144,10 @@ namespace RequestsForRights.Web.Infrastructure.Services
             if (options.Date == null)
             {
                 return null;
+            }
+            if (options.Date < _minSqlDateTimeValue)
+            {
+                options.Date = _minSqlDateTimeValue;
             }
             if (options.Department == null)
             {
@@ -159,6 +181,10 @@ namespace RequestsForRights.Web.Infrastructure.Services
             if (options.Date == null || options.Department == null || options.IdResource == null)
             {
                 return null;
+            }
+            if (options.Date < _minSqlDateTimeValue)
+            {
+                options.Date = _minSqlDateTimeValue;
             }
             if (!_reportRepository.GetResources().Select(r => r.IdResource).
                 Contains(options.IdResource.Value))

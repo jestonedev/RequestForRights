@@ -160,6 +160,15 @@ namespace RequestsForRights.Web.Infrastructure.Services
                 filterOptions.SortField = "IdRequest";
                 filterOptions.SortDirection = SortDirection.Desc;
             }
+            var minSqlDateTimeValue = new DateTime(1753, 1, 1, 12, 0, 0);
+            if (filterOptions.DateOfFillingFrom != null && filterOptions.DateOfFillingFrom < minSqlDateTimeValue)
+            {
+                filterOptions.DateOfFillingFrom = minSqlDateTimeValue;
+            }
+            if (filterOptions.DateOfFillingTo != null && filterOptions.DateOfFillingTo < minSqlDateTimeValue)
+            {
+                filterOptions.DateOfFillingTo = minSqlDateTimeValue;
+            }
             var requests = GetVisibleRequests(filterOptions, filteredRequests).ToList();
             if (!requests.Any())
             {
