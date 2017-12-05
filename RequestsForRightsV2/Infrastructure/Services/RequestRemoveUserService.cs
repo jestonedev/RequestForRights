@@ -35,7 +35,6 @@ namespace RequestsForRights.Web.Infrastructure.Services
             {
                 completeDate = request.CurrentRequestStateDate;
             }
-            var date = DateTime.Now;
             return new RequestModel<RequestUserModel>
             {
                 IdRequest = request.IdRequest,
@@ -49,7 +48,8 @@ namespace RequestsForRights.Web.Infrastructure.Services
                 Users = request.RequestUserAssoc.Where(ru => !ru.Deleted).Select(ru =>
                 {
                     var userModel = FillRequestUserModel(ru);
-                    userModel.Rights = _rightService.GetUserRightsOnDate(date, ru.IdRequestUser)
+                    var firstState = request.RequestStates.OrderBy(rs => rs.IdRequestState).FirstOrDefault();
+                    userModel.Rights = _rightService.GetUserRightsOnDate(firstState == null ? DateTime.Now : firstState.Date, ru.IdRequestUser)
                         .Select(r => new RequestUserRightModel
                         {
                             IdResource = r.IdResource,
