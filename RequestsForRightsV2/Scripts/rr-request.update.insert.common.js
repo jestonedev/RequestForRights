@@ -286,6 +286,30 @@ function formIsValid(form) {
             error[userSnpElem.attr("name")] = "ФИО задано некорректно";
             validator.showErrors(error);
         }
+        var rights = $(userElem).closest(".rr-request-user-wrapper").find(".rr-request-right");
+        rights.each(function (rightIdx, rightElem) {
+            var grantType = $(rightElem).find(".rr-request-right-grant-type select").val();
+            if (grantType !== "1") {
+                return;
+            }
+            var rightIdElem = $(rightElem).find(".rr-request-right-id select");
+            var rightId = rightIdElem.val();
+            if (rightId === "") {
+                return;
+            }
+            var user = getUserInfo(rightElem);
+            var currentUserRights = userRightsBuffer[JSON.stringify((user))];
+            if (currentUserRights == undefined) {
+                return;
+            }
+            if (currentUserRights.filter(function (val) { return val.IdResourceRight === parseInt(rightId) }).length > 0) {
+                formValid = false;
+                var error = {};
+                error[rightIdElem.attr("name")] = "У сотрудника уже имеется данное право";
+                validator.showErrors(error);
+            }
+        });
+
     });
     return formValid;
 }
