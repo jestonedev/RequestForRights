@@ -202,10 +202,14 @@ namespace RequestsForRights.Web.Controllers
             {
                 return RedirectToAction("ForbiddenError", "Home");
             }
+            var viewModel = _requestService.GetEmptyRequestViewModel();
             ViewData["UserIndex"] = 0;
-            ViewData["RightIndex"] = 0;
+            if (viewModel.RequestModel.Users.Any())
+            {
+                ViewData["RightIndex"] = viewModel.RequestModel.Users[0].Rights.Count - 1;
+            }
             ViewData["SecurityService"] = _securityService;
-            return PartialView("RightEditor", _requestService.GetEmptyRequestViewModel());
+            return PartialView("RightEditor", viewModel);
         }
 
         private void Validate(RequestModel<RequestUserModel> request)
