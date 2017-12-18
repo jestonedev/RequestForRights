@@ -297,12 +297,16 @@ function formIsValid(form) {
             if (rightId === "") {
                 return;
             }
+            var description = $(rightElem).find(".rr-request-right-description textarea").val();
+            if (description !== "") {
+                return;
+            }
             var user = getUserInfo(rightElem);
             var currentUserRights = userRightsBuffer[JSON.stringify((user))];
             if (currentUserRights == undefined) {
                 return;
             }
-            if (currentUserRights.filter(function (val) { return val.IdResourceRight === parseInt(rightId) }).length > 0) {
+            if ($(currentUserRights).filter(function (idx, val) { return val.IdResourceRight === parseInt(rightId) }).length > 0) {
                 formValid = false;
                 var error = {};
                 error[rightIdElem.attr("name")] = "У сотрудника уже имеется данное право";
