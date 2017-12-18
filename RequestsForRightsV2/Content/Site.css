@@ -830,3 +830,7 @@ button[name="deleteDeviceAddress"]{
 .alert.rr-request-user-duplicate-notification p {
     margin-top: 0;
 }
+
+.panel.rr-request-rights > .list-group .list-group-item {
+    padding: 0 10px 0 0;
+}
