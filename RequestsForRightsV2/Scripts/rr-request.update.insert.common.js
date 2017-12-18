@@ -309,7 +309,7 @@ function formIsValid(form) {
             if ($(currentUserRights).filter(function (idx, val) { return val.IdResourceRight === parseInt(rightId) }).length > 0) {
                 formValid = false;
                 var error = {};
-                error[rightIdElem.attr("name")] = "У сотрудника уже имеется данное право";
+                error[rightIdElem.attr("name")] = "У сотрудника уже имеется данное право. В случае необходимости повторной выдачи укажите в примечании к праву причину";
                 validator.showErrors(error);
             }
         });
