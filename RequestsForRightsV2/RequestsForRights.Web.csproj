@@ -344,6 +344,8 @@
     <Content Include="Content\Images\Help\otchet_5_1_1.png" />
     <Content Include="Content\Images\Help\otchet_5_1_2.png" />
     <Content Include="Content\Images\Help\otchet_5_5_1.png" />
+    <Content Include="Content\Images\Help\Otchet_5_6_1.png" />
+    <Content Include="Content\Images\Help\Otchet_5_7_1.png" />
     <Content Include="Content\Images\Help\othet_5_1_3.png" />
     <Content Include="Content\Images\Help\requests_button.PNG" />
     <Content Include="Content\Images\Help\request_add_agreement.png" />
