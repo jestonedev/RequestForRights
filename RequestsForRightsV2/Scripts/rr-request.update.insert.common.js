@@ -595,7 +595,7 @@ function getRequestDescriptionPreamble(idRequestType) {
                 (isOne ? "следующего сотрудника" : "следующих сотрудников") +
                 ":\n";
         case 4:
-            return "Временно делегировать права доступа " +
+            return "Делегировать права доступа " +
                 (isOne ? "следующего сотрудника" : "следующих сотрудников") +
                 ":\n";
         default:
